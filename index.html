@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
 
     <style>
         /* --- GLOBAL STYLES & THEME VARIABLES (WITH DARK MODE!) --- */
@@ -71,6 +72,7 @@
             font-weight: 700;
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -158,22 +160,6 @@
         }
 
         /* --- MODERN SYSTEM SUPPORTS GRID & CARD DESIGN --- */
-        #link-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        @media (max-width: 1200px) {
-            #link-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 800px) {
-            #link-grid {
-                grid-template-columns: 1fr;
-            }
-        }
         .link-item.system-support-link {
             background: linear-gradient(120deg, #6a11cb 0%, #2575fc 100%);
             color: #fff;
@@ -412,7 +398,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-fill-color: transparent;
         }
 
         /* Add to your <style> section: */
@@ -508,9 +493,15 @@
         // Store each sub-page as its own variable for clarity.
         const systemSupportsContent = `
         <div id="link-grid">
-            <a href="Calculations.html" class="link-item system-support-link" data-category="all">
+            <a href="BusinessCal.html" class="link-item system-support-link" data-category="all">
                 <div class="link-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M7,7h2v2H7V7z M7,11h2v2H7V11z M7,15h2v2H7V15z M11,15h2v2h-2V15z M11,11h2v2h-2V11z M11,7h2v2h-2V7z M15,15h2v2h-2V15z M15,11h2v2h-2V11z M15,7h2v2h-2V7z"/></svg>
+                    <!-- Lordicon: Calculator -->
+                    <lord-icon
+                        src="https://cdn.lordicon.com/emxxkbtx.json"
+                        trigger="hover"
+                        colors="primary:#ffffff"
+                        style="width:48px;height:48px">
+                    </lord-icon>
                 </div>
                 <div class="link-content">
                     <h3>Business Calculation</h3>
@@ -518,19 +509,47 @@
                 </div>
                 <div class="link-arrow">→</div>
             </a>
-            <a href="MessageReminder.html" class="link-item system-support-link" data-category="all">
+            <a href="FinanceCal.html" class="link-item system-support-link" data-category="finance">
                 <div class="link-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M20,8l-8,5L4,8V6l8,5l8-5V8z"/></svg>
+                    <!-- Lordicon: Finance -->
+                    <lord-icon
+                        src="https://cdn.lordicon.com/dnupukmh.json"
+                        trigger="hover"
+                        colors="primary:#ffffff"
+                        style="width:48px;height:48px">
+                    </lord-icon>
                 </div>
                 <div class="link-content">
-                    <h3>Email Sample</h3>
-                    <p>Generate and manage email/message reminders.</p>
+                    <h3>Finance Tools</h3>
+                    <p>Interest, pricing, and billing calculators for business and personal finance.</p>
+                </div>
+                <div class="link-arrow">→</div>
+            </a>
+            <a href="SampleEmail.html" class="link-item system-support-link" data-category="all">
+                <div class="link-icon">
+                    <!-- Lordicon: Email -->
+                    <lord-icon
+                        src="https://cdn.lordicon.com/bpptgtfr.json"
+                        trigger="hover"
+                        colors="primary:#ffffff"
+                        style="width:48px;height:48px">
+                    </lord-icon>
+                </div>
+                <div class="link-content">
+                    <h3>Sample Email</h3>
+                    <p>Sample of Email and Text.</p>
                 </div>
                 <div class="link-arrow">→</div>
             </a>
             <a href="TextExtractor.html" class="link-item system-support-link" data-category="all">
                 <div class="link-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.99,6.99v10c0,1.1-0.9,2-2,2H6v-2h12V6.99h3.99z M16,2H4C2.9,2,2,2.9,2,4v12c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V4C18,2.9,17.1,2,16,2z M8,16h6v-2H8V16z M14,12H8v-2h6V12z M14,8H8V6h6V8z"/></svg>
+                    <!-- Lordicon: Text Extractor -->
+                    <lord-icon
+                        src="https://cdn.lordicon.com/cfkiwvcc.json"
+                        trigger="hover"
+                        colors="primary:#ffffff"
+                        style="width:48px;height:48px">
+                    </lord-icon>
                 </div>
                 <div class="link-content">
                     <h3>Text Extraction</h3>
@@ -824,26 +843,23 @@
 
         // --- CORE APPLICATION LOGIC ---
         const contentArea = document.getElementById('content-area');
-        const mainNavLinks = document.querySelectorAll('.main-nav a');
 
         // Function to load page content and set up its specific logic
         const loadPage = (page) => {
             // Default to 'resources' if no hash or unknown hash
             if (!pageContent[page]) page = 'resources';
             contentArea.innerHTML = pageContent[page];
-            updateActiveNavLink(page);
+
+            // Highlight the active main navigation link
+            const mainNavLinks = document.querySelectorAll('.main-nav a');
+            mainNavLinks.forEach(link => {
+                link.classList.toggle('active', link.hash === `#${page}`);
+            });
 
             // If the loaded page is 'resources', we must activate its unique JS
             if (page === 'resources') {
                 initResourceHub();
             }
-        };
-
-        // Function to highlight the active main navigation link
-        const updateActiveNavLink = (activePage) => {
-            mainNavLinks.forEach(link => {
-                link.classList.toggle('active', link.hash === `#${activePage}`);
-            });
         };
 
         // Main navigation handler
@@ -916,6 +932,20 @@
                         systemSupportsContainer.querySelectorAll('.link-item').forEach(item => item.classList.remove('hide'));
                         applicationsContainer.querySelectorAll('.link-item').forEach(item => item.classList.add('hide'));
                         locationContainer.querySelectorAll('.link-item').forEach(item => item.classList.add('hide'));
+                    } else if (currentCategory === 'finance') {
+                        systemSupportsContainer.style.display = '';
+                        applicationsContainer.style.display = 'none';
+                        locationContainer.style.display = 'none';
+                        // Show only finance links in system supports
+                        systemSupportsContainer.querySelectorAll('.link-item').forEach(item => {
+                            if (item.dataset.category === 'finance') {
+                                item.classList.remove('hide');
+                            } else {
+                                item.classList.add('hide');
+                            }
+                        });
+                        applicationsContainer.querySelectorAll('.link-item').forEach(item => item.classList.add('hide'));
+                        locationContainer.querySelectorAll('.link-item').forEach(item => item.classList.add('hide'));
                     } else if (currentCategory === 'social') {
                         systemSupportsContainer.style.display = 'none';
                         applicationsContainer.style.display = '';
@@ -958,15 +988,17 @@
 
         if (currentTheme === 'dark') {
             document.body.classList.add('dark-theme');
-            themeToggle.textContent = '☀️';
+            if (themeToggle) themeToggle.textContent = '☀️';
         }
 
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-theme');
-            let isDark = document.body.classList.contains('dark-theme');
-            themeToggle.textContent = isDark ? '☀️' : '🌙';
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-theme');
+                let isDark = document.body.classList.contains('dark-theme');
+                themeToggle.textContent = isDark ? '☀️' : '🌙';
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            });
+        }
 
         // --- INITIALIZE THE APP ---
         window.addEventListener('hashchange', handleNavigation);
