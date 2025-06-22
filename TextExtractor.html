@@ -225,7 +225,16 @@
             };
 
             // --- API Call & Result Handling ---
-            const processApiRequest = async (prompt, file) => { /* ... unchanged ... */
+            // Add a timeout helper
+            const withTimeout = (promise, ms = 30000) =>
+                Promise.race([
+                    promise,
+                    new Promise((_, reject) =>
+                        setTimeout(() => reject(new Error('Request timed out. Please try again.')), ms)
+                    )
+                ]);
+
+            const processApiRequest = async (prompt, file) => {
                 if (!file) { setError('No file or recording available to process.'); return; }
                 setIsLoading(true); setExtractedText(''); setError(''); setIsCopied(false);
                 const apiKey = "AIzaSyDydw9gsfTJX7nRse3A1wLNsHLV36_HfTU"; // Replace with your key
@@ -235,13 +244,20 @@
                 }
                 try {
                     const base64Data = await toBase64(file);
+                    // Short, direct prompts for speed and accuracy
                     let customPrompt = prompt;
                     if (file.type.startsWith('audio/')) {
-                        customPrompt = `Transcribe all spoken content from this audio file. If the language is Khmer, transcribe it accurately in Khmer Unicode script. If the language is Chinese, transcribe it accurately in Chinese characters. Otherwise, transcribe in the detected language/script. Return only the transcribed text.`.trim();
+                        customPrompt = "Transcribe all speech in this audio. Use Khmer Unicode for Khmer, Chinese characters for Chinese, else use detected language. Only output the transcription.";
+                    } else {
+                        customPrompt = "Extract all text from this file. Only output the extracted text.";
                     }
                     const payload = { contents: [{ parts: [{ text: customPrompt }, { inline_data: { mime_type: file.type, data: base64Data } }] }] };
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
-                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    // Use timeout for faster failover
+                    const response = await withTimeout(
+                        fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }),
+                        30000 // 30 seconds
+                    );
                     if (!response.ok) { const errorBody = await response.json(); throw new Error(`API request failed: ${errorBody.error.message}`); }
                     const result = await response.json();
                     if (result.candidates && result.candidates[0].content) {
