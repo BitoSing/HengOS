@@ -651,6 +651,28 @@
             opacity: 0.3; filter: blur(80px);
             animation: heroBlobMove 12s ease-in-out infinite alternate-reverse;
         }
+        .hero-content {
+            max-width: 100%;
+            color: #fff;
+            z-index: 1;
+        }
+        .hero-content h1{
+            font-size: 50px;
+            color: #fff;
+            z-index: 1;
+        }
+        .hero-content p{
+            font-size: 20px;
+            color: #fff;
+            z-index: 1;
+        }
+        .hero-content .hero-quote {
+            font-size: 1rem;
+            color: #e0e7ff;
+            margin-top: 1.5rem;
+            font-style: italic;
+            text-align: left;
+        }
         @keyframes heroBlobMove {
             from { transform: translate(0, 0) scale(1) rotate(0deg); }
             to { transform: translate(20px, -20px) scale(1.1) rotate(20deg); }
@@ -665,26 +687,17 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             animation: floatY 3s ease-in-out infinite alternate;
         }
-        .hero-content { color: #fff; z-index: 1; }
-        .hero-content h1 {
-            font-size: 2.8rem; font-weight: 800; margin-bottom: 0.5rem;
-            background: linear-gradient(90deg, #fff 60%, var(--secondary-color) 100%);
-            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-            position: relative;
+        .link-item.system-support-link .link-icon.hero-icon-anim {
+            /* Inherit hero animation for system support icons */
+            width: 56px;
+            height: 56px;
+            margin-bottom: 1.1rem;
+            background: rgba(255,255,255,0.13);
+            border-radius: 12px;
+            animation: floatY 3s ease-in-out infinite alternate;
+            /* keep other .link-icon styles as well */
         }
-        .hero-content p { font-size: 1.2rem; font-weight: 400; color: #e0e7ff; opacity: 0.9; }
-        .hero-quote {
-            font-size: 1rem; color: var(--secondary-color); font-style: italic;
-            margin-top: 1.2rem; opacity: 0.8; border-left: 3px solid var(--secondary-color);
-            padding-left: 1rem;
-        }
-        @media (max-width: 768px) {
-            .hero-section { flex-direction: column; text-align: center; padding: 3rem 1.5rem; }
-            .hero-icon-anim { margin: 0 0 2rem 0; }
-            .hero-content h1 { font-size: 2.2rem; }
-            .hero-quote { border-left: none; padding-left: 0; }
-        }
-
+        /* ...existing code... */
         /* Fade-in animation for hero and controls */
         @keyframes fadeInHero {
             from { opacity: 0; transform: translateY(24px);}
@@ -751,7 +764,7 @@
         const systemSupportsContent = `
         <div id="link-grid">
             <a href="BusinessCal.html" class="link-item system-support-link" data-category="all">
-                <div class="link-icon">
+                <div class="link-icon hero-icon-anim">
                     <!-- Lordicon: Calculator -->
                     <lord-icon
                         src="https://cdn.lordicon.com/emxxkbtx.json"
@@ -767,7 +780,7 @@
                 <div class="link-arrow">→</div>
             </a>
             <a href="FinanceCal.html" class="link-item system-support-link" data-category="finance">
-                <div class="link-icon">
+                <div class="link-icon hero-icon-anim">
                     <!-- Lordicon: Finance -->
                     <lord-icon
                         src="https://cdn.lordicon.com/dnupukmh.json"
@@ -783,7 +796,7 @@
                 <div class="link-arrow">→</div>
             </a>
             <a href="SampleEmail.html" class="link-item system-support-link" data-category="all">
-                <div class="link-icon">
+                <div class="link-icon hero-icon-anim">
                     <!-- Lordicon: Email -->
                     <lord-icon
                         src="https://cdn.lordicon.com/bpptgtfr.json"
@@ -799,7 +812,7 @@
                 <div class="link-arrow">→</div>
             </a>
             <a href="TextExtractor.html" class="link-item system-support-link" data-category="all">
-                <div class="link-icon">
+                <div class="link-icon hero-icon-anim">
                     <!-- Lordicon: Text Extractor -->
                     <lord-icon
                         src="https://cdn.lordicon.com/cfkiwvcc.json"
