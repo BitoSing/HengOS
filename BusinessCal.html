@@ -69,6 +69,7 @@
             color: var(--heading-color);
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -208,6 +209,21 @@
         }
         .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
         body.dark-mode .tooltip .tooltiptext { background-color: var(--text-color); color: var(--card-bg); }
+
+        /* --- TWO COLUMN INPUT GROUP FOR PRICING & SUBSCRIPTION --- */
+        .input-group.two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem 2rem;
+        }
+        .input-group.two-col .input-field {
+            margin-bottom: 0;
+        }
+        @media (max-width: 700px) {
+            .input-group.two-col {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -234,13 +250,13 @@
                     <span class="icon-container"><!-- SVG --></span>
                     Pricing Calculator
                 </h2>
-                <div class="input-group">
+                <div class="input-group two-col">
                     <div class="input-field">
                         <label for="originalPrice">Original Price <span class="language-label">ថ្លៃដើម</span></label>
                         <input type="text" id="originalPrice" placeholder="Enter amount ($)" pattern="[0-9,.]+">
                     </div>
                     <div class="input-field">
-                        <label for="discountPercent">Discount Percentage <span class="language-label">បញ្ចុះភាគរយ</span></label>
+                        <label for="discountPercent">Discount % <span class="language-label">បញ្ចុះភាគរយ</span></label>
                         <input type="text" id="discountPercent" placeholder="Enter percentage (%)" pattern="[0-9,.]+">
                     </div>
                     <div class="input-field">
@@ -272,7 +288,7 @@
                     <span class="icon-container"><!-- SVG --></span>
                     Subscription Calculator
                 </h2>
-                <div class="input-group">
+                <div class="input-group two-col">
                     <div class="input-field">
                         <label for="startChargeDate">Start Date <span class="language-label">ថ្ងៃចាប់ផ្តើម</span></label>
                         <input type="text" id="startChargeDate" placeholder="DD / MMM / YYYY" class="date-picker">
@@ -282,12 +298,12 @@
                         <input type="text" id="monthRenew" placeholder="Enter months" pattern="[0-9,.]+">
                     </div>
                     <div class="input-field">
-                        <label for="freeMonth">Free Months <span class="language-label">ខែបន្ថែម</span></label>
-                        <input type="text" id="freeMonth" placeholder="Enter free months" pattern="[0-9,.]+">
+                        <label for="additionalDays">Days Adjustment <span class="language-label">ថ្ងៃបន្ថែម</span></label>
+                        <input type="text" id="additionalDays" placeholder="Enter days" pattern="[-]?[0-9]+">
                     </div>
                     <div class="input-field">
-                        <label for="additionalDays">Days Adjustment <span class="language-label">ថ្ងៃបន្ថែម</span></label>
-                        <input type="text" id="additionalDays" placeholder="Enter days (use - for past)" pattern="[-]?[0-9]+">
+                        <label for="freeMonth">Free Months <span class="language-label">ខែបន្ថែម</span></label>
+                        <input type="text" id="freeMonth" placeholder="Enter free months" pattern="[0-9,.]+">
                     </div>
                 </div>
                 <div class="results">
