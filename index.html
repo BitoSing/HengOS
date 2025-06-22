@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
 
     <style>
@@ -15,7 +16,8 @@
         :root {
             --primary-color: #007CF0; /* Vibrant Blue */
             --secondary-color: #00DFD8; /* Bright Cyan/Aqua */
-            --font-family: 'Poppins', sans-serif;
+            --font-family: 'Poppins', 'Noto Sans Khmer', sans-serif;
+            --khmer-font: 'Noto Sans Khmer', 'Khmer OS', 'Hanuman', 'Battambang', sans-serif;
             
             /* Light Theme (Default) */
             --bg-color: #F7F9FC;
@@ -48,6 +50,13 @@
             color: var(--text-color);
             line-height: 1.6;
             transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Khmer font for Khmer text */
+        .khmer-font, :lang(km) {
+            font-family: var(--khmer-font) !important;
+            font-size: 1.08em;
+            letter-spacing: 0.01em;
         }
 
         /* --- MAIN APPLICATION SHELL LAYOUT --- */
@@ -729,11 +738,11 @@
                 </lord-icon>
             </div>
             <div class="hero-content">
-                <h1>Welcome to HengOS</h1>
+                <h1>Welcome to HengOS <span class="hero-rocket">🚀</span></h1>
                 <p>Your all-in-one productivity dashboard. Jump to your favorite tools, links, and resources in a flash!</p>
-                <div class="hero-quote">
+                <div class="hero-quote khmer-font">
                     “អ្នកឈ្នះព្រោះឈ្នះ អ្នកចាញ់ព្រោះចាញ់ អ្នកឈ្នះដោយសារចាញ់ អ្នកចាញ់ដោយសារមិនឈ្នះ សូមអានម្តងទៀត.”
-                    <span style="display:block; font-size:0.9rem; opacity:0.7; font-style: normal; margin-top: 0.25rem;">— លី ហេង</span>
+                    <span style="display:block; font-size:0.9rem; opacity:0.7; font-style: normal; margin-top: 0.25rem;" class="khmer-font">— លី ហេង</span>
                 </div>
             </div>
         </section>
