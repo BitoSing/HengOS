@@ -50,6 +50,7 @@
             color: var(--text-color);
             line-height: 1.6;
             transition: background-color 0.3s, color 0.3s;
+            padding-top: 72px; /* Adjust to match .app-header height */
         }
 
         /* Khmer font for Khmer text */
@@ -73,8 +74,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            width: 100%;
             z-index: 1000;
         }
 
@@ -669,11 +672,6 @@
             -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
             position: relative;
         }
-        @keyframes rocket-float {
-            0% { transform: translateY(0) rotate(-10deg) scale(1);}
-            60% { transform: translateY(-10px) rotate(8deg) scale(1.08);}
-            100% { transform: translateY(-16px) rotate(15deg) scale(1.13);}
-        }
         .hero-content p { font-size: 1.2rem; font-weight: 400; color: #e0e7ff; opacity: 0.9; }
         .hero-quote {
             font-size: 1rem; color: var(--secondary-color); font-style: italic;
@@ -738,7 +736,7 @@
                 </lord-icon>
             </div>
             <div class="hero-content">
-                <h1>Welcome to HengOS <span class="hero-rocket">🚀</span></h1>
+                <h1>Welcome to HengOS</h1>
                 <p>Your all-in-one productivity dashboard. Jump to your favorite tools, links, and resources in a flash!</p>
                 <div class="hero-quote khmer-font">
                     “អ្នកឈ្នះព្រោះឈ្នះ អ្នកចាញ់ព្រោះចាញ់ អ្នកឈ្នះដោយសារចាញ់ អ្នកចាញ់ដោយសារមិនឈ្នះ សូមអានម្តងទៀត.”
