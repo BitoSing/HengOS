@@ -136,7 +136,7 @@
             font-family: var(--font-family); transition: var(--transition);
         }
         body.dark-mode input, body.dark-mode select { color: var(--text-color); }
-        input::placeholder { color: var(--light-text); opacity: 0.8; }
+        input::placeholder { color: var(--light-text); opacity: 0.5; font-size: 14px;}
         input:focus, select:focus { outline: none; border-color: var(--primary-focus); box-shadow: 0 0 0 3px var(--primary-light); }
         input.input-error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(198, 93, 87, 0.2); }
         
@@ -531,29 +531,69 @@
             if ((!monthRenewInput.value.trim() || isNaN(monthRenew)) && (!freeMonthInput.value.trim() || isNaN(freeMonth)) && (additionalDaysInput.value.trim() && !isNaN(additionalDays))) {
                 expiryDate = new Date(startDate);
                 expiryDate.setDate(expiryDate.getDate() + additionalDays - 1);
-                let months = 0, days = 0;
+
+                // Calculate years, months, days
                 let tempDate = new Date(startDate);
-                while (new Date(tempDate).setMonth(tempDate.getMonth() + 1) <= expiryDate) {
+                let years = 0, months = 0, days = 0;
+
+                // Years
+                while (true) {
+                    let next = new Date(tempDate);
+                    next.setFullYear(next.getFullYear() + 1);
+                    if (next > expiryDate) break;
+                    tempDate = next;
+                    years++;
+                }
+                // Months
+                while (true) {
+                    let next = new Date(tempDate);
+                    next.setMonth(next.getMonth() + 1);
+                    if (next > expiryDate) break;
+                    tempDate = next;
                     months++;
                 }
-                tempDate.setMonth(tempDate.getMonth() + months);
+                // Days
                 days = Math.floor((expiryDate - tempDate) / (1000 * 60 * 60 * 24)) + 1;
+
                 let parts = [];
-                if (months > 0) parts.push(months + (months === 1 ? ' month' : ' months'));
-                if (days > 0) parts.push(days + (days === 1 ? ' day' : ' days'));
-                durationText = parts.length > 0 ? parts.join(' ') : '0 months';
+                if (years > 0) parts.push(years + 'Y');
+                if (months > 0) parts.push(months + 'M');
+                if (days > 0) parts.push(days + 'D');
+                durationText = parts.length > 0 ? parts.join(' ') : '0M';
             } else {
                 const totalMonths = (!isNaN(monthRenew) ? monthRenew : 0) + (!isNaN(freeMonth) ? freeMonth : 0);
                 expiryDate = new Date(startDate);
                 expiryDate.setMonth(expiryDate.getMonth() + totalMonths);
                 expiryDate.setDate(expiryDate.getDate() - 1 + (isNaN(additionalDays) ? 0 : additionalDays));
                 if (startChargeDate && expiryDate) {
-                    const diff = calculateYearMonthDiff(startDate, expiryDate);
+                    // Calculate years, months, days
+                    let tempDate = new Date(startDate);
+                    let years = 0, months = 0, days = 0;
+
+                    // Years
+                    while (true) {
+                        let next = new Date(tempDate);
+                        next.setFullYear(next.getFullYear() + 1);
+                        if (next > expiryDate) break;
+                        tempDate = next;
+                        years++;
+                    }
+                    // Months
+                    while (true) {
+                        let next = new Date(tempDate);
+                        next.setMonth(next.getMonth() + 1);
+                        if (next > expiryDate) break;
+                        tempDate = next;
+                        months++;
+                    }
+                    // Days
+                    days = Math.floor((expiryDate - tempDate) / (1000 * 60 * 60 * 24)) + 1;
+
                     let parts = [];
-                    if (diff.years > 0) parts.push(diff.years + (diff.years === 1 ? ' year' : ' years'));
-                    if (diff.months > 0) parts.push(diff.months + (diff.months === 1 ? ' month' : ' months'));
-                    if (parts.length === 0 && diff.total > 0) parts.push(`${diff.total} months`);
-                    durationText = parts.length > 0 ? parts.join(' ') + (diff.total > 12 ? ` (Total ${diff.total} months)` : '') : '0 months';
+                    if (years > 0) parts.push(years + 'Y');
+                    if (months > 0) parts.push(months + 'M');
+                    if (days > 0) parts.push(days + 'D');
+                    durationText = parts.length > 0 ? parts.join(' ') : '0M';
                 }
             }
             endDateField.value = formatDate(expiryDate);
