@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Templates</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1; /* indigo-500 */
+            --secondary-color: #a21caf; /* purple-700 */
+            --font-family: 'Poppins', sans-serif;
+            --bg-color: #f8fafc; /* slate-50 */
+            --header-bg: #ffffff;
+            --card-bg: #ffffff;
+            --text-color: #1e293b; /* slate-800 */
+            --light-text-color: #64748b; /* slate-500 */
+            --border-color: #e5e7eb; /* slate-200 */
+            --shadow-color: rgba(99, 102, 241, 0.08); /* indigo shadow */
+        }
+        html, body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: var(--bg-color);
+            min-height: 100vh;
+            margin: 0;
+            height: auto;
+            overflow: auto;
+        }
+
+        /* --- FONT UTILITY CLASSES --- */
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .font-khmer { font-family: 'Noto Sans Khmer', 'Leelawadee UI', 'Khmer OS', 'Khmer UI', 'Inter', sans-serif; }
+
+        .book-wrapper {
+            display: flex;
+            max-width: 1400px;
+            margin: 1.5rem auto;
+            background: var(--card-bg);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px var(--shadow-color);
+            height: 100%;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 300px;
+            background: #ffffff; /* slate-100 */
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem;
+            overflow-y: auto;
+            transition: width 0.3s ease;
+        }
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        .sidebar h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #6366f1; /* indigo-500 */
+        }
+        .search-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .search-input {
+            width: 100%;
+            padding: 0.5rem 2rem 0.5rem 2.5rem;
+            border: 1.5px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            background: #fff;
+            color: var(--text-color);
+        }
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+        .section-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #6366f1; /* indigo-500 */
+            margin: 1rem 0 0.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-title:hover {
+            color: #a21caf; /* purple-700 */
+        }
+        .msgtype-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #6366f1 #f1f5f9;
+        }
+        .msgtype-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        .msgtype-list::-webkit-scrollbar-thumb {
+            background: #6366f1;
+            border-radius: 4px;
+        }
+        .msgtype-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .msgtype-link:hover, .msgtype-link.active {
+            background: #e0e7ff; /* indigo-100 */
+            color: #4338ca; /* indigo-700 */
+            font-weight: 500;
+        }
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #6366f1 #f1f5f9;
+            max-height: 100%;
+            background: var(--card-bg);
+        }
+        .template-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .template-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b; /* slate-800 */
+        }
+        .copy-button {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(90deg, #6366f1, #a21caf);
+            color: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            font-weight: 600;
+            border: none;
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+        .copy-button:hover {
+            background: linear-gradient(90deg, #a21caf, #6366f1);
+        }
+        .data-item {
+            background: #f1f5f9; /* slate-100 */
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border-left: 6px solid #6366f1;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-color);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        th {
+            background: #f1f5f9;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .collapsible-content.open {
+            max-height: 200px;
+        }
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+        @media (max-width: 1024px) {
+            .book-wrapper {
+                flex-direction: column;
+                margin: 0;
+                border-radius: 0;
+                height: auto;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                max-height: 30vh;
+                overflow-y: auto;
+            }
+            .content-area {
+                padding: 1.5rem;
+                height: auto;
+                overflow-y: auto;
+            }
+        }
+        @media (max-width: 640px) {
+            .template-title {
+                font-size: 1.25rem;
+            }
+            .data-item {
+                padding: 1rem;
+            }
+            .sidebar {
+                max-height: 40vh;
+            }
+            .search-input {
+                font-size: 0.8rem;
+            }
+            .msgtype-link {
+                font-size: 0.8rem;
+            }
+            .content-area {
+                overflow-y: auto;
+            }
+        }
+        .back-btn {
+            display: inline-block;
+            margin: 1rem 0 1rem 1.5rem;
+            background: linear-gradient(90deg, #6366f1, #a21caf);
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            padding: 0.7rem 1.7rem;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+        .back-btn:hover {
+            background: linear-gradient(90deg, #a21caf, #6366f1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Redesigned Back to Home button -->
+    <div style="width:100%;display:flex;justify-content:flex-start;">
+        <a href="MainWeb.html" class="back-btn" style="
+            display: flex;
+            align-items: center;
+            gap: 0.6em;
+            margin: 2rem 0 1rem 2rem;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            border-radius: 40px;
+            padding: 0.65rem 1.5rem 0.65rem 1.1rem;
+            font-size: 1.05rem;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            text-decoration: none;
+            transition: background 0.2s, box-shadow 0.2s;
+        ">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.3em;" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Back to Home
+        </a>
+    </div>
+    <div class="book-wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Message Templates</h2>
+            </div>
+            <div class="search-container">
+                <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search templates...">
+            </div>
+            <div id="sidebarContent">
+                <div class="section-title" data-section="incident-report" data-collapsed="true">
+                    Incident Report
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
+                    <li><a class="msgtype-link" data-section="Incident Report" data-type="Request Incident Report">Request Incident Report</a></li>
+                </ul>
+                <div class="section-title" data-section="service-termination" data-collapsed="true">
+                    Service Termination
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
+                    <li><a class="msgtype-link" data-section="Service Termination" data-type="EZECOM's Termination">EZECOM's Termination</a></li>
+                    <li><a class="msgtype-link" data-section="Service Termination" data-type="Cellcard's Termination">Cellcard's Termination</a></li>
+                </ul>
+                <div class="section-title" data-section="payment-offset" data-collapsed="true">
+                    Payment Offset
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
+                    <li><a class="msgtype-link" data-section="Payment Offset" data-type="Cellcard to EZECOM">Cellcard to EZECOM</a></li>
+                    <li><a class="msgtype-link" data-section="Payment Offset" data-type="EZECOM to Cellcard">EZECOM to Cellcard</a></li>
+                </ul>
+                <div class="section-title" data-section="invoice-follow-up" data-collapsed="true">
+                    Invoice Follow Up
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
+                    <li><a class="msgtype-link" data-section="Invoice Follow Up" data-type="1st Follow up">1st Follow up</a></li>
+                    <li><a class="msgtype-link" data-section="Invoice Follow Up" data-type="2nd Follow up">2nd Follow up</a></li>
+                    <li><a class="msgtype-link" data-section="Invoice Follow Up" data-type="3rd Follow up">3rd Follow up</a></li>
+                </ul>
+                <div class="section-title" data-section="renewal-reactivation" data-collapsed="true">
+                    Renewal/Reactivation Offer
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
+                    <li><a class="msgtype-link" data-section="Renewal/Reactivation Offer" data-type="After Expiry Date Offer">After Expiry Date Offer</a></li>
+                    <li><a class="msgtype-link" data-section="Renewal/Reactivation Offer" data-type="Before Expiry Date Offer">Before Expiry Date Offer</a></li>
+                </ul>
+                <div class="section-title" data-section="telegram-message" data-collapsed="true">
+                    Telegram Message
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
+                    <li><a class="msgtype-link" data-section="Telegram Message" data-type="Renewal Offer">Renewal Offer</a></li>
+                    <li><a class="msgtype-link" data-section="Telegram Message" data-type="After Expired Offer">After Expired Offer</a></li>
+                    <li><a class="msgtype-link" data-section="Telegram Message" data-type="Alert for Technical Issue">Alert for Technical Issue</a></li>
+                    <li><a class="msgtype-link" data-section="Telegram Message" data-type="Change Plan Confirmation">Change Plan Confirmation</a></li>
+                    <li><a class="msgtype-link" data-section="Telegram Message" data-type="Termination Confirmation">Termination Confirmation</a></li>
+                </ul>
+                <div class="section-title" data-section="eos-credit-note" data-collapsed="true">
+                    EOS - Credit Note and Inv. Revision
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
+                    <li><a class="msgtype-link" data-section="EOS - Credit Note and Inv. Revision" data-type="Invoice Revision">Invoice Revision</a></li>
+                    <li><a class="msgtype-link" data-section="EOS - Credit Note and Inv. Revision" data-type="Fiber Issues">Fiber Issues</a></li>
+                    <li><a class="msgtype-link" data-section="EOS - Credit Note and Inv. Revision" data-type="Personal Issues">Personal Issues</a></li>
+                </ul>
+            </div>
+        </nav>
+        <main class="content-area">
+            <div id="languageSwitcher" class="flex gap-2 mb-4">
+                <button class="lang-btn px-3 py-1 rounded bg-blue-100 text-blue-900 font-semibold border border-blue-300" data-lang="en">En</button>
+                <button class="lang-btn px-3 py-1 rounded bg-gray-100 text-gray-700 font-semibold border border-gray-300" data-lang="zh">Ch</button>
+                <button class="lang-btn px-3 py-1 rounded bg-gray-100 text-gray-700 font-semibold border border-gray-300" data-lang="km">Kh</button>
+            </div>
+            <div class="template-header">
+                <div id="templateTitle" class="template-title">Select a message type to view the template</div>
+                <button id="copyButton" class="copy-button hidden">Copy Template</button>
+            </div>
+            <div id="templateContent" class="data-item">Please select a message type from the sidebar to view the template.</div>
+        </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM fully loaded and script running');
+
+            const state = {
+                activeLink: null,
+                searchQuery: '',
+                currentLanguage: 'en'
+            };
+
+            function translateTemplate(templateKey, lang) {
+                return templateMap[templateKey] ? templateMap[templateKey](lang) : '<em>No template found.</em>';
+            }
+
+            function formatIncidentReportMessage(lang = 'en') {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: Request Incident Report of CID: ####, SID: ####, Name: ####</strong><br><br>
+                    Dear Bong,<br><br>
+                    I hope this email finds you well.<br><br>
+                    We would like to seek for your support to provide us the incident report from [DD/MM/YYYY] to [DD/MM/YYYY], though the customer encountered internet service’s cut off and demands to compensate the non-usage period back.<br><br>
+                    Your prompt response would be greatly appreciated. Let me know if you require any additional information.<br><br>
+                    Thank you for your cooperation.<br><br>
+                    Best regards,<br>
+                    LY HENG
+                `;
+            }
+            function formatFirstInvoiceFollowUpMessage(lang = 'en') {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: First Reminder - Follow-Up on Pending Invoice Payment</strong><br><br>
+                    Dear [Customer's Name],<br><br>
+                    I hope this email finds you well.<br><br>
+                    We would like to follow up on the outstanding invoice(s) listed below. Kindly arrange payment at your earliest convenience to avoid any service disruption. Please note that terms and conditions apply.<br><br>
+                    <strong class="text-gray-800">Invoice Details:</strong><br><br>
+                    - Invoice Number    : #####,<br>
+                    - Customer ID       : #####,<br>
+                    - Customer Name     : #####,<br>
+                    - Amount Pending    : #####,<br>
+                    - Invoice Due Date  : #####,<br><br>
+                    Should you require any further details or have already processed the payment, please disregard this email and kindly share the payment confirmation with us.<br><br>
+                    We appreciate your prompt attention to this matter.<br><br>
+                    Best regards,<br>
+                    Heng
+                `;
+            }
+            function formatInvoiceFollowUpMessage(subject, lang = 'en') {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: ${subject}</strong><br><br>
+                    Dear [Customer's Name],<br><br>
+                    We refer to our previous reminder regarding your overdue invoice(s).<br><br>
+                    As of today, payment remains outstanding, and immediate action is required to avoid service disconnection or dismantling as per our terms and conditions.<br><br>
+                    - Invoice Number    : #####,<br>
+                    - Customer ID       : #####,<br>
+                    - Customer Name     : #####,<br>
+                    - Amount Pending    : #####,<br>
+                    - Invoice Due Date  : #####,<br><br>
+                    Please ensure full payment is made by Final Due Date to avoid service disruption. If payment has already been processed, kindly provide the payment confirmation at your earliest convenience.<br><br>
+                    Noted: Failure to settle the outstanding balance by the due date will result in immediate action, which may include disconnecting or dismantling of services.<br><br>
+                    For any further assistance, feel free to reach out. We appreciate your urgent attention to this matter.<br><br>
+                    Best regards,<br>
+                    Heng
+                `;
+            }
+            function formatThirdInvoiceFollowUpMessage(lang = 'en') {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: Final Reminder - Immediate Payment Required</strong><br><br>
+                    Dear [Customer's Name],<br><br>
+                    This is our final reminder regarding your overdue invoice(s). Immediate payment is required to avoid service disconnection or dismantling as per our terms and conditions.<br><br>
+                    <strong class="text-gray-800">Invoice Details:</strong><br><br>
+                    - Invoice Number    : #####,<br>
+                    - Customer ID       : #####,<br>
+                    - Customer Name     : #####,<br>
+                    - Amount Pending    : #####,<br>
+                    - Invoice Due Date  : #####,<br><br>
+                    Please ensure full payment is made immediately to avoid service disruption. If payment has already been processed, kindly provide the payment confirmation at your earliest convenience.<br><br>
+                    Noted: Failure to settle the outstanding balance by the due date will result in immediate action, which may include disconnecting or dismantling of services.<br><br>
+                    For any further assistance, please reach out. We appreciate your urgent attention to this matter.<br><br>
+                    Best regards,<br>
+                    Heng
+                `;
+            }
+            function formatReimbursementMessage(fromCompany, toCompany, lang = 'en') {
+                const subject = fromCompany === "EZECOM" 
+                    ? `Request offset from EZECOM ID - ###### to Correct Cellcard ID - ######`
+                    : `Request offset from Cellcard ID - ###### to Correct EZECOM ID - ######`;
+                const body = fromCompany === "EZECOM" 
+                    ? `Dear AR Team,<br><br>
+                       We hope this email finds you well.<br><br>
+                       A Cellcard's customer mistakenly made a payment to EZECOM. To avoid service disruption, please assist in offsetting and transferring the credit back from EZECOM ID to the correct Cellcard ID account as per the details below:<br><br>`
+                    : `Dear AR Team,<br><br>
+                       We hope this email finds you well.<br><br>
+                       An EZECOM's customer mistakenly made a payment to Cellcard. To avoid service disruption, please assist in offsetting and transferring the credit back from Cellcard ID to the correct EZECOM account as per the details below:<br><br>`;
+
+                return `
+                    <strong class="text-lg text-gray-900">Subject: ${subject}</strong><br><br>
+                    <strong class="text-gray-800">Send to:</strong> receivable@ezecomcorp.com, huotdara@cellcard.com.kh<br><br>
+                    <strong class="text-gray-800">CC:</strong> ychanna@ezecom.com.kh, schanpenhbormey@ezecom.com.kh, customercare@cellcard.com.kh, ARprepaid@cellcard.com.kh, peskadervy@ezecom.com.kh, lheng@ezecom.com.kh<br><br>
+                    ${body}
+                    <strong class="text-gray-800">Transaction Details:</strong><br><br>
+                    - Correct ${toCompany} ID : #####,<br>
+                    - Customer Name          : #####,<br>
+                    - Transaction Date       : #####,<br>
+                    - Amount Paid            : #####,<br><br>
+                    Kindly let us know if any additional information is required. Your prompt assistance would be greatly appreciated.<br><br>
+                    Thank you for your cooperation.<br><br>
+                    Best regards,
+                `;
+            }
+            function formatTerminationMessage(company, contactNumber, lang = 'en') {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: ${company} - Termination Request for CID: 220964, Mr. Namhong Ek</strong><br><br>
+                    Dear Mr. Namhong Ek,<br><br>
+                    We are deeply saddened to receive your request to terminate your ${company} services. Your time with us has been greatly valued, and we sincerely regret seeing you go.<br><br>
+                    As per our service agreement, a 30-day notice period applies, and your subscription will conclude after your next billing cycle. To proceed, please complete, sign, and stamp the attached termination form and return it via email or at a ${company} office.<br><br>
+                    We truly hope you might reconsider this decision. Should you wish to discuss your options or reactivate your account, please contact our dedicated team at <span class="text-blue-600">${contactNumber}</span>. We would be honored to continue serving you.<br><br>
+                    Thank you for your understanding and past support.<br><br>
+                    Warm regards,<br>
+                    ${company} Customer Service
+                `;
+            }
+            function formatReactivationOfferMessage(company, lang = 'en') {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: Special Offer - Reactivate Your ${company} Internet Service Today!</strong><br><br>
+                    Dear [Customer's Name],<br><br>
+                    I hope this email finds you well.<br><br>
+                    We noticed that your ${company} internet service has expired, and we’d love to welcome you back with a special reactivation offer! Reconnect today and enjoy seamless internet with exclusive benefits tailored just for you.<br><br>
+                    <strong class="text-gray-800">Account Details:</strong><br><br>
+                    - Customer ID        : #####,<br>
+                    - Customer Name      : #####,<br>
+                    - Current Plan       : #####,<br>
+                    - Billing Date       : #####,<br>
+                    - Renewal Offer      : #####,<br>
+                    - Amount             : #####,<br><br>
+                    To reactivate your service, simply reply to this email or contact our support team at <span class="text-blue-600">${company === 'EZECOM' ? '085 888 181' : '012 812 812'}</span>. Don’t miss out—this offer is valid for a limited time only!<br><br>
+                    We look forward to serving you again.<br><br>
+                    Best regards,<br>
+                    Heng<br>
+                    ${company} Team
+                `;
+            }
+            function formatRenewalOfferMessage(company, lang = 'en') {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: Special Offer - Renew Your ${company} Internet Service Before It Expires!</strong><br><br>
+                    Dear [Customer's Name],<br><br>
+                    I hope this email finds you well.<br><br>
+                    We noticed that your ${company} internet service is nearing its expiry date. To ensure uninterrupted access to your reliable internet connection, we’re offering you a special renewal deal! Renew before your service expires and enjoy continued seamless connectivity with added benefits.<br><br>
+                    <strong class="text-gray-800">Account Details:</strong><br><br>
+                    - Customer ID        : #####,<br>
+                    - Customer Name      : #####,<br>
+                    - Current Plan       : #####,<br>
+                    - Billing Date       : #####,<br>
+                    - Renewal Offer      : #####,<br>
+                    - Amount             : #####,<br><br>
+                    To renew your service and avoid any disruption, please reply to this email or contact our support team at <span class="text-blue-600">${company === 'EZECOM' ? '085 888 181' : '012 812 812'}</span> before your expiry date. Act now to take advantage of this limited-time offer!<br><br>
+                    We value your continued trust in ${company} and look forward to keeping you connected.<br><br>
+                    Best regards,<br>
+                    Heng<br>
+                    ${company} Team
+                `;
+            }
+            function formatTelegramRenewalOfferMessage(lang = 'en') {
+                if (lang === 'km') {
+                    return `
+                        បន្តគម្រោងរបស់អ្នក & សន្សំសំចៃ! 🌟<br><br>
+                        សូមគោរព [ឈ្មោះអតិថិជន] គម្រោងសេវាកម្មរបស់អ្នកជិតផុតកំណត់។ ចាប់យកការផ្តល់ជូនផ្តាច់មុខនេះដើម្បីរក្សាសេវាកម្មរបស់អ្នកឱ្យដំណើរការ! 🚀<br><br>
+                        ព័ត៌មានលម្អិតរបស់អ្នក:<br>
+                        * CID: [លេខសម្គាល់អតិថិជន]<br>
+                        * SID: [លេខសម្គាល់ការជាវ]<br>
+                        * ឈ្មោះ: [ឈ្មោះអតិថិជន]<br>
+                        * វិក្កយបត្រ: [កាលបរិច្ឆេទចេញវិក្កយបត្រ]<br>
+                        * ទីតាំង: [ទីតាំងអតិថិជន]<br><br>
+                        ផ្តល់ជូន: [12 ខែឥតគិតថ្លៃ 3 ខែ] 🎉<br>
+                        តម្លៃ: [#####]<br><br>
+                        ឆ្លើយតប ឬទាក់ទងមកយើងខ្ញុំសម្រាប់ព័ត៌មានលម្អិតបន្ថែម! 💬<br><br>
+                        សំណាងល្អ
+                    `;
+                }
+                return `
+                    Renew Your Plan & Save! 🌟<br><br>
+                    Dear [Customer's Name], your service plan is about to expire. Grab this exclusive offer to keep your services running! 🚀<br><br>
+                    <strong>Your Details:</strong><br>
+                    * <strong>CID:</strong> [Customer ID]<br>
+                    * <strong>SID:</strong> [Subscription ID]<br>
+                    * <strong>Name:</strong> [Customer Name]<br>
+                    * <strong>Billing:</strong> [Billing Date]<br>
+                    * <strong>Location:</strong> [Customer Location]<br><br>
+                    Offer: [12 Months Free 3 Months] 🎉<br>
+                    <strong>Price: [#####]</strong><br><br>
+                    Respond or reach out to us for further details! 💬<br><br>
+                    Good Luck,
+                `;
+            }
+            function formatTelegramAfterExpiredOfferMessage(lang = 'en') {
+                if (lang === 'km') {
+                    return `
+                        ត្រលប់មកវិញជាមួយនឹងកិច្ចព្រមព្រៀងដ៏អស្ចារ្យ! 🎁<br><br>
+                        សូមគោរព [ឈ្មោះអតិថិជន] គម្រោងសេវាកម្មរបស់អ្នកត្រូវបានផុតកំណត់។ ចាប់យកការផ្តល់ជូនផ្តាច់មុខនេះដើម្បីរក្សាសេវាកម្មរបស់អ្នកឱ្យដំណើរការ! 🚀<br><br>
+                        ព័ត៌មានលម្អិតរបស់អ្នក:<br>
+                        * CID: [លេខសម្គាល់អតិថិជន]<br>
+                        * SID: [លេខសម្គាល់ការជាវ]<br>
+                        * ឈ្មោះ: [ឈ្មោះអតិថិជន]<br>
+                        * វិក្កយបត្រ: [កាលបរិច្ឆេទចេញវិក្កយបត្រ]<br>
+                        * ទីតាំង: [ទីតាំងអតិថិជន]<br><br>
+                        ដំណើរការឡើងវិញ ការផ្តល់ជូន: [12 ខែ ឥតគិតថ្លៃ 3 ខែ] 🎉<br>
+                        តម្លៃ: [#####]<br><br>
+                        ឆ្លើយតប ឬទាក់ទងមកយើងខ្ញុំសម្រាប់ព័ត៌មានលម្អិតបន្ថែម! 💬<br><br>
+                        សំណាងល្អ
+                    `;
+                }
+                return `
+                    Come Back with a Great Deal! 🎁<br><br>
+                    Dear [Customer's Name], your service plan has been expired. Grab this exclusive offer to keep your services running! 🚀<br><br>
+                    <strong>Your Details:</strong><br>
+                    * <strong>CID:</strong> [Customer ID]<br>
+                    * <strong>SID:</strong> [Subscription ID]<br>
+                    * <strong>Name:</strong> [Customer Name]<br>
+                    * <strong>Billing:</strong> [Billing Date]<br>
+                    * <strong>Location:</strong> [Customer Location]<br><br>
+                    Reactivate Offer: [12 Months Free 3 Months] 🎉<br>
+                    <strong>Price: [#####]</strong><br><br>
+                    Respond or reach out to us for further details! 💬<br><br>
+                    Good Luck,
+                `;
+            }
+            function formatTelegramChangePlanConfirmationMessage(lang = 'en') {
+                return `
+                    Confirm Your New Plan! 🌟<br><br>
+                    Dear Valuable Customer,<br><br>
+                    We’re excited to offer you an upgraded plan! Please confirm to switch to the new plan below: 🚀<br><br>
+                    <strong>Your Details:</strong><br>
+                    * <strong>CID:</strong> #####<br>
+                    * <strong>SID:</strong> #####<br>
+                    * <strong>Name:</strong> #####<br>
+                    * <strong>Location:</strong> #####<br>
+                    * <strong>Billing:</strong> #####<br><br>
+                    Proposed New Plan: ##### 🎉<br>
+                    <strong>Price: #####</strong><br><br>
+                    To confirm, reply “YES” or contact us back. Deadline Confirmation DD/MMM/YYYY. 💬<br><br>
+                    Thank you for choosing as your partner service internet provider!<br><br>
+                    EZECOM & CELLCARD
+                `;
+            }
+            function formatTelegramAlertForTechnicalIssueMessage(lang = 'en') {
+                if (lang === 'en') {
+                    return `
+                        Dear [Customer Name],<br><br>
+                        We deeply regret the inconvenience caused by your internet service issue. A support ticket has been created, and our technical team is prioritizing a swift resolution. You will be contacted soon.<br><br>
+                        For further assistance, please reach out via:<br><br>
+                        📞 Hotline: 085 888 181<br>
+                        💬 EZECOM Telegram: @EZECOM_Agent_bot<br>
+                        💬 CELLCARD Telegram: @Cellcard_Bot<br><br>
+                        Thank you for your patience and trust in [EZECOM/CELLCARD]. 🌟<br><br>
+                        Sincerely,<br>
+                        EZECOM/CELLCARD
+                    `;
+                }
+                if (lang === 'km') {
+                    return `
+                        ជូនចំពោះអតិថិជនជាទីគោរព!<br><br>
+                        យើងសូមអភ័យទោសដោយស្មោះចំពោះភាពរអាក់រអួលដែលអ្នកបានជួបប្រទះជាមួយសេវាកម្មអ៊ីនធឺណិតរបស់អ្នក។ ដើម្បីធានាបាននូវដំណោះស្រាយរហ័ស យើងបានបញ្ជូនបញ្ហាទៅកាន់ក្រុមបច្ចេកទេសរបស់យើង។ ពួកគេនឹងទាក់ទងអ្នកឱ្យបានឆាប់តាមដែលអាចធ្វើទៅបាន ដើម្បីដោះស្រាយបញ្ហានេះ។<br><br>
+                        ប្រសិនបើអ្នកត្រូវការជំនួយបន្ថែម សូមជួយធ្វើការទាក់ទងតាមរយៈបណ្តាញ HOTLINE៖<br><br>
+                        • Telegram៖ @EZECOM_Agent_bot<br>
+                        • CELLCARD Telegram: @Cellcard_Bot<br>
+                        • Hotline Number: 085 888 181<br><br>
+                        សូមអរគុណចំពោះការយោគយល់ និងការអត់ធ្មត់របស់អ្នក។ យើងសូមកោតសរសើរចំពោះការជឿទុកចិត្តរបស់អ្នកចំពោះ [EZECOM / CELLCARD] ហើយប្តេជ្ញាចិត្តក្នុងការដោះស្រាយរឿងនេះឱ្យបានឆាប់រហ័ស។<br><br>
+                        សូមគោរព<br>
+                        EZECOM / CELLCARD
+                    `;
+                }
+                if (lang === 'zh') {
+                    return `<em>Chinese translation coming soon.</em>`;
+                }
+            }
+            function formatTelegramTerminationConfirmationMessage(lang = 'en') {
+                if (lang === 'en') {
+                    return `
+                        Dear Mr. Namhong Ek,<br><br>
+                        We are deeply saddened to receive your request to terminate your EZECOM services 😔. Your valued patronage has been greatly appreciated.<br><br>
+                        As per our agreement, a 30-day notice period applies, and your subscription will end after your next billing cycle. Kindly complete, sign, and stamp the attached form 📝 and return it via email or at an EZECOM office.<br><br>
+                        We sincerely hope you might reconsider. Please contact us at 085 888 181 to discuss your options or reactivate your account 📞.<br><br>
+                        Thank you for your cooperation and past support.<br><br>
+                        Sincerely,<br>
+                        EZECOM
+                    `;
+                }
+                if (lang === 'zh') {
+                    return `<em>Chinese translation coming soon.</em>`;
+                }
+                if (lang === 'km') {
+                    return `<em>Khmer translation coming soon.</em>`;
+                }
+            }
+            function formatFiberIssuesCreditNote(lang = 'en') {
+                if (lang === 'en') {
+                    return `
+                        <strong class="text-lg text-gray-900">Flow:</strong><br>
+                        - Incident report + Metabase Report + Invoice Credit Note<br>
+                        - Calculation Amount > Process Credit Note in EOS > Refund Credit in Eze24<br><br>
+                        <strong class="text-lg text-gray-900">Subject: Request for Approval: Credit Note & Refund Processing</strong><br><br>
+                        Dear Management Team,<br><br>
+                        I hope this email finds you well.<br><br>
+                        We kindly request your approval to process a credit note and issue a refund to the customer due to our inability to complete the installation at the designated project site (City Hall, 40 Road). Unfortunately, the customer is unable to wait for our restoration efforts.<br><br>
+                        <strong class="text-gray-800">Customer Details:</strong><br><br>
+                        • CID: ##### | SID: ##### | Name: #####<br>
+                        • Invoice/Credit Note No: ###### (12+3 months)<br>
+                        • Amount Paid: $348 (17th March 2025)<br>
+                        • Issued Date: 31st March 2025<br><br>
+                        To proceed, we need to generate a credit note for $##### to facilitate the refund. For your reference, we have attached the relevant documents related to this case.<br><br>
+                        Thank you for your attention to this matter. Please let us know if any further details are required.<br><br>
+                        Best regards,<br>
+                        [Your Name/Team]
+                    `;
+                }
+                if (lang === 'zh') {
+                    return `<em>Chinese translation coming soon.</em>`;
+                }
+                if (lang === 'km') {
+                    return `<em>Khmer translation coming soon.</em>`;
+                }
+            }
+            function formatPersonalIssuesCreditNote(lang = 'en') {
+                if (lang === 'en') {
+                    return `
+                        <strong class="text-lg text-gray-900">Subject: Request to Amend Invoice No - #####, CID - #####, Name - ######</strong><br><br>
+                        Dear [Customer's Name],<br><br>
+                        I hope you are doing well.<br><br>
+                        We have identified that the invoice was issued on a monthly basis, while you have made an upfront payment and requested a single invoice. We sincerely apologize for this oversight.<br><br>
+                        <strong>Corrected Invoice Details:</strong><br><br>
+                        • CID: ##### | SID: ##### | Name: #####<br>
+                        • Period: 12+3 (28th May 25 to 28th Aug 26)<br>
+                        • Amount (Incl.VAT): $348<br>
+                        • Inv. No / Issued on: ##### / issued 28th May 25.<br><br>
+                        <strong>Reason:</strong> The invoice was mistakenly set as monthly instead of upfront, not reflecting your payment preference.<br><br>
+                        <strong>Corrective Action:</strong> We will revise the invoice to consolidate all monthly charges into a single upfront invoice as per your request. Your approval is kindly requested to proceed.<br><br>
+                        If you have any questions or need further clarification, please let us know.<br><br>
+                        Thank you for your understanding and best regards,<br>
+                        YOUR NAME
+                    `;
+                }
+                if (lang === 'zh') {
+                    return `<em>Chinese translation coming soon.</em>`;
+                }
+                if (lang === 'km') {
+                    return `<em>Khmer translation coming soon.</em>`;
+                }
+            }
+            function formatInvoiceRevisionTemplate(lang = 'en') {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: Request Revise on Inv. No - #####, CID - #####, Name - ######</strong><br><br>
+                    Dear [Customer's Name],<br><br>
+                    I hope this email finds you well.<br><br>
+                    We would like to seek your approval through this request for Revise on Invoice on the invoice as below mentioned:<br><br>
+                    <strong>Revise inv. Details to:</strong><br><br>
+                    • CID: ##### | SID: ##### | Name: #####<br>
+                    • Period: 12+3 (28th May 25 to 28th Aug 26)<br>
+                    • Amount (Incl.VAT): $348<br>
+                    • Inv. No / Issued on: ##### / issued 28th May 25.<br><br>
+                    <strong>Root Cause:</strong> Due to the invoice is monthly, the customer has made payment as upfront, the customer also requests to have 1 invoice only.<br><br>
+                    <strong>Solution/Preventive Action:</strong> To make changes to invoices in month from monthly to upfront payment as the customer request, we would like to seek your approval to revise on this invoice from monthly to upfront payment.<br><br>
+                    Should you have any further concerns, please do not hesitate to reach out to me.<br><br>
+                    Thank and regarding,<br>
+                    YOUR NAME
+                `;
+            }
+
+            const templateMap = {
+                "Request Incident Report": (lang) => formatIncidentReportMessage(lang),
+                "EZECOM's Termination": (lang) => formatTerminationMessage("EZECOM", "085 888 181", lang),
+                "Cellcard's Termination": (lang) => formatTerminationMessage("Cellcard", "012 812 812", lang),
+                "Cellcard to EZECOM": (lang) => formatReimbursementMessage("Cellcard", "EZECOM", lang),
+                "EZECOM to Cellcard": (lang) => formatReimbursementMessage("EZECOM", "Cellcard", lang),
+                "1st Follow up": (lang) => formatFirstInvoiceFollowUpMessage(lang),
+                "2nd Follow up": (lang) => formatInvoiceFollowUpMessage("Second Reminder - Urgent Payment Required", lang),
+                "3rd Follow up": (lang) => formatThirdInvoiceFollowUpMessage(lang),
+                "After Expiry Date Offer": (lang) => formatReactivationOfferMessage("EZECOM", lang),
+                "Before Expiry Date Offer": (lang) => formatRenewalOfferMessage("EZECOM", lang),
+                "Renewal Offer": (lang) => formatTelegramRenewalOfferMessage(lang),
+                "After Expired Offer": (lang) => formatTelegramAfterExpiredOfferMessage(lang),
+                "Alert for Technical Issue": (lang) => formatTelegramAlertForTechnicalIssueMessage(lang),
+                "Change Plan Confirmation": (lang) => formatTelegramChangePlanConfirmationMessage(lang),
+                "Termination Confirmation": (lang) => formatTelegramTerminationConfirmationMessage(lang),
+                "Invoice Revision": (lang) => formatInvoiceRevisionTemplate(lang),
+                "Fiber Issues": (lang) => formatFiberIssuesCreditNote(lang),
+                "Personal Issues": (lang) => formatPersonalIssuesCreditNote(lang)
+            };
+
+            function updateUI() {
+                try {
+                    const searchQuery = state.searchQuery.toLowerCase();
+                    let anySectionVisible = false;
+
+                    document.querySelectorAll('.section-title').forEach(title => {
+                        const sectionName = title.getAttribute('data-section')?.toLowerCase() || '';
+                        const content = title.nextElementSibling;
+                        if (!content) return;
+
+                        const links = content.querySelectorAll('.msgtype-link');
+                        let hasVisibleLinks = false;
+
+                        links.forEach(link => {
+                            const type = link.getAttribute('data-type')?.toLowerCase() || '';
+                            const matchesSearch = searchQuery === '' || 
+                                type.includes(searchQuery) || 
+                                sectionName.includes(searchQuery);
+                            
+                            link.parentElement.style.display = matchesSearch ? 'block' : 'none';
+                            if (matchesSearch) hasVisibleLinks = true;
+                        });
+
+                        const sectionMatches = searchQuery === '' || sectionName.includes(searchQuery);
+                        const shouldShowSection = sectionMatches || hasVisibleLinks;
+
+                        title.style.display = shouldShowSection ? 'flex' : 'none';
+                        content.style.display = shouldShowSection ? 'block' : 'none';
+
+                        if (shouldShowSection) {
+                            const isCollapsed = title.getAttribute('data-collapsed') === 'true';
+                            content.classList.toggle('open', !isCollapsed && hasVisibleLinks);
+                            content.style.maxHeight = (!isCollapsed && hasVisibleLinks) ? `${content.scrollHeight}px` : '0';
+                            const svg = title.querySelector('svg');
+                            if (svg) {
+                                svg.classList.toggle('rotate-180', !isCollapsed);
+                            }
+                        }
+
+                        if (shouldShowSection) anySectionVisible = true;
+                    });
+
+                    const sidebarContent = document.getElementById('sidebarContent');
+                    if (!anySectionVisible && searchQuery !== '') {
+                        sidebarContent.innerHTML += '<p class="text-gray-500 text-sm p-2">No matching templates found.</p>';
+                    } else {
+                        const noResults = sidebarContent.querySelector('.text-gray-500');
+                        if (noResults) noResults.remove();
+                    }
+                } catch (error) {
+                    console.error('Error in updateUI:', error);
+                }
+            }
+
+            try {
+                const sectionTitles = document.querySelectorAll('.section-title');
+                sectionTitles.forEach(title => {
+                    const content = title.nextElementSibling;
+                    if (!content) {
+                        console.warn('No content found for section title:', title);
+                        return;
+                    }
+                    if (title.getAttribute('data-collapsed') === 'true') {
+                        content.classList.remove('open');
+                        content.style.maxHeight = '0';
+                    } else {
+                        content.classList.add('open');
+                        content.style.maxHeight = `${content.scrollHeight}px`;
+                    }
+
+                    title.addEventListener('click', () => {
+                        try {
+                            const isCollapsed = title.getAttribute('data-collapsed') === 'true';
+                            title.setAttribute('data-collapsed', !isCollapsed);
+                            content.classList.toggle('open');
+                            content.style.maxHeight = isCollapsed ? `${content.scrollHeight}px` : '0';
+                            const svg = title.querySelector('svg');
+                            if (svg) {
+                                svg.classList.toggle('rotate-180');
+                            }
+                        } catch (error) {
+                            console.error('Error in section title click:', error);
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Error initializing collapsible sections:', error);
+            }
+
+            try {
+                const msgTypeLinks = document.querySelectorAll('.msgtype-link');
+                msgTypeLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        try {
+                            e.preventDefault();
+                            if (state.activeLink) {
+                                state.activeLink.classList.remove('active');
+                            }
+                            this.classList.add('active');
+                            state.activeLink = this;
+
+                            const type = this.getAttribute('data-type');
+                            const templateTitle = document.getElementById('templateTitle');
+                            const templateContent = document.getElementById('templateContent');
+                            const copyButton = document.getElementById('copyButton');
+
+                            if (templateTitle && templateContent && copyButton) {
+                                templateTitle.textContent = type || 'Unknown Template';
+                                templateContent.innerHTML = translateTemplate(type, state.currentLanguage);
+                                copyButton.classList.remove('hidden');
+                            }
+                        } catch (error) {
+                            console.error('Error in template selection:', error);
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Error setting up template links:', error);
+            }
+
+            try {
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('input', (e) => {
+                        try {
+                            state.searchQuery = e.target.value || '';
+                            updateUI();
+                        } catch (error) {
+                            console.error('Error in search input:', error);
+                        }
+                    });
+                } else {
+                    console.warn('Search input not found');
+                }
+            } catch (error) {
+                console.error('Error setting up search:', error);
+            }
+
+            try {
+                const copyButton = document.getElementById('copyButton');
+                if (copyButton) {
+                    copyButton.addEventListener('click', () => {
+                        try {
+                            const templateContent = document.getElementById('templateContent');
+                            if (!templateContent) {
+                                console.warn('Template content not found');
+                                return;
+                            }
+                            const content = templateContent.innerText;
+                            if (content) {
+                                navigator.clipboard.writeText(content).then(() => {
+                                    copyButton.textContent = 'Copied!';
+                                    setTimeout(() => {
+                                        copyButton.textContent = 'Copy Template';
+                                    }, 2000);
+                                }).catch(err => {
+                                    console.error('Failed to copy text:', err);
+                                    copyButton.textContent = 'Copy Failed';
+                                    setTimeout(() => {
+                                        copyButton.textContent = 'Copy Template';
+                                    }, 2000);
+                                });
+                            }
+                        } catch (error) {
+                            console.error('Error in copy to clipboard:', error);
+                        }
+                    });
+                } else {
+                    console.warn('Copy button not found');
+                }
+            } catch (error) {
+                console.error('Error setting up copy button:', error);
+            }
+
+            try {
+                const langBtns = document.querySelectorAll('.lang-btn');
+                langBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        langBtns.forEach(b => {
+                            b.classList.remove('bg-blue-100', 'text-blue-900', 'border-blue-300');
+                            b.classList.add('bg-gray-100', 'text-gray-700', 'border-gray-300');
+                        });
+                        this.classList.remove('bg-gray-100', 'text-gray-700', 'border-gray-300');
+                        this.classList.add('bg-blue-100', 'text-blue-900', 'border-blue-300');
+                        state.currentLanguage = this.getAttribute('data-lang');
+                        if (state.activeLink) {
+                            const type = state.activeLink.getAttribute('data-type');
+                            const templateContent = document.getElementById('templateContent');
+                            if (templateContent) {
+                                templateContent.innerHTML = translateTemplate(type, state.currentLanguage);
+                            }
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Error setting up language switcher:', error);
+            }
+
+            try {
+                updateUI();
+            } catch (error) {
+                console.error('Error in initial UI update:', error);
+            }
+        });
+    </script>
+</body>
+</html>

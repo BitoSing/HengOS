@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Ultimate Web System</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- GLOBAL STYLES & THEME VARIABLES (WITH DARK MODE!) --- */
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --font-family: 'Poppins', sans-serif;
+            
+            /* Light Theme (Default) */
+            --bg-color: #f0f2f5;
+            --header-bg: #ffffff;
+            --card-bg: #ffffff;
+            --text-color: #1a1a1a;
+            --light-text-color: #555;
+            --border-color: #ddd;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+        }
+
+        /* Dark Theme */
+        body.dark-theme {
+            --bg-color: #121212;
+            --header-bg: #1e1e1e;
+            --card-bg: #2a2a2a;
+            --text-color: #e0e0e0;
+            --light-text-color: #a0a0a0;
+            --border-color: #444;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- MAIN APPLICATION SHELL LAYOUT --- */
+        .app-shell {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .app-header {
+            background-color: var(--header-bg);
+            box-shadow: 0 2px 10px var(--shadow-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .main-nav a {
+            color: var(--light-text-color);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        .main-nav a:hover {
+            color: var(--text-color);
+        }
+
+        .main-nav a.active {
+            background-color: var(--primary-color);
+            color: white !important;
+        }
+
+        .theme-switch {
+            cursor: pointer; font-size: 1.5rem;
+        }
+
+        main {
+            flex-grow: 1;
+            padding: 2.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--light-text-color);
+            background-color: var(--header-bg);
+            margin-top: auto;
+        }
+        
+        /* --- STYLES FOR YOUR RESOURCE HUB PAGE --- */
+        .hub-header { text-align: center; margin-bottom: 2rem; }
+        .hub-header h1 { font-size: 2.5rem; color: var(--text-color); }
+        .hub-header p { font-size: 1.1rem; color: var(--light-text-color); }
+
+        .controls-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+        
+        #search-box {
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border-radius: 50px;
+            border: 2px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            min-width: 280px;
+            transition: all 0.3s;
+        }
+        #search-box:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        #category-filters { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+
+        .filter-btn {
+            padding: 0.6rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            background-color: var(--card-bg);
+            color: var(--light-text-color);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+        .filter-btn:hover { background-color: var(--bg-color); }
+        .filter-btn.active {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white; border-color: transparent;
+        }
+
+        /* --- MODERN SYSTEM SUPPORTS GRID & CARD DESIGN --- */
+        #link-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 1200px) {
+            #link-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 800px) {
+            #link-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .link-item.system-support-link {
+            background: linear-gradient(120deg, #6a11cb 0%, #2575fc 100%);
+            color: #fff;
+            border: none;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px -8px #2575fc55;
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            min-height: 160px;
+            transition: box-shadow 0.3s, transform 0.3s, background 0.3s;
+            overflow: hidden;
+        }
+        .link-item.system-support-link:hover {
+            background: linear-gradient(120deg, #2575fc 0%, #6a11cb 100%);
+            box-shadow: 0 16px 40px -8px #2575fc99;
+            transform: translateY(-6px) scale(1.03);
+        }
+        .link-item.system-support-link .link-icon {
+            background: rgba(255,255,255,0.13);
+            border-radius: 12px;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.1rem;
+            transition: transform 0.4s cubic-bezier(.4,2,.6,1), box-shadow 0.3s;
+            box-shadow: 0 2px 12px 0 #6a11cb22;
+            will-change: transform;
+        }
+        .link-item.system-support-link:hover .link-icon {
+            transform: scale(1.18) rotate(-8deg);
+            box-shadow: 0 8px 32px 0 #2575fc44;
+            background: rgba(255,255,255,0.22);
+        }
+        .link-item.system-support-link .link-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: #fff;
+            transition: filter 0.3s, transform 0.4s cubic-bezier(.4,2,.6,1);
+            filter: drop-shadow(0 2px 6px #2575fc55);
+        }
+        .link-item.system-support-link:hover .link-icon svg {
+            filter: drop-shadow(0 4px 12px #6a11cb88);
+            transform: scale(1.12) rotate(8deg);
+        }
+        .link-item.system-support-link .link-content h3 {
+            font-size: 1.18rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            color: #fff;
+            letter-spacing: 0.01em;
+        }
+        .link-item.system-support-link .link-content p {
+            font-size: 1.01rem;
+            color: #e0e7ff;
+            margin-bottom: 0.5rem;
+        }
+        .link-item.system-support-link .link-arrow {
+            color: #ffe066;
+            position: absolute;
+            right: 1.5rem;
+            top: 1.5rem;
+            font-size: 1.7rem;
+            opacity: 1;
+            transition: color 0.3s;
+        }
+        .link-item.system-support-link:hover .link-arrow {
+            color: #fff;
+        }
+
+        /* --- NEW LINK GRID & CARD DESIGN --- */
+        #link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.75rem;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-decoration: none;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s, opacity 0.4s ease;
+            opacity: 1;
+            transform: scale(1);
+            position: relative;
+        }
+
+        .link-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px var(--shadow-color);
+            border-color: var(--primary-color);
+        }
+        
+        .link-icon {
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background-color: #e9eef3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        body.dark-theme .link-icon {
+            background-color: #3c3c3c;
+        }
+        .link-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--text-color);
+        }
+        .link-content h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.2rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        .link-content p {
+            font-size: 0.9rem;
+            color: var(--light-text-color);
+            line-height: 1.5;
+        }
+        
+        .link-arrow {
+            position: absolute;
+            right: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%) translateX(-10px);
+            font-size: 1.5rem;
+            color: var(--light-text-color);
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .link-item:hover .link-arrow {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        /* Hiding animation */
+        .link-item.hide {
+            transform: scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+            height: 0;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            border: none;
+        }
+
+        .app-section-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.75rem;
+        }
+        @media (max-width: 900px) {
+            .app-section-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Highlighted Links Styles */
+        .link-item.cellcard-link {
+            background: #e48947;
+            color: #fff;
+        }
+        .link-item.cellcard-link .link-content h3,
+        .link-item.cellcard-link .link-content p {
+            color: #fff;
+        }
+        .link-item.cellcard-link .link-arrow {
+            color: #fff;
+        }
+        .link-item.cellcard-link:hover {
+            background: #d06f1a;
+            color: #fff;
+            border-color: #d06f1a;
+            box-shadow: 0 8px 24px -4px #e48947cc;
+        }
+        .link-item.ezecom-link {
+            background: #6c54a3;
+            color: #fff;
+        }
+        .link-item.ezecom-link .link-content h3,
+        .link-item.ezecom-link .link-content p {
+            color: #fff;
+        }
+        .link-item.ezecom-link .link-arrow {
+            color: #fff;
+        }
+        .link-item.ezecom-link:hover {
+            background: #4d3a7a;
+            color: #fff;
+            border-color: #4d3a7a;
+            box-shadow: 0 8px 24px -4px #6c54a3cc;
+        }
+        .link-item.altogether-link {
+            background: linear-gradient(135deg, #e48947 0%, #6c54a3 100%);
+            color: #fff;
+        }
+        .link-item.altogether-link .link-content h3,
+        .link-item.altogether-link .link-content p {
+            color: #fff;
+        }
+        .link-item.altogether-link .link-arrow {
+            color: #fff;
+        }
+        .link-item.altogether-link:hover {
+            background: linear-gradient(135deg, #d06f1a 0%, #4d3a7a 100%);
+            color: #fff;
+            border-color: #6c54a3;
+            box-shadow: 0 8px 24px -4px #6c54a3cc;
+        }
+
+        /* Section Titles in Applications Container */
+        .app-section-cellcard > h2 {
+            color: #e48947;
+        }
+        .app-section-ezecom > h2 {
+            color: #6c54a3;
+        }
+        .app-section-altogether > h2 {
+            background: linear-gradient(135deg, #e48947 0%, #6c54a3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        /* Add to your <style> section: */
+        .search-highlight {
+            background: #ffe066;
+            color: #222;
+            border-radius: 3px;
+            padding: 0 2px;
+        }
+
+        /* --- NEW: Location Content (3-column grid, aligned) --- */
+        .location-section-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            align-items: stretch;
+        }
+        @media (max-width: 900px) {
+            .location-section-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .link-item.location-link {
+            background: linear-gradient(135deg, #f7b267 0%, #6c54a3 100%);
+            color: #fff;
+            border: none;
+            box-shadow: 0 6px 24px -4px #6c54a3cc;
+            font-size: 1rem;
+            min-height: 50px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            border-radius: 14px;
+            padding: 1.5rem 1.25rem 1.25rem 1.5rem;
+            margin-bottom: 0;
+        }
+        .link-item.location-link .link-content h3,
+        .link-item.location-link .link-content p {
+            color: #fff;
+        }
+        .link-item.location-link .link-arrow {
+            color: #ffe066;
+            position: absolute;
+            right: 1.25rem;
+            top: 1.25rem;
+            transform: none;
+            opacity: 1;
+            font-size: 1.5rem;
+        }
+        .link-item.location-link:hover {
+            background: linear-gradient(135deg, #f4845f 0%, #4d3a7a 100%);
+            box-shadow: 0 12px 32px -4px #6c54a3cc;
+            transform: translateY(-7px) scale(1.03);
+        }
+        .link-item.location-link .link-content h3 {
+            font-size: 1.08rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+        }
+        .link-item.location-link .link-content p {
+            font-size: 0.97rem;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-shell">
+        <header class="app-header">
+            <div class="logo">HengOS</div>
+            <nav class="main-nav">
+                <a href="#resources" class="active">Home</a>
+                <a href="#about">About</a>
+            </nav>
+            <div class="theme-switch" id="theme-toggle" title="Toggle Dark/Light Mode">🌙</div>
+        </header>
+
+        <main id="content-area">
+            <!-- Dynamic Content will be injected here -->
+        </main>
+
+        <footer>
+            <p>All right Reserved @LYHENGG.</p>
+        </footer>
+    </div>
+
+    <script>
+        // === VIRTUAL PAGE CONTENT ===
+        // Store each sub-page as its own variable for clarity.
+        const systemSupportsContent = `
+        <div id="link-grid">
+            <a href="Calculations.html" class="link-item system-support-link" data-category="all">
+                <div class="link-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M7,7h2v2H7V7z M7,11h2v2H7V11z M7,15h2v2H7V15z M11,15h2v2h-2V15z M11,11h2v2h-2V11z M11,7h2v2h-2V7z M15,15h2v2h-2V15z M15,11h2v2h-2V11z M15,7h2v2h-2V7z"/></svg>
+                </div>
+                <div class="link-content">
+                    <h3>Business Calculation</h3>
+                    <p>Quickly calculate business numbers and scenarios.</p>
+                </div>
+                <div class="link-arrow">→</div>
+            </a>
+            <a href="MessageReminder.html" class="link-item system-support-link" data-category="all">
+                <div class="link-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M20,8l-8,5L4,8V6l8,5l8-5V8z"/></svg>
+                </div>
+                <div class="link-content">
+                    <h3>Email Sample</h3>
+                    <p>Generate and manage email/message reminders.</p>
+                </div>
+                <div class="link-arrow">→</div>
+            </a>
+            <a href="TextExtractor.html" class="link-item system-support-link" data-category="all">
+                <div class="link-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.99,6.99v10c0,1.1-0.9,2-2,2H6v-2h12V6.99h3.99z M16,2H4C2.9,2,2,2.9,2,4v12c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V4C18,2.9,17.1,2,16,2z M8,16h6v-2H8V16z M14,12H8v-2h6V12z M14,8H8V6h6V8z"/></svg>
+                </div>
+                <div class="link-content">
+                    <h3>Text Extraction</h3>
+                    <p>Extract and transcribe text from images, PDFs, and audio files.</p>
+                </div>
+                <div class="link-arrow">→</div>
+            </a>
+        </div>
+    `;
+
+    // Applications: store the sub page that was removed from System Supports
+    const applicationsContent = `
+    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+        <div class="app-section-cellcard" style="flex: 1 1 350px; min-width: 320px;">
+            <h2 style="margin-bottom:1rem;">Cellcard</h2>
+            <div class="app-section-grid">
+                <a href="https://cca.cellcard.com.kh:8443/app/?campaign=1#!LiveMonitoring" class="link-item cellcard-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>CC - Ameyo</h3>
+                        <p>Cellcard Call Center Ameyo</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://ccone.cellcard.com.kh/sm/login.cgi?uri=/" class="link-item cellcard-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>CC - BS4</h3>
+                        <p>Customer service Management (BS4)</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://ccos.cellcard.com.kh/login" class="link-item cellcard-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>CCOS Portal</h3>
+                        <p>CCOS Portal</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://app-report.ezecomcorp.com/auth/login?redirect=%2Fdashboard%2F542-csm-bs4-daily-utilization-dashboard%3Fuser_name%3Dacb24d%2540megabiz%26relative_date%3Dpast7days" class="link-item cellcard-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>BS4 - Metabase</h3>
+                        <p>BS4 Daily Utilization Dashboard</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+        </div>
+        <div class="app-section-ezecom" style="flex: 1 1 350px; min-width: 320px;">
+            <h2 style="margin-bottom:1rem;">EZECOM</h2>
+            <div class="app-section-grid">
+                <a href="https://ezecallx.ezecomcorp.com:8443/app/#!home" class="link-item ezecom-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>Eze - Ameyo</h3>
+                        <p>Customer Care Portal</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://csm.ezecom.com.kh/sm/login.cgi?uri=/sm/customer/search.cgi" class="link-item ezecom-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>CSM - BS2</h3>
+                        <p>Customer Service Management (BS2)</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://eos.ezecom.com.kh/login" class="link-item ezecom-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>EOS - Portal</h3>
+                        <p>EOS Portal</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://app-report.ezecomcorp.com/auth/login?redirect=%2Fdashboard%2F3-daily-utilization-dashboard%3Fuser_name%3D%26relative_date%3D" class="link-item ezecom-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>BS2 - Metabase</h3>
+                        <p>BS2 Daily Utilization Dashboard</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+        </div>
+        <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;">
+            <h2 style="margin-bottom:1rem;">Altogether</h2>
+            <div class="app-section-grid">
+                <a href="https://eze24.ezecomcorp.com/bizproc/processes/90/view/0/?list_section_id=" class="link-item altogether-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>Eze 24</h3>
+                        <p>Business Process Portal</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://rt.telcotech.com.kh/" class="link-item altogether-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>RT Ticket</h3>
+                        <p>Live Monitoring & Ticketing</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://intranet.ezecom.com.kh/" class="link-item altogether-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>Intranet</h3>
+                        <p>Internal Company Portal</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://login.mihcm.com/Account/Login?ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3D6F6A7687-5348-448B-BE6D-F63BDA164DEB%26response_mode%3Dform_post%26response_type%3Dcode%2520id_token%26scope%3Dopenid%2520profile%2520offline_access%2520webapi%2520identityapi%2520tenant_code%2520attendanceapi%2520customapi%26state%3DOpenIdConnect.AuthenticationProperties%253DSh04P9eoJtAZ53pInY9nKT0oXWD7CziHNMsPueuoi8iSOZAT-WvePSnkiKIgTKqxyc9chnoB6dn7NOfNOA0ljjb50dm-wqMaTGzWM8kbJNbuteJck1rEuSq9JcOfOR8j7dNRCKjoL80FTCYGoOTwvSjOA8pzctdAg0_6_p3tokU%26nonce%3D638633824860848287.M2U5YmM0ZTItYTg5Yy00OWNlLWI5MDEtM2I5MGYxYTBmYTJiMGU3NDY1NGUtNzBmMS00NzgwLWIzYTctYjllMzQ4YWVkYjhk%26redirect_uri%3Dhttps%253A%252F%252Fapp.mihcm.com%252Fsignin-oidc%252F%26x-client-SKU%3DID_NET461%26x-client-ver%3D5.3.0.0" class="link-item altogether-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>MiHCM</h3>
+                        <p>Human Capital Management</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://sm-portal.ezecom.com.kh/login" class="link-item altogether-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>SM Portal</h3>
+                        <p>Service Management Portal</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://sm-portal.ezecom.com.kh/customer_onsite_survey/customer-info" class="link-item altogether-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>SM Portal - Survey</h3>
+                        <p>Customer Onsite Survey</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://teams.microsoft.com/v2/" class="link-item altogether-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>Microsoft Teams</h3>
+                        <p>Collaboration Platform</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://outlook.office.com/mail/" class="link-item altogether-link" data-category="social" target="_blank">
+                    <div class="link-content">
+                        <h3>Microsoft Outlook</h3>
+                        <p>Email Platform</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+        </div>
+    </div>
+`;
+
+    // --- NEW: Location Content (3-column grid, aligned) ---
+    const locationContent = `
+    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+        <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;">
+            <h2 style="margin-bottom:1rem;">Phnom Penh City</h2>
+            <div class="location-section-grid">
+                <a href="https://www.google.com/maps/place/EZECOM+Head+Office/@11.5562593,104.9254636,17z/data=!3m1!4b1!4m6!3m5!1s0x31095174fd02869f:0x25212418565ea9a5!8m2!3d11.5562593!4d104.9254636!16s%2Fg%2F11r8s7lky?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                    <div class="link-content">
+                        <h3>ទីស្នាក់ការកណ្តាល (Mon - Sat)</h3>
+                        <p>លេខ ៣១ មហាវិថីព្រះសីហនុ (២៧៤) សង្កាត់ចតុមុខ ខណ្ឌដូនពេញ ១២០២០៧ រាជធានីភ្នំពេញ</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://www.google.com/maps/search/11.536414,+104.886707?coh=219680&entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                    <div class="link-content">
+                        <h3>ស្ទឹងមានជ័យ (Mon - Sat)</h3>
+                        <p>ផ្ទះលេខ ៨អា ផ្លូវលេខ ២១៧ សង្កាត់ស្ទឹងមានជ័យ ខណ្ឌមានជ័យ រាជធានីភ្នំពេញ</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://www.google.com/maps/place/Street+Polaris,+Phnom+Penh/@11.5342098,104.9578599,20.64z/data=!4m6!3m5!1s0x31095723bfe3c791:0x34163542179e6a9b!8m2!3d11.5345243!4d104.9578492!16s%2Fg%2F11f4pn531g?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                    <div class="link-content">
+                        <h3>ប៉េងហួតបឹងស្ងោរ (Mon - Fri)</h3>
+                        <p>ផ្លូវជាតិលេខ១ ភូមិបឹងឈូក សង្កាត់និរោធ ខណ្ឌច្បារអំពៅ រាជធានីភ្នំពេញ</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://www.google.com/maps/place/%E1%9E%80%E1%9F%92%E1%9E%9A%E1%9E%BB%E1%9E%98%E1%9E%A0%E1%9F%8A%E1%9E%BB%E1%9E%93+EZECOM/@11.5887958,104.9033051,17z/data=!3m1!4b1!4m6!3m5!1s0x3109537896a4cf59:0x4ba5aa38d2d240cc!8m2!3d11.5887958!4d104.9033051!16s%2Fg%2F11s5gvg607?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                    <div class="link-content">
+                        <h3>ទួលគោក (ទួលសង្កែ) (Mon - Fri)</h3>
+                        <p>ផ្ទះលេខ#៦៣-៦៥ ផ្លូវលេខ VI-១៣ សង្កាត់ទួលសង្កែ ខណ្ឌឬស្សីកែវ រាជធានីភ្នំពេញ</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://www.google.com/maps/place/Opennet-Phnom+Penh-Tek+Thla+Branch/@11.5604391,104.8708496,17z/data=!3m1!4b1!4m6!3m5!1s0x310951c408062eb1:0x67c3131a41c712a!8m2!3d11.5604391!4d104.8708496!16s%2Fg%2F11fg4lrdq9?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                    <div class="link-content">
+                        <h3>ទឹកថ្លា (Mon - Fri)</h3>
+                        <p>ផ្ទះលេខ ៣០ ផ្លូវ ១០១៩ សង្កាត់ទឹកថ្លា ខណ្ឌសែនសុខ រាជធានីភ្នំពេញ</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://www.google.com/maps/place/11%C2%B028'53.1%22N+104%C2%B056'53.3%22E/@11.4814167,104.9481389,17z/data=!3m1!4b1!4m4!3m3!8m2!3d11.4814167!4d104.9481389?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                    <div class="link-content">
+                        <h3>តាខ្មៅ (Mon - Fri)</h3>
+                        <p>ផ្ទះលេខ ៤៥ ផ្លូវលេខ១០៧ ភូមិតាខ្មៅ សង្កាត់តាខ្មៅ ក្រុងតាខ្មៅ ខេត្តកណ្តាល</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://www.google.com/maps/place/EZECOM+Chomchao+New/@11.5316446,104.6576929,12z/data=!4m7!3m6!1s0x31094f8ff9e4a1ab:0xf7726f012516dfba!8m2!3d11.5316375!4d104.8101345!15sCgZFWkVDT02SAQ1pbnRlcm5ldF9jYWZl4AEA!16s%2Fg%2F11r2w20mcs?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                    <div class="link-content">
+                        <h3>ចោមចៅ (Mon - Fri)</h3>
+                        <p>ផ្ទះលេខ A03 ផ្លូវជាតិលេខ៤ ភូមិអូរដើម សង្កាត់ចោមចៅ ខណ្ឌពរសែនជ័យ រាជធានីភ្នំពេញ</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+        </div>
+        <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;">
+            <h2 style="margin-bottom:1rem;">Provincial</h2>
+            <div class="location-section-grid">
+                <a href="https://www.google.com/maps/place/EZECOM+Bavet+Office/@11.07379,106.165445,17z/data=!3m1!4b1!4m6!3m5!1s0x310b23a218a50d3d:0x8af3d7ee4a19197a!8m2!3d11.07379!4d106.165445!16s%2Fg%2F11jkmy_cw1?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                    <div class="link-content">
+                        <h3>បាវិត (Mon - Fri)</h3>
+                        <p>ផ្ទះលេខ ៧-៨ ផ្លូវជាតិលេខ១ ភូមិបាវិតកណ្តាល សង្កាត់បាវិត ក្រុងបាវិតខេត្តស្វាយរៀង</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://www.google.com/maps/place/EZECOM+Poipet/@13.645153,102.573624,17z/data=!3m1!4b1!4m6!3m5!1s0x311b16e6174c32ff:0x5d041f0df6502e05!8m2!3d13.645153!4d102.573624!16s%2Fg%2F1ptzpsgjm?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                    <div class="link-content">
+                        <h3>ប៉ោយប៉ែត (Mon - Fri)</h3>
+                        <p>ផ្ទះលេខ C8-0657 ផ្លូវជាតិលេខ៥ ភូមិ៤ សង្កាត់ផ្សារកណ្តាល ក្រុងប៉ោយប៉ែត ខេត្តបន្ទាយមានជ័យ</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://www.google.com/maps/place/92-124+Neary+Klahan,+Kampong+Cham/@11.985518,105.3782371,12z/data=!4m6!3m5!1s0x310c6a641a73bc0f:0x5fede7599e943b23!8m2!3d11.98553!4d105.460639!16s%2Fg%2F11g606qv_f?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                    <div class="link-content">
+                        <h3>កំពង់ចាម (Mon - Fri)</h3>
+                        <p>ផ្ទះលេខ ៨០ ផ្លូវព្រះបាទអង្គឌួង ភូមិទួលស្បូវ សង្កាត់វាលវង់ ក្រុងកំពង់ចាម ខេត្តកំពង់ចាម</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Siem+Reap/@13.3593632,103.8545524,20z/data=!4m6!3m5!1s0x31101770a5909e8b:0xcdb83796db134804!8m2!3d13.3593183!4d103.8547083!16s%2Fg%2F11gz8zpjqg?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                    <div class="link-content">
+                        <h3>សៀមរាប (Mon - Fri)</h3>
+                        <p>#11,12 ផ្លូវស៊ីវុត្ថា ភូមិមណ្ឌល២ សង្កាត់ស្វាយដង្គំ ក្រុងសៀមរាប ខេត្តសៀមរាប</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Battambang/@13.0943536,103.1958162,17z/data=!3m1!4b1!4m6!3m5!1s0x3105498cb36ff109:0x73d0c8bd532dbe0f!8m2!3d13.0943536!4d103.1983911!16s%2Fg%2F1hf060w7n?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                    <div class="link-content">
+                        <h3>បាត់ដំបង (Mon - Fri)</h3>
+                        <p>ផ្ទះលេខ១៣៥១ ភូមិរំចេក សង្កាត់រតនៈ ក្រុងបាត់ដំបង ខេត្តបាត់ដំបង</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Sihanoukville/@10.6223804,103.5260101,18z/data=!4m6!3m5!1s0x3107e19d82b37785:0xd85a77996d030032!8m2!3d10.6223702!4d103.5258629!16s%2Fg%2F11fg535vj0?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                    <div class="link-content">
+                        <h3>ក្រុងព្រះសីហនុ (Mon - Fri)</h3>
+                        <p>ផ្ទះលេខ ១៥៧ ផ្លូវឯករាជ្យ សង្កាត់លេខ២ ក្រុងព្រះសីហនុ ខេត្តព្រះសីហនុ</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+        </div>
+    </div>
+`;
+
+    const pageContent = {
+        resources: `
+            <div class="hub-header">
+                <h1>Heng Applications</h1>
+                <p>Find the tools and links you need, organized and searchable.</p>
+            </div>
+            
+            <div class="controls-container">
+                <input type="text" id="search-box" placeholder="🔍 Search links...">
+                <div id="category-filters">
+                    <button class="filter-btn active" data-category="all">Systems Supports</button>
+                    <button class="filter-btn" data-category="social">Applications</button>
+                    <button class="filter-btn" data-category="location">Location</button>
+                </div>
+            </div>
+            <div id="system-supports-container">
+                ${systemSupportsContent}
+            </div>
+            <div id="applications-container" style="display:none;">
+                ${applicationsContent}
+            </div>
+            <div id="location-container" style="display:none;">
+                ${locationContent}
+            </div>
+        `,
+        about: `
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h1>About This Project</h1>
+                <p>This page is a demonstration of a modern Single-Page Application (SPA) built with vanilla JavaScript, HTML, and CSS.</p>
+                <h2>Key Features:</h2>
+                <ul>
+                    <li><strong>Application Shell:</strong> The header and footer load only once for a fast, app-like experience.</li>
+                    <li><strong>Client-Side Routing:</strong> Content is switched instantly without page reloads.</li>
+                    <li><strong>Dynamic Filtering & Search:</strong> The Heng Applications page allows for powerful, real-time filtering of content.</li>
+                    <li><strong>Dark Mode:</strong> A user-toggleable theme for better viewing comfort.</li>
+                    <li><strong>Self-Contained:</strong> Everything is in a single HTML file for maximum portability.</li>
+                </ul>
+            </div>
+        `
+    };
+
+        // --- CORE APPLICATION LOGIC ---
+        const contentArea = document.getElementById('content-area');
+        const mainNavLinks = document.querySelectorAll('.main-nav a');
+
+        // Function to load page content and set up its specific logic
+        const loadPage = (page) => {
+            // Default to 'resources' if no hash or unknown hash
+            if (!pageContent[page]) page = 'resources';
+            contentArea.innerHTML = pageContent[page];
+            updateActiveNavLink(page);
+
+            // If the loaded page is 'resources', we must activate its unique JS
+            if (page === 'resources') {
+                initResourceHub();
+            }
+        };
+
+        // Function to highlight the active main navigation link
+        const updateActiveNavLink = (activePage) => {
+            mainNavLinks.forEach(link => {
+                link.classList.toggle('active', link.hash === `#${activePage}`);
+            });
+        };
+
+        // Main navigation handler
+        const handleNavigation = () => {
+            const page = window.location.hash.substring(1) || 'resources';
+            loadPage(page);
+        };
+
+        // --- RESOURCE HUB SPECIFIC LOGIC ---
+        // This function only runs when the 'resources' page is loaded
+        function initResourceHub() {
+            const searchBox = document.getElementById('search-box');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const systemSupportsContainer = document.getElementById('system-supports-container');
+            const applicationsContainer = document.getElementById('applications-container');
+            const locationContainer = document.getElementById('location-container');
+            let currentCategory = 'all';
+
+            const allLinkItems = () => [
+                ...systemSupportsContainer.querySelectorAll('.link-item'),
+                ...applicationsContainer.querySelectorAll('.link-item'),
+                ...locationContainer.querySelectorAll('.link-item')
+            ];
+
+            // Add highlight style for search matches
+            function highlightText(element, searchTerm) {
+                if (!searchTerm) {
+                    // Remove highlight
+                    element.innerHTML = element.textContent;
+                    return;
+                }
+                const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                element.innerHTML = element.textContent.replace(regex, '<span class="search-highlight">$1</span>');
+            }
+
+            const filterAndSearch = () => {
+                const searchTerm = searchBox.value.trim().toLowerCase();
+
+                if (searchTerm) {
+                    systemSupportsContainer.style.display = '';
+                    applicationsContainer.style.display = '';
+                    locationContainer.style.display = '';
+                    allLinkItems().forEach(item => {
+                        const itemText = item.textContent.toLowerCase();
+                        const matches = itemText.includes(searchTerm);
+                        if (matches) {
+                            item.classList.remove('hide');
+                        } else {
+                            item.classList.add('hide');
+                        }
+                        // Highlight in h3 and p
+                        const h3 = item.querySelector('.link-content h3');
+                        const p = item.querySelector('.link-content p');
+                        if (h3) highlightText(h3, searchTerm);
+                        if (p) highlightText(p, searchTerm);
+                    });
+                } else {
+                    // Remove highlight when not searching
+                    allLinkItems().forEach(item => {
+                        const h3 = item.querySelector('.link-content h3');
+                        const p = item.querySelector('.link-content p');
+                        if (h3) h3.innerHTML = h3.textContent;
+                        if (p) p.innerHTML = p.textContent;
+                    });
+                    // No search: show by category as before
+                    if (currentCategory === 'all') {
+                        systemSupportsContainer.style.display = '';
+                        applicationsContainer.style.display = 'none';
+                        locationContainer.style.display = 'none';
+                        systemSupportsContainer.querySelectorAll('.link-item').forEach(item => item.classList.remove('hide'));
+                        applicationsContainer.querySelectorAll('.link-item').forEach(item => item.classList.add('hide'));
+                        locationContainer.querySelectorAll('.link-item').forEach(item => item.classList.add('hide'));
+                    } else if (currentCategory === 'social') {
+                        systemSupportsContainer.style.display = 'none';
+                        applicationsContainer.style.display = '';
+                        locationContainer.style.display = 'none';
+                        applicationsContainer.querySelectorAll('.link-item').forEach(item => item.classList.remove('hide'));
+                        systemSupportsContainer.querySelectorAll('.link-item').forEach(item => item.classList.add('hide'));
+                        locationContainer.querySelectorAll('.link-item').forEach(item => item.classList.add('hide'));
+                    } else if (currentCategory === 'location') {
+                        systemSupportsContainer.style.display = 'none';
+                        applicationsContainer.style.display = 'none';
+                        locationContainer.style.display = '';
+                        locationContainer.querySelectorAll('.link-item').forEach(item => item.classList.remove('hide'));
+                        systemSupportsContainer.querySelectorAll('.link-item').forEach(item => item.classList.add('hide'));
+                        applicationsContainer.querySelectorAll('.link-item').forEach(item => item.classList.add('hide'));
+                    } else {
+                        systemSupportsContainer.style.display = 'none';
+                        applicationsContainer.style.display = 'none';
+                        locationContainer.style.display = 'none';
+                    }
+                }
+            };
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentCategory = button.dataset.category;
+                    filterAndSearch();
+                });
+            });
+
+            searchBox.addEventListener('input', filterAndSearch);
+
+            filterAndSearch();
+        }
+
+        // --- THEME TOGGLE LOGIC ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            themeToggle.textContent = '☀️';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+            let isDark = document.body.classList.contains('dark-theme');
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        // --- INITIALIZE THE APP ---
+        window.addEventListener('hashchange', handleNavigation);
+        document.addEventListener('DOMContentLoaded', handleNavigation);
+
+    </script>
+</body>
+</html>
