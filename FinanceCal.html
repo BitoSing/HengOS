@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Calculator - Final Design</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Khmer:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* --- UPDATED COLOR THEME TO MATCH REFERENCE --- */
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --primary-focus: #6a11cb;
+            --primary-light: #e8f0fe;
+            --heading-color: #1a1a1a;
+            --success: #198754;
+            --danger: #c65d57;
+            --dark-text: #1a1a1a;
+            --text-color: #1a1a1a;
+            --light-text: #555;
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --input-bg: #ffffff;
+            --border-color: #ddd;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --card-bg: #2a2a2a;
+            --text-color: #e0e0e0;
+            --heading-color: #e0e0e0;
+            --light-text: #a0a0a0;
+            --border-color: #444;
+            --input-bg: #1e1e1e;
+            --primary-light: rgba(37, 117, 252, 0.12);
+            --success: #22c55e;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* --- FONT UTILITY CLASSES --- */
+        .font-inter { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
+        .font-khmer { font-family: 'Noto Sans Khmer', 'Leelawadee UI', 'Khmer OS', 'Khmer UI', 'Inter', sans-serif; }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+        }
+        
+        body.dark-mode { color: var(--text-color); }
+
+        .container { max-width: 95%; margin: 0 auto; padding: 2rem 1rem; }
+
+        /* --- HEADER --- */
+        header { text-align: center; margin-bottom: 2.5rem; }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--heading-color);
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle { color: var(--light-text); font-size: 1.1rem; font-weight: 400; }
+        
+        /* --- PAGE CONTROLS --- */
+        .page-controls { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2.5rem 0; }
+
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: #fff; font-weight: 600; border: none; border-radius: 50px;
+            padding: 0.65rem 1.3rem; font-size: 0.95rem; cursor: pointer; text-decoration: none;
+            box-shadow: 0 4px 15px var(--box-shadow); transition: var(--transition);
+        }
+        .back-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--box-shadow); }
+
+        .theme-toggle {
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50%;
+            width: 40px; height: 40px; cursor: pointer; color: var(--light-text);
+            font-size: 1.2rem; display: grid; place-items: center; transition: var(--transition);
+        }
+        .theme-toggle:hover { color: var(--primary-focus); transform: translateY(-2px); }
+
+        /* --- CALCULATOR GRID & CARD --- */
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        @media (max-width: 900px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .calculator-card {
+            background: var(--card-bg); border-radius: var(--border-radius); padding: 1.5rem;
+            box-shadow: var(--box-shadow); border: 1px solid var(--border-color);
+            transition: var(--transition); display: flex; flex-direction: column;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--heading-color);
+            display: flex; align-items: center; gap: 0.75rem; font-weight: 600;
+        }
+        
+        .icon-container {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-light);
+        }
+        
+        h2 svg { width: 20px; height: 20px; color: var(--primary-focus); }
+        body.dark-mode h2 svg { color: var(--secondary-color); }
+
+        /* --- INPUTS & LABELS --- */
+        .input-group, .billing-adjustment-fields { display: flex; flex-direction: column; gap: 1rem; }
+        .input-group { margin-bottom: 1.5rem; }
+
+        .input-field label, .billing-col label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark-text); font-size: 0.9rem; }
+        body.dark-mode .input-field label, body.dark-mode .billing-col label { color: var(--text-color); }
+
+        .language-label {
+            font-family: 'Noto Sans Khmer', 'Leelawadee UI', 'Khmer OS', 'Khmer UI', 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-left: 5px;
+            font-weight: 400;
+        }
+
+        input, select {
+            width: 100%; padding: 10px 12px; font-size: 0.95rem; border: 1px solid var(--border-color);
+            border-radius: 8px; background-color: var(--input-bg); color: var(--text-color);
+            font-family: var(--font-family); transition: var(--transition);
+        }
+        body.dark-mode input, body.dark-mode select { color: var(--text-color); }
+        input::placeholder { color: var(--light-text); opacity: 0.5; font-size: 14px;}
+        input:focus, select:focus { outline: none; border-color: var(--primary-focus); box-shadow: 0 0 0 3px var(--primary-light); }
+        input.input-error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(198, 93, 87, 0.2); }
+        
+        .billing-row { display: flex; gap: 1rem; }
+        .billing-col { flex: 1; }
+        @media (max-width: 500px) { .billing-row { flex-direction: column; gap: 1rem; } }
+
+        /* --- RESULTS DESIGN --- */
+        .results {
+            background-color: var(--primary-light);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-top: auto;
+            border: 1px solid rgba(37, 117, 252, 0.12);
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 0;
+        }
+
+        .result-item:not(:last-child) { border-bottom: 1px solid rgba(37, 117, 252, 0.10); }
+        .result-label { font-weight: 500; font-size: 0.9rem; color: var(--light-text); }
+        body.dark-mode .result-label { color: var(--light-text); }
+        .result-value { font-weight: 600; font-size: 1rem; color: var(--text-color); }
+        body.dark-mode .result-value { color: var(--text-color); }
+
+        .date-result {
+            font-weight: 600; font-size: 1rem; color: var(--text-color); text-align: right;
+            width: auto; border: none; background: transparent; padding: 0; cursor: default;
+        }
+        .date-result:focus { box-shadow: none; }
+        body.dark-mode .date-result { color: var(--text-color); }
+        
+        .billing-results-card {
+            background: var(--primary-light);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border: 1px solid rgba(37, 117, 252, 0.12);
+        }
+        .billing-result-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.6rem 0;
+        }
+        .billing-result-row:not(:last-child) { border-bottom: 1px solid rgba(37, 117, 252, 0.10); }
+        .billing-result-label { font-size: 0.9rem; font-weight: 500; color: var(--light-text); }
+        .billing-result-value { font-weight: 700; font-size: 1rem; color: var(--text-color); }
+        body.dark-mode .billing-result-value { color: var(--text-color); }
+
+        body.dark-mode .results, body.dark-mode .billing-results-card {
+            background-color: rgba(37, 117, 252, 0.12);
+            border-color: rgba(37, 117, 252, 0.18);
+        }
+
+        .positive { color: var(--success) !important; }
+        .negative { color: var(--danger) !important; }
+        .neutral { color: var(--text-color) !important; }
+        body.dark-mode .neutral { color: var(--text-color) !important; }
+
+        .tooltip { cursor: help; }
+        .tooltip .tooltiptext {
+            visibility: hidden; width: 180px; background-color: var(--text-color); color: white; text-align: center;
+            border-radius: 6px; padding: 8px; position: absolute; z-index: 1; bottom: 125%; left: 50%;
+            transform: translateX(-50%); opacity: 0; transition: opacity 0.3s; font-size: 0.8rem;
+            font-weight: normal; line-height: 1.4;
+        }
+        .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
+        body.dark-mode .tooltip .tooltiptext { background-color: var(--text-color); color: var(--card-bg); }
+
+        /* Hide other calculators */
+        .hide-calculator {
+            display: none !important;
+        }
+
+        /* --- Add: Two-column layout for Interest Rate Calculator results --- */
+        .interest-results-row {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .interest-results-row .result-item {
+            flex: 1 1 0;
+            padding: 0;
+            border-bottom: none;
+        }
+        @media (max-width: 600px) {
+            .interest-results-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* --- Add: Two-column layout for Interest Rate Calculator inputs --- */
+        .interest-inputs-row {
+            display: flex;
+            gap: 1rem;
+        }
+        .interest-inputs-row .input-field {
+            flex: 1 1 0;
+        }
+        @media (max-width: 600px) {
+            .interest-inputs-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* --- TWO COLUMN INPUT GROUP FOR ALL CALCULATORS --- */
+        .input-group.two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .input-group.two-col .input-field {
+            margin-bottom: 0;
+        }
+        @media (max-width: 700px) {
+            .input-group.two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-controls">
+        <a href="index.html" class="back-btn">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 0.2rem;">
+              <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            </svg>
+            Back to Home
+        </a>
+        <button class="theme-toggle" id="themeToggle">🌓</button>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>Financial Calculator</h1>
+            <p class="subtitle">Essential tools for pricing, subscription, and interest calculations</p>
+        </header>
+
+        <div class="calculator-grid">
+            <!-- Interest Rate Calculator (only section kept) -->
+            <div class="calculator-card">
+                <h2>
+                    <span class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l4 4m-4-12V4m0 16v-4m-4-4H4m12 0h4m-8 8v4m0-16V4m-4 4H4m12 0h4" />
+                        </svg>
+                    </span>
+                    Interest Rate Calculator
+                </h2>
+                <div class="input-group two-col">
+                    <div class="input-field">
+                        <label for="principalAmount">Principal Amount <span class="language-label">ប្រាក់ដើម</span></label>
+                        <input type="text" id="principalAmount" placeholder="Enter amount ($)" pattern="[0-9,.]+">
+                    </div>
+                    <div class="input-field">
+                        <label for="interestRate">Interest Rate (%) <span class="language-label">អត្រាការប្រាក់</span></label>
+                        <input type="text" id="interestRate" placeholder="Enter rate (%)" pattern="[0-9,.]+">
+                    </div>
+                    <div class="input-field">
+                        <label for="interestPeriod">Period (months) <span class="language-label">រយៈពេល (ខែ)</span></label>
+                        <input type="text" id="interestPeriod" placeholder="Enter months" pattern="[0-9]+">
+                    </div>
+                </div>
+                <div class="results">
+                    <div class="interest-results-row">
+                        <div class="result-item">
+                            <span class="result-label">Total Interest <span class="language-label">សរុបការប្រាក់</span>:</span>
+                            <span class="result-value" id="totalInterest">$0.00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Total Amount <span class="language-label">ប្រាក់សរុប</span>:</span>
+                            <span class="result-value" id="totalAmount">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // Only keep calculation logic for Interest Rate Calculator
+        function formatNumber(num, isPercentage = false) {
+            if (isPercentage) { return num.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 }); }
+            return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        function stripSeparators(value) {
+            if (!value) return '';
+            const cleaned = value.replace(/[, ]/g, '').trim();
+            return cleaned.match(/^[.]*$/) ? '' : cleaned;
+        }
+        function formatInputNumber(input) {
+            let value = input.value.replace(/[^0-9.-]/g, '');
+            let [integerPart, decimalPart] = value.split('.');
+            integerPart = parseInt(integerPart.replace(/[^0-9-]/g, '') || '0').toLocaleString('en-US');
+            if (decimalPart !== undefined) {
+                decimalPart = decimalPart.slice(0, input.id === 'discountPercent' ? 4 : 2);
+                input.value = `${integerPart}.${decimalPart}`;
+            } else {
+                input.value = integerPart;
+            }
+        }
+        function calculateInterest() {
+            const principalInput = document.getElementById('principalAmount');
+            const rateInput = document.getElementById('interestRate');
+            const periodInput = document.getElementById('interestPeriod');
+            const totalInterestField = document.getElementById('totalInterest');
+            const totalAmountField = document.getElementById('totalAmount');
+            [principalInput, rateInput, periodInput].forEach(el => el && el.classList.remove('input-error'));
+            totalInterestField.innerText = '$0.00';
+            totalAmountField.innerText = '$0.00';
+            const principal = parseFloat(stripSeparators(principalInput?.value));
+            const rate = parseFloat(stripSeparators(rateInput?.value));
+            const period = parseInt(stripSeparators(periodInput?.value));
+            if (principalInput && principalInput.value.trim() !== '' && (isNaN(principal) || principal <= 0)) {
+                principalInput.classList.add('input-error'); return;
+            }
+            if (rateInput && rateInput.value.trim() !== '' && (isNaN(rate) || rate < 0)) {
+                rateInput.classList.add('input-error'); return;
+            }
+            if (periodInput && periodInput.value.trim() !== '' && (isNaN(period) || period <= 0)) {
+                periodInput.classList.add('input-error'); return;
+            }
+            if (isNaN(principal) || isNaN(rate) || isNaN(period)) return;
+            const totalInterest = principal * (rate / 100) * period;
+            const totalAmount = principal + totalInterest;
+            totalInterestField.innerText = `$${formatNumber(totalInterest)}`;
+            totalAmountField.innerText = `$${formatNumber(totalAmount)}`;
+        }
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+            this.textContent = isDarkMode ? '🌞' : '🌓';
+        });
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('themeToggle').textContent = '🌞';
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add SVG icon for interest calculator
+            document.querySelectorAll('.icon-container').forEach((container) => {
+                container.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l4 4m-4-12V4m0 16v-4m-4-4H4m12 0h4m-8 8v4m0-16V4m-4 4H4m12 0h4" /></svg>';
+            });
+            // Input events for interest calculator
+            ['principalAmount','interestRate','interestPeriod'].forEach(id => {
+                const field = document.getElementById(id);
+                if (field) {
+                    field.addEventListener('input', () => { formatInputNumber(field); calculateInterest(); });
+                    field.addEventListener('change', calculateInterest);
+                }
+            });
+            calculateInterest();
+        });
+    </script>
+</body>
+</html>
