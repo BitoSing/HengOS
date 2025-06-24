@@ -69,6 +69,8 @@
 
         .app-header {
             background-color: var(--header-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 2px 10px var(--shadow-color);
             padding: 1rem 2rem;
             display: flex;
@@ -90,6 +92,11 @@
             -webkit-text-fill-color: transparent;
         }
 
+        .main-nav {
+            display: flex;
+            gap: 0.5rem;
+        }
+
         .main-nav a {
             color: var(--light-text-color);
             text-decoration: none;
@@ -97,15 +104,29 @@
             padding: 0.5rem 1rem;
             border-radius: 8px;
             transition: color 0.3s, background-color 0.3s;
+            position: relative;
         }
 
         .main-nav a:hover {
             color: var(--text-color);
+            background-color: var(--highlight-bg);
         }
 
         .main-nav a.active {
-            background-color: var(--primary-color);
-            color: white !important;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        
+        .main-nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
         }
 
         .theme-switch {
@@ -837,39 +858,43 @@
         /* --- RESPONSIVE DESIGN FOR MOBILE --- */
         @media (max-width: 900px) {
             .app-header {
-                padding: 1rem 1rem;
+                padding: 1rem 1.5rem;
             }
             main {
-                padding: 1.2rem;
+                padding: 1.5rem;
             }
         }
         @media (max-width: 600px) {
             .app-header {
-                padding: 0.7rem 0.7rem;
+                padding: 1rem;
             }
             .logo {
-                font-size: 1.15rem;
-            }
-            .theme-switch {
                 font-size: 1.25rem;
             }
+            .theme-switch {
+                font-size: 1.35rem;
+            }
             main {
-                padding: 0.7rem;
+                padding: 1rem;
             }
             .hero-section {
                 flex-direction: column;
-                padding: 2rem 0.7rem;
-                border-radius: 1.2rem;
+                padding: 2.5rem 1rem;
+                text-align: center;
+                border-radius: 1.5rem;
             }
             .hero-icon-anim {
                 margin-right: 0;
-                margin-bottom: 1.2rem;
+                margin-bottom: 1.5rem;
             }
             .hero-content h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             .hero-content p {
-                font-size: 1rem;
+                font-size: 1.05rem;
+            }
+            .hero-content .hero-quote {
+                text-align: center;
             }
             .controls-container {
                 flex-direction: column;
@@ -887,7 +912,7 @@
                 grid-template-columns: 1fr;
             }
             .about-card {
-                padding: 1.1rem 0.7rem;
+                padding: 1.5rem;
             }
             .about-container {
                 gap: 1rem;
@@ -897,45 +922,130 @@
             }
         }
 
-        /* --- HAMBURGER MENU --- */
-        .hamburger {
-            display: none !important;
+        /* --- START: HAMBURGER MENU & MOBILE NAV --- */
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
         }
-        /* Remove mobile nav override: always show .main-nav */
+
+        .hamburger {
+            display: none; /* Hidden on desktop */
+            width: 30px;
+            height: 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            position: relative;
+            z-index: 1002; /* Above nav panel */
+        }
+
+        .hamburger-bar {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: var(--text-color);
+            border-radius: 3px;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            position: absolute;
+        }
+
+        .hamburger-bar:nth-child(1) { top: 0; }
+        .hamburger-bar:nth-child(2) { top: 50%; transform: translateY(-50%); }
+        .hamburger-bar:nth-child(3) { bottom: 0; }
+
+        /* Hamburger to "X" animation */
+        .hamburger.open .hamburger-bar:nth-child(1) {
+            transform: translateY(10.5px) rotate(45deg);
+        }
+        .hamburger.open .hamburger-bar:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.open .hamburger-bar:nth-child(3) {
+            transform: translateY(-10.5px) rotate(-45deg);
+        }
+
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 998; /* Below nav panel, above content */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        body.no-scroll {
+            overflow: hidden;
+        }
+
+
         @media (max-width: 900px) {
             .main-nav {
-                position: static !important;
-                width: auto !important;
-                max-width: none !important;
-                height: auto !important;
-                background: none !important;
-                box-shadow: none !important;
-                display: flex !important;
-                flex-direction: row !important;
-                align-items: center !important;
-                justify-content: flex-start !important;
-                padding: 0 !important;
-                gap: 0.5rem !important;
-                transition: none !important;
-                z-index: auto !important;
+                position: fixed;
+                top: 0;
+                right: -100%; /* Start off-screen */
+                width: min(80vw, 300px); /* Responsive width */
+                height: 100vh;
+                background-color: var(--card-bg);
+                box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: flex-start;
+                padding: 6rem 1rem 2rem 1rem;
+                gap: 1rem;
+                z-index: 1001; /* Above overlay */
+                transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             }
+            
+            body.dark-theme .main-nav {
+                box-shadow: -5px 0 35px rgba(0, 0, 0, 0.3);
+            }
+
             .main-nav.open {
-                right: auto !important;
+                right: 0; /* Slide in */
             }
+
             .main-nav a {
-                width: auto !important;
-                padding: 0.5rem 1rem !important;
-                font-size: 1rem !important;
-                border-radius: 8px !important;
+                color: var(--text-color); /* Use the main text color for mobile nav */
+                font-size: 1.1rem;
+                font-weight: 600;
+                transition: color 0.3s, background-color 0.3s;
+                border-radius: 8px;
+                padding: 1rem 1.5rem; /* Larger tap targets */
+                width: 100%;
+                text-align: left;
             }
+
+            .main-nav a:hover {
+                background-color: var(--highlight-bg);
+                color: var(--text-color);
+            }
+            
+            .main-nav a.active {
+                background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+                color: white !important;
+            }
+            
+            .main-nav a.active::after {
+                display: none; /* Hide underline on mobile */
+            }
+
             .hamburger {
-                display: none !important;
+                display: block; /* Show hamburger on mobile */
             }
         }
-        /* Overlay for nav when open */
-        .nav-overlay {
-            display: none !important;
-        }
+        /* --- END: HAMBURGER MENU & MOBILE NAV --- */
+
 
         /* Responsive breakpoints for RT Ticket Inquiries grid */
         @media (max-width: 1200px) {
@@ -957,14 +1067,24 @@
 </head>
 <body>
     <div class="app-shell">
+        <!-- START: NEW MODIFIED HEADER -->
         <header class="app-header">
             <div class="logo">HengOS</div>
             <nav class="main-nav" id="main-nav">
                 <a href="#resources" class="active" id="home-link">Home</a>
                 <a href="#about">About</a>
             </nav>
-            <div class="theme-switch" id="theme-toggle" title="Toggle Dark/Light Mode">🌙</div>
+            <div class="header-controls">
+                <div class="theme-switch" id="theme-toggle" title="Toggle Dark/Light Mode">🌙</div>
+                <button class="hamburger" id="hamburger-menu" aria-label="Open navigation menu" aria-expanded="false">
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                </button>
+            </div>
         </header>
+        <div class="nav-overlay" id="nav-overlay"></div>
+        <!-- END: NEW MODIFIED HEADER -->
 
         <main id="content-area">
             <!-- Dynamic Content will be injected here -->
@@ -1427,7 +1547,7 @@
                     </div>
 
                     <div class="rt-card-subsection" style="flex: 1; min-width: 280px;">
-                        <h4>Fulfillment & Configuration</h4>
+                        <h4>Fulfillment</h4>
                         <ul>
                             <li>Relocate / Re-Configure Modem/Router</li>
                             <li>Request Login for Modem/Router</li>
@@ -1592,11 +1712,9 @@
             // Highlight the active main navigation link
             const mainNavLinks = document.querySelectorAll('.main-nav a');
             mainNavLinks.forEach(link => {
-                // Home is active if page is 'resources' and no hash or hash is empty
-                if (link.id === 'home-link') {
-                    link.classList.toggle('active', page === 'resources');
-                } else {
-                    link.classList.toggle('active', link.hash === `#${page}`);
+                link.classList.remove('active');
+                if (link.hash === `#${page}` || (page === 'resources' && link.id === 'home-link')) {
+                    link.classList.add('active');
                 }
             });
 
@@ -1608,30 +1726,19 @@
 
         // Main navigation handler
         const handleNavigation = () => {
-            // always use hash for navigation
-            let page;
-            if (window.location.hash === '' || window.location.hash === '#' || window.location.hash === '#resources') {
-                page = 'resources';
-            } else {
-                page = window.location.hash.substring(1);
-            }
+            let page = window.location.hash.substring(1) || 'resources';
             loadPage(page);
         };
 
-        // Intercept Home link to prevent reload and use SPA navigation
+        // Initial load and event listeners for SPA navigation
         document.addEventListener('DOMContentLoaded', () => {
-            const homeLink = document.getElementById('home-link');
-            if (homeLink) {
-                homeLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    window.location.hash = '#resources';
-                });
-            }
-            handleNavigation();
+            handleNavigation(); // Load initial page based on hash
+            window.addEventListener('hashchange', handleNavigation);
+            
+            // Setup mobile menu
+            initMobileMenu();
         });
 
-        window.addEventListener('popstate', handleNavigation);
-        window.addEventListener('hashchange', handleNavigation);
 
         // --- RESOURCE HUB SPECIFIC LOGIC ---
         // This function only runs when the 'resources' page is loaded
@@ -1724,8 +1831,6 @@
                         case 'location':
                             locationContainer.style.display = 'block';
                             break;
-                        // The 'finance' case is handled by the default 'all' view.
-                        // We will need to adjust if 'finance' needs to be its own view.
                     }
                 }
             };
@@ -1747,6 +1852,42 @@
             filterAndSearch();
         }
 
+        // --- START: NEW MOBILE NAVIGATION LOGIC ---
+        function initMobileMenu() {
+            const hamburger = document.getElementById('hamburger-menu');
+            const nav = document.getElementById('main-nav');
+            const overlay = document.getElementById('nav-overlay');
+            const navLinks = nav.querySelectorAll('a');
+
+            if (!hamburger || !nav || !overlay) return; // Exit if elements don't exist
+
+            const toggleMenu = () => {
+                const isMenuOpen = nav.classList.contains('open');
+                
+                // Toggle classes
+                hamburger.classList.toggle('open', !isMenuOpen);
+                nav.classList.toggle('open', !isMenuOpen);
+                overlay.classList.toggle('active', !isMenuOpen);
+                document.body.classList.toggle('no-scroll', !isMenuOpen);
+
+                // Update ARIA attribute for accessibility
+                hamburger.setAttribute('aria-expanded', String(!isMenuOpen));
+            };
+
+            hamburger.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+
+            // Close menu when a link is clicked (important for SPAs)
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (nav.classList.contains('open')) {
+                        toggleMenu();
+                    }
+                });
+            });
+        }
+        // --- END: NEW MOBILE NAVIGATION LOGIC ---
+
 
         // --- THEME TOGGLE LOGIC ---
         const themeToggle = document.getElementById('theme-toggle');
@@ -1766,18 +1907,10 @@
             });
         }
         
-        // --- SPA NAVIGATION LOGIC ---
-        document.querySelectorAll('.main-nav a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const hash = link.getAttribute('href');
-                if (window.location.hash !== hash) {
-                    window.location.hash = hash;
-                } else {
-                    handleNavigation();
-                }
-            });
-        });
+        // --- SPA NAVIGATION LOGIC (using hashchange) ---
+        // The main navigation listener is now inside the DOMContentLoaded event listener
+        // to simplify the code flow. Clicks on nav links will trigger the 'hashchange'
+        // event, which is already handled.
     </script>
 </body>
 </html>
