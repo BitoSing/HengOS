@@ -56,7 +56,8 @@
         /* Khmer font for Khmer text */
         .khmer-font, :lang(km) {
             font-family: var(--khmer-font) !important;
-            font-size: 1.08em;
+            /* CHANGE: Adjusted font size for better visual balance with English text */
+            font-size: 1.02em; 
             letter-spacing: 0.01em;
         }
 
@@ -88,12 +89,6 @@
             font-weight: 700;
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
-            background-clip: text;
-            background-clip: text;
-            background-clip: text;
-            background-clip: text;
-            background-clip: text;
-            background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -963,7 +958,7 @@
         .header-controls {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            gap: 1rem;
         }
 
         .hamburger {
@@ -1023,6 +1018,37 @@
             overflow: hidden;
         }
 
+        /* --- Language Switcher Styles --- */
+        .lang-switch {
+            display: flex;
+            align-items: center;
+            background-color: var(--highlight-bg);
+            border-radius: 50px;
+            padding: 4px;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s;
+        }
+        .lang-btn {
+            background-color: transparent;
+            border: none;
+            color: var(--light-text-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        .lang-btn.active {
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        body.dark-theme .lang-btn.active {
+            color: var(--text-color);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+
 
         @media (max-width: 900px) {
             .main-nav {
@@ -1037,7 +1063,8 @@
                 flex-direction: column;
                 align-items: flex-start;
                 justify-content: flex-start;
-                padding: 6rem 1rem 2rem 1rem;
+                /* CHANGE: Reverted padding to give space at the top */
+                padding: 6rem 1rem 2rem 1rem; 
                 gap: 1rem;
                 z-index: 1001;
                 transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1106,10 +1133,14 @@
         <header class="app-header">
             <div class="logo">HengOS</div>
             <nav class="main-nav" id="main-nav">
-                <a href="#resources" class="active" id="home-link">Home</a>
-                <a href="#about">About</a>
+                <a href="#resources" class="active" id="home-link" data-translate-key="navHome">Home</a>
+                <a href="#about" data-translate-key="navAbout">About</a>
             </nav>
             <div class="header-controls">
+                <div class="lang-switch" id="lang-switcher">
+                    <button class="lang-btn" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="kh">KH</button>
+                </div>
                 <div class="theme-switch" id="theme-toggle" title="Toggle Dark/Light Mode">🌙</div>
                 <button class="hamburger" id="hamburger-menu" aria-label="Open navigation menu" aria-expanded="false">
                     <span class="hamburger-bar"></span>
@@ -1125,11 +1156,166 @@
         </main>
 
         <footer>
-            <p>All right Reserved 2025 @LYHENG.</p>
+            <p data-translate-key="footerText">All right Reserved 2025 @LYHENG.</p>
         </footer>
     </div>
 
     <script>
+        // --- I18N (Internationalization) ---
+        const translations = {
+            en: {
+                // Navigation
+                navHome: 'Home',
+                navAbout: 'About',
+                // Hero Section
+                heroTitle: 'Welcome to HengOS',
+                heroSubtitle: 'Your all-in-one productivity dashboard. Jump to your favorite tools, links, and resources in a flash!',
+                // Controls
+                searchPlaceholder: '🔍 Search links...',
+                filterBtnSys: 'Systems Supports',
+                filterBtnApp: 'Applications',
+                filterBtnRT: 'RT Ticket Inquiries',
+                filterBtnLoc: 'Location',
+                // System Supports Section
+                ss_bizCalc_h3: 'Business Calculation',
+                ss_bizCalc_p: 'Quickly calculate business numbers and scenarios.',
+                ss_finTools_h3: 'Finance Tools',
+                ss_finTools_p: 'Interest, pricing, and billing calculators for business and personal finance.',
+                ss_sampleEmail_h3: 'Sample Email',
+                ss_sampleEmail_p: 'Sample of Email and Text.',
+                ss_textExtract_h3: 'Text Extraction',
+                ss_textExtract_p: 'Extract and transcribe text from images, PDFs, and audio files.',
+                // Applications Section
+                app_cat_cellcard: 'Cellcard',
+                app_cat_ezecom: 'EZECOM',
+                app_cat_altogether: 'Altogether',
+                // Location Section
+                loc_pp_title: 'Phnom Penh City',
+                loc_prov_title: 'Provincial',
+                // RT Ticket Section
+                rt_title: 'RT Ticket Inquiries',
+                rt_q_activation_h3: 'Queue: Activation Team',
+                rt_q_delivery_h3: 'Queue: Customer Delivery',
+                rt_q_collection_h3: 'Queue: Care Collection',
+                rt_q_renewal_h3: 'Queue: Care Renewal',
+                rt_q_digital_h3: 'Queue: Digital (Technical Issues & Fulfillment)',
+                rt_digital_sub1: 'Service Availability Issues',
+                rt_digital_sub2: 'Service Performance Issues',
+                rt_digital_sub3: 'Fulfillment',
+                // About Page
+                aboutTitle: 'About This System',
+                aboutDesc: 'Welcome to <strong>HengOS</strong>, a personalized and high-performance web dashboard. This system is designed as a central hub for essential tools and links, built to be fast, responsive, and easy to use. It serves as both a practical utility and a demonstration of modern web development techniques.',
+                aboutKeyFeatTitle: 'Key Features:',
+                aboutFeat1: '<strong>Instant Navigation:</strong> A Single-Page Application (SPA) shell ensures no page reloads for a seamless, app-like feel.',
+                aboutFeat2: '<strong>Dynamic Content:</strong> Powerful, real-time search and category filtering on the Home page.',
+                aboutFeat3: '<strong>Adaptive Theming:</strong> A beautiful and functional Dark/Light mode that respects your viewing preference.',
+                aboutFeat4: '<strong>Animated & Interactive:</strong> Subtle animations and interactive elements powered by Lordicon for an engaging experience.',
+                aboutFeat5: '<strong>Portable & Efficient:</strong> Built with vanilla JavaScript for maximum performance and portability.',
+                creatorTitle: 'Meet The Creator',
+                creatorDesc: "Hi, I'm <b>LY Heng</b>, the creator of HengOS.<br>I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.<br>Thank you for using HengOS!",
+                feedbackTitle: 'Share Your Feedback',
+                feedbackDesc: "Have a suggestion, a feature request, or found a bug? I'd love to hear from you. Your feedback helps make this system better!",
+                feedbackEmailLabel: 'Your Email (Optional)',
+                feedbackMessageLabel: 'Your Message',
+                feedbackSubmitBtn: 'Send Feedback',
+                // Footer
+                footerText: 'All right Reserved 2025 @LYHENG.'
+            },
+            kh: {
+                // Navigation
+                navHome: 'ទំព័រដើម',
+                navAbout: 'អំពីប្រព័ន្ធ',
+                // Hero Section
+                heroTitle: 'សូមស្វាគមន៍មកកាន់ HengOS',
+                heroSubtitle: 'ផ្ទាំងគ្រប់គ្រងផលិតភាពរបស់អ្នក។ ចូលទៅកាន់ឧបករណ៍ តំណ និងធនធានដែលអ្នកចូលចិត្តបានភ្លាមៗ!',
+                // Controls
+                searchPlaceholder: '🔍 ស្វែងរកតំណ...',
+                filterBtnSys: 'ប្រព័ន្ធជំនួយ',
+                filterBtnApp: 'កម្មវិធីនានា',
+                filterBtnRT: 'សាកសួរ RT Ticket',
+                filterBtnLoc: 'ទីតាំង',
+                // System Supports Section
+                ss_bizCalc_h3: 'ការគណនាអាជីវកម្ម',
+                ss_bizCalc_p: 'គណនាលេខអាជីវកម្ម និងសេណារីយ៉ូផ្សេងៗបានរហ័ស។',
+                ss_finTools_h3: 'ឧបករណ៍ហិរញ្ញវត្ថុ',
+                ss_finTools_p: 'ការគណនាការប្រាក់ តម្លៃ និងវិក្កយបត្រសម្រាប់អាជីវកម្ម និងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន។',
+                ss_sampleEmail_h3: 'គំរូអ៊ីមែល',
+                ss_sampleEmail_p: 'គំរូនៃអ៊ីមែល និងសារអក្សរ។',
+                ss_textExtract_h3: 'ការដកស្រង់អត្ថបទ',
+                ss_textExtract_p: 'ដកស្រង់ និងចម្លងអត្ថបទពីរូបភាព PDF និងឯកសារអូឌីយ៉ូ។',
+                // Applications Section
+                app_cat_cellcard: 'សែលកាត',
+                app_cat_ezecom: 'អ៊ីស៊ីខម',
+                app_cat_altogether: 'រួមគ្នា',
+                // Location Section
+                loc_pp_title: 'រាជធានីភ្នំពេញ',
+                loc_prov_title: 'ទីតាំងតាមខេត្ត',
+                // RT Ticket Section
+                rt_title: 'ការសាកសួរ RT Ticket',
+                rt_q_activation_h3: 'ផ្នែក: ក្រុមការងារដំឡើង',
+                rt_q_delivery_h3: 'ផ្នែក: ការដឹកជញ្ជូនអតិថិជន',
+                rt_q_collection_h3: 'ផ្នែក: ការប្រមូលបំណុល',
+                rt_q_renewal_h3: 'ផ្នែក: បន្តសេវាកម្ម',
+                rt_q_digital_h3: 'ផ្នែក: បច្ចេកទេស (បញ្ហាបច្ចេកទេស និងការបំពេញការងារ)',
+                rt_digital_sub1: 'បញ្ហាដែលអាចកើតមានលើសេវាកម្ម',
+                rt_digital_sub2: 'បញ្ហាដំណើរការសេវាកម្ម',
+                rt_digital_sub3: 'ការបំពេញការងារ',
+                // About Page
+                aboutTitle: 'អំពីប្រព័ន្ធនេះ',
+                aboutDesc: 'សូមស្វាគមន៍មកកាន់ <strong>HengOS</strong> ដែលជាផ្ទាំងគ្រប់គ្រងគេហទំព័រផ្ទាល់ខ្លួន និងមានประสิทธิภาพខ្ពស់។ ប្រព័ន្ធនេះត្រូវបានរចនាឡើងជាមជ្ឈមណ្ឌលសម្រាប់ឧបករណ៍ និងតំណភ្ជាប់សំខាន់ៗ ដែលបង្កើតឡើងឱ្យមានល្បឿនលឿន ឆ្លើយតប និងងាយស្រួលប្រើ។',
+                aboutKeyFeatTitle: 'មុខងារសំខាន់ៗ:',
+                aboutFeat1: '<strong>ការរុករករហ័ស៖</strong> Single-Page Application (SPA) ធានាថាមិនមានការផ្ទុកទំព័រឡើងវិញសម្រាប់អារម្មណ៍ដូចកម្មវិធី។',
+                aboutFeat2: '<strong>មាតិកាថាមវន្ត៖</strong> ការស្វែងរក និងការត្រងប្រភេទតាមពេលវេលាជាក់ស្តែងដ៏មានអានុភាពនៅលើទំព័រដើម។',
+                aboutFeat3: '<strong>ស្បែកដែលអាចបត់បែនបាន៖</strong> មុខងារ Dark/Light ដ៏ស្រស់ស្អាតដែលគោរពចំណូលចិត្តរបស់អ្នក។',
+                aboutFeat4: '<strong>មានចលនា និងអន្តរកម្ម៖</strong> ចលនា និងធាតុអន្តរកម្មដែលដំណើរការដោយ Lordicon សម្រាប់បទពិសោធន៍ដ៏ទាក់ទាញ។',
+                aboutFeat5: '<strong>អាចយកតាមខ្លួនបាន និងមានប្រសិទ្ធភាព៖</strong> បង្កើតឡើងដោយ vanilla JavaScript សម្រាប់ដំណើរការ និងអាចយកតាមខ្លួនបានជាអតិបរមា។',
+                creatorTitle: 'ស្គាល់អ្នកបង្កើត',
+                creatorDesc: "សួស្តី ខ្ញុំឈ្មោះ <b>លី ហេង</b> ជាអ្នកបង្កើត HengOS។<br>ខ្ញុំ đam mê ការបង្កើតឧបករណ៍ឌីជីថលដែលជួយបង្កើនផលិតភាព និងធ្វើឱ្យការងារប្រចាំថ្ងៃកាន់តែងាយស្រួល។<br>សូមអរគុណសម្រាប់ការប្រើប្រាស់ HengOS!",
+                feedbackTitle: 'ចែករំលែកមតិកែលម្អរបស់អ្នក',
+                feedbackDesc: 'មានសំណូមពរ ស្នើសុំមុខងារ ឬរកឃើញបញ្ហាទេ? ខ្ញុំចង់ឮពីអ្នក។ មតិកែលម្អរបស់អ្នកជួយធ្វើឱ្យប្រព័ន្ធនេះកាន់តែប្រសើរឡើង!',
+                feedbackEmailLabel: 'អ៊ីមែលរបស់អ្នក (ស្រេចចិត្ត)',
+                feedbackMessageLabel: 'សាររបស់អ្នក',
+                feedbackSubmitBtn: 'ផ្ញើមតិកែលម្អ',
+                // Footer
+                footerText: 'រក្សាសិទ្ធិគ្រប់យ៉ាង ២០២៥ @LYHENG.'
+            }
+        };
+
+        let currentLanguage = 'en';
+
+        function applyTranslations() {
+            const lang = currentLanguage;
+            if (!translations[lang]) return;
+
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                const key = el.dataset.translateKey;
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+                const key = el.dataset.translatePlaceholder;
+                if (translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+            document.documentElement.lang = lang === 'kh' ? 'km' : 'en';
+        }
+
+        function setLanguage(lang) {
+            if (!translations[lang]) return;
+            currentLanguage = lang;
+            localStorage.setItem('userLanguage', lang);
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            
+            applyTranslations();
+        }
+
+
         // === VIRTUAL PAGE CONTENT ===
         const heroSection = `
         <section class="hero-section">
@@ -1143,12 +1329,11 @@
                 </lord-icon>
             </div>
             <div class="hero-content">
-                <h1>Welcome to HengOS</h1>
-                <p>Your all-in-one productivity dashboard. Jump to your favorite tools, links, and resources in a flash!</p>
+                <h1 data-translate-key="heroTitle">Welcome to HengOS</h1>
+                <p data-translate-key="heroSubtitle">Your all-in-one productivity dashboard. Jump to your favorite tools, links, and resources in a flash!</p>
                <div class="hero-quote khmer-font">
                     “ជំនះប្រសិនបើចង់ឈ្នះ ខំប្រសិនបើចង់បានផល​ រៀនប្រសិនបើចង់ចេះ អត់ធ្មត់ប្រសិនបើចង់ច្បាស់.”
-                    <span style="display:block; font-size:0.9rem; opacity:0.7; font-style: normal; margin-top: 0.25rem;" class="khmer-font"></span>
-                </div>
+               </div>
             </div>
         </section>
         `;
@@ -1157,61 +1342,41 @@
         <div id="link-grid">
             <a href="BusinessCal.html" class="link-item system-support-link" data-category="all">
                 <div class="link-icon hero-icon-anim">
-                    <lord-icon
-                        src="https://cdn.lordicon.com/emxxkbtx.json"
-                        trigger="hover"
-                        colors="primary:#ffffff"
-                        style="width:48px;height:48px">
-                    </lord-icon>
+                    <lord-icon src="https://cdn.lordicon.com/emxxkbtx.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon>
                 </div>
                 <div class="link-content">
-                    <h3>Business Calculation</h3>
-                    <p>Quickly calculate business numbers and scenarios.</p>
+                    <h3 data-translate-key="ss_bizCalc_h3">Business Calculation</h3>
+                    <p data-translate-key="ss_bizCalc_p">Quickly calculate business numbers and scenarios.</p>
                 </div>
                 <div class="link-arrow">→</div>
             </a>
             <a href="FinanceCal.html" class="link-item system-support-link" data-category="finance">
                 <div class="link-icon hero-icon-anim">
-                    <lord-icon
-                        src="https://cdn.lordicon.com/dnupukmh.json"
-                        trigger="hover"
-                        colors="primary:#ffffff"
-                        style="width:48px;height:48px">
-                    </lord-icon>
+                    <lord-icon src="https://cdn.lordicon.com/dnupukmh.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon>
                 </div>
                 <div class="link-content">
-                    <h3>Finance Tools</h3>
-                    <p>Interest, pricing, and billing calculators for business and personal finance.</p>
+                    <h3 data-translate-key="ss_finTools_h3">Finance Tools</h3>
+                    <p data-translate-key="ss_finTools_p">Interest, pricing, and billing calculators for business and personal finance.</p>
                 </div>
                 <div class="link-arrow">→</div>
             </a>
             <a href="SampleEmail.html" class="link-item system-support-link" data-category="all">
                 <div class="link-icon hero-icon-anim">
-                    <lord-icon
-                        src="https://cdn.lordicon.com/bpptgtfr.json"
-                        trigger="hover"
-                        colors="primary:#ffffff"
-                        style="width:48px;height:48px">
-                    </lord-icon>
+                    <lord-icon src="https://cdn.lordicon.com/bpptgtfr.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon>
                 </div>
                 <div class="link-content">
-                    <h3>Sample Email</h3>
-                    <p>Sample of Email and Text.</p>
+                    <h3 data-translate-key="ss_sampleEmail_h3">Sample Email</h3>
+                    <p data-translate-key="ss_sampleEmail_p">Sample of Email and Text.</p>
                 </div>
                 <div class="link-arrow">→</div>
             </a>
             <a href="TextExtractor.html" class="link-item system-support-link" data-category="all">
                 <div class="link-icon hero-icon-anim">
-                    <lord-icon
-                        src="https://cdn.lordicon.com/cfkiwvcc.json"
-                        trigger="hover"
-                        colors="primary:#ffffff"
-                        style="width:48px;height:48px">
-                    </lord-icon>
+                    <lord-icon src="https://cdn.lordicon.com/cfkiwvcc.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon>
                 </div>
                 <div class="link-content">
-                    <h3>Text Extraction</h3>
-                    <p>Extract and transcribe text from images, PDFs, and audio files.</p>
+                    <h3 data-translate-key="ss_textExtract_h3">Text Extraction</h3>
+                    <p data-translate-key="ss_textExtract_p">Extract and transcribe text from images, PDFs, and audio files.</p>
                 </div>
                 <div class="link-arrow">→</div>
             </a>
@@ -1221,7 +1386,7 @@
     const applicationsContent = `
     <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
         <div class="app-section-cellcard" style="flex: 1 1 350px; min-width: 320px;">
-            <h2 style="margin-bottom:1rem;">Cellcard</h2>
+            <h2 style="margin-bottom:1rem;" data-translate-key="app_cat_cellcard">Cellcard</h2>
             <div class="app-section-grid">
                 <a href="https://cca.cellcard.com.kh:8443/app/?campaign=1#!LiveMonitoring" class="link-item cellcard-link" data-category="social" target="_blank">
                     <div class="link-content">
@@ -1254,7 +1419,7 @@
             </div>
         </div>
         <div class="app-section-ezecom" style="flex: 1 1 350px; min-width: 320px;">
-            <h2 style="margin-bottom:1rem;">EZECOM</h2>
+            <h2 style="margin-bottom:1rem;" data-translate-key="app_cat_ezecom">EZECOM</h2>
             <div class="app-section-grid">
                 <a href="https://ezecallx.ezecomcorp.com:8443/app/#!home" class="link-item ezecom-link" data-category="social" target="_blank">
                     <div class="link-content">
@@ -1287,7 +1452,7 @@
             </div>
         </div>
         <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;">
-            <h2 style="margin-bottom:1rem;">Altogether</h2>
+            <h2 style="margin-bottom:1rem;" data-translate-key="app_cat_altogether">Altogether</h2>
             <div class="app-section-grid">
                 <a href="https://eze24.ezecomcorp.com/bizproc/processes/90/view/0/?list_section_id=" class="link-item altogether-link" data-category="social" target="_blank">
                     <div class="link-content">
@@ -1353,51 +1518,51 @@
     const locationContent = `
     <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
         <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;">
-            <h2 style="margin-bottom:1rem;">Phnom Penh City</h2>
+            <h2 style="margin-bottom:1rem;" data-translate-key="loc_pp_title">Phnom Penh City</h2>
             <div class="location-section-grid">
-                <a href="https://www.google.com/maps/place/EZECOM+Head+Office/@11.5562593,104.9254636,17z/data=!3m1!4b1!4m6!3m5!1s0x31095174fd02869f:0x25212418565ea9a5!8m2!3d11.5562593!4d104.9254636!16s%2Fg%2F11r8s7lky?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                <a href="https://www.google.com/maps/place/EZECOM+Head+Office/@11.5562593,104.9254636,17z/data=!3m1!4b1!4m6!3m5!1s0x31095174fd02869f:0x25212418565ea9a5!8m2!3d11.5562593!4d104.9254636!16s%2Fg%2F11r8s7lky?entry=tts" class="link-item location-link" target="_blank">
                     <div class="link-content">
                         <h3>ទីស្នាក់ការកណ្តាល (Mon - Sat)</h3>
                         <p>លេខ ៣១ មហាវិថីព្រះសីហនុ (២៧៤) សង្កាត់ចតុមុខ ខណ្ឌដូនពេញ ១២០២០៧ រាជធានីភ្នំពេញ</p>
                     </div>
                     <div class="link-arrow">→</div>
                 </a>
-                <a href="https://www.google.com/maps/search/11.536414,+104.886707?coh=219680&entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                 <a href="https://www.google.com/maps/search/11.536414,+104.886707?coh=219680&entry=tts" class="link-item location-link" target="_blank">
                     <div class="link-content">
                         <h3>ស្ទឹងមានជ័យ (Mon - Sat)</h3>
                         <p>ផ្ទះលេខ ៨អា ផ្លូវលេខ ២១៧ សង្កាត់ស្ទឹងមានជ័យ ខណ្ឌមានជ័យ រាជធានីភ្នំពេញ</p>
                     </div>
                     <div class="link-arrow">→</div>
                 </a>
-                <a href="https://www.google.com/maps/place/Street+Polaris,+Phnom+Penh/@11.5342098,104.9578599,20.64z/data=!4m6!3m5!1s0x31095723bfe3c791:0x34163542179e6a9b!8m2!3d11.5345243!4d104.9578492!16s%2Fg%2F11f4pn531g?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                <a href="https://www.google.com/maps/place/Street+Polaris,+Phnom+Penh/@11.5342098,104.9578599,20.64z/data=!4m6!3m5!1s0x31095723bfe3c791:0x34163542179e6a9b!8m2!3d11.5345243!4d104.9578492!16s%2Fg%2F11f4pn531g?entry=tts" class="link-item location-link" target="_blank">
                     <div class="link-content">
                         <h3>ប៉េងហួតបឹងស្ងោរ (Mon - Fri)</h3>
                         <p>ផ្លូវជាតិលេខ១ ភូមិបឹងឈូក សង្កាត់និរោធ ខណ្ឌច្បារអំពៅ រាជធានីភ្នំពេញ</p>
                     </div>
                     <div class="link-arrow">→</div>
                 </a>
-                <a href="https://www.google.com/maps/place/%E1%9E%80%E1%9F%92%E1%9E%9A%E1%9E%BB%E1%9E%98%E1%9E%A0%E1%9F%8A%E1%9E%BB%E1%9E%93+EZECOM/@11.5887958,104.9033051,17z/data=!3m1!4b1!4m6!3m5!1s0x3109537896a4cf59:0x4ba5aa38d2d240cc!8m2!3d11.5887958!4d104.9033051!16s%2Fg%2F11s5gvg607?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                <a href="https://www.google.com/maps/place/%E1%9E%80%E1%9F%92%E1%9E%9A%E1%9E%BB%E1%9E%98%E1%9E%A0%E1%9F%8A%E1%9E%BB%E1%9E%93+EZECOM/@11.5887958,104.9033051,17z/data=!3m1!4b1!4m6!3m5!1s0x3109537896a4cf59:0x4ba5aa38d2d240cc!8m2!3d11.5887958!4d104.9033051!16s%2Fg%2F11s5gvg607?entry=tts" class="link-item location-link" target="_blank">
                     <div class="link-content">
                         <h3>ទួលគោក (ទួលសង្កែ) (Mon - Fri)</h3>
                         <p>ផ្ទះលេខ#៦៣-៦៥ ផ្លូវលេខ VI-១៣ សង្កាត់ទួលសង្កែ ខណ្ឌឬស្សីកែវ រាជធានីភ្នំពេញ</p>
                     </div>
                     <div class="link-arrow">→</div>
                 </a>
-                <a href="https://www.google.com/maps/place/Opennet-Phnom+Penh-Tek+Thla+Branch/@11.5604391,104.8708496,17z/data=!3m1!4b1!4m6!3m5!1s0x310951c408062eb1:0x67c3131a41c712a!8m2!3d11.5604391!4d104.8708496!16s%2Fg%2F11fg4lrdq9?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                <a href="https://www.google.com/maps/place/Opennet-Phnom+Penh-Tek+Thla+Branch/@11.5604391,104.8708496,17z/data=!3m1!4b1!4m6!3m5!1s0x310951c408062eb1:0x67c3131a41c712a!8m2!3d11.5604391!4d104.8708496!16s%2Fg%2F11fg4lrdq9?entry=tts" class="link-item location-link" target="_blank">
                     <div class="link-content">
                         <h3>ទឹកថ្លា (Mon - Fri)</h3>
                         <p>ផ្ទះលេខ ៣០ ផ្លូវ ១០១៩ សង្កាត់ទឹកថ្លា ខណ្ឌសែនសុខ រាជធានីភ្នំពេញ</p>
                     </div>
                     <div class="link-arrow">→</div>
                 </a>
-                <a href="https://www.google.com/maps/place/11%C2%B028'53.1%22N+104%C2%B056'53.3%22E/@11.4814167,104.9481389,17z/data=!3m1!4b1!4m4!3m3!8m2!3d11.4814167!4d104.9481389?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                <a href="https://www.google.com/maps/place/11%C2%B028'53.1%22N+104%C2%B056'53.3%22E/@11.4814167,104.9481389,17z/data=!3m1!4b1!4m4!3m3!8m2!3d11.4814167!4d104.9481389?entry=tts" class="link-item location-link" target="_blank">
                     <div class="link-content">
                         <h3>តាខ្មៅ (Mon - Fri)</h3>
                         <p>ផ្ទះលេខ ៤៥ ផ្លូវលេខ១០៧ ភូមិតាខ្មៅ សង្កាត់តាខ្មៅ ក្រុងតាខ្មៅ ខេត្តកណ្តាល</p>
                     </div>
                     <div class="link-arrow">→</div>
                 </a>
-                <a href="https://www.google.com/maps/place/EZECOM+Chomchao+New/@11.5316446,104.6576929,12z/data=!4m7!3m6!1s0x31094f8ff9e4a1ab:0xf7726f012516dfba!8m2!3d11.5316375!4d104.8101345!15sCgZFWkVDT02SAQ1pbnRlcm5ldF9jYWZl4AEA!16s%2Fg%2F11r2w20mcs?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                <a href="https://www.google.com/maps/place/EZECOM+Chomchao+New/@11.5316446,104.6576929,12z/data=!4m7!3m6!1s0x31094f8ff9e4a1ab:0xf7726f012516dfba!8m2!3d11.5316375!4d104.8101345!15sCgZFWkVDT02SAQ1pbnRlcm5ldF9jYWZl4AEA!16s%2Fg%2F11r2w20mcs?entry=tts" class="link-item location-link" target="_blank">
                     <div class="link-content">
                         <h3>ចោមចៅ (Mon - Fri)</h3>
                         <p>ផ្ទះលេខ A03 ផ្លូវជាតិលេខ៤ ភូមិអូរដើម សង្កាត់ចោមចៅ ខណ្ឌពរសែនជ័យ រាជធានីភ្នំពេញ</p>
@@ -1407,44 +1572,44 @@
             </div>
         </div>
         <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;">
-            <h2 style="margin-bottom:1rem;">Provincial</h2>
+            <h2 style="margin-bottom:1rem;" data-translate-key="loc_prov_title">Provincial</h2>
             <div class="location-section-grid">
-                <a href="https://www.google.com/maps/place/EZECOM+Bavet+Office/@11.07379,106.165445,17z/data=!3m1!4b1!4m6!3m5!1s0x310b23a218a50d3d:0x8af3d7ee4a19197a!8m2!3d11.07379!4d106.165445!16s%2Fg%2F11jkmy_cw1?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                <a href="https://www.google.com/maps/place/EZECOM+Bavet+Office/@11.07379,106.165445,17z/data=!3m1!4b1!4m6!3m5!1s0x310b23a218a50d3d:0x8af3d7ee4a19197a!8m2!3d11.07379!4d106.165445!16s%2Fg%2F11jkmy_cw1?entry=tts" class="link-item location-link" target="_blank">
                     <div class="link-content">
                         <h3>បាវិត (Mon - Fri)</h3>
                         <p>ផ្ទះលេខ ៧-៨ ផ្លូវជាតិលេខ១ ភូមិបាវិតកណ្តាល សង្កាត់បាវិត ក្រុងបាវិតខេត្តស្វាយរៀង</p>
                     </div>
                     <div class="link-arrow">→</div>
                 </a>
-                <a href="https://www.google.com/maps/place/EZECOM+Poipet/@13.645153,102.573624,17z/data=!3m1!4b1!4m6!3m5!1s0x311b16e6174c32ff:0x5d041f0df6502e05!8m2!3d13.645153!4d102.573624!16s%2Fg%2F1ptzpsgjm?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                <a href="https://www.google.com/maps/place/EZECOM+Poipet/@13.645153,102.573624,17z/data=!3m1!4b1!4m6!3m5!1s0x311b16e6174c32ff:0x5d041f0df6502e05!8m2!3d13.645153!4d102.573624!16s%2Fg%2F1ptzpsgjm?entry=ttu" class="link-item location-link" target="_blank">
                     <div class="link-content">
                         <h3>ប៉ោយប៉ែត (Mon - Fri)</h3>
                         <p>ផ្ទះលេខ C8-0657 ផ្លូវជាតិលេខ៥ ភូមិ៤ សង្កាត់ផ្សារកណ្តាល ក្រុងប៉ោយប៉ែត ខេត្តបន្ទាយមានជ័យ</p>
                     </div>
                     <div class="link-arrow">→</div>
                 </a>
-                <a href="https://www.google.com/maps/place/92-124+Neary+Klahan,+Kampong+Cham/@11.985518,105.3782371,12z/data=!4m6!3m5!1s0x310c6a641a73bc0f:0x5fede7599e943b23!8m2!3d11.98553!4d105.460639!16s%2Fg%2F11g606qv_f?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                <a href="https://www.google.com/maps/place/92-124+Neary+Klahan,+Kampong+Cham/@11.985518,105.3782371,12z/data=!4m6!3m5!1s0x310c6a641a73bc0f:0x5fede7599e943b23!8m2!3d11.98553!4d105.460639!16s%2Fg%2F11g606qv_f?entry=tts" class="link-item location-link" target="_blank">
                     <div class="link-content">
                         <h3>កំពង់ចាម (Mon - Fri)</h3>
                         <p>ផ្ទះលេខ ៨០ ផ្លូវព្រះបាទអង្គឌួង ភូមិទួលស្បូវ សង្កាត់វាលវង់ ក្រុងកំពង់ចាម ខេត្តកំពង់ចាម</p>
                     </div>
                     <div class="link-arrow">→</div>
                 </a>
-                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Siem+Reap/@13.3593632,103.8545524,20z/data=!4m6!3m5!1s0x31101770a5909e8b:0xcdb83796db134804!8m2!3d13.3593183!4d103.8547083!16s%2Fg%2F11gz8zpjqg?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Siem+Reap/@13.3593632,103.8545524,20z/data=!4m6!3m5!1s0x31101770a5909e8b:0xcdb83796db134804!8m2!3d13.3593183!4d103.8547083!16s%2Fg%2F11gz8zpjqg?entry=tts" class="link-item location-link" target="_blank">
                     <div class="link-content">
                         <h3>សៀមរាប (Mon - Fri)</h3>
                         <p>#11,12 ផ្លូវស៊ីវុត្ថា ភូមិមណ្ឌល២ សង្កាត់ស្វាយដង្គំ ក្រុងសៀមរាប ខេត្តសៀមរាប</p>
                     </div>
                     <div class="link-arrow">→</div>
                 </a>
-                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Battambang/@13.0943536,103.1958162,17z/data=!3m1!4b1!4m6!3m5!1s0x3105498cb36ff109:0x73d0c8bd532dbe0f!8m2!3d13.0943536!4d103.1983911!16s%2Fg%2F1hf060w7n?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Battambang/@13.0943536,103.1958162,17z/data=!3m1!4b1!4m6!3m5!1s0x3105498cb36ff109:0x73d0c8bd532dbe0f!8m2!3d13.0943536!4d103.1983911!16s%2Fg%2F1hf060w7n?entry=ttu" class="link-item location-link" target="_blank">
                     <div class="link-content">
                         <h3>បាត់ដំបង (Mon - Fri)</h3>
                         <p>ផ្ទះលេខ១៣៥១ ភូមិរំចេក សង្កាត់រតនៈ ក្រុងបាត់ដំបង ខេត្តបាត់ដំបង</p>
                     </div>
                     <div class="link-arrow">→</div>
                 </a>
-                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Sihanoukville/@10.6223804,103.5260101,18z/data=!4m6!3m5!1s0x3107e19d82b37785:0xd85a77996d030032!8m2!3d10.6223702!4d103.5258629!16s%2Fg%2F11fg535vj0?entry=tts&g_ep=EgoyMDI0MTAwOS4wIPu8ASoASAFQAw%3D%3D" class="link-item location-link" target="_blank">
+                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Sihanoukville/@10.6223804,103.5260101,18z/data=!4m6!3m5!1s0x3107e19d82b37785:0xd85a77996d030032!8m2!3d10.6223702!4d103.5258629!16s%2Fg%2F11fg535vj0?entry=tts" class="link-item location-link" target="_blank">
                     <div class="link-content">
                         <h3>ក្រុងព្រះសីហនុ (Mon - Fri)</h3>
                         <p>ផ្ទះលេខ ១៥៧ ផ្លូវឯករាជ្យ សង្កាត់លេខ២ ក្រុងព្រះសីហនុ ខេត្តព្រះសីហនុ</p>
@@ -1458,13 +1623,13 @@
 
     const rtTicketInquiriesContent = `
     <section>
-        <h2 class="section-title">RT Ticket Inquiries</h2>
+        <h2 class="section-title" data-translate-key="rt_title">RT Ticket Inquiries</h2>
         <div class="rt-inquiries-grid">
             
             <div class="rt-inquiry-card">
                 <div class="rt-card-header">
                     <div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div>
-                    <h3>Queue: Activation Team</h3>
+                    <h3 data-translate-key="rt_q_activation_h3">Queue: Activation Team</h3>
                 </div>
                 <div class="rt-card-body"><ul><li>Re-activation after dismantle</li><li>Re-activation after termination</li><li>Connection with removed connectivity/port/device</li></ul></div>
             </div>
@@ -1472,7 +1637,7 @@
             <div class="rt-inquiry-card">
                 <div class="rt-card-header">
                     <div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12-4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg></div>
-                    <h3>Queue: Customer Delivery</h3>
+                    <h3 data-translate-key="rt_q_delivery_h3">Queue: Customer Delivery</h3>
                 </div>
                 <div class="rt-card-body"><ul><li>Update Profile</li><li>Upgrade / Downgrade Speed</li><li>Test Speed</li><li>Change Billing Date / Location</li><li>Change Account Name</li><li>Purchase CPE or Static IP</li></ul></div>
             </div>
@@ -1480,7 +1645,7 @@
             <div class="rt-inquiry-card">
                 <div class="rt-card-header">
                     <div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div>
-                    <h3>Queue: Care Collection</h3>
+                    <h3 data-translate-key="rt_q_collection_h3">Queue: Care Collection</h3>
                 </div>
                 <div class="rt-card-body"><ul><li>Refuse to pay (Has Pending Invoice)</li><li>Renewal/Promo (Has Pending Invoice)</li><li>Reactive Request (Has Pending Invoice)</li><li>Termination (Has Pending Invoice)</li><li>Compensation / Refund (Has Pending Invoice)</li></ul></div>
             </div>
@@ -1488,7 +1653,7 @@
             <div class="rt-inquiry-card">
                 <div class="rt-card-header">
                     <div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></div>
-                    <h3>Queue: Care Renewal</h3>
+                    <h3 data-translate-key="rt_q_renewal_h3">Queue: Care Renewal</h3>
                 </div>
                 <div class="rt-card-body"><ul><li>Refuse to pay invoice</li><li>Renewal + Promotion request</li><li>Reactive Request</li><li>Terminate Request</li><li>Request Compensation or Refund</li></ul></div>
             </div>
@@ -1496,19 +1661,19 @@
             <div class="rt-inquiry-card digital-queue">
                 <div class="rt-card-header">
                     <div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></div>
-                    <h3>Queue: Digital (Technical Issues & Fulfillment)</h3>
+                    <h3 data-translate-key="rt_q_digital_h3">Queue: Digital (Technical Issues & Fulfillment)</h3>
                 </div>
                 <div class="rt-card-body" style="display: flex; flex-wrap: wrap; gap: 1.5rem;">
                     <div class="rt-card-subsection" style="flex: 1; min-width: 280px;">
-                        <h4>Service Availability Issues</h4>
+                        <h4 data-translate-key="rt_digital_sub1">Service Availability Issues</h4>
                         <ul><li>Alarm / Lastsmile Alert</li><li>Many ONU Down / PON Down</li><li>Internet Not Working (Total outage)</li><li>No WiFi Signal</li></ul>
                     </div>
                     <div class="rt-card-subsection" style="flex: 1; min-width: 280px;">
-                        <h4>Service Performance Issues</h4>
+                        <h4 data-translate-key="rt_digital_sub2">Service Performance Issues</h4>
                         <ul><li>Internet Slow or Unstable</li><li>WiFi Low Signal / Poor Range</li><li>Link budget low or high</li><li>Website, App, or Game Issue</li><li>Port access / Protocol issue</li></ul>
                     </div>
                     <div class="rt-card-subsection" style="flex: 1; min-width: 280px;">
-                        <h4>Fulfillment</h4>
+                        <h4 data-translate-key="rt_digital_sub3">Fulfillment</h4>
                         <ul><li>Relocate / Re-Configure Modem/Router</li><li>Request Login for Modem/Router</li><li>Change WiFi Name / Password</li><li>Configure Remote Camera / NAT</li><li>Request LAN/Wi-Fi Survey</li><li>Add/Share Graph Utilization</li><li>Enable/Disable MAC Address</li></ul>
                     </div>
                 </div>
@@ -1521,12 +1686,12 @@
         resources: `
         ${heroSection}
         <div class="controls-container fade-in" style="animation-delay:0.8s;">
-            <input type="text" id="search-box" placeholder="🔍 Search links...">
+            <input type="text" id="search-box" data-translate-placeholder="searchPlaceholder" placeholder="🔍 Search links...">
             <div id="category-filters">
-                <button class="filter-btn active" data-category="all">Systems Supports</button>
-                <button class="filter-btn" data-category="social">Applications</button>
-                <button class="filter-btn" data-category="rt-ticket-inquiries">RT Ticket Inquiries</button>
-                <button class="filter-btn" data-category="location">Location</button>
+                <button class="filter-btn active" data-category="all" data-translate-key="filterBtnSys">Systems Supports</button>
+                <button class="filter-btn" data-category="social" data-translate-key="filterBtnApp">Applications</button>
+                <button class="filter-btn" data-category="rt-ticket-inquiries" data-translate-key="filterBtnRT">RT Ticket Inquiries</button>
+                <button class="filter-btn" data-category="location" data-translate-key="filterBtnLoc">Location</button>
             </div>
         </div>
         <div id="system-supports-container">
@@ -1545,22 +1710,22 @@
         about: `
             <div class="about-container">
                 <div class="about-card">
-                    <h2>About This System</h2>
-                    <p>Welcome to <strong>HengOS</strong>, a personalized and high-performance web dashboard. This system is designed as a central hub for essential tools and links, built to be fast, responsive, and easy to use. It serves as both a practical utility and a demonstration of modern web development techniques.</p>
-                    <h3>Key Features:</h3>
+                    <h2 data-translate-key="aboutTitle">About This System</h2>
+                    <p data-translate-key="aboutDesc">Welcome to <strong>HengOS</strong>, a personalized and high-performance web dashboard. This system is designed as a central hub for essential tools and links, built to be fast, responsive, and easy to use. It serves as both a practical utility and a demonstration of modern web development techniques.</p>
+                    <h3 data-translate-key="aboutKeyFeatTitle">Key Features:</h3>
                     <ul>
-                        <li><strong>Instant Navigation:</strong> A Single-Page Application (SPA) shell ensures no page reloads for a seamless, app-like feel.</li>
-                        <li><strong>Dynamic Content:</strong> Powerful, real-time search and category filtering on the Home page.</li>
-                        <li><strong>Adaptive Theming:</strong> A beautiful and functional Dark/Light mode that respects your viewing preference.</li>
-                        <li><strong>Animated & Interactive:</strong> Subtle animations and interactive elements powered by Lordicon for an engaging experience.</li>
-                        <li><strong>Portable & Efficient:</strong> Built with vanilla JavaScript for maximum performance and portability.</li>
+                        <li data-translate-key="aboutFeat1"><strong>Instant Navigation:</strong> A Single-Page Application (SPA) shell ensures no page reloads for a seamless, app-like feel.</li>
+                        <li data-translate-key="aboutFeat2"><strong>Dynamic Content:</strong> Powerful, real-time search and category filtering on the Home page.</li>
+                        <li data-translate-key="aboutFeat3"><strong>Adaptive Theming:</strong> A beautiful and functional Dark/Light mode that respects your viewing preference.</li>
+                        <li data-translate-key="aboutFeat4"><strong>Animated & Interactive:</strong> Subtle animations and interactive elements powered by Lordicon for an engaging experience.</li>
+                        <li data-translate-key="aboutFeat5"><strong>Portable & Efficient:</strong> Built with vanilla JavaScript for maximum performance and portability.</li>
                     </ul>
                 </div>
                 <div class="about-card" style="text-align: center;">
-                    <h2>Meet The Creator</h2>
+                    <h2 data-translate-key="creatorTitle">Meet The Creator</h2>
                     <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; justify-content: center; text-align: left;">
                         <div style="flex:1 1 260px; min-width:220px; max-width:350px;">
-                            <p style="font-size:1.08rem; margin-bottom:1.2rem;">Hi, I'm <b>LY Heng</b>, the creator of HengOS.<br>I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.<br>Thank you for using HengOS!</p>
+                            <p style="font-size:1.08rem; margin-bottom:1.2rem;" data-translate-key="creatorDesc">Hi, I'm <b>LY Heng</b>, the creator of HengOS.<br>I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.<br>Thank you for using HengOS!</p>
                         </div>
                         <div style="flex:1 1 220px; min-width:200px; max-width:320px; display:flex; flex-direction:column; align-items:center;">
                             <div style="width:220px;height:220px;overflow:hidden;border-radius:18px;border:4px solid var(--border-color);box-shadow:0 4px 16px -4px var(--shadow-color);background:#eee;">
@@ -1578,12 +1743,12 @@
                     </div>
                 </div>
                 <div class="about-card">
-                    <h2>Share Your Feedback</h2>
-                    <p>Have a suggestion, a feature request, or found a bug? I'd love to hear from you. Your feedback helps make this system better!</p>
+                    <h2 data-translate-key="feedbackTitle">Share Your Feedback</h2>
+                    <p data-translate-key="feedbackDesc">Have a suggestion, a feature request, or found a bug? I'd love to hear from you. Your feedback helps make this system better!</p>
                     <form class="feedback-form" action="https://formspree.io/f/YOUR_UNIQUE_ID" method="POST">
-                        <div class="form-group"><label for="feedback-email">Your Email (Optional)</label><input type="email" id="feedback-email" name="email" placeholder="you@example.com"></div>
-                        <div class="form-group"><label for="feedback-message">Your Message</label><textarea id="feedback-message" name="message" placeholder="Type your thoughts here..." required></textarea></div>
-                        <button type="submit" class="submit-btn">Send Feedback</button>
+                        <div class="form-group"><label for="feedback-email" data-translate-key="feedbackEmailLabel">Your Email (Optional)</label><input type="email" id="feedback-email" name="email" placeholder="you@example.com"></div>
+                        <div class="form-group"><label for="feedback-message" data-translate-key="feedbackMessageLabel">Your Message</label><textarea id="feedback-message" name="message" placeholder="Type your thoughts here..." required></textarea></div>
+                        <button type="submit" class="submit-btn" data-translate-key="feedbackSubmitBtn">Send Feedback</button>
                     </form>
                 </div>
             </div>
@@ -1596,6 +1761,8 @@
         const loadPage = (page) => {
             if (!pageContent[page]) page = 'resources';
             contentArea.innerHTML = pageContent[page];
+            
+            applyTranslations(); 
 
             const mainNavLinks = document.querySelectorAll('.main-nav a');
             mainNavLinks.forEach(link => {
@@ -1619,6 +1786,18 @@
             handleNavigation();
             window.addEventListener('hashchange', handleNavigation);
             initMobileMenu();
+            
+            const langSwitcher = document.getElementById('lang-switcher');
+            if (langSwitcher) {
+                langSwitcher.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('lang-btn')) {
+                        setLanguage(e.target.dataset.lang);
+                    }
+                });
+            }
+            
+            const savedLang = localStorage.getItem('userLanguage') || 'en';
+            setLanguage(savedLang);
         });
 
 
@@ -1720,6 +1899,9 @@
 
             if (!hamburger || !nav || !overlay) return;
 
+            // CHANGE: Removed the logic that cloned the language switcher.
+            // There is now only one switcher, which is in the .header-controls div.
+            
             const toggleMenu = () => {
                 const isMenuOpen = nav.classList.contains('open');
                 hamburger.classList.toggle('open', !isMenuOpen);
