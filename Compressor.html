@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File-Compressor</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Import Inter and Noto Sans Khmer -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+Khmer:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Load required JavaScript libraries from CDN -->
+    <!-- FFmpeg for video compression -->
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+    <!-- JSZip for creating .zip archives -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- pdf-lib for PDF manipulation -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+    <style>
+        body { font-family: 'Inter', 'Noto Sans Khmer', sans-serif; background-color: #f8fafc; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+        /* Update Khmer font stack for best compatibility */
+        .font-khmer { 
+            font-family: 'Noto Sans Khmer', 'Leelawadee UI', 'Khmer OS', 'Khmer UI', 'Inter', sans-serif; 
+        }
+
+        /* --- 1. CSS STYLING --- */
+
+        /* A. Global Styles & Color Palette */
+        :root {
+            --primary-blue: #007BFF;
+            --primary-blue-hover: #0056b3;
+            --success-green: #28a745;
+            --danger-red: #dc3545;
+            --light-gray-bg: #f8f9fa;
+            --border-color: #dee2e6;
+            --text-dark: #343a40;
+            --text-muted: #6c757d;
+            --font-family: 'Inter', sans-serif;
+        }
+
+        .centered-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Match TextExtractor.html card width: max-width: 600px on desktop, 100% on mobile */
+        .main-card {
+            background: #fff;
+            border-radius: 1.25rem;
+            box-shadow: 0 8px 32px rgba(16,30,54,0.10), 0 1.5px 4px rgba(16,30,54,0.07);
+            border: 1.5px solid var(--border-color);
+            padding: 2.5rem 2rem 2rem 2rem;
+            margin: 0;
+            max-width: 600px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: max-width 0.2s;
+        }
+        .back-btn-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 2.5rem 0 0.5rem 0;
+            display: flex;
+            justify-content: flex-start;
+            transition: max-width 0.2s;
+            padding: 0;
+        }
+
+        /* Tablet (≥ 640px) */
+        @media (min-width: 640px) {
+            .main-card,
+            .back-btn-container {
+                max-width: 600px;
+            }
+            .main-card {
+                padding: 2.5rem 2.5rem 2rem 2.5rem;
+            }
+        }
+
+        /* Small Desktop (≥ 900px) */
+        @media (min-width: 900px) {
+            .main-card,
+            .back-btn-container {
+                max-width: 420px;
+            }
+            .main-card {
+                padding: 2.5rem 2rem 2rem 2rem;
+            }
+        }
+
+        /* Large Desktop (≥ 1200px) */
+        @media (min-width: 1200px) {
+            .main-card,
+            .back-btn-container {
+                max-width: 800px;
+            }
+        }
+
+        /* Ultra-wide (≥ 1600px) */
+        @media (min-width: 1600px) {
+            .main-card,
+            .back-btn-container {
+                max-width: 540px;
+            }
+        }
+
+        /* Mobile (≤ 600px) */
+        @media (max-width: 600px) {
+            .main-card,
+            .back-btn-container {
+                max-width: 98vw;
+            }
+            .main-card {
+                padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+            }
+            .back-btn-container {
+                margin: 1.2rem 0 0.5rem 0;
+            }
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.15em;
+        }
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 0.5em;
+        }
+        .card-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        @media (max-width: 600px) {
+            .back-btn-container {
+                margin: 1.2rem auto 0.5rem auto;
+                max-width: 98vw;
+            }
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        header h1 {
+            font-size: 1.75rem;
+            color: var(--text-dark);
+        }
+
+        /* Language dropdown styles */
+        .language-selector { position: relative; display: inline-block; }
+        .language-btn { background-color: #f3f4f6; color: #4b5563; border: 1.5px solid #e5e7eb; border-radius: 24px; padding: 8px 18px 8px 12px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.2s; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+        .language-btn:hover, .language-btn:focus { background-color: #e0e7ff; color: #3730a3; outline: none; }
+        .language-btn .arrow { margin-left: 6px; transition: transform 0.2s; }
+        .language-selector.open .language-btn .arrow { transform: rotate(180deg); }
+        .dropdown-content { display: none; position: absolute; right: 0; background-color: #fff; min-width: 170px; border-radius: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.13); z-index: 10; margin-top: 8px; overflow: hidden; animation: fadeIn 0.18s ease; }
+        .language-selector.open .dropdown-content { display: block; }
+        .language-option { color: #374151; padding: 12px 18px 12px 16px; display: flex; align-items: center; gap: 10px; font-size: 15px; background: none; border: none; width: 100%; text-align: left; cursor: pointer; transition: background 0.18s; }
+        .language-option:hover, .language-option.active-language { background-color: #f1f5f9; }
+        .language-flag { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px);} to { opacity: 1; transform: translateY(0);} }
+
+        /* D. File Queue & Status UI */
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .file-icon { font-size: 1.5rem; }
+        .file-info { flex-grow: 1; }
+        .file-name { font-weight: 500; }
+        .file-size { font-size: 0.9rem; color: var(--text-muted); }
+        .file-status { font-weight: 500; }
+        .file-status.success { color: var(--success-green); }
+        .file-status.error { color: var(--danger-red); }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--light-gray-bg);
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--primary-blue);
+            border-radius: 4px;
+            transition: width 0.3s ease-in-out;
+        }
+
+        /* F. Responsive Design */
+        @media (max-width: 768px) {
+            .app-container {
+                margin: 1rem auto;
+                padding: 1rem;
+            }
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 flex flex-col font-inter">
+
+    <!-- --- 2. HTML STRUCTURE --- -->
+    <div class="centered-col">
+        <!-- Back to Home button aligned left, outside the card -->
+        <div class="back-btn-container">
+            <a
+                href="index.html"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-indigo-600 to-purple-500 text-white font-semibold shadow hover:from-indigo-700 hover:to-purple-600 transition"
+                style="text-decoration: none; font-size: 1rem;"
+            >
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.1em" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Home
+            </a>
+        </div>
+
+        <!-- Main Card Layout -->
+        <div class="main-card">
+            <header class="card-header">
+                <div>
+                    <h1 class="card-title font-inter">File-Compressor</h1>
+                    <p class="card-desc font-inter" data-i18n-key="sub-heading">Drag & drop files here.</p>
+                </div>
+                <!-- Custom Language Dropdown -->
+                <div class="language-selector" id="lang-dropdown">
+                    <button class="language-btn" id="lang-btn" type="button">
+                        <img src="https://flagcdn.com/us.svg" class="language-flag" id="lang-flag" alt="English" />
+                        <span id="lang-label" class="font-inter">English</span>
+                        <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <div class="dropdown-content" id="lang-dropdown-content">
+                        <button class="language-option font-inter active-language" data-lang="en"><img src="https://flagcdn.com/us.svg" class="language-flag" alt="English" /> English</button>
+                        <button class="language-option font-khmer" data-lang="km"><img src="https://flagcdn.com/kh.svg" class="language-flag" alt="Khmer" /> ភាសាខ្មែរ</button>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 flex flex-col gap-6">
+                <!-- Upload Module -->
+                <div id="upload-module">
+                    <label for="file-input" id="upload-box" class="block cursor-pointer bg-white border-2 border-dashed border-slate-300 rounded-xl p-8 text-center transition-colors hover:border-indigo-400">
+                        <h2 class="text-xl font-semibold mb-2 font-inter" data-i18n-key="main-heading">Compress Your Files</h2>
+                        <p class="text-slate-500 mb-4" data-i18n-key="sub-heading">Drag & drop files here.</p>
+                        <button type="button" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-semibold transition" data-i18n-key="select-files-btn">Select Files</button>
+                        <p class="text-xs text-slate-400 mt-4" data-i18n-key="disclaimer">All processing is done securely in your browser. Max 100MB.</p>
+                    </label>
+                    <input type="file" id="file-input" multiple class="hidden">
+                </div>
+
+                <!-- Processing Queue -->
+                <div id="file-queue" class="flex flex-col gap-4"></div>
+
+                <!-- Action Buttons (Download All, etc.) -->
+                <div id="action-buttons" class="card-actions hidden">
+                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-semibold transition" id="download-all-btn" data-i18n-key="download-all-btn">Download All (.zip)</button>
+                    <button class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-6 py-2 rounded-lg font-semibold transition" id="compress-more-btn" data-i18n-key="compress-more-btn">Compress More</button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <footer class="text-center mt-auto py-6 text-slate-400 text-sm font-inter">
+        <p data-i18n-key="footer-text">© 2024 QuantumCompress. Built for performance and privacy.</p>
+    </footer>
+
+    <script>
+    // --- 3. JAVASCRIPT LOGIC --- //
+
+    // --- A. I18N (INTERNATIONALIZATION) & CONFIG --- //
+    const translations = {
+        'en': {
+            'main-heading': 'Compress Your Files',
+            'sub-heading': 'Drag & drop PDF, Image, Video, or Office files here.',
+            'select-files-btn': 'Select Files',
+            'disclaimer': 'All processing is done securely in your browser. Max 100MB.',
+            'download-all-btn': 'Download All (.zip)',
+            'compress-more-btn': 'Compress More',
+            'footer-text': '© 2024 QuantumCompress. Built for performance and privacy.',
+            'status-queued': 'Queued',
+            'status-compressing': 'Compressing...',
+            'status-complete': 'Complete!',
+            'status-error': 'Error',
+            'status-unsupported': 'Unsupported File Type',
+            'download-btn': 'Download'
+        },
+        'km': {
+            'main-heading': 'បង្ហាប់ឯកសាររបស់អ្នក',
+            'sub-heading': 'អូសហើយទម្លាក់ឯកសារ PDF, រូបភាព, វីដេអូ, ឬ Office នៅទីនេះ។',
+            'select-files-btn': 'ជ្រើសរើសឯកសារ',
+            'disclaimer': 'ការដំណើរការទាំងអស់ត្រូវបានធ្វើដោយសុវត្ថិភាពនៅក្នុងកម្មវិធីរុករករបស់អ្នក។ អតិបរមា 100MB ។',
+            'download-all-btn': 'ទាញយកទាំងអស់ (.zip)',
+            'compress-more-btn': 'បង្ហាប់បន្ថែម',
+            'footer-text': '© 2024 QuantumCompress ។ បង្កើតឡើងសម្រាប់ប្រសិទ្ធភាពនិងភាពឯកជន។',
+            'status-queued': 'កំពុងរង់ចាំ',
+            'status-compressing': 'កំពុងបង្ហាប់...',
+            'status-complete': 'រួចរាល់!',
+            'status-error': 'កំហុស',
+            'status-unsupported': 'ប្រភេទឯកសារមិនគាំទ្រ',
+            'download-btn': 'ទាញយក'
+        }
+    };
+    const langMap = {
+        en: { flag: 'https://flagcdn.com/us.svg', label: 'English', font: 'font-inter' },
+        km: { flag: 'https://flagcdn.com/kh.svg', label: 'ភាសាខ្មែរ', font: 'font-khmer' }
+    };
+
+    // --- B. HELPER & COMPRESSION FUNCTIONS (DEFINED BEFORE USE) --- //
+
+    const formatFileSize = (bytes) => {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    };
+
+    const getFileIcon = (file) => {
+        const fileType = file.type;
+        const fileName = file.name.toLowerCase();
+        if (fileType.startsWith('image/') || fileName.endsWith('.heic') || fileName.endsWith('.heif')) return '🖼️';
+        if (fileType === 'application/pdf') return '📄';
+        if (fileType.startsWith('video/')) return '🎬';
+        if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) return '📘';
+        if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) return '📗';
+        if (fileName.endsWith('.ppt') || fileName.endsWith('.pptx')) return '📙';
+        return '📁';
+    };
+
+    const getExtensionForBlob = (blob) => {
+        const mimeMap = {
+            'image/jpeg': 'jpg',
+            'image/png': 'png',
+            'image/webp': 'webp',
+            'image/gif': 'gif',
+            'video/mp4': 'mp4',
+            'video/webm': 'webm',
+            'video/ogg': 'ogv',
+            'application/pdf': 'pdf',
+        };
+        return mimeMap[blob.type] || 'bin';
+    };
+
+    const compressImage = (file, onProgress) => {
+        return new Promise((resolve, reject) => {
+            onProgress(0.1);
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    onProgress(0.5);
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    // Determine preferred output format, defaulting to JPEG for lossy, PNG for lossless
+                    const outputType = (file.type === 'image/png' || file.type === 'image/gif') ? 'image/png' : 'image/jpeg';
+                    const quality = 0.75; // Good balance of quality and size
+
+                    onProgress(0.9);
+                    canvas.toBlob((blob) => {
+                        if (blob && blob.size < file.size) {
+                            onProgress(1);
+                            resolve(blob);
+                        } else {
+                            // If compressed is not smaller, return original file
+                            onProgress(1);
+                            resolve(file);
+                        }
+                    }, outputType, quality);
+                };
+                img.onerror = () => reject(new Error('Browser cannot decode this image format.'));
+                img.src = event.target.result;
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    };
+
+    const compressPDF = async (file, onProgress) => {
+        const { PDFDocument } = PDFLib;
+        onProgress(0.1);
+        const arrayBuffer = await file.arrayBuffer();
+        onProgress(0.3);
+        const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+        onProgress(0.7);
+        const pdfBytes = await pdfDoc.save();
+        onProgress(1);
+        return new Blob([pdfBytes], { type: 'application/pdf' });
+    };
+
+    const compressVideo = async (file, onProgress) => {
+        const { createFFmpeg, fetchFile } = FFmpeg;
+        const ffmpeg = createFFmpeg({ log: false, progress: (p) => onProgress(p.ratio) });
+        await ffmpeg.load();
+        onProgress(0.05);
+        ffmpeg.FS('writeFile', file.name, await fetchFile(file));
+
+        const outputName = 'output.mp4';
+        // Use a fast preset for quicker browser processing
+        await ffmpeg.run('-i', file.name, '-vcodec', 'libx264', '-crf', '28', '-preset', 'fast', outputName);
+
+        const data = ffmpeg.FS('readFile', outputName);
+        ffmpeg.exit();
+        return new Blob([data.buffer], { type: 'video/mp4' });
+    };
+
+    const compressOfficeFile = async (file, onProgress) => {
+        onProgress(0.1);
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        // This method only works for XML-based formats (docx, xlsx, pptx)
+        if (!['docx', 'xlsx', 'pptx'].includes(fileExtension)) {
+            // For older binary formats (doc, xls, ppt), we can't re-zip. Return original.
+            onProgress(1);
+            return file;
+        }
+        const arrayBuffer = await file.arrayBuffer();
+        onProgress(0.3);
+        const zip = await JSZip.loadAsync(arrayBuffer);
+        onProgress(0.7);
+        const newZipBlob = await zip.generateAsync({
+            type: "blob",
+            compression: "DEFLATE",
+            compressionOptions: { level: 9 }
+        });
+        onProgress(1);
+        return newZipBlob;
+    };
+
+
+    // --- C. MAIN APP LOGIC --- //
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- Element Selectors --- //
+        const uploadBox = document.getElementById('upload-box');
+        const fileInput = document.getElementById('file-input');
+        const fileQueue = document.getElementById('file-queue');
+        const actionButtons = document.getElementById('action-buttons');
+        const downloadAllBtn = document.getElementById('download-all-btn');
+        const compressMoreBtn = document.getElementById('compress-more-btn');
+        const langBtn = document.getElementById('lang-btn');
+        const langDropdown = document.getElementById('lang-dropdown');
+        const langDropdownContent = document.getElementById('lang-dropdown-content');
+        const langFlag = document.getElementById('lang-flag');
+        const langLabel = document.getElementById('lang-label');
+        
+        let langSwitcher = document.getElementById('lang-switcher');
+        if (!langSwitcher) {
+            langSwitcher = document.createElement('input');
+            langSwitcher.type = 'hidden';
+            langSwitcher.id = 'lang-switcher';
+            langSwitcher.value = 'en'; // Default language
+            document.body.appendChild(langSwitcher);
+        }
+
+        let compressedFiles = []; // Store blobs for "Download All"
+
+        // --- Language Switcher Logic --- //
+        const translatePage = () => {
+            const lang = langSwitcher.value;
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-i18n-key]').forEach(el => {
+                const key = el.getAttribute('data-i18n-key');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+            // Update dynamic buttons
+            document.querySelectorAll('.dynamic-download-btn').forEach(btn => {
+                btn.querySelector('span').textContent = translations[lang]['download-btn'];
+            });
+        };
+
+        const setLang = (lang) => {
+            langSwitcher.value = lang;
+            langFlag.src = langMap[lang].flag;
+            langFlag.alt = langMap[lang].label;
+            langLabel.textContent = langMap[lang].label;
+            langLabel.className = `font-inter ${langMap[lang].font}`;
+            langDropdownContent.querySelectorAll('.language-option').forEach(btn => {
+                btn.classList.toggle('active-language', btn.getAttribute('data-lang') === lang);
+            });
+            translatePage();
+        };
+
+        langBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            langDropdown.classList.toggle('open');
+        });
+        document.addEventListener('click', () => langDropdown.classList.remove('open'));
+        langDropdownContent.querySelectorAll('.language-option').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                setLang(btn.getAttribute('data-lang'));
+            });
+        });
+        langSwitcher.addEventListener('change', translatePage);
+        setLang(langSwitcher.value); // Initial translation on load
+
+
+        // --- File Handling & Drag-n-Drop --- //
+        uploadBox.addEventListener('click', () => fileInput.click());
+        ['dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadBox.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+        uploadBox.addEventListener('dragover', () => uploadBox.classList.add('border-indigo-400', 'bg-indigo-50'));
+        uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('border-indigo-400', 'bg-indigo-50'));
+        uploadBox.addEventListener('drop', (e) => {
+            uploadBox.classList.remove('border-indigo-400', 'bg-indigo-50');
+            handleFiles(e.dataTransfer.files);
+        });
+        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+        const handleFiles = (files) => {
+            if (files.length === 0) return;
+            document.getElementById('upload-module').style.display = 'none';
+            actionButtons.style.display = 'flex';
+            for (const file of files) {
+                processFile(file);
+            }
+        };
+
+
+        // --- File Processing Logic --- //
+        const processFile = async (file) => {
+            const fileId = `file-${Date.now()}-${Math.random()}`;
+            const fileItem = createQueueItem(file, fileId);
+            fileQueue.appendChild(fileItem);
+
+            const progressFillEl = fileItem.querySelector('.progress-bar-fill');
+
+            if (file.size > 100 * 1024 * 1024) { // 100 MB limit
+                updateStatus(fileItem, 'Error: File size exceeds 100MB', 'error');
+                return;
+            }
+
+            try {
+                updateStatus(fileItem, translations[langSwitcher.value]['status-compressing'], 'progress');
+                let compressedBlob;
+                const fileName = file.name.toLowerCase();
+
+                if (file.type.startsWith('image/') || fileName.endsWith('.heic') || fileName.endsWith('.heif')) {
+                    compressedBlob = await compressImage(file, p => progressFillEl.style.width = `${p * 100}%`);
+                } else if (file.type === 'application/pdf') {
+                    compressedBlob = await compressPDF(file, p => progressFillEl.style.width = `${p * 100}%`);
+                } else if (file.type.startsWith('video/')) {
+                    compressedBlob = await compressVideo(file, p => progressFillEl.style.width = `${p * 100}%`);
+                } else if (fileName.match(/\.(docx?|xlsx?|pptx?)$/i)) {
+                    compressedBlob = await compressOfficeFile(file, p => progressFillEl.style.width = `${p * 100}%`);
+                } else {
+                    throw new Error(translations[langSwitcher.value]['status-unsupported']);
+                }
+
+                const compressionRatio = 1 - (compressedBlob.size / file.size);
+                const resultText = compressionRatio > 0
+                    ? `✅ ${formatFileSize(compressedBlob.size)} (${Math.round(compressionRatio * 100)}% smaller)`
+                    : `✅ ${formatFileSize(compressedBlob.size)} (No size reduction)`;
+                
+                updateStatus(fileItem, resultText, 'success');
+                addDownloadButton(fileItem, compressedBlob, file.name);
+                compressedFiles.push({ blob: compressedBlob, name: file.name });
+
+            } catch (err) {
+                console.error("Processing Error:", err);
+                const errorMessage = `${translations[langSwitcher.value]['status-error']}: ${err.message}`;
+                updateStatus(fileItem, errorMessage, 'error');
+            }
+        };
+
+        // --- UI Update Functions --- //
+        const createQueueItem = (file, fileId) => {
+            const item = document.createElement('div');
+            item.className = 'file-item';
+            item.id = fileId;
+            const lang = langSwitcher.value;
+            item.innerHTML = `
+                <div class="file-icon">${getFileIcon(file)}</div>
+                <div class="file-info">
+                    <div class="file-name">${file.name}</div>
+                    <div class="file-size">${formatFileSize(file.size)} → <span class="file-status">${translations[lang]['status-queued']}</span></div>
+                    <div class="progress-bar"><div class="progress-bar-fill"></div></div>
+                </div>
+                <div class="file-actions"></div>
+            `;
+            return item;
+        };
+
+        const updateStatus = (fileItem, text, type) => {
+            const statusEl = fileItem.querySelector('.file-status');
+            statusEl.innerHTML = text; // Use innerHTML to render the checkmark
+            statusEl.className = `file-status ${type}`;
+            if (type === 'success' || type === 'error') {
+                fileItem.querySelector('.progress-bar').style.display = 'none';
+            }
+        };
+
+        const addDownloadButton = (fileItem, blob, originalFileName) => {
+            const actionDiv = fileItem.querySelector('.file-actions');
+            actionDiv.innerHTML = '';
+            
+            const baseName = originalFileName.substring(0, originalFileName.lastIndexOf('.')) || originalFileName;
+            const newExtension = blob.type === "application/octet-stream" 
+                ? originalFileName.split('.').pop() 
+                : getExtensionForBlob(blob) || originalFileName.split('.').pop();
+            const downloadName = `${baseName}-compressed.${newExtension}`;
+            
+            const lang = langSwitcher.value;
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = downloadName;
+            link.className = "dynamic-download-btn group inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-500 text-white font-semibold shadow-md hover:from-indigo-700 hover:to-purple-600 transition focus:outline-none focus:ring-2 focus:ring-indigo-400";
+            link.style.textDecoration = "none";
+            link.innerHTML = `
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"/>
+                </svg>
+                <span>${translations[lang]['download-btn']}</span>
+            `;
+            actionDiv.appendChild(link);
+        };
+
+        // --- Final Action Buttons Logic --- //
+        downloadAllBtn.addEventListener('click', async () => {
+            if (compressedFiles.length === 0) return;
+
+            const zip = new JSZip();
+            compressedFiles.forEach(file => {
+                 const baseName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+                 const newExtension = file.blob.type === "application/octet-stream" 
+                    ? file.name.split('.').pop() 
+                    : getExtensionForBlob(file.blob) || file.name.split('.').pop();
+                 const downloadName = `${baseName}-compressed.${newExtension}`;
+                zip.file(downloadName, file.blob);
+            });
+            
+            const zipBlob = await zip.generateAsync({ type: "blob" });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(zipBlob);
+            link.download = 'QuantumCompress-files.zip';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        compressMoreBtn.addEventListener('click', () => {
+            fileQueue.innerHTML = '';
+            actionButtons.style.display = 'none';
+            document.getElementById('upload-module').style.display = 'block';
+            fileInput.value = '';
+            compressedFiles = [];
+        });
+    });
+    </script>
+</body>
+</html>
