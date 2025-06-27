@@ -1137,9 +1137,21 @@
                 <a href="#about" data-translate-key="navAbout">About</a>
             </nav>
             <div class="header-controls">
-                <div class="lang-switch" id="lang-switcher">
-                    <button class="lang-btn" data-lang="en">EN</button>
-                    <button class="lang-btn" data-lang="kh">KH</button>
+                <!-- Language Switcher Dropdown with Flags -->
+                <div class="language-selector" id="lang-switcher" tabindex="0" style="position:relative;">
+                    <button class="language-btn" id="lang-btn-current" type="button" style="background-color: #f3f4f6; color: #4b5563; border: 1.5px solid #e5e7eb; border-radius: 24px; padding: 8px 18px 8px 12px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                        <img id="lang-flag-current" src="https://flagcdn.com/us.svg" class="language-flag" alt="EN" style="width:20px;height:20px;border-radius:50%;object-fit:cover;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
+                        <span id="lang-label-current" style="font-family:'Poppins',sans-serif;">English</span>
+                        <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <div class="dropdown-content" id="lang-dropdown" style="display:none;position:absolute;right:0;background-color:#fff;min-width:170px;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,0.13);z-index:10;margin-top:8px;overflow:hidden;">
+                        <button class="language-option" data-lang="en" style="color:#374151;padding:12px 18px 12px 16px;display:flex;align-items:center;gap:10px;font-size:15px;background:none;border:none;width:100%;text-align:left;cursor:pointer;transition:background 0.18s;">
+                            <img src="https://flagcdn.com/us.svg" class="language-flag" alt="EN" style="width:20px;height:20px;border-radius:50%;object-fit:cover;box-shadow:0 1px 4px rgba(0,0,0,0.07);"> English
+                        </button>
+                        <button class="language-option" data-lang="kh" style="color:#374151;padding:12px 18px 12px 16px;display:flex;align-items:center;gap:10px;font-size:15px;background:none;border:none;width:100%;text-align:left;cursor:pointer;transition:background 0.18s;">
+                            <img src="https://flagcdn.com/kh.svg" class="language-flag" alt="KH" style="width:20px;height:20px;border-radius:50%;object-fit:cover;box-shadow:0 1px 4px rgba(0,0,0,0.07);"> ភាសាខ្មែរ
+                        </button>
+                    </div>
                 </div>
                 <div class="theme-switch" id="theme-toggle" title="Toggle Dark/Light Mode">🌙</div>
                 <button class="hamburger" id="hamburger-menu" aria-label="Open navigation menu" aria-expanded="false">
@@ -1652,7 +1664,7 @@
 
             <div class="rt-inquiry-card">
                 <div class="rt-card-header">
-                    <div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></div>
+                    <div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></div>
                     <h3 data-translate-key="rt_q_renewal_h3">Queue: Care Renewal</h3>
                 </div>
                 <div class="rt-card-body"><ul><li>Refuse to pay invoice</li><li>Renewal + Promotion request</li><li>Reactive Request</li><li>Terminate Request</li><li>Request Compensation or Refund</li></ul></div>
@@ -1940,6 +1952,56 @@
                 localStorage.setItem('theme', isDark ? 'dark' : 'light');
             });
         }
+
+        // --- Language Switcher Dropdown with Flags ---
+        (function() {
+            const langSelector = document.getElementById('lang-switcher');
+            const langBtnCurrent = document.getElementById('lang-btn-current');
+            const langDropdown = document.getElementById('lang-dropdown');
+            const langFlagCurrent = document.getElementById('lang-flag-current');
+            const langLabelCurrent = document.getElementById('lang-label-current');
+            const langOptions = [
+                { code: 'en', label: 'English', flag: 'https://flagcdn.com/us.svg' },
+                { code: 'kh', label: 'ភាសាខ្មែរ', flag: 'https://flagcdn.com/kh.svg' }
+            ];
+            function updateLangBtn(lang) {
+                const opt = langOptions.find(l => l.code === lang) || langOptions[0];
+                langFlagCurrent.src = opt.flag;
+                langFlagCurrent.alt = opt.code.toUpperCase();
+                langLabelCurrent.textContent = opt.label;
+            }
+            function setDropdownActive(lang) {
+                Array.from(langDropdown.querySelectorAll('.language-option')).forEach(btn => {
+                    btn.classList.toggle('active-language', btn.dataset.lang === lang);
+                });
+            }
+            langBtnCurrent.addEventListener('click', function(e) {
+                e.stopPropagation();
+                langDropdown.style.display = langDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+            langDropdown.addEventListener('click', function(e) {
+                if (e.target.closest('.language-option')) {
+                    const lang = e.target.closest('.language-option').dataset.lang;
+                    setLanguage(lang);
+                    langDropdown.style.display = 'none';
+                }
+            });
+            document.addEventListener('click', function(e) {
+                if (!langSelector.contains(e.target)) langDropdown.style.display = 'none';
+            });
+            // Update on language change
+            const origSetLanguage = setLanguage;
+            setLanguage = function(lang) {
+                origSetLanguage(lang);
+                updateLangBtn(lang);
+                setDropdownActive(lang);
+            };
+            // On load, set correct flag/label
+            document.addEventListener('DOMContentLoaded', function() {
+                updateLangBtn(currentLanguage);
+                setDropdownActive(currentLanguage);
+            });
+        })();
     </script>
 </body>
 </html>
