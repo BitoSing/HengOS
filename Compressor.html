@@ -33,6 +33,7 @@
             --primary-blue-hover: #0056b3;
             --success-green: #28a745;
             --danger-red: #dc3545;
+            --warning-amber: #f59e0b; /* Amber 500 from Tailwind */
             --light-gray-bg: #f8f9fa;
             --border-color: #dee2e6;
             --text-dark: #343a40;
@@ -200,6 +201,7 @@
         .file-status { font-weight: 500; }
         .file-status.success { color: var(--success-green); }
         .file-status.error { color: var(--danger-red); }
+        .file-status.warning { color: var(--warning-amber); } /* FIXED: Added warning status color */
 
         .progress-bar {
             width: 100%;
@@ -305,7 +307,7 @@
     const translations = {
         'en': {
             'main-heading': 'Compress Your Files',
-            'sub-heading': 'Drag & drop PDF, Image, Video, or Office files here.',
+            'sub-heading': 'Drag & drop PDF, Image, or Office files here.', // Removed Video
             'select-files-btn': 'Select Files',
             'disclaimer': 'All processing is done securely in your browser. Max 100MB.',
             'download-all-btn': 'Download All (.zip)',
@@ -316,11 +318,12 @@
             'status-complete': 'Complete!',
             'status-error': 'Error',
             'status-unsupported': 'Unsupported File Type',
+            'status-video-unsupported': '', // Not needed anymore
             'download-btn': 'Download'
         },
         'km': {
             'main-heading': 'បង្ហាប់ឯកសាររបស់អ្នក',
-            'sub-heading': 'អូសហើយទម្លាក់ឯកសារ PDF, រូបភាព, វីដេអូ, ឬ Office នៅទីនេះ។',
+            'sub-heading': 'អូសហើយទម្លាក់ឯកសារ PDF, រូបភាព ឬ Office នៅទីនេះ។', // Removed Video
             'select-files-btn': 'ជ្រើសរើសឯកសារ',
             'disclaimer': 'ការដំណើរការទាំងអស់ត្រូវបានធ្វើដោយសុវត្ថិភាពនៅក្នុងកម្មវិធីរុករករបស់អ្នក។ អតិបរមា 100MB ។',
             'download-all-btn': 'ទាញយកទាំងអស់ (.zip)',
@@ -331,6 +334,7 @@
             'status-complete': 'រួចរាល់!',
             'status-error': 'កំហុស',
             'status-unsupported': 'ប្រភេទឯកសារមិនគាំទ្រ',
+            'status-video-unsupported': '', // Not needed anymore
             'download-btn': 'ទាញយក'
         }
     };
@@ -352,12 +356,24 @@
     const getFileIcon = (file) => {
         const fileType = file.type;
         const fileName = file.name.toLowerCase();
+        // Use custom icons for specific file types
+        if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
+            return '<img src="./Icons/docx.png" alt="DOCX" style="width:1.7em;height:1.7em;vertical-align:middle">';
+        }
+        if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
+            return '<img src="./Icons/xlsx.png" alt="XLSX" style="width:1.7em;height:1.7em;vertical-align:middle">';
+        }
+        if (fileName.endsWith('.ppt') || fileName.endsWith('.pptx')) {
+            return '<img src="./Icons/pptx.png" alt="PPTX" style="width:1.7em;height:1.7em;vertical-align:middle">';
+        }
+        if (fileType === 'image/jpeg' || fileName.endsWith('.jpg') || fileName.endsWith('.jpeg')) {
+            return '<img src="./Icons/jpg.png" alt="JPG" style="width:1.7em;height:1.7em;vertical-align:middle">';
+        }
+        if (fileType === 'image/png' || fileName.endsWith('.png')) {
+            return '<img src="./Icons/png.png" alt="PNG" style="width:1.7em;height:1.7em;vertical-align:middle">';
+        }
         if (fileType.startsWith('image/') || fileName.endsWith('.heic') || fileName.endsWith('.heif')) return '🖼️';
         if (fileType === 'application/pdf') return '📄';
-        if (fileType.startsWith('video/')) return '🎬';
-        if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) return '📘';
-        if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) return '📗';
-        if (fileName.endsWith('.ppt') || fileName.endsWith('.pptx')) return '📙';
         return '📁';
     };
 
@@ -389,9 +405,8 @@
                     canvas.height = img.height;
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                    // Determine preferred output format, defaulting to JPEG for lossy, PNG for lossless
                     const outputType = (file.type === 'image/png' || file.type === 'image/gif') ? 'image/png' : 'image/jpeg';
-                    const quality = 0.75; // Good balance of quality and size
+                    const quality = 0.75; 
 
                     onProgress(0.9);
                     canvas.toBlob((blob) => {
@@ -399,7 +414,6 @@
                             onProgress(1);
                             resolve(blob);
                         } else {
-                            // If compressed is not smaller, return original file
                             onProgress(1);
                             resolve(file);
                         }
@@ -425,28 +439,10 @@
         return new Blob([pdfBytes], { type: 'application/pdf' });
     };
 
-    const compressVideo = async (file, onProgress) => {
-        const { createFFmpeg, fetchFile } = FFmpeg;
-        const ffmpeg = createFFmpeg({ log: false, progress: (p) => onProgress(p.ratio) });
-        await ffmpeg.load();
-        onProgress(0.05);
-        ffmpeg.FS('writeFile', file.name, await fetchFile(file));
-
-        const outputName = 'output.mp4';
-        // Use a fast preset for quicker browser processing
-        await ffmpeg.run('-i', file.name, '-vcodec', 'libx264', '-crf', '28', '-preset', 'fast', outputName);
-
-        const data = ffmpeg.FS('readFile', outputName);
-        ffmpeg.exit();
-        return new Blob([data.buffer], { type: 'video/mp4' });
-    };
-
     const compressOfficeFile = async (file, onProgress) => {
         onProgress(0.1);
         const fileExtension = file.name.split('.').pop().toLowerCase();
-        // This method only works for XML-based formats (docx, xlsx, pptx)
         if (!['docx', 'xlsx', 'pptx'].includes(fileExtension)) {
-            // For older binary formats (doc, xls, ppt), we can't re-zip. Return original.
             onProgress(1);
             return file;
         }
@@ -489,7 +485,7 @@
             document.body.appendChild(langSwitcher);
         }
 
-        let compressedFiles = []; // Store blobs for "Download All"
+        let compressedFiles = []; 
 
         // --- Language Switcher Logic --- //
         const translatePage = () => {
@@ -501,7 +497,6 @@
                     el.innerText = translations[lang][key];
                 }
             });
-            // Update dynamic buttons
             document.querySelectorAll('.dynamic-download-btn').forEach(btn => {
                 btn.querySelector('span').textContent = translations[lang]['download-btn'];
             });
@@ -530,7 +525,7 @@
             });
         });
         langSwitcher.addEventListener('change', translatePage);
-        setLang(langSwitcher.value); // Initial translation on load
+        setLang(langSwitcher.value);
 
 
         // --- File Handling & Drag-n-Drop --- //
@@ -581,8 +576,6 @@
                     compressedBlob = await compressImage(file, p => progressFillEl.style.width = `${p * 100}%`);
                 } else if (file.type === 'application/pdf') {
                     compressedBlob = await compressPDF(file, p => progressFillEl.style.width = `${p * 100}%`);
-                } else if (file.type.startsWith('video/')) {
-                    compressedBlob = await compressVideo(file, p => progressFillEl.style.width = `${p * 100}%`);
                 } else if (fileName.match(/\.(docx?|xlsx?|pptx?)$/i)) {
                     compressedBlob = await compressOfficeFile(file, p => progressFillEl.style.width = `${p * 100}%`);
                 } else {
@@ -594,12 +587,25 @@
                     ? `✅ ${formatFileSize(compressedBlob.size)} (${Math.round(compressionRatio * 100)}% smaller)`
                     : `✅ ${formatFileSize(compressedBlob.size)} (No size reduction)`;
                 
+                // --- Update icon if file type changed after compression (e.g., png->jpg) ---
+                const iconDiv = fileItem.querySelector('.file-icon');
+                // Use the original file name for icon, but if image, update icon if output type changed
+                let iconFile = file;
+                if (compressedBlob.type.startsWith('image/')) {
+                    // Create a dummy File object with new extension for icon detection
+                    const ext = getExtensionForBlob(compressedBlob);
+                    const base = file.name.replace(/\.[^/.]+$/, "");
+                    iconFile = new File([compressedBlob], `${base}.${ext}`, { type: compressedBlob.type });
+                }
+                iconDiv.innerHTML = getFileIcon(iconFile);
+
                 updateStatus(fileItem, resultText, 'success');
                 addDownloadButton(fileItem, compressedBlob, file.name);
                 compressedFiles.push({ blob: compressedBlob, name: file.name });
 
             } catch (err) {
                 console.error("Processing Error:", err);
+                // Remove video error handling
                 const errorMessage = `${translations[langSwitcher.value]['status-error']}: ${err.message}`;
                 updateStatus(fileItem, errorMessage, 'error');
             }
@@ -625,9 +631,10 @@
 
         const updateStatus = (fileItem, text, type) => {
             const statusEl = fileItem.querySelector('.file-status');
-            statusEl.innerHTML = text; // Use innerHTML to render the checkmark
+            statusEl.innerHTML = text; 
             statusEl.className = `file-status ${type}`;
-            if (type === 'success' || type === 'error') {
+            // FIXED: Hide progress bar for warning state as well
+            if (type === 'success' || type === 'error' || type === 'warning') {
                 fileItem.querySelector('.progress-bar').style.display = 'none';
             }
         };
