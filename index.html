@@ -531,7 +531,7 @@
       }
       .company-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr; /* Default to 1 column */
           gap: 2rem;
       }
       .company-card {
@@ -1268,17 +1268,15 @@
         .hero-content p.subtitle {
           font-size: 1.1rem;
         }
-        .app-section-grid,
-        .location-section-grid {
+        .app-section-grid {
           grid-template-columns: 1fr;
         }
         
-        /* Location Section Responsive */
         .company-grid {
             grid-template-columns: 1fr;
         }
 
-        /* About Page Responsive */
+        /* --- START: ABOUT PAGE RESPONSIVE FIXES --- */
         .about-page-content .max-width {
           padding: 0 30px;
         }
@@ -1301,6 +1299,7 @@
         .about-hero-content .text-3 {
           font-size: 1.7rem;
         }
+
         .about-page-content .skills-intro,
         .about-page-content .contact-info-col {
           text-align: center;
@@ -1308,9 +1307,15 @@
         .about-page-content .contact-form button {
           align-self: stretch;
         }
+        
+        /* FIX: This centers the "Get in Touch" info block on mobile */
         .about-page-content .contact-info-list {
-          align-items: center;
+          display: inline-flex;
+          flex-direction: column;
+          align-items: flex-start;
+          text-align: left;
         }
+        /* --- END: ABOUT PAGE RESPONSIVE FIXES --- */
       }
 
       /* For small tablets and large mobiles */
@@ -1325,7 +1330,6 @@
           gap: 1.5rem;
         }
 
-        /* Location Section Responsive */
         .company-locations-body {
             grid-template-columns: 1fr;
             gap: 2.5rem; /* Increase gap when columns stack */
@@ -1336,7 +1340,6 @@
         .company-header h2 {
             font-size: 1.5rem;
         }
-
 
         .hero-content h1 {
           font-size: 2.2rem;
@@ -1356,13 +1359,10 @@
           text-align: center;
           justify-content: center;
         }
-        .about-page-content .creator-profile,
+
         .about-page-content .skills-content-grid,
         .about-page-content .contact-content-grid {
           flex-direction: column;
-        }
-        .about-page-content .creator-info .social-icons {
-          text-align: center;
         }
         .about-page-content .skills-list {
           grid-template-columns: 1fr;
@@ -1409,7 +1409,7 @@
           grid-template-columns: 1fr;
         }
         .location-list {
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr; /* FIX: single column on small phones */
         }
         .hero-section {
           padding: 3rem 1rem;
@@ -1798,18 +1798,12 @@
       // --- CORE APP LOGIC ---
       const contentArea = document.getElementById("content-area");
 
-      function applyTranslations() {
-        /* Function remains the same */
-      }
-      function setLanguage(lang) {
-        /* Function remains the same */
-      }
-
       const loadPage = (page) => {
-        if (!pageContent[page]) page = "resources";
+        if (!pageContent[page]) {
+          page = "resources";
+        }
         contentArea.innerHTML = pageContent[page];
         applyTranslations();
-
         document.querySelectorAll(".main-nav a").forEach((link) => {
           link.classList.toggle("active", link.hash === `#${page}`);
         });
@@ -1822,28 +1816,27 @@
       };
 
       const handleNavigation = () => {
-        loadPage(window.location.hash.substring(1) || "resources");
+        const pageName = window.location.hash.substring(1) || "resources";
+        loadPage(pageName);
       };
 
       // --- RESOURCE HUB LOGIC ---
       function initResourceHub() {
-        const filterButtons = document.querySelectorAll(".filter-btn");
+        const filterButtons = document.querySelectorAll("#category-filters .filter-btn");
+        if (!filterButtons.length) return;
+
         const containers = {
           all: document.getElementById("system-supports-container"),
           social: document.getElementById("applications-container"),
-          "rt-ticket-inquiries": document.getElementById(
-            "rt-ticket-inquiries-container"
-          ),
+          "rt-ticket-inquiries": document.getElementById("rt-ticket-inquiries-container"),
           location: document.getElementById("location-container"),
         };
         let currentCategory = "all";
 
         const filterByCategory = (category) => {
-          // Hide all containers
           Object.values(containers).forEach((c) => {
             if (c) c.style.display = "none";
           });
-          // Show the selected one
           if (containers[category]) {
             containers[category].style.display = "block";
           }
@@ -1851,69 +1844,31 @@
 
         filterButtons.forEach((button) => {
           button.addEventListener("click", () => {
-            // Update active state on buttons
             filterButtons.forEach((btn) => btn.classList.remove("active"));
             button.classList.add("active");
-
-            // Get the new category and filter
             currentCategory = button.dataset.category;
             filterByCategory(currentCategory);
           });
         });
 
-        // Initial setup on page load
         filterByCategory(currentCategory);
       }
 
 
       // --- ABOUT PAGE LOGIC ---
       function initAboutPageLogic() {
-        if (
-          window.Typed &&
-          document.querySelector(".about-page-content .typing")
-        ) {
-          new Typed(".about-page-content .typing", {
-            strings: ["FreeLancer.", "Web Developer.", "Graphic Designer.", "Content Creator."],
+        const typingElement = document.querySelector(".about-page-content .typing");
+        if (window.Typed && typingElement) {
+          new Typed(typingElement, {
+            strings: ["Freelancer.", "Web Developer.", "Graphic Designer.", "Content Creator."],
             typeSpeed: 60,
             backSpeed: 20,
             loop: true,
           });
         }
       }
-
-      // --- GENERAL INITIALIZERS ---
-      function initMobileMenu() {
-        /* Function remains the same */
-      }
-      function initTheme() {
-        /* Function remains the same */
-      }
-      function initLanguageSwitcher() {
-        /* Function remains the same */
-      }
-
-      // --- DOMContentLoaded ---
-      document.addEventListener("DOMContentLoaded", () => {
-        const savedLang = localStorage.getItem("userLanguage") || "en";
-        setLanguage(savedLang);
-
-        handleNavigation();
-        initTheme();
-        initMobileMenu();
-        initLanguageSwitcher();
-
-        window.addEventListener("hashchange", handleNavigation);
-      });
-
-      // (Definitions for unchanged functions like applyTranslations, setLanguage, initMobileMenu, etc.)
-      function setLanguage(lang) {
-        if (!translations[lang]) return;
-        currentLanguage = lang;
-        localStorage.setItem("userLanguage", lang);
-        applyTranslations();
-        if (typeof updateLanguageSwitcherUI === "function")
-          updateLanguageSwitcherUI(lang);
-      }
+      
+      // --- GENERAL INITIALIZERS (UNCHANGED) ---
       function applyTranslations() {
         const lang = currentLanguage;
         document.querySelectorAll("[data-translate-key]").forEach((el) => {
@@ -1930,6 +1885,16 @@
           });
         document.documentElement.lang = lang === "kh" ? "km" : "en";
       }
+
+      function setLanguage(lang) {
+        if (!translations[lang]) return;
+        currentLanguage = lang;
+        localStorage.setItem("userLanguage", lang);
+        applyTranslations();
+        if (typeof updateLanguageSwitcherUI === "function")
+          updateLanguageSwitcherUI(lang);
+      }
+
       function initTheme() {
         const themeToggle = document.getElementById("theme-toggle");
         const applyTheme = (theme) => {
@@ -1947,6 +1912,7 @@
         }
         applyTheme(localStorage.getItem("theme") || "light");
       }
+
       function initMobileMenu() {
         const hamburger = document.getElementById("hamburger-menu");
         const nav = document.getElementById("main-nav");
@@ -1970,6 +1936,7 @@
               )
             );
       }
+
       let updateLanguageSwitcherUI;
       function initLanguageSwitcher() {
         const selector = document.getElementById("lang-switcher"),
@@ -2020,6 +1987,17 @@
         document.addEventListener("click", () => toggleDropdown(false));
         updateLanguageSwitcherUI(currentLanguage);
       }
+
+      // --- DOMContentLoaded ---
+      document.addEventListener("DOMContentLoaded", () => {
+        const savedLang = localStorage.getItem("userLanguage") || "en";
+        setLanguage(savedLang);
+        handleNavigation();
+        initTheme();
+        initMobileMenu();
+        initLanguageSwitcher();
+        window.addEventListener("hashchange", handleNavigation);
+      });
     </script>
   </body>
 </html>
