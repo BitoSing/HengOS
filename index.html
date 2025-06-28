@@ -10,12 +10,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    <!-- Add Font Awesome and Typed.js for About page -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.11/typed.min.js"></script>
 
     <style>
-        /* --- GLOBAL STYLES & THEME VARIABLES (NEW FUTURISTIC VIOLET THEME!) --- */
+        /* --- GLOBAL STYLES & THEME VARIABLES --- */
         :root {
             --primary-color: #063969;
-            --secondary-color: #0e1f46; /* Vibrant Indigo Blue */
+            --secondary-color: #0e1f46;
             --font-family: 'Poppins', 'Noto Sans Khmer', sans-serif;
             --khmer-font: 'Noto Sans Khmer', 'Khmer OS', 'Hanuman', 'Battambang', sans-serif;
             
@@ -23,20 +26,20 @@
             --bg-color: #F9F9FB;
             --header-bg: rgba(255, 255, 255, 0.75);
             --card-bg: #ffffff;
-            --text-color: #1E2022; /* Very Dark Gray */
-            --light-text-color: #5A6472; /* Medium Gray */
+            --text-color: #1E2022;
+            --light-text-color: #5A6472;
             --border-color: #EAECEF;
-            --shadow-color: rgba(106, 17, 203, 0.07); /* Shadow tied to primary color */
+            --shadow-color: rgba(106, 17, 203, 0.07);
             --highlight-bg: color-mix(in srgb, var(--primary-color) 15%, transparent);
         }
 
         /* Dark Theme */
         body.dark-theme {
-            --bg-color: #12101C; /* Deep, dark desaturated purple */
-            --header-bg: rgba(18, 16, 28, 0.8); /* Dark glass */
-            --card-bg: #1B1829; /* Slightly lighter dark purple */
-            --text-color: #E8E6FC; /* Soft, lavender-tinged white */
-            --light-text-color: #908CA7; /* Lighter gray-purple */
+            --bg-color: #12101C;
+            --header-bg: rgba(18, 16, 28, 0.8);
+            --card-bg: #1B1829;
+            --text-color: #E8E6FC;
+            --light-text-color: #908CA7;
             --border-color: #2A263B;
             --shadow-color: rgba(0, 0, 0, 0.3);
             --highlight-bg: color-mix(in srgb, var(--primary-color) 20%, transparent);
@@ -50,1176 +53,220 @@
             color: var(--text-color);
             line-height: 1.6;
             transition: background-color 0.3s, color 0.3s;
-            padding-top: 72px; /* Adjust to match .app-header height */
+            padding-top: 72px;
         }
 
-        /* Khmer font for Khmer text */
         .khmer-font, :lang(km) {
             font-family: var(--khmer-font) !important;
-            /* CHANGE: Adjusted font size for better visual balance with English text */
             font-size: 1.02em; 
             letter-spacing: 0.01em;
         }
 
-        /* --- MAIN APPLICATION SHELL LAYOUT --- */
-        .app-shell {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .app-header {
-            background-color: var(--header-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 2px 10px var(--shadow-color);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .main-nav {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .main-nav a {
-            color: var(--light-text-color);
-            text-decoration: none;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: color 0.3s, background-color 0.3s;
-            position: relative;
-        }
-
-        .main-nav a:hover {
-            color: var(--text-color);
-            background-color: var(--highlight-bg);
-        }
-
-        .main-nav a.active {
-            color: var(--primary-color);
-            font-weight: 700;
-        }
+        /* --- MAIN LAYOUT --- */
+        .app-shell { display: flex; flex-direction: column; min-height: 100vh; }
+        .app-header { background-color: var(--header-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 2px 10px var(--shadow-color); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; }
+        .logo { font-size: 1.5rem; font-weight: 700; background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .main-nav { display: flex; gap: 0.5rem; }
+        .main-nav a { color: var(--light-text-color); text-decoration: none; font-weight: 600; padding: 0.5rem 1rem; border-radius: 8px; transition: color 0.3s, background-color 0.3s; position: relative; }
+        .main-nav a:hover { color: var(--text-color); background-color: var(--highlight-bg); }
+        .main-nav a.active { color: var(--primary-color); font-weight: 700; }
+        .main-nav a.active::after { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); width: 50%; height: 3px; background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); border-radius: 2px; }
+        .theme-switch { cursor: pointer; font-size: 1.5rem; }
+        main { flex-grow: 1; padding: 2.5rem; }
+        footer { text-align: center; padding: 2rem; color: var(--light-text-color); background-color: var(--card-bg); border-top: 1px solid var(--border-color); margin-top: auto; }
         
-        .main-nav a.active::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            border-radius: 2px;
-        }
+        /* --- HERO SECTION --- */
+        .hero-section { position: relative; padding: 6rem 2rem; margin-bottom: 2.5rem; border-radius: 2rem; background-color: #12101C; color: #fff; text-align: center; overflow: hidden; display: grid; place-items: center; z-index: 1; }
+        .hero-section::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px); background-size: 40px 40px; animation: panGrid 20s linear infinite; z-index: -2; opacity: 0.5; }
+        @keyframes panGrid { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
+        .hero-section::after { content: ""; position: absolute; z-index: -1; left: -20%; top: -50%; width: 70%; height: 150%; background: radial-gradient(circle, var(--primary-color) 0%, transparent 60%); opacity: 0.25; filter: blur(100px); animation: heroBlobMove 15s ease-in-out infinite alternate; }
+        @keyframes heroBlobMove { from { transform: translate(0, 0) scale(1) rotate(0deg); } to { transform: translate(20px, -20px) scale(1.1) rotate(20deg); } }
+        .hero-content { z-index: 2; max-width: 800px; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+        .hero-content > * { animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-content h1 { font-size: 3.5rem; font-weight: 700; background: linear-gradient(90deg, #FFFFFF, #C9C4F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 4px 20px rgba(0,0,0,0.3); line-height: 1.2; animation-delay: 0.2s; }
+        .hero-content p.subtitle { font-size: 1.25rem; color: #E8E6FC; max-width: 600px; line-height: 1.6; animation-delay: 0.4s; }
+        .hero-controls { margin-top: 1rem; display: flex; flex-direction: column; gap: 1.25rem; width: 100%; max-width: 650px; animation-delay: 0.6s; }
+        .hero-section #search-box { width: 100%; padding: 1rem 1.5rem; font-size: 1.1rem; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.1); color: #fff; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .hero-section #search-box::placeholder { color: rgba(255, 255, 255, 0.6); }
+        .hero-section #search-box:focus { border-color: rgba(255, 255, 255, 0.5); box-shadow: 0 0 0 4px rgba(6, 57, 105, 0.5), 0 4px 20px rgba(0,0,0,0.3); background: rgba(255, 255, 255, 0.15); }
+        #category-filters { display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center; }
+        .hero-section #category-filters { gap: 0.75rem; animation-delay: 0.8s; }
+        .filter-btn, .hero-section .filter-btn { padding: 0.6rem 1.5rem; font-size: 0.95rem; font-weight: 600; border: 2px solid var(--border-color); border-radius: 50px; background-color: var(--card-bg); color: var(--light-text-color); cursor: pointer; transition: all 0.3s ease-in-out; }
+        .hero-section .filter-btn { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #E8E6FC; font-weight: 500; padding: 0.5rem 1.25rem; backdrop-filter: blur(5px); }
+        .filter-btn:hover, .hero-section .filter-btn:hover { background-color: var(--highlight-bg); border-color: var(--primary-color); color: var(--text-color); }
+        .hero-section .filter-btn:hover { background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.3); color: #fff; }
+        .filter-btn.active, .hero-section .filter-btn.active { background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); color: white; border-color: transparent; }
+        .hero-section .filter-btn.active { background: #fff; color: var(--primary-color); border-color: #fff; box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2); }
 
-        .theme-switch {
-            cursor: pointer; font-size: 1.5rem;
-        }
+        /* --- LINK CARD & GRID STYLES --- */
+        #link-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.75rem; margin-top: 2.5rem; }
+        .link-item { text-decoration: none; }
+        .link-item.system-support-link { background: linear-gradient(120deg, #1B1829 0%, #2A263B 100%); color: #fff; border: 1px solid #2A263B; border-radius: 18px; box-shadow: 0 8px 32px -8px rgba(10,25,41,0.5); padding: 2rem 1.5rem 1.5rem 1.5rem; display: flex; flex-direction: column; align-items: flex-start; position: relative; min-height: 160px; transition: box-shadow 0.3s, transform 0.3s, background 0.3s; overflow: hidden; }
+        .link-item.system-support-link:hover { background: linear-gradient(120deg, var(--primary-color) 0%, #1B1829 100%); box-shadow: 0 16px 40px -8px rgba(10,25,41,0.7); transform: translateY(-6px) scale(1.03); border-color: var(--primary-color); }
+        .link-item.system-support-link .link-icon { background: rgba(255,255,255,0.08); border-radius: 12px; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.1rem; transition: transform 0.4s cubic-bezier(.4,2,.6,1), box-shadow 0.3s; box-shadow: 0 2px 12px 0 rgba(106, 17, 203, 0.2); will-change: transform; }
+        .hero-icon-anim { animation: floatY 3s ease-in-out infinite alternate; }
+        @keyframes floatY { 0% { transform: translateY(0);} 100% { transform: translateY(-12px);} }
+        .link-item.system-support-link .link-icon svg { width: 32px; height: 32px; fill: #fff; }
+        .link-item.system-support-link .link-content h3 { font-size: 1.18rem; font-weight: 700; margin-bottom: 0.4rem; color: #fff; letter-spacing: 0.01em; }
+        .link-item.system-support-link .link-content p { font-size: 1.01rem; color: #e0e7ff; margin-bottom: 0.5rem; }
+        .link-item.system-support-link .link-arrow { color: #E8E6FC; position: absolute; right: 1.5rem; top: 1.5rem; font-size: 1.7rem; opacity: 1; transition: color 0.3s, transform 0.3s; }
+        .link-item.system-support-link:hover .link-arrow { color: #fff; transform: translateX(4px); }
 
-        main {
-            flex-grow: 1;
-            padding: 2.5rem;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--light-text-color);
-            background-color: var(--card-bg); /* Use card bg for footer for consistency */
-            border-top: 1px solid var(--border-color);
-            margin-top: auto;
-        }
+        /* Application Cards */
+        .app-section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem; }
+        .link-item { display: flex; align-items: center; gap: 1.25rem; background-color: var(--card-bg); border-radius: 12px; padding: 1.25rem; color: var(--text-color); border: 1px solid var(--border-color); box-shadow: 0 4px 6px -1px var(--shadow-color); transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s, opacity 0.4s ease; position: relative; }
+        .link-item:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px var(--shadow-color); border-color: var(--primary-color); }
+        .link-content h3 { font-size: 1.15rem; margin-bottom: 0.2rem; font-weight: 600; color: var(--text-color); }
+        .link-content p { font-size: 0.9rem; color: var(--light-text-color); line-height: 1.5; }
+        .link-arrow { position: absolute; right: 1.25rem; top: 50%; transform: translateY(-50%) translateX(-10px); font-size: 1.5rem; color: var(--light-text-color); opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; }
+        .link-item:hover .link-arrow { opacity: 1; transform: translateY(-50%) translateX(0); }
+        .link-item.cellcard-link, .link-item.ezecom-link, .link-item.altogether-link { color: #fff; }
+        .link-item.cellcard-link .link-content h3, .link-item.cellcard-link .link-content p, .link-item.ezecom-link .link-content h3, .link-item.ezecom-link .link-content p, .link-item.altogether-link .link-content h3, .link-item.altogether-link .link-content p { color: #fff; }
+        .link-item.cellcard-link .link-arrow, .link-item.ezecom-link .link-arrow, .link-item.altogether-link .link-arrow { color: #fff; }
+        .link-item.cellcard-link { background: #e48947; } .link-item.cellcard-link:hover { background: #d06f1a; border-color: #d06f1a; box-shadow: 0 8px 24px -4px #e48947cc; }
+        .link-item.ezecom-link { background: #6c54a3; } .link-item.ezecom-link:hover { background: #4d3a7a; border-color: #4d3a7a; box-shadow: 0 8px 24px -4px #6c54a3cc; }
+        .link-item.altogether-link { background: linear-gradient(135deg, #e48947 0%, #6c54a3 100%); } .link-item.altogether-link:hover { background: linear-gradient(135deg, #d06f1a 0%, #4d3a7a 100%); border-color: #6c54a3; box-shadow: 0 8px 24px -4px #6c54a3cc; }
+        .app-section-cellcard > h2 { color: #e48947; } .app-section-ezecom > h2 { color: #6c54a3; }
+        .app-section-altogether > h2 { background: linear-gradient(135deg, #e48947 0%, #6c54a3 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         
-        /* --- STYLES FOR YOUR RESOURCE HUB PAGE --- */
-        .hub-header { text-align: center; margin-bottom: 2rem; }
-        .hub-header h1 { font-size: 2.5rem; color: var(--text-color); }
-        .hub-header p { font-size: 1.1rem; color: var(--light-text-color); }
-
-        .controls-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 3rem;
-            /* Styles for this container are now inside .hero-section */
-        }
-        
-        #search-box {
-            padding: 0.75rem 1rem;
-            font-size: 1rem;
-            border-radius: 50px;
-            border: 2px solid var(--border-color);
-            background-color: var(--card-bg);
-            color: var(--text-color);
-            min-width: 280px;
-            transition: all 0.3s;
-        }
-        #search-box:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 4px var(--highlight-bg);
-        }
-
-        #category-filters { display: flex; flex-wrap: wrap; gap: 0.8rem; }
-
-        .filter-btn {
-            padding: 0.6rem 1.5rem;
-            font-size: 0.95rem;
-            font-weight: 600;
-            border: 2px solid var(--border-color);
-            border-radius: 50px;
-            background-color: var(--card-bg);
-            color: var(--light-text-color);
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-        }
-        .filter-btn:hover { background-color: var(--highlight-bg); border-color: var(--primary-color); color: var(--text-color);}
-        .filter-btn.active {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: white; border-color: transparent;
-        }
-
-        /* --- MODERN SYSTEM SUPPORTS GRID & CARD DESIGN (RE-THEMED) --- */
-        .link-item.system-support-link {
-            background: linear-gradient(120deg, #1B1829 0%, #2A263B 100%); /* New dark gradient */
-            color: #fff;
-            border: 1px solid #2A263B;
-            border-radius: 18px;
-            box-shadow: 0 8px 32px -8px rgba(10,25,41,0.5);
-            padding: 2rem 1.5rem 1.5rem 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            position: relative;
-            min-height: 160px;
-            transition: box-shadow 0.3s, transform 0.3s, background 0.3s;
-            overflow: hidden;
-        }
-        .link-item.system-support-link:hover {
-            background: linear-gradient(120deg, var(--primary-color) 0%, #1B1829 100%);
-            box-shadow: 0 16px 40px -8px rgba(10,25,41,0.7);
-            transform: translateY(-6px) scale(1.03);
-            border-color: var(--primary-color);
-        }
-        .link-item.system-support-link .link-icon {
-            background: rgba(255,255,255,0.08);
-            border-radius: 12px;
-            width: 56px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.1rem;
-            transition: transform 0.4s cubic-bezier(.4,2,.6,1), box-shadow 0.3s;
-            box-shadow: 0 2px 12px 0 rgba(106, 17, 203, 0.2);
-            will-change: transform;
-        }
-        .link-item.system-support-link:hover .link-icon {
-            transform: scale(1.18) rotate(-8deg);
-            box-shadow: 0 8px 32px 0 rgba(37, 117, 252, 0.4);
-            background: rgba(255,255,255,0.15);
-        }
-        .link-item.system-support-link .link-icon svg {
-            width: 32px;
-            height: 32px;
-            fill: #fff;
-            transition: filter 0.3s, transform 0.4s cubic-bezier(.4,2,.6,1);
-            filter: drop-shadow(0 2px 6px rgba(37, 117, 252, 0.5));
-        }
-        .link-item.system-support-link:hover .link-icon svg {
-            filter: drop-shadow(0 4px 12px rgba(106, 17, 203, 0.7));
-            transform: scale(1.12) rotate(8deg);
-        }
-        .link-item.system-support-link .link-content h3 {
-            font-size: 1.18rem;
-            font-weight: 700;
-            margin-bottom: 0.4rem;
-            color: #fff;
-            letter-spacing: 0.01em;
-        }
-        .link-item.system-support-link .link-content p {
-            font-size: 1.01rem;
-            color: #e0e7ff;
-            margin-bottom: 0.5rem;
-        }
-        .link-item.system-support-link .link-arrow {
-            color: #E8E6FC;
-            position: absolute;
-            right: 1.5rem;
-            top: 1.5rem;
-            font-size: 1.7rem;
-            opacity: 1;
-            transition: color 0.3s, transform 0.3s;
-        }
-        .link-item.system-support-link:hover .link-arrow {
-            color: #fff;
-            transform: translateX(4px);
-        }
-
-        /* --- NEW LINK GRID & CARD DESIGN --- */
-        #link-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr); /* Changed from 4 to 5 */
-            gap: 1.75rem;
-            margin-top: 2.5rem; /* Add margin to separate from hero */
-        }
-        @media (max-width: 1200px) {
-            #link-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        @media (max-width: 900px) {
-            #link-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 600px) {
-            #link-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .link-item {
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.25rem;
-            text-decoration: none;
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px -1px var(--shadow-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s, opacity 0.4s ease;
-            opacity: 1;
-            transform: scale(1);
-            position: relative;
-        }
-
-        .link-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px var(--shadow-color);
-            border-color: var(--primary-color);
-        }
-        
-        .link-icon {
-            flex-shrink: 0;
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            background-color: var(--highlight-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .link-icon svg {
-            width: 28px;
-            height: 28px;
-            fill: var(--text-color);
-        }
-        .link-content h3 {
-            font-size: 1.15rem;
-            margin-bottom: 0.2rem;
-            font-weight: 600;
-            color: var(--text-color);
-        }
-        .link-content p {
-            font-size: 0.9rem;
-            color: var(--light-text-color);
-            line-height: 1.5;
-        }
-        
-        .link-arrow {
-            position: absolute;
-            right: 1.25rem;
-            top: 50%;
-            transform: translateY(-50%) translateX(-10px);
-            font-size: 1.5rem;
-            color: var(--light-text-color);
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-
-        .link-item:hover .link-arrow {
-            opacity: 1;
-            transform: translateY(-50%) translateX(0);
-        }
-
-        /* Hiding animation */
-        .link-item.hide {
-            transform: scale(0.8);
-            opacity: 0;
-            pointer-events: none;
-            height: 0;
-            padding: 0;
-            margin: 0;
-            overflow: hidden;
-            border: none;
-        }
-
-        .app-section-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.75rem;
-        }
-        @media (max-width: 900px) {
-            .app-section-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Highlighted Links Styles (Brands) - Intentionally kept */
-        .link-item.cellcard-link {
-            background: #e48947;
-            color: #fff;
-        }
-        .link-item.cellcard-link .link-content h3,
-        .link-item.cellcard-link .link-content p {
-            color: #fff;
-        }
-        .link-item.cellcard-link .link-arrow {
-            color: #fff;
-        }
-        .link-item.cellcard-link:hover {
-            background: #d06f1a;
-            color: #fff;
-            border-color: #d06f1a;
-            box-shadow: 0 8px 24px -4px #e48947cc;
-        }
-        .link-item.ezecom-link {
-            background: #6c54a3;
-            color: #fff;
-        }
-        .link-item.ezecom-link .link-content h3,
-        .link-item.ezecom-link .link-content p {
-            color: #fff;
-        }
-        .link-item.ezecom-link .link-arrow {
-            color: #fff;
-        }
-        .link-item.ezecom-link:hover {
-            background: #4d3a7a;
-            color: #fff;
-            border-color: #4d3a7a;
-            box-shadow: 0 8px 24px -4px #6c54a3cc;
-        }
-        .link-item.altogether-link {
-            background: linear-gradient(135deg, #e48947 0%, #6c54a3 100%);
-            color: #fff;
-        }
-        .link-item.altogether-link .link-content h3,
-        .link-item.altogether-link .link-content p {
-            color: #fff;
-        }
-        .link-item.altogether-link .link-arrow {
-            color: #fff;
-        }
-        .link-item.altogether-link:hover {
-            background: linear-gradient(135deg, #d06f1a 0%, #4d3a7a 100%);
-            color: #fff;
-            border-color: #6c54a3;
-            box-shadow: 0 8px 24px -4px #6c54a3cc;
-        }
-
-        /* Section Titles in Applications Container */
-        .app-section-cellcard > h2 {
-            color: #e48947;
-        }
-        .app-section-ezecom > h2 {
-            color: #6c54a3;
-        }
-        .app-section-altogether > h2 {
-            background: linear-gradient(135deg, #e48947 0%, #6c54a3 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .search-highlight {
-            background: #ffe066;
-            color: #222;
-            border-radius: 3px;
-            padding: 0 2px;
-        }
-        body.dark-theme .search-highlight {
-            background: #F7D000;
-        }
-
-        /* --- NEW: Location Content (RE-THEMED TO MATCH SYSTEM SUPPORTS) --- */
-        .location-section-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            align-items: stretch;
-        }
-        @media (max-width: 900px) {
-            .location-section-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        .link-item.location-link {
-            /* Inheriting the visual style from .system-support_link */
-            background: linear-gradient(120deg, #1B1829 0%, #2A263B 100%);
-            color: #fff;
-            border: 1px solid #2A263B;
-            border-radius: 18px; /* Matched for consistency */
-            box-shadow: 0 8px 32px -8px rgba(10,25,41,0.5);
-            transition: box-shadow 0.3s, transform 0.3s, background 0.3s;
-
-            /* Retaining original layout styles for location cards */
-            font-size: 1rem;
-            min-height: 50px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
-            padding: 1.5rem 1.25rem 1.25rem 1.5rem;
-            margin-bottom: 0;
-            position: relative; /* Needed for link-arrow */
-            overflow: hidden; /* Good practice with rounded corners and transitions */
-        }
-        .link-item.location-link .link-content h3,
-        .link-item.location-link .link-content p {
-            color: #fff;
-        }
-        .link-item.location-link .link-arrow {
-            color: #E8E6FC;
-            position: absolute;
-            right: 1.25rem;
-            top: 1.25rem;
-            transform: none;
-            opacity: 1;
-            font-size: 1.5rem;
-            transition: color 0.3s, transform 0.3s;
-        }
-        .link-item.location-link:hover {
-            /* Inheriting hover style from .system-support_link:hover */
-            background: linear-gradient(120deg, var(--primary-color) 0%, #1B1829 100%);
-            box-shadow: 0 16px 40px -8px rgba(10,25,41,0.7);
-            transform: translateY(-6px) scale(1.03);
-            border-color: var(--primary-color);
-        }
-        .link-item.location-link:hover .link-arrow {
-             /* Mimicking arrow behavior from .system-support_link:hover */
-            color: #fff;
-            transform: translateX(4px);
-        }
-        .link-item.location-link .link-content h3 {
-            font-size: 1.08rem;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-            letter-spacing: 0.01em;
-        }
-        .link-item.location-link .link-content p {
-            font-size: 0.97rem;
-            font-weight: 400;
-            line-height: 1.5;
-        }
-
-        /* --- STYLES FOR THE ABOUT PAGE --- */
-        .about-container {
-            max-width: 900px;
-            margin: 0 auto;
-            display: grid;
-            gap: 2rem;
-        }
-
-        .about-card {
-            background-color: var(--card-bg);
-            padding: 2rem 2.5rem;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px -1px var(--shadow-color);
-            transition: all 0.3s ease;
-        }
-
-        .about-card h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .about-card p {
-            color: var(--light-text-color);
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-        }
-
-        .about-card ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-
-        .about-card ul li {
-            padding-left: 2rem;
-            position: relative;
-            margin-bottom: 0.8rem;
-            color: var(--text-color);
-        }
-
-        .about-card ul li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--secondary-color);
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        /* Social Media Links */
-        .social-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 1.5rem;
-        }
-
-        .social-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            background-color: var(--bg-color);
-            border-radius: 50%;
-            border: 2px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        .social-link:hover {
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 8px 20px -5px var(--shadow-color);
-            border-color: var(--primary-color);
-        }
-
-        /* Feedback Form Styling */
-        .feedback-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-        }
-
-        .feedback-form .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .feedback-form label {
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--light-text-color);
-        }
-
-        .feedback-form input[type="email"],
-        .feedback-form textarea {
-            padding: 0.8rem 1rem;
-            font-size: 1rem;
-            font-family: var(--font-family);
-            border-radius: 8px;
-            border: 2px solid var(--border-color);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: all 0.3s;
-        }
-
-        .feedback-form input[type="email"]:focus,
-        .feedback-form textarea:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 20%, transparent);
-        }
-
-        .feedback-form textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .submit-btn {
-            padding: 0.8rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            align-self: flex-start; /* Aligns button to the left */
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px -4px var(--shadow-color);
-        }
-
-        /* --- START: REDESIGNED HERO SECTION --- */
-        .hero-section {
-            position: relative;
-            padding: 6rem 2rem;
-            margin-bottom: 2.5rem;
-            border-radius: 2rem;
-            background-color: #12101C;
-            color: #fff;
-            text-align: center;
-            overflow: hidden;
-            display: grid;
-            place-items: center;
-            z-index: 1;
-        }
-
-        /* Animated Grid Background */
-        .hero-section::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px), 
-                linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: panGrid 20s linear infinite;
-            z-index: -2;
-            opacity: 0.5;
-        }
-
-        @keyframes panGrid {
-            0% { background-position: 0 0; }
-            100% { background-position: 40px 40px; }
-        }
-
-        /* Animated Blobs */
-        .hero-section::after {
-            content: "";
-            position: absolute;
-            z-index: -1;
-            left: -20%; top: -50%; width: 70%; height: 150%;
-            background: radial-gradient(circle, var(--primary-color) 0%, transparent 60%);
-            opacity: 0.25;
-            filter: blur(100px);
-            animation: heroBlobMove 15s ease-in-out infinite alternate;
-        }
-
-        @keyframes heroBlobMove {
-            from { transform: translate(0, 0) scale(1) rotate(0deg); }
-            to { transform: translate(20px, -20px) scale(1.1) rotate(20deg); }
-        }
-
-        .hero-content {
-            z-index: 2;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-        }
-        
-        .hero-content > * {
-            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, #FFFFFF, #C9C4F3);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            line-height: 1.2;
-            animation-delay: 0.2s;
-        }
-
-        .hero-content p.subtitle {
-            font-size: 1.25rem;
-            color: #E8E6FC;
-            max-width: 600px;
-            line-height: 1.6;
-            animation-delay: 0.4s;
-        }
-
-        /* Search box and filters styling within the hero */
-        .hero-controls {
-            margin-top: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            width: 100%;
-            max-width: 650px;
-            animation-delay: 0.6s;
-        }
-
-        .hero-section #search-box {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            font-size: 1.1rem;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .hero-section #search-box::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .hero-section #search-box:focus {
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 0 4px rgba(6, 57, 105, 0.5), 0 4px 20px rgba(0,0,0,0.3);
-            background: rgba(255, 255, 255, 0.15);
-        }
-        
-        .hero-section #category-filters {
-            justify-content: center;
-            gap: 0.75rem;
-            animation-delay: 0.8s;
-        }
-
-        .hero-section .filter-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #E8E6FC;
-            font-weight: 500;
-            padding: 0.5rem 1.25rem;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-
-        .hero-section .filter-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-            color: #fff;
-        }
-
-        .hero-section .filter-btn.active {
-            background: #fff;
-            color: var(--primary-color);
-            border-color: #fff;
-            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
-        }
-        
-        @media (max-width: 768px) {
-            .hero-section {
-                padding: 4rem 1.5rem;
-            }
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-            .hero-content p.subtitle {
-                font-size: 1.1rem;
-            }
-        }
-        @media (max-width: 600px) {
-             .hero-content h1 {
-                font-size: 2.2rem;
-            }
-            .hero-section #category-filters {
-                gap: 0.5rem;
-            }
-             .hero-section .filter-btn {
-                padding: 0.4rem 1rem;
-                font-size: 0.9rem;
-            }
-        }
-        /* --- END: REDESIGNED HERO SECTION --- */
-
-        .hero-icon-anim {
-            flex-shrink: 0; margin-right: 2.5rem;
-            width: 110px; height: 110px; display: flex;
-            align-items: center; justify-content: center;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: floatY 3s ease-in-out infinite alternate;
-        }
-        .link-item.system-support-link .link-icon.hero-icon-anim {
-            width: 56px;
-            height: 56px;
-            margin-bottom: 1.1rem;
-            background: rgba(255,255,255,0.08);
-            border-radius: 12px;
-            animation: floatY 3s ease-in-out infinite alternate;
-        }
-        
-        @keyframes floatY {
-            0% { transform: translateY(0);}
-            100% { transform: translateY(-12px);}
-        }
-        
-        /* --- START: REDESIGNED RT TICKET INQUIRIES STYLES --- */
-        #rt-ticket-inquiries-container h2.section-title {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .rt-inquiries-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.75rem;
-            align-items: stretch;
-        }
-
-        .rt-inquiry-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px -1px var(--shadow-color);
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .rt-inquiry-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px var(--shadow-color);
-        }
-
-        .rt-card-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.25rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .rt-card-icon {
-            flex-shrink: 0;
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #0e1f46;
-            color: #ffffff;
-        }
-
-        .rt-card-icon svg {
-            width: 28px;
-            height: 28px;
-        }
-
-        .rt-card-header h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-color);
-            line-height: 1.3;
-        }
-
-        .rt-card-body ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .rt-card-body ul li {
-            padding-left: 1.75rem;
-            position: relative;
-            margin-bottom: 0.75rem;
-            color: var(--light-text-color);
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        .rt-card-body ul li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            top: 1px;
-            font-weight: 700;
-            font-size: 1rem;
-            color: #ffffff;
-            background-color: #0e1f46;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            line-height: 1;
-        }
-        
-        .rt-inquiry-card.digital-queue {
-            grid-column: 1 / -1;
-        }
-
-        .rt-card-subsection {
-            margin-top: 1.5rem;
-        }
-        .rt-card-subsection:first-child {
-            margin-top: 0;
-        }
-
-        .rt-card-subsection h4 {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px dashed var(--border-color);
-        }
-        /* --- END: RT TICKET INQUIRIES STYLES --- */
-
-
-        /* --- RESPONSIVE DESIGN FOR MOBILE --- */
-        @media (max-width: 900px) {
-            .app-header {
-                padding: 1rem 1.5rem;
-            }
-            main {
-                padding: 1.5rem;
-            }
-        }
-        @media (max-width: 600px) {
-            .app-header {
-                padding: 1rem;
-            }
-            .logo {
-                font-size: 1.25rem;
-            }
-            .theme-switch {
-                font-size: 1.35rem;
-            }
-            main {
-                padding: 1rem;
-            }
-            .controls-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            #search-box {
-                min-width: 0;
-                width: 100%;
-            }
-            #link-grid {
-                grid-template-columns: 1fr;
-            }
-            .app-section-grid,
-            .location-section-grid {
-                grid-template-columns: 1fr;
-            }
-            .about-card {
-                padding: 1.5rem;
-            }
-            .about-container {
-                gap: 1rem;
-            }
-            .social-links {
-                gap: 0.5rem;
-            }
-        }
-
-        /* --- START: HAMBURGER MENU & MOBILE NAV --- */
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .hamburger {
-            display: none;
-            width: 30px;
-            height: 24px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            position: relative;
-            z-index: 1002;
-        }
-
-        .hamburger-bar {
-            display: block;
-            width: 100%;
-            height: 3px;
-            background-color: var(--text-color);
-            border-radius: 3px;
-            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-            position: absolute;
-        }
-
-        .hamburger-bar:nth-child(1) { top: 0; }
-        .hamburger-bar:nth-child(2) { top: 50%; transform: translateY(-50%); }
-        .hamburger-bar:nth-child(3) { bottom: 0; }
-
-        .hamburger.open .hamburger-bar:nth-child(1) {
-            transform: translateY(10.5px) rotate(45deg);
-        }
-        .hamburger.open .hamburger-bar:nth-child(2) {
-            opacity: 0;
-        }
-        .hamburger.open .hamburger-bar:nth-child(3) {
-            transform: translateY(-10.5px) rotate(-45deg);
-        }
-
-        .nav-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 998;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-        }
-        .nav-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        body.no-scroll {
-            overflow: hidden;
-        }
-
-        /* --- Language Switcher Styles --- */
-        .lang-switch {
-            display: flex;
-            align-items: center;
-            background-color: var(--highlight-bg);
-            border-radius: 50px;
-            padding: 4px;
-            border: 1px solid var(--border-color);
-            transition: background-color 0.3s;
-        }
-        .lang-btn {
-            background-color: transparent;
-            border: none;
-            color: var(--light-text-color);
-            padding: 0.25rem 0.75rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-        .lang-btn.active {
-            background-color: var(--card-bg);
-            color: var(--primary-color);
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-        }
-        body.dark-theme .lang-btn.active {
-            color: var(--text-color);
-            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-        }
-
-
-        @media (max-width: 900px) {
-            .main-nav {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: min(80vw, 300px);
-                height: 100vh;
-                background-color: var(--card-bg);
-                box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                justify-content: flex-start;
-                /* CHANGE: Reverted padding to give space at the top */
-                padding: 6rem 1rem 2rem 1rem; 
-                gap: 1rem;
-                z-index: 1001;
-                transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            }
-            
-            body.dark-theme .main-nav {
-                box-shadow: -5px 0 35px rgba(0, 0, 0, 0.3);
-            }
-
-            .main-nav.open {
-                right: 0;
-            }
-
-            .main-nav a {
-                color: var(--text-color);
-                font-size: 1.1rem;
-                font-weight: 600;
-                transition: color 0.3s, background-color 0.3s;
-                border-radius: 8px;
-                padding: 1rem 1.5rem;
-                width: 100%;
-                text-align: left;
-            }
-
-            .main-nav a:hover {
-                background-color: var(--highlight-bg);
-                color: var(--text-color);
-            }
-            
-            .main-nav a.active {
-                background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-                color: white !important;
-            }
-            
-            .main-nav a.active::after {
-                display: none;
-            }
-
-            .hamburger {
-                display: block;
-            }
-        }
-        /* --- END: HAMBURGER MENU & MOBILE NAV --- */
-
-
-        /* Responsive breakpoints for RT Ticket Inquiries grid */
-        @media (max-width: 1200px) {
-            .rt-inquiries-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        @media (max-width: 900px) {
-            .rt-inquiries-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 600px) {
-            .rt-inquiries-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        /* Location Cards */
+        .location-section-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; align-items: stretch; }
+        .link-item.location-link { background: linear-gradient(120deg, #1B1829 0%, #2A263B 100%); color: #fff; border: 1px solid #2A263B; border-radius: 18px; box-shadow: 0 8px 32px -8px rgba(10,25,41,0.5); font-size: 1rem; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; padding: 1.5rem 1.25rem 1.25rem 1.5rem; }
+        .link-item.location-link .link-content h3, .link-item.location-link .link-content p { color: #fff; }
+        .link-item.location-link .link-arrow { color: #E8E6FC; position: absolute; right: 1.25rem; top: 1.25rem; transform: none; opacity: 1; transition: color 0.3s, transform 0.3s; }
+        .link-item.location-link:hover { background: linear-gradient(120deg, var(--primary-color) 0%, #1B1829 100%); box-shadow: 0 16px 40px -8px rgba(10,25,41,0.7); transform: translateY(-6px) scale(1.03); border-color: var(--primary-color); }
+        .link-item.location-link:hover .link-arrow { color: #fff; transform: translateX(4px); }
+        .link-item.location-link .link-content h3 { font-size: 1.08rem; margin-bottom: 0.5rem; font-weight: 700; }
+        .link-item.location-link .link-content p { font-size: 0.97rem; font-weight: 400; line-height: 1.5; }
+
+        /* RT Ticket Cards */
+        #rt-ticket-inquiries-container h2.section-title { font-size: 2rem; margin-bottom: 2rem; text-align: center; background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .rt-inquiries-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.75rem; align-items: stretch; }
+        .rt-inquiry-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 6px -1px var(--shadow-color); display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .rt-inquiry-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px var(--shadow-color); }
+        .rt-card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
+        .rt-card-icon { flex-shrink: 0; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background-color: #0e1f46; color: #ffffff; }
+        .rt-card-icon svg { width: 28px; height: 28px; }
+        .rt-card-header h3 { font-size: 1.25rem; font-weight: 700; color: var(--text-color); line-height: 1.3; }
+        .rt-card-body ul { list-style: none; padding: 0; margin: 0; }
+        .rt-card-body ul li { padding-left: 1.75rem; position: relative; margin-bottom: 0.75rem; color: var(--light-text-color); font-size: 0.95rem; line-height: 1.5; }
+        .rt-card-body ul li::before { content: '✓'; position: absolute; left: 0; top: 1px; font-weight: 700; font-size: 1rem; color: #ffffff; background-color: #0e1f46; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 1; }
+        .rt-inquiry-card.digital-queue { grid-column: 1 / -1; }
+        .rt-card-subsection { margin-top: 1.5rem; }
+        .rt-card-subsection:first-child { margin-top: 0; }
+        .rt-card-subsection h4 { font-size: 1.05rem; font-weight: 600; color: var(--text-color); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--border-color); }
+        .search-highlight { background: #ffe066; color: #222; border-radius: 3px; padding: 0 2px; }
+        body.dark-theme .search-highlight { background: #F7D000; }
+
+        /* --- MOBILE & NAV --- */
+        .header-controls { display: flex; align-items: center; gap: 1rem; }
+        .hamburger { display: none; width: 30px; height: 24px; background: transparent; border: none; cursor: pointer; padding: 0; position: relative; z-index: 1002; }
+        .hamburger-bar { display: block; width: 100%; height: 3px; background-color: var(--text-color); border-radius: 3px; transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; position: absolute; }
+        .hamburger-bar:nth-child(1) { top: 0; } .hamburger-bar:nth-child(2) { top: 50%; transform: translateY(-50%); } .hamburger-bar:nth-child(3) { bottom: 0; }
+        .hamburger.open .hamburger-bar:nth-child(1) { transform: translateY(10.5px) rotate(45deg); } .hamburger.open .hamburger-bar:nth-child(2) { opacity: 0; } .hamburger.open .hamburger-bar:nth-child(3) { transform: translateY(-10.5px) rotate(-45deg); }
+        .nav-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.5); z-index: 998; opacity: 0; visibility: hidden; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; }
+        .nav-overlay.active { opacity: 1; visibility: visible; }
+        body.no-scroll { overflow: hidden; }
+
+        /* Language Switcher */
+        .language-selector { position: relative; }
+        .language-btn { background-color: var(--card-bg); color: var(--light-text-color); border: 1.5px solid var(--border-color); border-radius: 24px; padding: 8px 18px 8px 12px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: border-color 0.3s, background-color 0.3s; }
+        .language-btn:hover { border-color: var(--primary-color); }
+        .language-flag { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+        .dropdown-content { display: none; position: absolute; right: 0; background-color: var(--card-bg); min-width: 170px; border-radius: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.13); z-index: 10; margin-top: 8px; overflow: hidden; border: 1px solid var(--border-color); }
+        .language-option { color: var(--text-color); padding: 12px 18px 12px 16px; display: flex; align-items: center; gap: 10px; font-size: 15px; background: none; border: none; width: 100%; text-align: left; cursor: pointer; transition: background-color 0.2s; }
+        .language-option:hover { background-color: var(--highlight-bg); }
+        .language-option.active-language { background-color: var(--highlight-bg); color: var(--primary-color); font-weight: 700; }
+
+        /* --- START: PORTFOLIO ABOUT PAGE STYLES (SCOPED) --- */
+        .about-page-content {
+            font-family: 'Poppins', sans-serif;
+            --primary-gradient: linear-gradient(45deg, #0e1f46, #063969 80%);
+            --dark-color: #0e1f46;
+        }
+        .about-page-content .max-width { max-width: 1300px; padding: 0 80px; margin: auto; }
+        .about-page-content section { padding: 50px 0; }
+        .about-page-content section .title { position: relative; text-align: center; font-size: 40px; font-weight: 500; margin-bottom: 60px; padding-bottom: 20px; font-family: 'Ubuntu', sans-serif; color: var(--text-color); }
+        .about-page-content section .title::before { content: ""; position: absolute; bottom: 0px; left: 50%; width: 180px; height: 3px; background: var(--dark-color); transform: translateX(-50%); }
+        .about-page-content section .title::after { position: absolute; bottom: -8px; left: 50%; font-size: 20px; color: var(--primary-color); padding: 0 5px; background: var(--bg-color); transform: translateX(-50%); }
+        .about-page-content .home { display: flex; background: url("Img/AboutMe/Banner1.JPG") no-repeat center; height: 90vh; color: #fff; min-height: 600px; background-size: cover; background-attachment: fixed; font-family: 'Ubuntu', sans-serif; align-items: center; margin: -2.5rem -2.5rem 0; }
+        .about-page-content .home .home-content .text-1 { font-size: 27px; }
+        .about-page-content .home .home-content .text-2 { font-size: 75px; font-weight: 600; margin-left: -3px; }
+        .about-page-content .home .home-content .text-3 { font-size: 40px; margin: 5px 0; }
+        .about-page-content .home .home-content .text-3 span { color: var(--primary-color); font-weight: 500; }
+        .about-page-content .home .home-content .card-panel { background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); }
+        body.dark-theme .about-page-content .home .home-content .card-panel { background: rgba(27, 24, 41, 0.85); backdrop-filter: blur(5px); }
+        .about-page-content .card-panel { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(6, 57, 105, 0.08); padding: 2rem 2.5rem; margin-bottom: 2rem; }
+        body.dark-theme .about-page-content .card-panel { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+        .about-page-content .card-panel-title { font-size: 1.8rem; margin-bottom: 1.2rem; background: var(--primary-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .about-page-content .card-panel p, .about-page-content .card-panel li { color: var(--text-color); line-height: 1.7; }
+        .about-page-content .about .title::after { content: "who I am"; }
+        .about-page-content .about-features-list { list-style-type: none; padding-left: 0; }
+        .about-page-content .about-features-list li { padding-left: 2rem; position: relative; margin-bottom: 0.8rem; }
+        .about-page-content .about-features-list li::before { content: "✓"; position: absolute; left: 0; color: var(--dark-color); font-weight: 700; font-size: 1.2rem; }
+        .about-page-content .creator-profile { display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; }
+        .about-page-content .creator-img-wrapper { flex: 0 0 240px; display: flex; justify-content: center; }
+        .about-page-content .creator-img { width: 240px; height: 240px; object-fit: cover; border-radius: 22px; border: 4px solid var(--border-color); box-shadow: 0 4px 16px -4px rgba(106,17,203,0.1); }
+        .about-page-content .creator-info { flex: 1 1 320px; }
+        .about-page-content .creator-info h3 { font-size: 1.18rem; font-weight: 600; color: var(--primary-color); margin-bottom: 0.5rem; }
+        .about-page-content .creator-info p span { display: block; margin-bottom: 0.7rem; }
+        .about-page-content .creator-info p span b, .about-page-content .creator-info p span a { color: var(--primary-color); font-weight: 600; }
+        .about-page-content .social-icons a { display: inline-block; font-size: 20px; color: var(--primary-color); margin: 0 10px; transition: all 0.3s ease; }
+        .about-page-content .social-icons a:hover { color: var(--dark-color); }
+        .about-page-content .skills .title::after { content: "what I know"; }
+        .about-page-content .skills-content-grid { display: flex; flex-wrap: wrap; gap: 2.5rem; align-items: flex-start; }
+        .about-page-content .skills-intro { flex: 1 1 300px; }
+        .about-page-content .skills-intro .text { color: var(--primary-color); font-size: 1.25rem; font-weight: 600; margin-bottom: 1.1rem; }
+        .about-page-content .skills-intro a { display: inline-block; background: var(--primary-color); color: #fff; font-size: 1rem; font-weight: 500; padding: 0.7rem 1.7rem; border-radius: 8px; border: 2px solid var(--primary-color); transition: all 0.2s ease; }
+        .about-page-content .skills-intro a:hover { background: none; color: var(--primary-color); }
+        .about-page-content .skills-list { flex: 2 1 400px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.3rem; }
+        .about-page-content .skill-card { background: var(--bg-color); border-radius: 12px; border: 1px solid var(--border-color); padding: 1rem 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .about-page-content .skill-card:hover { transform: translateY(-5px); box-shadow: 0 6px 16px rgba(6, 57, 105, 0.12); }
+        .about-page-content .skill-card-header { display: flex; align-items: center; gap: 0.7rem; }
+        .about-page-content .skill-icon { width: 2.2rem; height: 2.2rem; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+        .about-page-content .skill-title { color: var(--text-color); font-weight: 600; font-size: 1.07rem; }
+        .about-page-content .skill-percent { font-size: 1.05rem; font-weight: 600; color: var(--primary-color); margin-left: auto; }
+        .about-page-content .skill-bar-bg { width: 100%; height: 8px; background: var(--border-color); border-radius: 6px; overflow: hidden; margin-top: 0.2rem; }
+        .about-page-content .skill-bar-fill { height: 100%; background: var(--primary-gradient); border-radius: 6px; }
+        .about-page-content .contact .title::after { content: "get in touch"; }
+        .about-page-content .contact-content-grid { display: flex; flex-wrap: wrap; gap: 2.5rem; align-items: flex-start; }
+        .about-page-content .contact-info-col { flex: 1 1 300px; }
+        .about-page-content .contact-form-col { flex: 2 1 400px; }
+        .about-page-content .contact-col-title { color: var(--primary-color); font-size: 1.25rem; font-weight: 600; margin-bottom: 1.1rem; }
+        .about-page-content .contact-info-list { display: flex; flex-direction: column; gap: 1.5rem; }
+        .about-page-content .contact-info-item { display: flex; align-items: center; gap: 1rem; }
+        .about-page-content .contact-info-item .icon { background: var(--highlight-bg); color: var(--primary-color); border-radius: 8px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .about-page-content .contact-info-item .text .head { color: var(--text-color); font-weight: 600; }
+        .about-page-content .contact-info-item .text .sub-title { color: var(--light-text-color); }
+        .about-page-content .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+        .about-page-content .contact-form .field-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .about-page-content .contact-form input, .about-page-content .contact-form textarea { background: var(--bg-color); color: var(--text-color); width: 100%; padding: 0.8rem 1rem; font-size: 1rem; font-family: 'Poppins', sans-serif; border-radius: 8px; border: 1.5px solid var(--border-color); transition: border-color 0.2s ease; }
+        .about-page-content .contact-form .field-group input { flex: 1 1 150px; }
+        .about-page-content .contact-form input:focus, .about-page-content .contact-form textarea:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 20%, transparent); }
+        .about-page-content .contact-form textarea { min-height: 120px; resize: vertical; }
+        .about-page-content .contact-form button { padding: 0.8rem 1.5rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; background: var(--primary-gradient); color: #fff; cursor: pointer; align-self: flex-start; transition: all 0.3s ease; }
+        .about-page-content .contact-form button:hover { filter: brightness(110%); transform: translateY(-2px); }
+        @media (max-width: 991px) { .about-page-content .max-width { padding: 0 50px; } }
+        @media (max-width: 947px) {
+            .about-page-content .home .home-content .text-2 { font-size: 70px; }
+            .about-page-content .home .home-content .text-3 { font-size: 35px; }
+            .about-page-content .skills-intro, .about-page-content .contact-info-col { text-align: center; }
+            .about-page-content .skills-intro a, .about-page-content .contact-form button { align-self: center; }
+            .about-page-content .contact-info-list { align-items: center; }
+        }
+        @media (max-width: 690px) {
+            .about-page-content .max-width { padding: 0 23px; }
+            .about-page-content .home .home-content .text-2 { font-size: 60px; }
+            .about-page-content .home .home-content .text-3 { font-size: 32px; }
+            .about-page-content .card-panel { padding: 1.5rem; }
+            .about-page-content .home { margin: -1.5rem -1.5rem 0; }
+        }
+        @media (max-width: 500px) {
+            .about-page-content .home .home-content .text-2 { font-size: 50px; }
+            .about-page-content .home .home-content .text-3 { font-size: 27px; }
+        }
+        /* --- END: PORTFOLIO ABOUT PAGE STYLES --- */
     </style>
 </head>
 <body>
@@ -1228,30 +275,30 @@
             <div class="logo">HengOS</div>
             <nav class="main-nav" id="main-nav">
                 <a href="#resources" class="active" id="home-link" data-translate-key="navHome">Home</a>
-                <a href="AboutMe.html" data-translate-key="navAbout">About</a>
+                <a href="#about" id="about-link" data-translate-key="navAbout">
+                    <span style="display:inline-block;vertical-align:middle;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="margin-right:5px;vertical-align:middle;">
+                            <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    About
+                </a>
             </nav>
             <div class="header-controls">
-                <!-- Language Switcher Dropdown with Flags -->
-                <div class="language-selector" id="lang-switcher" tabindex="0" style="position:relative;">
-                    <button class="language-btn" id="lang-btn-current" type="button" style="background-color: #f3f4f6; color: #4b5563; border: 1.5px solid #e5e7eb; border-radius: 24px; padding: 8px 18px 8px 12px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px;">
-                        <img id="lang-flag-current" src="https://flagcdn.com/us.svg" class="language-flag" alt="EN" style="width:20px;height:20px;border-radius:50%;object-fit:cover;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
-                        <span id="lang-label-current" style="font-family:'Poppins',sans-serif;">English</span>
-                        <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <div class="language-selector" id="lang-switcher" tabindex="0">
+                    <button class="language-btn" id="lang-btn-current" type="button" aria-haspopup="true" aria-expanded="false">
+                        <img id="lang-flag-current" src="https://flagcdn.com/us.svg" class="language-flag" alt="EN">
+                        <span id="lang-label-current">English</span>
+                        <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9L12 15L18 9"/></svg>
                     </button>
-                    <div class="dropdown-content" id="lang-dropdown" style="display:none;position:absolute;right:0;background-color:#fff;min-width:170px;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,0.13);z-index:10;margin-top:8px;overflow:hidden;">
-                        <button class="language-option" data-lang="en" style="color:#374151;padding:12px 18px 12px 16px;display:flex;align-items:center;gap:10px;font-size:15px;background:none;border:none;width:100%;text-align:left;cursor:pointer;transition:background 0.18s;">
-                            <img src="https://flagcdn.com/us.svg" class="language-flag" alt="EN" style="width:20px;height:20px;border-radius:50%;object-fit:cover;box-shadow:0 1px 4px rgba(0,0,0,0.07);"> English
-                        </button>
-                        <button class="language-option" data-lang="kh" style="color:#374151;padding:12px 18px 12px 16px;display:flex;align-items:center;gap:10px;font-size:15px;background:none;border:none;width:100%;text-align:left;cursor:pointer;transition:background 0.18s;">
-                            <img src="https://flagcdn.com/kh.svg" class="language-flag" alt="KH" style="width:20px;height:20px;border-radius:50%;object-fit:cover;box-shadow:0 1px 4px rgba(0,0,0,0.07);"> ភាសាខ្មែរ
-                        </button>
+                    <div class="dropdown-content" id="lang-dropdown" role="menu">
+                        <button class="language-option" data-lang="en" role="menuitem"><img src="https://flagcdn.com/us.svg" class="language-flag" alt="EN"> English</button>
+                        <button class="language-option" data-lang="kh" role="menuitem"><img src="https://flagcdn.com/kh.svg" class="language-flag" alt="KH"> <span class="khmer-font">ភាសាខ្មែរ</span></button>
                     </div>
                 </div>
                 <div class="theme-switch" id="theme-toggle" title="Toggle Dark/Light Mode">🌙</div>
                 <button class="hamburger" id="hamburger-menu" aria-label="Open navigation menu" aria-expanded="false">
-                    <span class="hamburger-bar"></span>
-                    <span class="hamburger-bar"></span>
-                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span>
                 </button>
             </div>
         </header>
@@ -1267,792 +314,337 @@
     </div>
 
     <script>
-        // --- I18N (Internationalization) ---
         const translations = {
-            en: {
-                // Navigation
-                navHome: 'Home',
-                navAbout: 'About',
-                // Hero Section
-                heroTitle: 'Welcome to HengOS',
-                heroSubtitle: 'Your all-in-one productivity dashboard. Jump to your favorite tools, links, and resources in a flash!',
-                // Controls
-                searchPlaceholder: '🔍 Search links...',
-                filterBtnSys: 'Systems Supports',
-                filterBtnApp: 'Applications',
-                filterBtnRT: 'RT Ticket Inquiries',
-                filterBtnLoc: 'Location',
-                // System Supports Section
-                ss_bizCalc_h3: 'Business Calculation',
-                ss_bizCalc_p: 'Quickly calculate business numbers and scenarios.',
-                ss_finTools_h3: 'Finance Tools',
-                ss_finTools_p: 'Interest, pricing, and billing calculators for business and personal finance.',
-                ss_sampleEmail_h3: 'Sample Email',
-                ss_sampleEmail_p: 'Sample of Email and Text.',
-                ss_textExtract_h3: 'Text Extraction',
-                ss_textExtract_p: 'Extract and transcribe text from images, PDFs, and audio files.',
-                // Applications Section
-                app_cat_cellcard: 'Cellcard',
-                app_cat_ezecom: 'EZECOM',
-                app_cat_altogether: 'Altogether',
-                // Location Section
-                loc_pp_title: 'Phnom Penh City',
-                loc_prov_title: 'Provincial',
-                // RT Ticket Section
-                rt_title: 'RT Ticket Inquiries',
-                rt_q_activation_h3: 'Queue: Activation Team',
-                rt_q_delivery_h3: 'Queue: Customer Delivery',
-                rt_q_collection_h3: 'Queue: Care Collection',
-                rt_q_renewal_h3: 'Queue: Care Renewal',
-                rt_q_digital_h3: 'Queue: Digital (Technical Issues & Fulfillment)',
-                rt_digital_sub1: 'Service Availability Issues',
-                rt_digital_sub2: 'Service Performance Issues',
-                rt_digital_sub3: 'Fulfillment',
-                // About Page
-                aboutTitle: 'About This System',
-                aboutDesc: 'Welcome to <strong>HengOS</strong>, a personalized and high-performance web dashboard. This system is designed as a central hub for essential tools and links, built to be fast, responsive, and easy to use. It serves as both a practical utility and a demonstration of modern web development techniques.',
-                aboutKeyFeatTitle: 'Key Features:',
-                aboutFeat1: '<strong>Instant Navigation:</strong> A Single-Page Application (SPA) shell ensures no page reloads for a seamless, app-like feel.',
-                aboutFeat2: '<strong>Dynamic Content:</strong> Powerful, real-time search and category filtering on the Home page.',
-                aboutFeat3: '<strong>Adaptive Theming:</strong> A beautiful and functional Dark/Light mode that respects your viewing preference.',
-                aboutFeat4: '<strong>Animated & Interactive:</strong> Subtle animations and interactive elements powered by Lordicon for an engaging experience.',
-                aboutFeat5: '<strong>Portable & Efficient:</strong> Built with vanilla JavaScript for maximum performance and portability.',
-                creatorTitle: 'Meet The Creator',
-                creatorDesc: "Hi, I'm <b>LY Heng</b>, the creator of HengOS.<br>I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.<br>Thank you for using HengOS!",
-                feedbackTitle: 'Share Your Feedback',
-                feedbackDesc: "Have a suggestion, a feature request, or found a bug? I'd love to hear from you. Your feedback helps make this system better!",
-                feedbackEmailLabel: 'Your Email (Optional)',
-                feedbackMessageLabel: 'Your Message',
-                feedbackSubmitBtn: 'Send Feedback',
-                // Footer
-                footerText: 'All right Reserved 2025 @LYHENG.'
-            },
-            kh: {
-                // Navigation
-                navHome: 'ទំព័រដើម',
-                navAbout: 'អំពីប្រព័ន្ធ',
-                // Hero Section
-                heroTitle: 'សូមស្វាគមន៍មកកាន់ HengOS',
-                heroSubtitle: 'ផ្ទាំងគ្រប់គ្រងផលិតភាពរបស់អ្នក។ ចូលទៅកាន់ឧបករណ៍ តំណ និងធនធានដែលអ្នកចូលចិត្តបានភ្លាមៗ!',
-                // Controls
-                searchPlaceholder: '🔍 ស្វែងរកតំណ...',
-                filterBtnSys: 'ប្រព័ន្ធជំនួយ',
-                filterBtnApp: 'កម្មវិធីនានា',
-                filterBtnRT: 'សាកសួរ RT Ticket',
-                filterBtnLoc: 'ទីតាំង',
-                // System Supports Section
-                ss_bizCalc_h3: 'ការគណនាអាជីវកម្ម',
-                ss_bizCalc_p: 'គណនាលេខអាជីវកម្ម និងសេណារីយ៉ូផ្សេងៗបានរហ័ស។',
-                ss_finTools_h3: 'ឧបករណ៍ហិរញ្ញវត្ថុ',
-                ss_finTools_p: 'ការគណនាការប្រាក់ តម្លៃ និងវិក្កយបត្រសម្រាប់អាជីវកម្ម និងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន។',
-                ss_sampleEmail_h3: 'គំរូអ៊ីមែល',
-                ss_sampleEmail_p: 'គំរូនៃអ៊ីមែល និងសារអក្សរ។',
-                ss_textExtract_h3: 'ការដកស្រង់អត្ថបទ',
-                ss_textExtract_p: 'ដកស្រង់ និងចម្លងអត្ថបទពីរូបភាព PDF និងឯកសារអូឌីយ៉ូ។',
-                // Applications Section
-                app_cat_cellcard: 'សែលកាត',
-                app_cat_ezecom: 'អ៊ីស៊ីខម',
-                app_cat_altogether: 'រួមគ្នា',
-                // Location Section
-                loc_pp_title: 'រាជធានីភ្នំពេញ',
-                loc_prov_title: 'ទីតាំងតាមខេត្ត',
-                // RT Ticket Section
-                rt_title: 'ការសាកសួរ RT Ticket',
-                rt_q_activation_h3: 'ផ្នែក: ក្រុមការងារដំឡើង',
-                rt_q_delivery_h3: 'ផ្នែក: ការដឹកជញ្ជូនអតិថិជន',
-                rt_q_collection_h3: 'ផ្នែក: ការប្រមូលបំណុល',
-                rt_q_renewal_h3: 'ផ្នែក: បន្តសេវាកម្ម',
-                rt_q_digital_h3: 'ផ្នែក: បច្ចេកទេស (បញ្ហាបច្ចេកទេស និងការបំពេញការងារ)',
-                rt_digital_sub1: 'បញ្ហាដែលអាចកើតមានលើសេវាកម្ម',
-                rt_digital_sub2: 'បញ្ហាដំណើរការសេវាកម្ម',
-                rt_digital_sub3: 'ការបំពេញការងារ',
-                // About Page
-                aboutTitle: 'អំពីប្រព័ន្ធនេះ',
-                aboutDesc: 'សូមស្វាគមន៍មកកាន់ <strong>HengOS</strong> ដែលជាផ្ទាំងគ្រប់គ្រងគេហទំព័រផ្ទាល់ខ្លួន និងមានประสิทธิភាពខ្ពស់។ ប្រព័ន្ធនេះត្រូវបានរចនាឡើងជាមជ្ឈមណ្ឌលសម្រាប់ឧបករណ៍ និងតំណភ្ជាប់សំខាន់ៗ ដែលបង្កើតឡើងឱ្យមានល្បឿនលឿន ឆ្លើយតប និងងាយស្រួលប្រើ។',
-                aboutKeyFeatTitle: 'មុខងារសំខាន់ៗ:',
-                aboutFeat1: '<strong>ការរុករករហ័ស៖</strong> Single-Page Application (SPA) ធានាថាមិនមានការផ្ទុកទំព័រឡើងវិញសម្រាប់អារម្មណ៍ដូចកម្មវិធី។',
-                aboutFeat2: '<strong>មាតិកាថាមវន្ត៖</strong> ការស្វែងរក និងការត្រងប្រភេទតាមពេលវេលាជាក់ស្តែងដ៏មានអានុភាពនៅលើទំព័រដើម។',
-                aboutFeat3: '<strong>ស្បែកដែលអាចបត់បែនបាន៖</strong> មុខងារ Dark/Light ដ៏ស្រស់ស្អាតដែលគោរពចំណូលចិត្តរបស់អ្នក។',
-                aboutFeat4: '<strong>មានចលនា និងអន្តរកម្ម៖</strong> ចលនា និងធាតុអន្តរកម្មដែលដំណើរការដោយ Lordicon សម្រាប់បទពិសោធន៍ដ៏ទាក់ទាញ។',
-                aboutFeat5: '<strong>អាចយកតាមខ្លួនបាន និងមានប្រសិទ្ធភាព៖</strong> បង្កើតឡើងដោយ vanilla JavaScript សម្រាប់ដំណើរការ និងអាចយកតាមខ្លួនបានជាអតិបរមា។',
-                creatorTitle: 'ស្គាល់អ្នកបង្កើត',
-                creatorDesc: "សួស្តី ខ្ញុំឈ្មោះ <b>លី ហេង</b> ជាអ្នកបង្កើត HengOS។<br>ខ្ញុំ đam mê ការបង្កើតឧបករណ៍ឌីជីថលដែលជួយបង្កើនផលិតភាព និងធ្វើឱ្យការងារប្រចាំថ្ងៃកាន់តែងាយស្រួល។<br>សូមអរគុណសម្រាប់ការប្រើប្រាស់ HengOS!",
-                feedbackTitle: 'ចែករំលែកមតិកែលម្អរបស់អ្នក',
-                feedbackDesc: 'មានសំណូមពរ ស្នើសុំមុខងារ ឬរកឃើញបញ្ហាទេ? ខ្ញុំចង់ឮពីអ្នក។ មតិកែលម្អរបស់អ្នកជួយធ្វើឱ្យប្រព័ន្ធនេះកាន់តែប្រសើរឡើង!',
-                feedbackEmailLabel: 'អ៊ីមែលរបស់អ្នក (ស្រេចចិត្ត)',
-                feedbackMessageLabel: 'សាររបស់អ្នក',
-                feedbackSubmitBtn: 'ផ្ញើមតិកែលម្អ',
-                // Footer
-                footerText: 'រក្សាសិទ្ធិគ្រប់យ៉ាង ២០២៥ @LYHENG.'
-            }
+            en: { navHome: 'Home', navAbout: 'About', heroTitle: 'Welcome to HengOS', heroSubtitle: 'Your all-in-one productivity dashboard. Jump to your favorite tools, links, and resources in a flash!', searchPlaceholder: '🔍 Search links...', filterBtnSys: 'Systems Supports', filterBtnApp: 'Applications', filterBtnRT: 'RT Ticket Inquiries', filterBtnLoc: 'Location', ss_bizCalc_h3: 'Business Calculation', ss_bizCalc_p: 'Quickly calculate business numbers and scenarios.', ss_finTools_h3: 'Finance Tools', ss_finTools_p: 'Interest, pricing, and billing calculators for business and personal finance.', ss_sampleEmail_h3: 'Sample Email', ss_sampleEmail_p: 'Sample of Email and Text.', ss_textExtract_h3: 'Text Extraction', ss_textExtract_p: 'Extract and transcribe text from images, PDFs, and audio files.', app_cat_cellcard: 'Cellcard', app_cat_ezecom: 'EZECOM', app_cat_altogether: 'Altogether', loc_pp_title: 'Phnom Penh City', loc_prov_title: 'Provincial', rt_title: 'RT Ticket Inquiries', rt_q_activation_h3: 'Queue: Activation Team', rt_q_delivery_h3: 'Queue: Customer Delivery', rt_q_collection_h3: 'Queue: Care Collection', rt_q_renewal_h3: 'Queue: Care Renewal', rt_q_digital_h3: 'Queue: Digital (Technical Issues & Fulfillment)', rt_digital_sub1: 'Service Availability Issues', rt_digital_sub2: 'Service Performance Issues', rt_digital_sub3: 'Fulfillment', aboutTitle: 'About This System', aboutDesc: 'Welcome to <strong>HengOS</strong>...', aboutKeyFeatTitle: 'Key Features:', aboutFeat1: '<strong>Instant Navigation:</strong>...', aboutFeat2: '<strong>Dynamic Content:</strong>...', aboutFeat3: '<strong>Adaptive Theming:</strong>...', aboutFeat4: '<strong>Animated & Interactive:</strong>...', aboutFeat5: '<strong>Portable & Efficient:</strong>...', creatorTitle: 'Meet The Creator', creatorDesc: "Hi, I'm <b>LY Heng</b>, the creator of HengOS.<br>I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.<br>Thank you for using HengOS!", feedbackTitle: 'Share Your Feedback', feedbackDesc: "Have a suggestion...", feedbackEmailLabel: 'Your Email (Optional)', feedbackMessageLabel: 'Your Message', feedbackSubmitBtn: 'Send Feedback', footerText: 'All right Reserved 2025 @LYHENG.' },
+            kh: { navHome: 'ទំព័រដើម', navAbout: 'អំពីប្រព័ន្ធ', heroTitle: 'សូមស្វាគមន៍មកកាន់ HengOS', heroSubtitle: 'ផ្ទាំងគ្រប់គ្រងផលិតភាពរបស់អ្នក។ ចូលទៅកាន់ឧបករណ៍ តំណ និងធនធានដែលអ្នកចូលចិត្តបានភ្លាមៗ!', searchPlaceholder: '🔍 ស្វែងរកតំណ...', filterBtnSys: 'ប្រព័ន្ធជំនួយ', filterBtnApp: 'កម្មវិធីនានា', filterBtnRT: 'សាកសួរ RT Ticket', filterBtnLoc: 'ទីតាំង', ss_bizCalc_h3: 'ការគណនាអាជីវកម្ម', ss_bizCalc_p: 'គណនាលេខអាជីវកម្ម និងសេណារីយ៉ូផ្សេងៗបានរហ័ស។', ss_finTools_h3: 'ឧបករណ៍ហិរញ្ញវត្ថុ', ss_finTools_p: 'ការគណនាការប្រាក់ តម្លៃ និងវិក្កយបត្រសម្រាប់អាជីវកម្ម និងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន។', ss_sampleEmail_h3: 'គំរូអ៊ីមែល', ss_sampleEmail_p: 'គំរូនៃអ៊ីមែល និងសារអក្សរ។', ss_textExtract_h3: 'ការដកស្រង់អត្ថបទ', ss_textExtract_p: 'ដកស្រង់ និងចម្លងអត្ថបទពីរូបភាព PDF និងឯកសារអូឌីយ៉ូ។', app_cat_cellcard: 'សែលកាត', app_cat_ezecom: 'អ៊ីស៊ីខម', app_cat_altogether: 'រួមគ្នា', loc_pp_title: 'រាជធានីភ្នំពេញ', loc_prov_title: 'ទីតាំងតាមខេត្ត', rt_title: 'ការសាកសួរ RT Ticket', rt_q_activation_h3: 'ផ្នែក: ក្រុមការងារដំឡើង', rt_q_delivery_h3: 'ផ្នែក: ការដឹកជញ្ជូនអតិថិជន', rt_q_collection_h3: 'ផ្នែក: ការប្រមូលបំណុល', rt_q_renewal_h3: 'ផ្នែក: បន្តសេវាកម្ម', rt_q_digital_h3: 'ផ្នែក: បច្ចេកទេស (បញ្ហាបច្ចេកទេស និងការបំពេញការងារ)', rt_digital_sub1: 'បញ្ហាដែលអាចកើតមានលើសេវាកម្ម', rt_digital_sub2: 'បញ្ហាដំណើរការសេវាកម្ម', rt_digital_sub3: 'ការបំពេញការងារ', aboutTitle: 'អំពីប្រព័ន្ធនេះ', aboutDesc: 'សូមស្វាគមន៍មកកាន់ <strong>HengOS</strong>...', aboutKeyFeatTitle: 'មុខងារសំខាន់ៗ:', aboutFeat1: '<strong>ការរុករករហ័ស៖</strong>...', aboutFeat2: '<strong>មាតិកាថាមវន្ត៖</strong>...', aboutFeat3: '<strong>ស្បែកដែលអាចបត់បែនបាន៖</strong>...', aboutFeat4: '<strong>មានចលនា និងអន្តរកម្ម៖</strong>...', aboutFeat5: '<strong>អាចយកតាមខ្លួនបាន និងមានប្រសិទ្ធភាព៖</strong>...', creatorTitle: 'ស្គាល់អ្នកបង្កើត', creatorDesc: "សួស្តី ខ្ញុំឈ្មោះ <b>លី ហេង</b> ជាអ្នកបង្កើត HengOS។<br>ខ្ញុំ đam mê ការបង្កើតឧបករណ៍ឌីជីថលដែលជួយបង្កើនផលិតភាព និងធ្វើឱ្យការងារប្រចាំថ្ងៃកាន់តែងាយស្រួល។<br>សូមអរគុណសម្រាប់ការប្រើប្រាស់ HengOS!", feedbackTitle: 'ចែករំលែកមតិកែលម្អរបស់អ្នក', feedbackDesc: 'មានសំណូមពរ...', feedbackEmailLabel: 'អ៊ីមែលរបស់អ្នក (ស្រេចចិត្ត)', feedbackMessageLabel: 'សាររបស់អ្នក', feedbackSubmitBtn: 'ផ្ញើមតិកែលម្អ', footerText: 'រក្សាសិទ្ធិគ្រប់យ៉ាង ២០២៥ @LYHENG.' }
         };
 
         let currentLanguage = 'en';
 
-        function applyTranslations() {
-            const lang = currentLanguage;
-            if (!translations[lang]) return;
-
-            document.querySelectorAll('[data-translate-key]').forEach(el => {
-                const key = el.dataset.translateKey;
-                if (translations[lang][key]) {
-                    el.innerHTML = translations[lang][key];
-                }
-            });
-
-            document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
-                const key = el.dataset.translatePlaceholder;
-                if (translations[lang][key]) {
-                    el.placeholder = translations[lang][key];
-                }
-            });
-            document.documentElement.lang = lang === 'kh' ? 'km' : 'en';
-        }
-
-        function setLanguage(lang) {
-            if (!translations[lang]) return;
-            currentLanguage = lang;
-            localStorage.setItem('userLanguage', lang);
-
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.lang === lang);
-            });
-            
-            applyTranslations();
-        }
-
-
         // === VIRTUAL PAGE CONTENT ===
         const systemSupportsContent = `
         <div id="link-grid">
-            <a href="BusinessCal.html" class="link-item system-support-link" data-category="all">
-                <div class="link-icon hero-icon-anim">
-                    <lord-icon src="https://cdn.lordicon.com/emxxkbtx.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon>
-                </div>
-                <div class="link-content">
-                    <h3 data-translate-key="ss_bizCalc_h3">Business Calculation</h3>
-                    <p data-translate-key="ss_bizCalc_p">Quickly calculate business numbers and scenarios.</p>
-                </div>
-                <div class="link-arrow">→</div>
-            </a>
-            <a href="FinanceCal.html" class="link-item system-support-link" data-category="finance">
-                <div class="link-icon hero-icon-anim">
-                    <lord-icon src="https://cdn.lordicon.com/dnupukmh.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon>
-                </div>
-                <div class="link-content">
-                    <h3 data-translate-key="ss_finTools_h3">Finance Tools</h3>
-                    <p data-translate-key="ss_finTools_p">Interest, pricing, and billing calculators for business and personal finance.</p>
-                </div>
-                <div class="link-arrow">→</div>
-            </a>
-            <a href="SampleEmail.html" class="link-item system-support-link" data-category="all">
-                <div class="link-icon hero-icon-anim">
-                    <lord-icon src="https://cdn.lordicon.com/bpptgtfr.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon>
-                </div>
-                <div class="link-content">
-                    <h3 data-translate-key="ss_sampleEmail_h3">Sample Email</h3>
-                    <p data-translate-key="ss_sampleEmail_p">Sample of Email and Text.</p>
-                </div>
-                <div class="link-arrow">→</div>
-            </a>
-            <a href="TextExtractor.html" class="link-item system-support-link" data-category="all">
-                <div class="link-icon hero-icon-anim">
-                    <lord-icon src="https://cdn.lordicon.com/cfkiwvcc.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon>
-                </div>
-                <div class="link-content">
-                    <h3 data-translate-key="ss_textExtract_h3">Text Extraction</h3>
-                    <p data-translate-key="ss_textExtract_p">Extract and transcribe text from images, PDFs, and audio files.</p>
-                </div>
-                <div class="link-arrow">→</div>
-            </a>
-            <!-- NEW: Compressor Tool Link -->
-            <a href="Compressor.html" class="link-item system-support-link" data-category="all">
-                <div class="link-icon hero-icon-anim">
-                    <lord-icon
-                        src="https://cdn.lordicon.com/eoygayvy.json"
-                        trigger="hover"
-                        colors="primary:#ffffff"
-                        style="width:48px;height:48px">
-                    </lord-icon>
-                </div>
-                <div class="link-content">
-                    <h3>Compressor Tool</h3>
-                    <p>Compress PDF, images, videos, Word, Excel, and PowerPoint files.</p>
-                </div>
-                <div class="link-arrow">→</div>
-            </a>
+            <a href="BusinessCal.html" class="link-item system-support-link" data-category="all"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/emxxkbtx.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3 data-translate-key="ss_bizCalc_h3">Business Calculation</h3><p data-translate-key="ss_bizCalc_p">Quickly calculate business numbers and scenarios.</p></div><div class="link-arrow">→</div></a>
+            <a href="FinanceCal.html" class="link-item system-support-link" data-category="finance"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/dnupukmh.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3 data-translate-key="ss_finTools_h3">Finance Tools</h3><p data-translate-key="ss_finTools_p">Interest, pricing, and billing calculators for business and personal finance.</p></div><div class="link-arrow">→</div></a>
+            <a href="SampleEmail.html" class="link-item system-support-link" data-category="all"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/bpptgtfr.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3 data-translate-key="ss_sampleEmail_h3">Sample Email</h3><p data-translate-key="ss_sampleEmail_p">Sample of Email and Text.</p></div><div class="link-arrow">→</div></a>
+            <a href="TextExtractor.html" class="link-item system-support-link" data-category="all"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/cfkiwvcc.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3 data-translate-key="ss_textExtract_h3">Text Extraction</h3><p data-translate-key="ss_textExtract_p">Extract and transcribe text from images, PDFs, and audio files.</p></div><div class="link-arrow">→</div></a>
+            <a href="Compressor.html" class="link-item system-support-link" data-category="all"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/eoygayvy.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3>Compressor Tool</h3><p>Compress PDF, images, videos, Word, Excel, and PowerPoint files.</p></div><div class="link-arrow">→</div></a>
         </div>
-    `;
+        `;
 
-    const applicationsContent = `
-    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
-        <div class="app-section-cellcard" style="flex: 1 1 350px; min-width: 320px;">
-            <h2 style="margin-bottom:1rem;" data-translate-key="app_cat_cellcard">Cellcard</h2>
-            <div class="app-section-grid">
-                <a href="https://cca.cellcard.com.kh:8443/app/?campaign=1#!LiveMonitoring" class="link-item cellcard-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>CC - Ameyo</h3>
-                        <p>Cellcard Call Center Ameyo</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://ccone.cellcard.com.kh/sm/login.cgi?uri=/" class="link-item cellcard-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>CC - BS4</h3>
-                        <p>Customer service Management (BS4)</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://ccos.cellcard.com.kh/login" class="link-item cellcard-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>CCOS Portal</h3>
-                        <p>CCOS Portal</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://app-report.ezecomcorp.com/auth/login?redirect=%2Fdashboard%2F542-csm-bs4-daily-utilization-dashboard%3Fuser_name%3Dacb24d%2540megabiz%26relative_date%3Dpast7days" class="link-item cellcard-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>BS4 - Metabase</h3>
-                        <p>BS4 Daily Utilization Dashboard</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-            </div>
-        </div>
-        <div class="app-section-ezecom" style="flex: 1 1 350px; min-width: 320px;">
-            <h2 style="margin-bottom:1rem;" data-translate-key="app_cat_ezecom">EZECOM</h2>
-            <div class="app-section-grid">
-                <a href="https://ezecallx.ezecomcorp.com:8443/app/#!home" class="link-item ezecom-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>Eze - Ameyo</h3>
-                        <p>Customer Care Portal</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://csm.ezecom.com.kh/sm/login.cgi?uri=/sm/customer/search.cgi" class="link-item ezecom-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>CSM - BS2</h3>
-                        <p>Customer Service Management (BS2)</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://eos.ezecom.com.kh/login" class="link-item ezecom-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>EOS - Portal</h3>
-                        <p>EOS Portal</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://app-report.ezecomcorp.com/auth/login?redirect=%2Fdashboard%2F3-daily-utilization-dashboard%3Fuser_name%3D%26relative_date%3D" class="link-item ezecom-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>BS2 - Metabase</h3>
-                        <p>BS2 Daily Utilization Dashboard</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-            </div>
-        </div>
-        <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;">
-            <h2 style="margin-bottom:1rem;" data-translate-key="app_cat_altogether">Altogether</h2>
-            <div class="app-section-grid">
-                <a href="https://eze24.ezecomcorp.com/bizproc/processes/90/view/0/?list_section_id=" class="link-item altogether-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>Eze 24</h3>
-                        <p>Business Process Portal</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://rt.telcotech.com.kh/" class="link-item altogether-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>RT Ticket</h3>
-                        <p>Live Monitoring & Ticketing</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://intranet.ezecom.com.kh/" class="link-item altogether-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>Intranet</h3>
-                        <p>Internal Company Portal</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://login.mihcm.com/Account/Login?ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3D6F6A7687-5348-448B-BE6D-F63BDA164DEB%26response_mode%3Dform_post%26response_type%3Dcode%2520id_token%26scope%3Dopenid%2520profile%2520offline_access%2520webapi%2520identityapi%2520tenant_code%2520attendanceapi%2520customapi%26state%3DOpenIdConnect.AuthenticationProperties%253DSh04P9eoJtAZ53pInY9nKT0oXWD7CziHNMsPueuoi8iSOZAT-WvePSnkiKIgTKqxyc9chnoB6dn7NOfNOA0ljjb50dm-wqMaTGzWM8kbJNbuteJck1rEuSq9JcOfOR8j7dNRCKjoL80FTCYGoOTwvSjOA8pzctdAg0_6_p3tokU%26nonce%3D638633824860848287.M2U5YmM0ZTItYTg5Yy00OWNlLWliMDEtM2I5MGYxYTBmYTJiMGU3NDY1NGUtNzBmMS00NzgwLWIzYTctYjllMzQ4YWVkYjhk%26redirect_uri%3Dhttps%253A%252F%252Fapp.mihcm.com%252Fsignin-oidc%252F%26x-client-SKU%3DID_NET461%26x-client-ver%3D5.3.0.0" class="link-item altogether-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>MiHCM</h3>
-                        <p>Human Capital Management</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://sm-portal.ezecom.com.kh/login" class="link-item altogether-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>SM Portal</h3>
-                        <p>Service Management Portal</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://sm-portal.ezecom.com.kh/customer_onsite_survey/customer-info" class="link-item altogether-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>SM Portal - Survey</h3>
-                        <p>Customer Onsite Survey</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://teams.microsoft.com/v2/" class="link-item altogether-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>Microsoft Teams</h3>
-                        <p>Collaboration Platform</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://outlook.office.com/mail/" class="link-item altogether-link" data-category="social" target="_blank">
-                    <div class="link-content">
-                        <h3>Microsoft Outlook</h3>
-                        <p>Email Platform</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-            </div>
-        </div>
-    </div>
-`;
-
-    const locationContent = `
-    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
-        <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;">
-            <h2 style="margin-bottom:1rem;" data-translate-key="loc_pp_title">Phnom Penh City</h2>
-            <div class="location-section-grid">
-                <a href="https://www.google.com/maps/place/EZECOM+Head+Office/@11.5562593,104.9254636,17z/data=!3m1!4b1!4m6!3m5!1s0x31095174fd02869f:0x25212418565ea9a5!8m2!3d11.5562593!4d104.9254636!16s%2Fg%2F11r8s7lky?entry=tts" class="link-item location-link" target="_blank">
-                    <div class="link-content">
-                        <h3>ទីស្នាក់ការកណ្តាល (Mon - Sat)</h3>
-                        <p>លេខ ៣១ មហាវិថីព្រះសីហនុ (២៧៤) សង្កាត់ចតុមុខ ខណ្ឌដូនពេញ ១២០២០៧ រាជធានីភ្នំពេញ</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                 <a href="https://www.google.com/maps/search/11.536414,+104.886707?coh=219680&entry=tts" class="link-item location-link" target="_blank">
-                    <div class="link-content">
-                        <h3>ស្ទឹងមានជ័យ (Mon - Sat)</h3>
-                        <p>ផ្ទះលេខ ៨អា ផ្លូវលេខ ២១៧ សង្កាត់ស្ទឹងមានជ័យ ខណ្ឌមានជ័យ រាជធានីភ្នំពេញ</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://www.google.com/maps/place/Street+Polaris,+Phnom+Penh/@11.5342098,104.9578599,20.64z/data=!4m6!3m5!1s0x31095723bfe3c791:0x34163542179e6a9b!8m2!3d11.5345243!4d104.9578492!16s%2Fg%2F11f4pn531g?entry=tts" class="link-item location-link" target="_blank">
-                    <div class="link-content">
-                        <h3>ប៉េងហួតបឹងស្ងោរ (Mon - Fri)</h3>
-                        <p>ផ្លូវជាតិលេខ១ ភូមិបឹងឈូក សង្កាត់និរោធ ខណ្ឌច្បារអំពៅ រាជធានីភ្នំពេញ</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://www.google.com/maps/place/%E1%99%80%E1%9F%92%E1%9E%9A%E1%9E%BB%E1%9E%98%E1%9E%A0%E1%9F%8A%E1%9E%BB%E1%9E%93+EZECOM/@11.5887958,104.9033051,17z/data=!3m1!4b1!4m6!3m5!1s0x3109537896a4cf59:0x4ba5aa38d2d240cc!8m2!3d11.5887958!4d104.9033051!16s%2Fg%2F11s5gvg607?entry=tts" class="link-item location-link" target="_blank">
-                    <div class="link-content">
-                        <h3>ទួលគោក (ទួលសង្កែ) (Mon - Fri)</h3>
-                        <p>ផ្ទះលេខ#៦៣-៦៥ ផ្លូវលេខ VI-១៣ សង្កាត់ទួលសង្កែ ខណ្ឌឬស្សីកែវ រាជធានីភ្នំពេញ</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://www.google.com/maps/place/Opennet-Phnom+Penh-Tek+Thla+Branch/@11.5604391,104.8708496,17z/data=!3m1!4b1!4m6!3m5!1s0x310951c408062eb1:0x67c3131a41c712a!8m2!3d11.5604391!4d104.8708496!16s%2Fg%2F11fg4lrdq9?entry=tts" class="link-item location-link" target="_blank">
-                    <div class="link-content">
-                        <h3>ទឹកថ្លា (Mon - Fri)</h3>
-                        <p>ផ្ទះលេខ ៣០ ផ្លូវ ១០១៩ សង្កាត់ទឹកថ្លា ខណ្ឌសែនសុខ រាជធានីភ្នំពេញ</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://www.google.com/maps/place/11%C2%B028'53.1%22N+104%C2%B056'53.3%22E/@11.4814167,104.9481389,17z/data=!3m1!4b1!4m4!3m3!8m2!3d11.4814167!4d104.9481389?entry=tts" class="link-item location-link" target="_blank">
-                    <div class="link-content">
-                        <h3>តាខ្មៅ (Mon - Fri)</h3>
-                        <p>ផ្ទះលេខ ៤៥ ផ្លូវលេខ១០៧ ភូមិតាខ្មៅ សង្កាត់តាខ្មៅ ក្រុងតាខ្មៅ ខេត្តកណ្តាល</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://www.google.com/maps/place/EZECOM+Chomchao+New/@11.5316446,104.6576929,12z/data=!4m7!3m6!1s0x31094f8ff9e4a1ab:0xf7726f012516dfba!8m2!3d11.5316375!4d104.8101345!15sCgZFWkVDT02SAQ1pbnRlcm5ldF9jYWZl4AEA!16s%2Fg%2F11r2w20mcs?entry=tts" class="link-item location-link" target="_blank">
-                    <div class="link-content">
-                        <h3>ចោមចៅ (Mon - Fri)</h3>
-                        <p>ផ្ទះលេខ A03 ផ្លូវជាតិលេខ៤ ភូមិអូរដើម សង្កាត់ចោមចៅ ខណ្ឌពរសែនជ័យ រាជធានីភ្នំពេញ</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-            </div>
-        </div>
-        <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;">
-            <h2 style="margin-bottom:1rem;" data-translate-key="loc_prov_title">Provincial</h2>
-            <div class="location-section-grid">
-                <a href="https://www.google.com/maps/place/EZECOM+Bavet+Office/@11.07379,106.165445,17z/data=!3m1!4b1!4m6!3m5!1s0x310b23a218a50d3d:0x8af3d7ee4a19197a!8m2!3d11.07379!4d106.165445!16s%2Fg%2F11jkmy_cw1?entry=tts" class="link-item location-link" target="_blank">
-                    <div class="link-content">
-                        <h3>បាវិត (Mon - Fri)</h3>
-                        <p>ផ្ទះលេខ ៧-៨ ផ្លូវជាតិលេខ១ ភូមិបាវិតកណ្តាល សង្កាត់បាវិត ក្រុងបាវិតខេត្តស្វាយរៀង</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://www.google.com/maps/place/EZECOM+Poipet/@13.645153,102.573624,17z/data=!3m1!4b1!4m6!3m5!1s0x311b16e6174c32ff:0x5d041f0df6502e05!8m2!3d13.645153!4d102.573624!16s%2Fg%2F1ptzpsgjm?entry=ttu" class="link-item location-link" target="_blank">
-                    <div class="link-content">
-                        <h3>ប៉ោយប៉ែត (Mon - Fri)</h3>
-                        <p>ផ្ទះលេខ C8-0657 ផ្លូវជាតិលេខ៥ ភូមិ៤ សង្កាត់ផ្សារកណ្តាល ក្រុងប៉ោយប៉ែត ខេត្តបន្ទាយមានជ័យ</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://www.google.com/maps/place/92-124+Neary+Klahan,+Kampong+Cham/@11.985518,105.3782371,12z/data=!4m6!3m5!1s0x310c6a641a73bc0f:0x5fede7599e943b23!8m2!3d11.98553!4d105.460639!16s%2Fg%2F11g606qv_f?entry=tts" class="link-item location-link" target="_blank">
-                    <div class="link-content">
-                        <h3>កំពង់ចាម (Mon - Fri)</h3>
-                        <p>ផ្ទះលេខ ៨០ ផ្លូវព្រះបាទអង្គឌួង ភូមិទួលស្បូវ សង្កាត់វាលវង់ ក្រុងកំពង់ចាម ខេត្តកំពង់ចាម</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Siem+Reap/@13.3593632,103.8545524,20z/data=!4m6!3m5!1s0x31101770a5909e8b:0xcdb83796db134804!8m2!3d13.3593183!4d103.8547083!16s%2Fg%2F11gz8zpjqg?entry=tts" class="link-item location-link" target="_blank">
-                    <div class="link-content">
-                        <h3>សៀមរាប (Mon - Fri)</h3>
-                        <p>#11,12 ផ្លូវស៊ីវុត្ថា ភូមិមណ្ឌល២ សង្កាត់ស្វាយដង្គំ ក្រុងសៀមរាប ខេត្តសៀមរាប</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Battambang/@13.0943536,103.1958162,17z/data=!3m1!4b1!4m6!3m5!1s0x3105498cb36ff109:0x73d0c8bd532dbe0f!8m2!3d13.0943536!4d103.1983911!16s%2Fg%2F1hf060w7n?entry=ttu" class="link-item location-link" target="_blank">
-                    <div class="link-content">
-                        <h3>បាត់ដំបង (Mon - Fri)</h3>
-                        <p>ផ្ទះលេខ១៣៥១ ភូមិរំចេក សង្កាត់រតនៈ ក្រុងបាត់ដំបង ខេត្តបាត់ដំបង</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Sihanoukville/@10.6223804,103.5260101,18z/data=!4m6!3m5!1s0x3107e19d82b37785:0xd85a77996d030032!8m2!3d10.6223702!4d103.5258629!16s%2Fg%2F11fg535vj0?entry=tts" class="link-item location-link" target="_blank">
-                    <div class="link-content">
-                        <h3>ក្រុងព្រះសីហនុ (Mon - Fri)</h3>
-                        <p>ផ្ទះលេខ ១៥៧ ផ្លូវឯករាជ្យ សង្កាត់លេខ២ ក្រុងព្រះសីហនុ ខេត្តព្រះសីហនុ</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-            </div>
-        </div>
-    </div>
-`;
-
-    const rtTicketInquiriesContent = `
-    <section>
-        <h2 class="section-title" data-translate-key="rt_title">RT Ticket Inquiries</h2>
-        <div class="rt-inquiries-grid">
-            
-            <div class="rt-inquiry-card">
-                <div class="rt-card-header">
-                    <div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div>
-                    <h3 data-translate-key="rt_q_activation_h3">Queue: Activation Team</h3>
+        const applicationsContent = `
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+            <div class="app-section-cellcard" style="flex: 1 1 350px; min-width: 320px;">
+                <h2 style="margin-bottom:1rem;" data-translate-key="app_cat_cellcard">Cellcard</h2>
+                <div class="app-section-grid">
+                    <a href="https://cca.cellcard.com.kh:8443/app/?campaign=1#!LiveMonitoring" class="link-item cellcard-link" data-category="social" target="_blank"><div class="link-content"><h3>CC - Ameyo</h3><p>Cellcard Call Center Ameyo</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://ccone.cellcard.com.kh/sm/login.cgi?uri=/" class="link-item cellcard-link" data-category="social" target="_blank"><div class="link-content"><h3>CC - BS4</h3><p>Customer service Management (BS4)</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://ccos.cellcard.com.kh/login" class="link-item cellcard-link" data-category="social" target="_blank"><div class="link-content"><h3>CCOS Portal</h3><p>CCOS Portal</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://app-report.ezecomcorp.com/auth/login?redirect=%2Fdashboard%2F542-csm-bs4-daily-utilization-dashboard%3Fuser_name%3Dacb24d%2540megabiz%26relative_date%3Dpast7days" class="link-item cellcard-link" data-category="social" target="_blank"><div class="link-content"><h3>BS4 - Metabase</h3><p>BS4 Daily Utilization Dashboard</p></div><div class="link-arrow">→</div></a>
                 </div>
-                <div class="rt-card-body"><ul><li>Re-activation after dismantle</li><li>Re-activation after termination</li><li>Connection with removed connectivity/port/device</li></ul></div>
             </div>
-
-            <div class="rt-inquiry-card">
-                <div class="rt-card-header">
-                    <div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12-4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></div>
-                    <h3 data-translate-key="rt_q_delivery_h3">Queue: Customer Delivery</h3>
+            <div class="app-section-ezecom" style="flex: 1 1 350px; min-width: 320px;">
+                <h2 style="margin-bottom:1rem;" data-translate-key="app_cat_ezecom">EZECOM</h2>
+                <div class="app-section-grid">
+                    <a href="https://ezecallx.ezecomcorp.com:8443/app/#!home" class="link-item ezecom-link" data-category="social" target="_blank"><div class="link-content"><h3>Eze - Ameyo</h3><p>Customer Care Portal</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://csm.ezecom.com.kh/sm/login.cgi?uri=/sm/customer/search.cgi" class="link-item ezecom-link" data-category="social" target="_blank"><div class="link-content"><h3>CSM - BS2</h3><p>Customer Service Management (BS2)</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://eos.ezecom.com.kh/login" class="link-item ezecom-link" data-category="social" target="_blank"><div class="link-content"><h3>EOS - Portal</h3><p>EOS Portal</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://app-report.ezecomcorp.com/auth/login?redirect=%2Fdashboard%2F3-daily-utilization-dashboard%3Fuser_name%3D%26relative_date%3D" class="link-item ezecom-link" data-category="social" target="_blank"><div class="link-content"><h3>BS2 - Metabase</h3><p>BS2 Daily Utilization Dashboard</p></div><div class="link-arrow">→</div></a>
                 </div>
-                <div class="rt-card-body"><ul><li>Update Profile</li><li>Upgrade / Downgrade Speed</li><li>Test Speed</li><li>Change Billing Date / Location</li><li>Change Account Name</li><li>Purchase CPE or Static IP</li></ul></div>
             </div>
-
-            <div class="rt-inquiry-card">
-                <div class="rt-card-header">
-                    <div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div>
-                    <h3 data-translate-key="rt_q_collection_h3">Queue: Care Collection</h3>
-                </div>
-                <div class="rt-card-body"><ul><li>Refuse to pay (Has Pending Invoice)</li><li>Renewal/Promo (Has Pending Invoice)</li><li>Reactive Request (Has Pending Invoice)</li><li>Termination (Has Pending Invoice)</li><li>Compensation / Refund (Has Pending Invoice)</li></ul></div>
-            </div>
-
-            <div class="rt-inquiry-card">
-                <div class="rt-card-header">
-                    <div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></div>
-                    <h3 data-translate-key="rt_q_renewal_h3">Queue: Care Renewal</h3>
-                </div>
-                <div class="rt-card-body"><ul><li>Refuse to pay invoice</li><li>Renewal + Promotion request</li><li>Reactive Request</li><li>Terminate Request</li><li>Request Compensation or Refund</li></ul></div>
-            </div>
-
-            <div class="rt-inquiry-card digital-queue">
-                <div class="rt-card-header">
-                    <div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></div>
-                    <h3 data-translate-key="rt_q_digital_h3">Queue: Digital (Technical Issues & Fulfillment)</h3>
-                </div>
-                <div class="rt-card-body" style="display: flex; flex-wrap: wrap; gap: 1.5rem;">
-                    <div class="rt-card-subsection" style="flex: 1; min-width: 280px;">
-                        <h4 data-translate-key="rt_digital_sub1">Service Availability Issues</h4>
-                        <ul><li>Alarm / Lastsmile Alert</li><li>Many ONU Down / PON Down</li><li>Internet Not Working (Total outage)</li><li>No WiFi Signal</li></ul>
-                    </div>
-                    <div class="rt-card-subsection" style="flex: 1; min-width: 280px;">
-                        <h4 data-translate-key="rt_digital_sub2">Service Performance Issues</h4>
-                        <ul><li>Internet Slow or Unstable</li><li>WiFi Low Signal / Poor Range</li><li>Link budget low or high</li><li>Website, App, or Game Issue</li><li>Port access / Protocol issue</li></ul>
-                    </div>
-                    <div class="rt-card-subsection" style="flex: 1; min-width: 280px;">
-                        <h4 data-translate-key="rt_digital_sub3">Fulfillment</h4>
-                        <ul><li>Relocate / Re-Configure Modem/Router</li><li>Request Login for Modem/Router</li><li>Change WiFi Name / Password</li><li>Configure Remote Camera / NAT</li><li>Request LAN/Wi-Fi Survey</li><li>Add/Share Graph Utilization</li><li>Enable/Disable MAC Address</li></ul>
-                    </div>
+            <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;">
+                <h2 style="margin-bottom:1rem;" data-translate-key="app_cat_altogether">Altogether</h2>
+                <div class="app-section-grid">
+                    <a href="https://eze24.ezecomcorp.com/bizproc/processes/90/view/0/?list_section_id=" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>Eze 24</h3><p>Business Process Portal</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://rt.telcotech.com.kh/" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>RT Ticket</h3><p>Live Monitoring & Ticketing</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://intranet.ezecom.com.kh/" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>Intranet</h3><p>Internal Company Portal</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://login.mihcm.com/" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>MiHCM</h3><p>Human Capital Management</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://sm-portal.ezecom.com.kh/login" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>SM Portal</h3><p>Service Management Portal</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://sm-portal.ezecom.com.kh/customer_onsite_survey/customer-info" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>SM Portal - Survey</h3><p>Customer Onsite Survey</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://teams.microsoft.com/v2/" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>Microsoft Teams</h3><p>Collaboration Platform</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://outlook.office.com/mail/" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>Microsoft Outlook</h3><p>Email Platform</p></div><div class="link-arrow">→</div></a>
                 </div>
             </div>
         </div>
-    </section>
-`;
+        `;
 
-    const pageContent = {
-        resources: `
-        <section class="hero-section">
-            <div class="hero-content">
-                <h1 data-translate-key="heroTitle">Welcome to HengOS</h1>
-                <p class="subtitle" data-translate-key="heroSubtitle">Your all-in-one productivity dashboard. Jump to your favorite tools, links, and resources in a flash!</p>
-                <div class="hero-controls">
-                     <input type="text" id="search-box" data-translate-placeholder="searchPlaceholder" placeholder="🔍 Search for anything...">
-                    <div id="category-filters">
-                        <button class="filter-btn active" data-category="all" data-translate-key="filterBtnSys">Systems Supports</button>
-                        <button class="filter-btn" data-category="social" data-translate-key="filterBtnApp">Applications</button>
-                        <button class="filter-btn" data-category="rt-ticket-inquiries" data-translate-key="filterBtnRT">RT Ticket Inquiries</button>
-                        <button class="filter-btn" data-category="location" data-translate-key="filterBtnLoc">Location</button>
-                    </div>
-                </div>
+        const locationContent = `
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+            <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;"><h2 style="margin-bottom:1rem;" data-translate-key="loc_pp_title">Phnom Penh City</h2><div class="location-section-grid">
+                <a href="https://www.google.com/maps/place/EZECOM+Head+Office/@11.5562593,104.9254636,17z/data=!4m6!3m5!1s0x31095174fd02869f:0x25212418565ea9a5!8m2!3d11.5562593!4d104.9254636!16s%2Fg%2F11r8s7lky?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>ទីស្នាក់ការកណ្តាល (Mon - Sat)</h3><p>លេខ ៣១ មហាវិថីព្រះសីហនុ (២៧៤) សង្កាត់ចតុមុខ ខណ្ឌដូនពេញ ១២០២០៧ រាជធានីភ្នំពេញ</p></div><div class="link-arrow">→</div></a>
+                <a href="https://www.google.com/maps/search/11.536414,+104.886707?coh=219680&entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>ស្ទឹងមានជ័យ (Mon - Sat)</h3><p>ផ្ទះលេខ ៨អា ផ្លូវលេខ ២១៧ សង្កាត់ស្ទឹងមានជ័យ ខណ្ឌមានជ័យ រាជធានីភ្នំពេញ</p></div><div class="link-arrow">→</div></a>
+                <a href="https://www.google.com/maps/place/Street+Polaris,+Phnom+Penh/@11.5342098,104.9578599,20.64z/data=!4m6!3m5!1s0x31095723bfe3c791:0x34163542179e6a9b!8m2!3d11.5345243!4d104.9578492!16s%2Fg%2F11f4pn531g?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>ប៉េងហួតបឹងស្ងោរ (Mon - Fri)</h3><p>ផ្លូវជាតិលេខ១ ភូមិបឹងឈូក សង្កាត់និរោធ ខណ្ឌច្បារអំពៅ រាជធានីភ្នំពេញ</p></div><div class="link-arrow">→</div></a>
+                <a href="https://www.google.com/maps/place/%E1%99%80%E1%9F%92%E1%9E%9A%E1%9E%BB%E1%9E%98%E1%9E%A0%E1%9F%8A%E1%9E%BB%E1%9E%93+EZECOM/@11.5887958,104.9033051,17z/data=!4m6!3m5!1s0x3109537896a4cf59:0x4ba5aa38d2d240cc!8m2!3d11.5887958!4d104.9033051!16s%2Fg%2F11s5gvg607?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>ទួលគោក (ទួលសង្កែ) (Mon - Fri)</h3><p>ផ្ទះលេខ#៦៣-៦៥ ផ្លូវលេខ VI-១៣ សង្កាត់ទួលសង្កែ ខណ្ឌឬស្សីកែវ រាជធានីភ្នំពេញ</p></div><div class="link-arrow">→</div></a>
+                <a href="https://www.google.com/maps/place/Opennet-Phnom+Penh-Tek+Thla+Branch/@11.5604391,104.8708496,17z/data=!4m6!3m5!1s0x310951c408062eb1:0x67c3131a41c712a!8m2!3d11.5604391!4d104.8708496!16s%2Fg%2F11fg4lrdq9?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>ទឹកថ្លា (Mon - Fri)</h3><p>ផ្ទះលេខ ៣០ ផ្លូវ ១០១៩ សង្កាត់ទឹកថ្លា ខណ្ឌសែនសុខ រាជធានីភ្នំពេញ</p></div><div class="link-arrow">→</div></a>
+                <a href="https://www.google.com/maps/place/11%C2%B028'53.1%22N+104%C2%B056'53.3%22E/@11.4814167,104.9481389,17z" class="link-item location-link" target="_blank"><div class="link-content"><h3>តាខ្មៅ (Mon - Fri)</h3><p>ផ្ទះលេខ ៤៥ ផ្លូវលេខ១០៧ ភូមិតាខ្មៅ សង្កាត់តាខ្មៅ ក្រុងតាខ្មៅ ខេត្តកណ្តាល</p></div><div class="link-arrow">→</div></a>
+                <a href="https://www.google.com/maps/place/EZECOM+Chomchao+New/@11.5316446,104.6576929,12z/data=!4m7!3m6!1s0x31094f8ff9e4a1ab:0xf7726f012516dfba!8m2!3d11.5316375!4d104.8101345!16s%2Fg%2F11r2w20mcs?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>ចោមចៅ (Mon - Fri)</h3><p>ផ្ទះលេខ A03 ផ្លូវជាតិលេខ៤ ភូមិអូរដើម សង្កាត់ចោមចៅ ខណ្ឌពរសែនជ័យ រាជធានីភ្នំពេញ</p></div><div class="link-arrow">→</div></a>
+            </div></div>
+            <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;"><h2 style="margin-bottom:1rem;" data-translate-key="loc_prov_title">Provincial</h2><div class="location-section-grid">
+                <a href="https://www.google.com/maps/place/EZECOM+Bavet+Office/@11.07379,106.165445,17z/data=!4m6!3m5!1s0x310b23a218a50d3d:0x8af3d7ee4a19197a!8m2!3d11.07379!4d106.165445!16s%2Fg%2F11jkmy_cw1?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>បាវិត (Mon - Fri)</h3><p>ផ្ទះលេខ ៧-៨ ផ្លូវជាតិលេខ១ ភូមិបាវិតកណ្តាល សង្កាត់បាវិត ក្រុងបាវិតខេត្តស្វាយរៀង</p></div><div class="link-arrow">→</div></a>
+                <a href="https://www.google.com/maps/place/EZECOM+Poipet/@13.645153,102.573624,17z/data=!4m6!3m5!1s0x311b16e6174c32ff:0x5d041f0df6502e05!8m2!3d13.645153!4d102.573624!16s%2Fg%2F1ptzpsgjm?entry=ttu" class="link-item location-link" target="_blank"><div class="link-content"><h3>ប៉ោយប៉ែត (Mon - Fri)</h3><p>ផ្ទះលេខ C8-0657 ផ្លូវជាតិលេខ៥ ភូមិ៤ សង្កាត់ផ្សារកណ្តាល ក្រុងប៉ោយប៉ែត ខេត្តបន្ទាយមានជ័យ</p></div><div class="link-arrow">→</div></a>
+                <a href="https://www.google.com/maps/place/92-124+Neary+Klahan,+Kampong+Cham/@11.985518,105.3782371,12z/data=!4m6!3m5!1s0x310c6a641a73bc0f:0x5fede7599e943b23!8m2!3d11.98553!4d105.460639!16s%2Fg%2F11g606qv_f?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>កំពង់ចាម (Mon - Fri)</h3><p>ផ្ទះលេខ ៨០ ផ្លូវព្រះបាទអង្គឌួង ភូមិទួលស្បូវ សង្កាត់វាលវង់ ក្រុងកំពង់ចាម ខេត្តកំពង់ចាម</p></div><div class="link-arrow">→</div></a>
+                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Siem+Reap/@13.3593632,103.8545524,20z/data=!4m6!3m5!1s0x31101770a5909e8b:0xcdb83796db134804!8m2!3d13.3593183!4d103.8547083!16s%2Fg%2F11gz8zpjqg?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>សៀមរាប (Mon - Fri)</h3><p>#11,12 ផ្លូវស៊ីវុត្ថា ភូមិមណ្ឌល២ សង្កាត់ស្វាយដង្គំ ក្រុងសៀមរាប ខេត្តសៀមរាប</p></div><div class="link-arrow">→</div></a>
+                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Battambang/@13.0943536,103.1958162,17z/data=!4m6!3m5!1s0x3105498cb36ff109:0x73d0c8bd532dbe0f!8m2!3d13.0943536!4d103.1983911!16s%2Fg%2F1hf060w7n?entry=ttu" class="link-item location-link" target="_blank"><div class="link-content"><h3>បាត់ដំបង (Mon - Fri)</h3><p>ផ្ទះលេខ១៣៥១ ភូមិរំចេក សង្កាត់រតនៈ ក្រុងបាត់ដំបង ខេត្តបាត់ដំបង</p></div><div class="link-arrow">→</div></a>
+                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Sihanoukville/@10.6223804,103.5260101,18z/data=!4m6!3m5!1s0x3107e19d82b37785:0xd85a77996d030032!8m2!3d10.6223702!4d103.5258629!16s%2Fg%2F11fg535vj0?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>ក្រុងព្រះសីហនុ (Mon - Fri)</h3><p>ផ្ទះលេខ ១៥៧ ផ្លូវឯករាជ្យ សង្កាត់លេខ២ ក្រុងព្រះសីហនុ ខេត្តព្រះសីហនុ</p></div><div class="link-arrow">→</div></a>
+            </div></div>
+        </div>
+        `;
+
+        const rtTicketInquiriesContent = `
+        <section>
+            <h2 class="section-title" data-translate-key="rt_title">RT Ticket Inquiries</h2>
+            <div class="rt-inquiries-grid">
+                <div class="rt-inquiry-card"><div class="rt-card-header"><div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div><h3 data-translate-key="rt_q_activation_h3">Queue: Activation Team</h3></div><div class="rt-card-body"><ul><li>Re-activation after dismantle</li><li>Re-activation after termination</li><li>Connection with removed connectivity/port/device</li></ul></div></div>
+                <div class="rt-inquiry-card"><div class="rt-card-header"><div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12-4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg></div><h3 data-translate-key="rt_q_delivery_h3">Queue: Customer Delivery</h3></div><div class="rt-card-body"><ul><li>Update Profile</li><li>Upgrade / Downgrade Speed</li><li>Test Speed</li><li>Change Billing Date / Location</li><li>Change Account Name</li><li>Purchase CPE or Static IP</li></ul></div></div>
+                <div class="rt-inquiry-card"><div class="rt-card-header"><div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div><h3 data-translate-key="rt_q_collection_h3">Queue: Care Collection</h3></div><div class="rt-card-body"><ul><li>Refuse to pay (Has Pending Invoice)</li><li>Renewal/Promo (Has Pending Invoice)</li><li>Reactive Request (Has Pending Invoice)</li><li>Termination (Has Pending Invoice)</li><li>Compensation / Refund (Has Pending Invoice)</li></ul></div></div>
+                <div class="rt-inquiry-card"><div class="rt-card-header"><div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></div><h3 data-translate-key="rt_q_renewal_h3">Queue: Care Renewal</h3></div><div class="rt-card-body"><ul><li>Refuse to pay invoice</li><li>Renewal + Promotion request</li><li>Reactive Request</li><li>Terminate Request</li><li>Request Compensation or Refund</li></ul></div></div>
+                <div class="rt-inquiry-card digital-queue"><div class="rt-card-header"><div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></div><h3 data-translate-key="rt_q_digital_h3">Queue: Digital (Technical Issues & Fulfillment)</h3></div><div class="rt-card-body" style="display: flex; flex-wrap: wrap; gap: 1.5rem;"><div class="rt-card-subsection" style="flex: 1; min-width: 280px;"><h4 data-translate-key="rt_digital_sub1">Service Availability Issues</h4><ul><li>Alarm / Lastsmile Alert</li><li>Many ONU Down / PON Down</li><li>Internet Not Working (Total outage)</li><li>No WiFi Signal</li></ul></div><div class="rt-card-subsection" style="flex: 1; min-width: 280px;"><h4 data-translate-key="rt_digital_sub2">Service Performance Issues</h4><ul><li>Internet Slow or Unstable</li><li>WiFi Low Signal / Poor Range</li><li>Link budget low or high</li><li>Website, App, or Game Issue</li><li>Port access / Protocol issue</li></ul></div><div class="rt-card-subsection" style="flex: 1; min-width: 280px;"><h4 data-translate-key="rt_digital_sub3">Fulfillment</h4><ul><li>Relocate / Re-Configure Modem/Router</li><li>Request Login for Modem/Router</li><li>Change WiFi Name / Password</li><li>Configure Remote Camera / NAT</li><li>Request LAN/Wi-Fi Survey</li><li>Add/Share Graph Utilization</li><li>Enable/Disable MAC Address</li></ul></div></div></div>
             </div>
         </section>
-        
-        <div id="system-supports-container">
-            ${systemSupportsContent}
-        </div>
-        <div id="applications-container" style="display:none;">
-            ${applicationsContent}
-        </div>
-        <div id="rt-ticket-inquiries-container" style="display:none;">
-            ${rtTicketInquiriesContent}
-        </div>
-        <div id="location-container" style="display:none;">
-            ${locationContent}
-        </div>
-    `
-    };
+        `;
 
-        // --- CORE APPLICATION LOGIC ---
+        const aboutPageContent = `
+        <div class="about-page-content">
+            <!-- Home Section -->
+            <section class="home" id="home">
+                <div class="max-width">
+                    <div class="home-content">
+                        <div class="text-1">Hello, my name is</div>
+                        <div class="text-2">Ly Heng</div>
+                        <div class="text-3">And I'm a <span class="typing"></span></div>
+                    </div>
+                </div>
+            </section>
+            <!-- About Section -->
+            <section class="about" id="about">
+                <div class="max-width">
+                    <div class="card-panel">
+                        <h2 class="card-panel-title">Meet The Creator</h2>
+                        <div class="creator-profile">
+                            <div class="creator-img-wrapper">
+                                <img src="Img/HengImg1.jpg" alt="LY Heng Profile Picture" class="creator-img">
+                            </div>
+                            <div class="creator-info" style="flex:1;">
+                                <div style="font-size:1.05rem; color:var(--text-color); line-height:1.7;">
+                                    <p data-translate-key="creatorDesc">
+                                       Hi, I'm <b>LY Heng</b>, the creator of HengOS.<br>I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.<br>Thank you for using HengOS!
+                                    </p>
+                                </div>
+                                <div class="social-icons" style="margin-top:1.1rem; text-align: left;">
+                                    <a href="https://web.facebook.com/sing.rithano.96" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="https://www.instagram.com/ly_henggg/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                                    <a href="https://t.me/LyHengg" target="_blank" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+                                    <a href="https://twitter.com/CapaldiVector" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                                    <a href="https://www.linkedin.com/in/ly-heng-54a474220/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Skills Section -->
+            <section class="skills" id="skills">
+                <div class="max-width">
+                    <h2 class="title">My Skills</h2>
+                    <div class="card-panel">
+                        <div class="skills-content-grid">
+                            <div class="skills-intro">
+                                <div class="text">My creative skills & experiences</div>
+                                <p>Responsible and hardworking, I’m able to handle working under pressure as well as communicate and collaborate seamlessly in a teamwork environment. My strongest points are well-communication, open-mind set, self-motivated, active listening, honesty, patience, creativity, fast learning, and trustworthiness.</p>
+                            </div>
+                            <div class="skills-list">
+                                <div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e6f7fa;"><i class="fab fa-windows" style="color:#2563eb;"></i></span><span class="skill-title">Office Software</span><span class="skill-percent">90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%;"></div></div></div>
+                                <div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#f3e6fa;"><i class="fas fa-paint-brush" style="color:#a259c6;"></i></span><span class="skill-title">Adobe Suite</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div>
+                                <div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e6f4fa;"><i class="fas fa-film" style="color:#3bb3ce;"></i></span><span class="skill-title">Video Editing</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div>
+                                <div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e3e9f7;"><i class="fas fa-code" style="color:#457ABD;"></i></span><span class="skill-title">Front-End Dev</span><span class="skill-percent">90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%;"></div></div></div>
+                                <div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#fbeee6;"><i class="fas fa-tasks" style="color:#f59e42;"></i></span><span class="skill-title">Management</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Contact Section -->
+            <section class="contact" id="contact">
+                <div class="max-width">
+                    <h2 class="title">Contact Me</h2>
+                    <div class="card-panel">
+                        <div class="contact-content-grid">
+                            <div class="contact-info-col">
+                                <div class="contact-col-title">Get in Touch</div>
+                                <p style="margin-bottom: 2rem;">Have a question or a project in mind? Feel free to reach out. I'm always open to discussing new opportunities and creative ideas.</p>
+                                <div class="contact-info-list">
+                                    <div class="contact-info-item"><span class="icon"><i class="fas fa-user"></i></span><div class="text"><div class="head">Name</div><div class="sub-title">LY HENG</div></div></div>
+                                    <div class="contact-info-item"><span class="icon" style="background: #fbeee6;"><i class="fas fa-map-marker-alt" style="color:#f59e42;"></i></span><div class="text"><div class="head">Address</div><div class="sub-title">Phnom Penh, Cambodia</div></div></div>
+                                    <div class="contact-info-item"><span class="icon" style="background: #e6f4fa;"><i class="fas fa-envelope" style="color:#3bb3ce;"></i></span><div class="text"><div class="head">Email</div><div class="sub-title">Singlovesmiles@gmail.com</div></div></div>
+                                </div>
+                            </div>
+                            <div class="contact-form-col">
+                                <div class="contact-col-title">Message Me</div>
+                                <form class="contact-form" action="mailto:Singlovesmiles@gmail.com" method="post" enctype="text/plain">
+                                    <div class="field-group"><input type="text" name="name" placeholder="Name" required><input type="email" name="email" placeholder="Email" required></div>
+                                    <input type="text" name="subject" placeholder="Subject" required>
+                                    <textarea name="message" cols="30" rows="6" placeholder="Your Message.." required></textarea>
+                                    <button type="submit">Send Message</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        `;
+
+        const pageContent = {
+            resources: `
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1 data-translate-key="heroTitle">Welcome to HengOS</h1>
+                    <p class="subtitle" data-translate-key="heroSubtitle">Your all-in-one productivity dashboard. Jump to your favorite tools, links, and resources in a flash!</p>
+                    <div class="hero-controls">
+                        <input type="text" id="search-box" data-translate-placeholder="searchPlaceholder" placeholder="🔍 Search for anything...">
+                        <div id="category-filters">
+                            <button class="filter-btn active" data-category="all" data-translate-key="filterBtnSys">Systems Supports</button>
+                            <button class="filter-btn" data-category="social" data-translate-key="filterBtnApp">Applications</button>
+                            <button class="filter-btn" data-category="rt-ticket-inquiries" data-translate-key="filterBtnRT">RT Ticket Inquiries</button>
+                            <button class="filter-btn" data-category="location" data-translate-key="filterBtnLoc">Location</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div id="system-supports-container">${systemSupportsContent}</div>
+            <div id="applications-container" style="display:none;">${applicationsContent}</div>
+            <div id="rt-ticket-inquiries-container" style="display:none;">${rtTicketInquiriesContent}</div>
+            <div id="location-container" style="display:none;">${locationContent}</div>
+            `,
+            about: aboutPageContent
+        };
+
+        // --- CORE APP LOGIC ---
         const contentArea = document.getElementById('content-area');
+
+        function applyTranslations() { /* Function remains the same */ }
+        function setLanguage(lang) { /* Function remains the same */ }
 
         const loadPage = (page) => {
             if (!pageContent[page]) page = 'resources';
             contentArea.innerHTML = pageContent[page];
-            
-            applyTranslations(); 
+            applyTranslations();
 
-            const mainNavLinks = document.querySelectorAll('.main-nav a');
-            mainNavLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.hash === `#${page}` || (page === 'resources' && link.id === 'home-link')) {
-                    link.classList.add('active');
-                }
+            document.querySelectorAll('.main-nav a').forEach(link => {
+                link.classList.toggle('active', link.hash === `#${page}`);
             });
 
             if (page === 'resources') {
                 initResourceHub();
+            } else if (page === 'about') {
+                initAboutPageLogic();
             }
         };
 
         const handleNavigation = () => {
-            let page = window.location.hash.substring(1) || 'resources';
-            // Prevent loading About as SPA section
-            if (page === 'about') page = 'resources';
-            loadPage(page);
+            loadPage(window.location.hash.substring(1) || 'resources');
+       
         };
 
-        document.addEventListener('DOMContentLoaded', () => {
-            handleNavigation();
-            window.addEventListener('hashchange', handleNavigation);
-            initMobileMenu();
-            
-            const langSwitcher = document.getElementById('lang-switcher');
-            if (langSwitcher) {
-                langSwitcher.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('lang-btn')) {
-                        setLanguage(e.target.dataset.lang);
-                    }
-                });
-            }
-            
-            const savedLang = localStorage.getItem('userLanguage') || 'en';
-            setLanguage(savedLang);
-        });
-
-
-        // --- RESOURCE HUB SPECIFIC LOGIC ---
+        // --- RESOURCE HUB LOGIC ---
         function initResourceHub() {
             const searchBox = document.getElementById('search-box');
             const filterButtons = document.querySelectorAll('.filter-btn');
-            const systemSupportsContainer = document.getElementById('system-supports-container');
-            const applicationsContainer = document.getElementById('applications-container');
-            const rtTicketInquiriesContainer = document.getElementById('rt-ticket-inquiries-container');
-            const locationContainer = document.getElementById('location-container');
+            const containers = {
+                all: document.getElementById('system-supports-container'),
+                social: document.getElementById('applications-container'),
+                'rt-ticket-inquiries': document.getElementById('rt-ticket-inquiries-container'),
+                location: document.getElementById('location-container')
+            };
             let currentCategory = 'all';
 
-            const allLinkItems = () => [
-                ...systemSupportsContainer.querySelectorAll('.link-item'),
-                ...applicationsContainer.querySelectorAll('.link-item'),
-                ...(rtTicketInquiriesContainer ? rtTicketInquiriesContainer.querySelectorAll('.rt-inquiry-card') : []),
-                ...locationContainer.querySelectorAll('.link-item')
-            ];
-
-            function highlightText(element, searchTerm) {
-                if (!searchTerm || !element) {
-                    if(element) element.innerHTML = element.textContent;
-                    return;
-                }
-                const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-                const cleanContent = element.innerHTML.replace(/<span class="search-highlight">/g, '').replace(/<\/span>/g, '');
-                element.innerHTML = cleanContent.replace(regex, '<span class="search-highlight">$1</span>');
-            }
-            
-            function removeAllHighlights() {
-                document.querySelectorAll('.search-highlight').forEach(el => {
-                    el.outerHTML = el.innerHTML;
-                });
-            }
-
-            const filterAndSearch = () => {
-                const searchTerm = searchBox.value.trim().toLowerCase();
-                removeAllHighlights();
-
-                if (searchTerm) {
-                    systemSupportsContainer.style.display = 'block';
-                    applicationsContainer.style.display = 'block';
-                    rtTicketInquiriesContainer.style.display = 'block';
-                    locationContainer.style.display = 'block';
-                    
-                    allLinkItems().forEach(item => {
-                        const itemText = item.textContent.toLowerCase();
-                        const isMatch = itemText.includes(searchTerm);
-                        item.style.display = isMatch ? '' : 'none';
-
-                        if (isMatch) {
-                            item.querySelectorAll('h3, h4, p, li').forEach(el => {
-                                highlightText(el, searchTerm);
-                            });
-                        }
-                    });
-
-                } else {
-                    systemSupportsContainer.style.display = 'none';
-                    applicationsContainer.style.display = 'none';
-                    rtTicketInquiriesContainer.style.display = 'none';
-                    locationContainer.style.display = 'none';
-
-                     allLinkItems().forEach(item => {
-                        item.style.display = '';
-                    });
-
-                    switch (currentCategory) {
-                        case 'all': systemSupportsContainer.style.display = 'block'; break;
-                        case 'social': applicationsContainer.style.display = 'block'; break;
-                        case 'rt-ticket-inquiries': rtTicketInquiriesContainer.style.display = 'block'; break;
-                        case 'location': locationContainer.style.display = 'block'; break;
-                    }
+            const filterByCategory = () => {
+                searchBox.value = '';
+                Object.values(containers).forEach(c => c.style.display = 'none');
+                if (containers[currentCategory]) {
+                    containers[currentCategory].style.display = 'block';
                 }
             };
+            
+            const searchAll = () => {
+                const searchTerm = searchBox.value.trim().toLowerCase();
+                
+                // Show all containers for searching
+                Object.values(containers).forEach(c => c.style.display = 'block');
 
+                // Remove previous highlights
+                document.querySelectorAll('.search-highlight').forEach(el => el.outerHTML = el.innerHTML);
+
+                if (!searchTerm) {
+                    filterByCategory(); // If search is cleared, revert to category view
+                    return;
+                }
+                
+                // Hide non-matching items across all containers
+                document.querySelectorAll('.link-item, .rt-inquiry-card').forEach(item => {
+                    const itemText = item.textContent.toLowerCase();
+                    const isMatch = itemText.includes(searchTerm);
+                    item.style.display = isMatch ? '' : 'flex'; // Use flex for link-item, default for card
+
+                    if (isMatch) {
+                        const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                        item.querySelectorAll('h3, h4, p, li').forEach(el => {
+                           el.innerHTML = el.textContent.replace(regex, '<span class="search-highlight">$1</span>');
+                        });
+                    }
+                });
+            };
 
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     filterButtons.forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
                     currentCategory = button.dataset.category;
-                    searchBox.value = '';
-                    filterAndSearch();
+                    filterByCategory();
                 });
             });
 
-            searchBox.addEventListener('input', filterAndSearch);
-            filterAndSearch();
+            searchBox.addEventListener('input', searchAll);
+            filterByCategory(); // Initial setup
         }
 
-        // --- MOBILE NAVIGATION LOGIC ---
-        function initMobileMenu() {
-            const hamburger = document.getElementById('hamburger-menu');
-            const nav = document.getElementById('main-nav');
-            const overlay = document.getElementById('nav-overlay');
-            const navLinks = nav.querySelectorAll('a');
+        // --- ABOUT PAGE LOGIC ---
+        function initAboutPageLogic() {
+            // Only run if .typing exists
+            if (window.Typed && document.querySelector(".about-page-content .typing")) {
+                new Typed(".about-page-content .typing", {
+                    strings: ["Graphic Designer.", "Web Developer.", "Marketer."],
+                    typeSpeed: 60,
+                    backSpeed: 30,
+                    loop: true
+                });
+            }
+        }
 
-            if (!hamburger || !nav || !overlay) return;
+        // --- GENERAL INITIALIZERS ---
+        function initMobileMenu() { /* Function remains the same */ }
+        function initTheme() { /* Function remains the same */ }
+        function initLanguageSwitcher() { /* Function remains the same */ }
 
-            // CHANGE: Removed the logic that cloned the language switcher.
-            // There is now only one switcher, which is in the .header-controls div.
+        // --- DOMContentLoaded ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('userLanguage') || 'en';
+            setLanguage(savedLang);
             
-            const toggleMenu = () => {
-                const isMenuOpen = nav.classList.contains('open');
-                hamburger.classList.toggle('open', !isMenuOpen);
-                nav.classList.toggle('open', !isMenuOpen);
-                overlay.classList.toggle('active', !isMenuOpen);
-                document.body.classList.toggle('no-scroll', !isMenuOpen);
-                hamburger.setAttribute('aria-expanded', String(!isMenuOpen));
-            };
+            handleNavigation();
+            initTheme();
+            initMobileMenu();
+            initLanguageSwitcher();
+            
+            window.addEventListener('hashchange', handleNavigation);
+        });
 
-            hamburger.addEventListener('click', toggleMenu);
-            overlay.addEventListener('click', toggleMenu);
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    if (nav.classList.contains('open')) {
-                        toggleMenu();
-                    }
-                });
-            });
-        }
-        
-        // --- THEME TOGGLE LOGIC ---
-        const themeToggle = document.getElementById('theme-toggle');
-        const currentTheme = localStorage.getItem('theme');
-
-        if (currentTheme === 'dark') {
-            document.body.classList.add('dark-theme');
-            if (themeToggle) themeToggle.textContent = '☀️';
-        }
-
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                document.body.classList.toggle('dark-theme');
-                let isDark = document.body.classList.contains('dark-theme');
-                themeToggle.textContent = isDark ? '☀️' : '🌙';
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            });
-        }
-
-        // --- Language Switcher Dropdown with Flags ---
-        (function() {
-            const langSelector = document.getElementById('lang-switcher');
-            const langBtnCurrent = document.getElementById('lang-btn-current');
-            const langDropdown = document.getElementById('lang-dropdown');
-            const langFlagCurrent = document.getElementById('lang-flag-current');
-            const langLabelCurrent = document.getElementById('lang-label-current');
-            const langOptions = [
-                { code: 'en', label: 'English', flag: 'https://flagcdn.com/us.svg' },
-                { code: 'kh', label: 'ភាសាខ្មែរ', flag: 'https://flagcdn.com/kh.svg' }
-            ];
-            function updateLangBtn(lang) {
-                const opt = langOptions.find(l => l.code === lang) || langOptions[0];
-                langFlagCurrent.src = opt.flag;
-                langFlagCurrent.alt = opt.code.toUpperCase();
-                langLabelCurrent.textContent = opt.label;
-            }
-            function setDropdownActive(lang) {
-                Array.from(langDropdown.querySelectorAll('.language-option')).forEach(btn => {
-                    btn.classList.toggle('active-language', btn.dataset.lang === lang);
-                });
-            }
-            langBtnCurrent.addEventListener('click', function(e) {
-                e.stopPropagation();
-                langDropdown.style.display = langDropdown.style.display === 'block' ? 'none' : 'block';
-            });
-            langDropdown.addEventListener('click', function(e) {
-                if (e.target.closest('.language-option')) {
-                    const lang = e.target.closest('.language-option').dataset.lang;
-                    setLanguage(lang);
-                    langDropdown.style.display = 'none';
-                }
-            });
-            document.addEventListener('click', function(e) {
-                if (!langSelector.contains(e.target)) langDropdown.style.display = 'none';
-            });
-            // Update on language change
-            const origSetLanguage = setLanguage;
-            setLanguage = function(lang) {
-                origSetLanguage(lang);
-                updateLangBtn(lang);
-                setDropdownActive(lang);
-            };
-            // On load, set correct flag/label
-            document.addEventListener('DOMContentLoaded', function() {
-                updateLangBtn(currentLanguage);
-                setDropdownActive(currentLanguage);
-            });
-        })();
+        // (Definitions for unchanged functions like applyTranslations, setLanguage, initMobileMenu, etc.)
+        function setLanguage(lang) { if (!translations[lang]) return; currentLanguage = lang; localStorage.setItem('userLanguage', lang); applyTranslations(); if (typeof updateLanguageSwitcherUI === "function") updateLanguageSwitcherUI(lang); }
+        function applyTranslations() { const lang = currentLanguage; document.querySelectorAll('[data-translate-key]').forEach(el => { const key = el.dataset.translateKey; if (translations[lang] && translations[lang][key]) el.innerHTML = translations[lang][key]; }); document.querySelectorAll('[data-translate-placeholder]').forEach(el => { const key = el.dataset.translatePlaceholder; if (translations[lang] && translations[lang][key]) el.placeholder = translations[lang][key]; }); document.documentElement.lang = lang === 'kh' ? 'km' : 'en'; }
+        function initTheme() { const themeToggle = document.getElementById('theme-toggle'); const applyTheme = (theme) => { document.body.classList.toggle('dark-theme', theme === 'dark'); if (themeToggle) themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙'; localStorage.setItem('theme', theme); }; themeToggle.addEventListener('click', () => applyTheme(document.body.classList.contains('dark-theme') ? 'light' : 'dark')); applyTheme(localStorage.getItem('theme') || 'light'); }
+        function initMobileMenu() { const hamburger = document.getElementById('hamburger-menu'); const nav = document.getElementById('main-nav'); const overlay = document.getElementById('nav-overlay'); const toggleMenu = () => { const isOpen = nav.classList.toggle('open'); hamburger.classList.toggle('open', isOpen); overlay.classList.toggle('active', isOpen); document.body.classList.toggle('no-scroll', isOpen); hamburger.setAttribute('aria-expanded', String(isOpen)); }; hamburger.addEventListener('click', toggleMenu); overlay.addEventListener('click', toggleMenu); nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => nav.classList.contains('open') && toggleMenu())); }
+        let updateLanguageSwitcherUI; function initLanguageSwitcher() { const selector = document.getElementById('lang-switcher'), btn = document.getElementById('lang-btn-current'), dropdown = document.getElementById('lang-dropdown'), flag = document.getElementById('lang-flag-current'), label = document.getElementById('lang-label-current'); const options = { en: { label: 'English', flag: 'https://flagcdn.com/us.svg' }, kh: { label: 'ភាសាខ្មែរ', flag: 'https://flagcdn.com/kh.svg' } }; updateLanguageSwitcherUI = (lang) => { const opt = options[lang] || options.en; flag.src = opt.flag; label.innerHTML = opt.label; label.classList.toggle('khmer-font', lang === 'kh'); dropdown.querySelectorAll('.language-option').forEach(b => b.classList.toggle('active-language', b.dataset.lang === lang)); }; const toggleDropdown = (show) => { const toShow = typeof show === 'boolean' ? show : dropdown.style.display !== 'block'; dropdown.style.display = toShow ? 'block' : 'none'; btn.setAttribute('aria-expanded', toShow); }; btn.addEventListener('click', (e) => { e.stopPropagation(); toggleDropdown(); }); dropdown.addEventListener('click', (e) => { const option = e.target.closest('.language-option'); if (option) { setLanguage(option.dataset.lang); toggleDropdown(false); } }); document.addEventListener('click', () => toggleDropdown(false)); updateLanguageSwitcherUI(currentLanguage); }
     </script>
 </body>
 </html>
