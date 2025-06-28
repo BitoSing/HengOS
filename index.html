@@ -865,86 +865,92 @@
         font-weight: 700;
       }
 
-      /* --- START: PORTFOLIO ABOUT PAGE STYLES (SCOPED) --- */
+      /* --- START: PORTFOLIO ABOUT PAGE STYLES --- */
       .about-page-content {
         font-family: "Poppins", sans-serif;
         --primary-gradient: linear-gradient(45deg, #0e1f46, #063969 80%);
         --dark-color: #0e1f46;
       }
       .about-page-content .max-width {
-        max-width: 1300px;
-        padding: 0 80px;
+        max-width: 1100px; /* Adjusted for better spacing in 2-column layouts */
+        padding: 0 40px;
         margin: auto;
       }
-      .about-page-content section {
+      .about-page-content .about-cards {
         padding: 50px 0;
       }
-      .about-page-content section .title {
-        position: relative;
-        text-align: center;
-        font-size: 40px;
-        font-weight: 500;
-        margin-bottom: 60px;
-        padding-bottom: 20px;
-        font-family: "Ubuntu", sans-serif;
+
+      /* New About Hero Section */
+      .about-hero {
+        display: flex;
+        align-items: center;
+        gap: 3rem;
+        padding: 4rem 0;
+        margin-bottom: 2rem;
+      }
+      .about-hero-content {
+        flex: 1 1 60%;
+      }
+      .about-hero-image {
+        flex: 0 0 300px; /* Fixed width for the image container */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .about-hero-image .creator-img {
+        width: 300px;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 50%; /* Modern circular look */
+        border: 6px solid var(--card-bg);
+        box-shadow: 0 0 0 8px var(--primary-color),
+          0 10px 40px rgba(6, 57, 105, 0.25);
+        animation: floatAnimation 4s ease-in-out infinite;
+        margin-top: 2rem;
+      }
+
+      @keyframes floatAnimation {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+      }
+
+      .about-hero-content .text-1 {
+        font-size: 1.5rem;
+        color: var(--light-text-color);
+      }
+      .about-hero-content .text-2 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: var(--text-color);
+        line-height: 1.1;
+        margin: 0.5rem 0;
+      }
+      .about-hero-content .text-3 {
+        font-size: 2rem;
+        font-weight: 400;
         color: var(--text-color);
       }
-      .about-page-content section .title::before {
-        content: "";
-        position: absolute;
-        bottom: 0px;
-        left: 50%;
-        width: 180px;
-        height: 3px;
-        background: var(--dark-color);
-        transform: translateX(-50%);
-      }
-      .about-page-content section .title::after {
-        position: absolute;
-        bottom: -8px;
-        left: 50%;
-        font-size: 20px;
+      .about-hero-content .text-3 span {
         color: var(--primary-color);
-        padding: 0 5px;
-        background: var(--bg-color);
-        transform: translateX(-50%);
-      }
-      .about-page-content .home {
-        display: flex;
-        background: url("Img/AboutMe/Banner1.JPG") no-repeat center;
-        height: 90vh;
-        color: #fff;
-        min-height: 600px;
-        background-size: cover;
-        background-attachment: fixed;
-        font-family: "Ubuntu", sans-serif;
-        align-items: center;
-        margin: -2.5rem -2.5rem 0;
-      }
-      .about-page-content .home .home-content .text-1 {
-        font-size: 27px;
-      }
-      .about-page-content .home .home-content .text-2 {
-        font-size: 75px;
         font-weight: 600;
-        margin-left: -3px;
       }
-      .about-page-content .home .home-content .text-3 {
-        font-size: 40px;
-        margin: 5px 0;
+      .about-hero-content p {
+        margin: 1.5rem 0;
+        font-size: 1.05rem;
+        max-width: 600px;
+        color: var(--light-text-color);
       }
-      .about-page-content .home .home-content .text-3 span {
-        color: var(--primary-color);
-        font-weight: 500;
+      .about-hero-content .social-icons {
+        margin-top: 1rem;
+        text-align: left;
       }
-      .about-page-content .home .home-content .card-panel {
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(5px);
-      }
-      body.dark-theme .about-page-content .home .home-content .card-panel {
-        background: rgba(27, 24, 41, 0.85);
-        backdrop-filter: blur(5px);
-      }
+      /* End New About Hero Section */
+
       .about-page-content .card-panel {
         background: var(--card-bg);
         border-radius: 16px;
@@ -958,7 +964,8 @@
       }
       .about-page-content .card-panel-title {
         font-size: 1.8rem;
-        margin-bottom: 1.2rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
         background: var(--primary-gradient);
         -webkit-background-clip: text;
         background-clip: text;
@@ -969,83 +976,19 @@
         color: var(--text-color);
         line-height: 1.7;
       }
-      .about-page-content .about .title::after {
-        content: "who I am";
-      }
-      .about-page-content .about-features-list {
-        list-style-type: none;
-        padding-left: 0;
-      }
-      .about-page-content .about-features-list li {
-        padding-left: 2rem;
-        position: relative;
-        margin-bottom: 0.8rem;
-      }
-      .about-page-content .about-features-list li::before {
-        content: "✓";
-        position: absolute;
-        left: 0;
-        color: var(--dark-color);
-        font-weight: 700;
-        font-size: 1.2rem;
-      }
-      .about-page-content .creator-profile {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2rem;
-        align-items: center;
-      }
-      .about-page-content .creator-img-wrapper {
-        flex: 0 0 240px;
-        display: flex;
-        justify-content: center;
-      }
-      .about-page-content .creator-img {
-        width: 240px;
-        height: 240px;
-        object-fit: cover;
-        border-radius: 22px;
-        border: 4px solid var(--border-color);
-        box-shadow: 0 4px 16px -4px rgba(106, 17, 203, 0.1);
-      }
-      .about-page-content .creator-info {
-        flex: 1 1 320px;
-      }
-      .about-page-content .creator-info h3 {
-        font-size: 1.18rem;
-        font-weight: 600;
-        color: var(--primary-color);
-        margin-bottom: 0.5rem;
-      }
-      .about-page-content .creator-info p span {
-        display: block;
-        margin-bottom: 0.7rem;
-      }
-      .about-page-content .creator-info p span b,
-      .about-page-content .creator-info p span a {
-        color: var(--primary-color);
-        font-weight: 600;
-      }
-      
-      /* --- MODIFICATION FOR SOCIAL ICON BOUNCE --- */
       .about-page-content .social-icons a {
-        display: inline-block; /* Crucial for transform to work */
+        display: inline-block;
         font-size: 20px;
         color: var(--primary-color);
-        margin: 0 10px;
-        /* This transition creates the bounce effect */
-        transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55), color 0.3s ease;
+        margin-right: 15px; /* Spaced out a bit more */
+        transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+          color 0.3s ease;
       }
       .about-page-content .social-icons a:hover {
         color: var(--dark-color);
-        /* Move the icon up on hover */
         transform: translateY(-5px);
       }
-      /* --- END MODIFICATION --- */
 
-      .about-page-content .skills .title::after {
-        content: "what I know";
-      }
       .about-page-content .skills-content-grid {
         display: flex;
         flex-wrap: wrap;
@@ -1060,21 +1003,6 @@
         font-size: 1.25rem;
         font-weight: 600;
         margin-bottom: 1.1rem;
-      }
-      .about-page-content .skills-intro a {
-        display: inline-block;
-        background: var(--primary-color);
-        color: #fff;
-        font-size: 1rem;
-        font-weight: 500;
-        padding: 0.7rem 1.7rem;
-        border-radius: 8px;
-        border: 2px solid var(--primary-color);
-        transition: all 0.2s ease;
-      }
-      .about-page-content .skills-intro a:hover {
-        background: none;
-        color: var(--primary-color);
       }
       .about-page-content .skills-list {
         flex: 2 1 400px;
@@ -1134,9 +1062,6 @@
         height: 100%;
         background: var(--primary-gradient);
         border-radius: 6px;
-      }
-      .about-page-content .contact .title::after {
-        content: "get in touch";
       }
       .about-page-content .contact-content-grid {
         display: flex;
@@ -1246,17 +1171,16 @@
           grid-template-columns: repeat(3, 1fr);
         }
       }
-      
+
       /* For tablets and smaller devices */
       @media (max-width: 992px) {
         body {
-          padding-top: 68px; /* Adjust for potentially smaller header */
+          padding-top: 68px;
         }
         .app-header {
           padding: 0.8rem 1.5rem;
         }
 
-        /* --- Mobile Navigation --- */
         .main-nav {
           display: none;
           flex-direction: column;
@@ -1291,15 +1215,12 @@
         .hamburger {
           display: block;
         }
-
         main {
           padding: 2rem 1.5rem;
         }
-
         #link-grid {
           grid-template-columns: repeat(2, 1fr);
         }
-
         .hero-section {
           padding: 4rem 1.5rem;
           margin-bottom: 2rem;
@@ -1310,38 +1231,43 @@
         .hero-content p.subtitle {
           font-size: 1.1rem;
         }
-
         .app-section-grid,
         .location-section-grid {
           grid-template-columns: 1fr;
         }
 
-        /* About Page */
+        /* About Page Responsive */
         .about-page-content .max-width {
-          padding: 0 50px;
+          padding: 0 30px;
         }
-        .about-page-content .home {
-          margin: -2rem -1.5rem 0;
-          background-attachment: scroll;
+        .about-hero {
+          flex-direction: column-reverse; /* Image on top on mobile */
+          text-align: center;
+          gap: 2rem;
+          padding: 2rem 0;
         }
-        .about-page-content .home .home-content .text-2 {
-          font-size: 70px;
-        }
-        .about-page-content .home .home-content .text-3 {
-          font-size: 35px;
-        }
-        .about-page-content .skills-intro, .about-page-content .contact-info-col {
+        .about-hero-content .social-icons {
           text-align: center;
         }
-        .about-page-content .skills-intro a, .about-page-content .contact-form button {
-          margin-left: auto;
-          margin-right: auto;
+        .about-hero-image .creator-img {
+          width: 250px;
+          height: 250px;
+        }
+        .about-hero-content .text-2 {
+          font-size: 3rem;
+        }
+        .about-hero-content .text-3 {
+          font-size: 1.7rem;
+        }
+        .about-page-content .skills-intro,
+        .about-page-content .contact-info-col {
+          text-align: center;
         }
         .about-page-content .contact-form button {
-            align-self: stretch;
+          align-self: stretch;
         }
         .about-page-content .contact-info-list {
-            align-items: center;
+          align-items: center;
         }
       }
 
@@ -1353,7 +1279,6 @@
         .rt-inquiry-card.digital-queue .rt-card-body {
           flex-direction: column;
         }
-
         .hero-content h1 {
           font-size: 2.2rem;
         }
@@ -1372,20 +1297,6 @@
           text-align: center;
           justify-content: center;
         }
-
-        /* About page adjustments */
-        .about-page-content .max-width {
-          padding: 0 30px;
-        }
-        .about-page-content .home .home-content .text-2 {
-          font-size: 60px;
-        }
-        .about-page-content .home .home-content .text-3 {
-          font-size: 32px;
-        }
-        .about-page-content section .title {
-          font-size: 35px;
-        }
         .about-page-content .creator-profile,
         .about-page-content .skills-content-grid,
         .about-page-content .contact-content-grid {
@@ -1399,9 +1310,6 @@
         }
         .about-page-content .contact-form button {
           width: 100%;
-        }
-        .about-page-content .home {
-          margin: -1.5rem -1.5rem 0;
         }
         .about-page-content .card-panel {
           padding: 1.5rem;
@@ -1456,7 +1364,6 @@
           padding: 0.8rem 1.2rem;
           font-size: 1rem;
         }
-
         #rt-ticket-inquiries-container h2.section-title {
           font-size: 1.5rem;
           margin-bottom: 1.5rem;
@@ -1471,22 +1378,27 @@
           padding: 1rem;
           gap: 1rem;
         }
-
-        /* About page adjustments */
         .about-page-content .max-width {
           padding: 0 20px;
         }
-        .about-page-content .home {
-          min-height: 500px;
-          height: 70vh;
-          margin: -1.5rem -1rem 0;
+
+        .about-hero-image .creator-img {
+          width: 200px;
+          height: 200px;
+          border-width: 4px;
+          box-shadow: 0 0 0 6px var(--primary-color),
+            0 5px 20px rgba(6, 57, 105, 0.2);
         }
-        .about-page-content .home .home-content .text-2 {
-          font-size: 50px;
+        .about-hero-content .text-1 {
+          font-size: 1.2rem;
         }
-        .about-page-content .home .home-content .text-3 {
-          font-size: 27px;
+        .about-hero-content .text-2 {
+          font-size: 2.5rem;
         }
+        .about-hero-content .text-3 {
+          font-size: 1.5rem;
+        }
+
         .about-page-content .contact-form .field-group {
           flex-direction: column;
           gap: 1rem;
@@ -1640,22 +1552,8 @@
           rt_digital_sub1: "Service Availability Issues",
           rt_digital_sub2: "Service Performance Issues",
           rt_digital_sub3: "Fulfillment",
-          aboutTitle: "About This System",
-          aboutDesc: "Welcome to <strong>HengOS</strong>...",
-          aboutKeyFeatTitle: "Key Features:",
-          aboutFeat1: "<strong>Instant Navigation:</strong>...",
-          aboutFeat2: "<strong>Dynamic Content:</strong>...",
-          aboutFeat3: "<strong>Adaptive Theming:</strong>...",
-          aboutFeat4: "<strong>Animated & Interactive:</strong>...",
-          aboutFeat5: "<strong>Portable & Efficient:</strong>...",
-          creatorTitle: "Meet The Creator",
           creatorDesc:
-            "Hi, I'm <b>LY Heng</b>, the creator of HengOS.<br>I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.<br>Thank you for using HengOS!",
-          feedbackTitle: "Share Your Feedback",
-          feedbackDesc: "Have a suggestion...",
-          feedbackEmailLabel: "Your Email (Optional)",
-          feedbackMessageLabel: "Your Message",
-          feedbackSubmitBtn: "Send Feedback",
+            "I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.",
           footerText: "All right Reserved 2025 @LYHENG.",
         },
         kh: {
@@ -1694,22 +1592,8 @@
           rt_digital_sub1: "បញ្ហាដែលអាចកើតមានលើសេវាកម្ម",
           rt_digital_sub2: "បញ្ហាដំណើរការសេវាកម្ម",
           rt_digital_sub3: "ការបំពេញការងារ",
-          aboutTitle: "អំពីប្រព័ន្ធនេះ",
-          aboutDesc: "សូមស្វាគមន៍មកកាន់ <strong>HengOS</strong>...",
-          aboutKeyFeatTitle: "មុខងារសំខាន់ៗ:",
-          aboutFeat1: "<strong>ការរុករករហ័ស៖</strong>...",
-          aboutFeat2: "<strong>មាតិកាថាមវន្ត៖</strong>...",
-          aboutFeat3: "<strong>ស្បែកដែលអាចបត់បែនបាន៖</strong>...",
-          aboutFeat4: "<strong>មានចលនា និងអន្តរកម្ម៖</strong>...",
-          aboutFeat5: "<strong>អាចយកតាមខ្លួនបាន និងមានប្រសិទ្ធភាព៖</strong>...",
-          creatorTitle: "ស្គាល់អ្នកបង្កើត",
           creatorDesc:
-            "សួស្តី ខ្ញុំឈ្មោះ <b>លី ហេង</b> ជាអ្នកបង្កើត HengOS។<br>ខ្ញុំ đam mê ការបង្កើតឧបករណ៍ឌីជីថលដែលជួយបង្កើនផលិតភាព និងធ្វើឱ្យការងារប្រចាំថ្ងៃកាន់តែងាយស្រួល។<br>សូមអរគុណសម្រាប់ការប្រើប្រាស់ HengOS!",
-          feedbackTitle: "ចែករំលែកមតិកែលម្អរបស់អ្នក",
-          feedbackDesc: "មានសំណូមពរ...",
-          feedbackEmailLabel: "អ៊ីមែលរបស់អ្នក (ស្រេចចិត្ត)",
-          feedbackMessageLabel: "សាររបស់អ្នក",
-          feedbackSubmitBtn: "ផ្ញើមតិកែលម្អ",
+            "ខ្ញុំ đam mê ការបង្កើតឧបករណ៍ឌីជីថលដែលជួយបង្កើនផលិតភាព និងធ្វើឱ្យការងារប្រចាំថ្ងៃកាន់តែងាយស្រួល។",
           footerText: "រក្សាសិទ្ធិគ្រប់យ៉ាង ២០២៥ @LYHENG.",
         },
       };
@@ -1800,48 +1684,34 @@
 
       const aboutPageContent = `
         <div class="about-page-content">
-            <!-- Home Section -->
-            <section class="home" id="home">
+            <!-- New Integrated Hero Section -->
+            <section class="about-hero" id="about">
                 <div class="max-width">
-                    <div class="home-content">
+                    <div class="about-hero-content">
                         <div class="text-1">Hello, my name is</div>
                         <div class="text-2">Ly Heng</div>
                         <div class="text-3">And I'm a <span class="typing"></span></div>
-                    </div>
-                </div>
-            </section>
-            <!-- About Section -->
-            <section class="about" id="about">
-                <div class="max-width">
-                    <div class="card-panel">
-                        <h2 class="card-panel-title">Meet The Creator</h2>
-                        <div class="creator-profile">
-                            <div class="creator-img-wrapper">
-                                <img src="Img/HengImg1.jpg" alt="LY Heng Profile Picture" class="creator-img">
-                            </div>
-                            <div class="creator-info" style="flex:1;">
-                                <div style="font-size:1.05rem; color:var(--text-color); line-height:1.7;">
-                                    <p data-translate-key="creatorDesc">
-                                       Hi, I'm <b>LY Heng</b>, the creator of HengOS.<br>I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.<br>Thank you for using HengOS!
-                                    </p>
-                                </div>
-                                <div class="social-icons" style="margin-top:1.1rem; text-align: left;">
-                                    <a href="https://web.facebook.com/sing.rithano.96" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="https://www.instagram.com/ly_henggg/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                                    <a href="https://t.me/LyHengg" target="_blank" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
-                                    <a href="https://twitter.com/CapaldiVector" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                                    <a href="https://www.linkedin.com/in/ly-heng-54a474220/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                                </div>
-                            </div>
+                        <p data-translate-key="creatorDesc">I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.</p>
+                        <div class="social-icons">
+                            <a href="https://www.facebook.com/lyhenggggg" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/ly_henggg/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="https://t.me/LyHengg" target="_blank" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+                            <a href="https://twitter.com/CapaldiVector" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="https://www.linkedin.com/in/ly-heng-54a474220/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                         </div>
                     </div>
+                    <div class="about-hero-image">
+                        <img src="Img/HengImg1.jpg" alt="LY Heng Profile Picture" class="creator-img">
+                    </div>
                 </div>
             </section>
-            <!-- Skills Section -->
-            <section class="skills" id="skills">
+            
+            <!-- Main Content Section with Cards -->
+            <section class="about-cards">
                 <div class="max-width">
-                    <h2 class="title">My Skills</h2>
+                    <!-- Card 1: My Skills -->
                     <div class="card-panel">
+                        <h2 class="card-panel-title">My Skills</h2>
                         <div class="skills-content-grid">
                             <div class="skills-intro">
                                 <div class="text">My creative skills & experiences</div>
@@ -1856,13 +1726,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
-            <!-- Contact Section -->
-            <section class="contact" id="contact">
-                <div class="max-width">
-                    <h2 class="title">Contact Me</h2>
+
+                    <!-- Card 2: Contact Me -->
                     <div class="card-panel">
+                        <h2 class="card-panel-title">Contact Me</h2>
                         <div class="contact-content-grid">
                             <div class="contact-info-col">
                                 <div class="contact-col-title">Get in Touch</div>
@@ -2051,7 +1918,7 @@
           document.querySelector(".about-page-content .typing")
         ) {
           new Typed(".about-page-content .typing", {
-            strings: ["Graphic Designer.", "Marketer."],
+            strings: ["FreeLancer.", "Web Developer.", "Graphic Designer.", "Content Creator."],
             typeSpeed: 60,
             backSpeed: 20,
             loop: true,
