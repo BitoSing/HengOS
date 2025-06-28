@@ -267,35 +267,13 @@
         animation-delay: 0.4s;
       }
       .hero-controls {
-        margin-top: 1rem;
+        margin-top: 1.5rem; /* Increased margin for better spacing */
         display: flex;
         flex-direction: column;
         gap: 1.25rem;
         width: 100%;
         max-width: 650px;
         animation-delay: 0.6s;
-      }
-      .hero-section #search-box {
-        width: 100%;
-        padding: 1rem 1.5rem;
-        font-size: 1.1rem;
-        border-radius: 50px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      }
-      .hero-section #search-box::placeholder {
-        color: rgba(255, 255, 255, 0.6);
-      }
-      .hero-section #search-box:focus {
-        border-color: rgba(255, 255, 255, 0.5);
-        box-shadow: 0 0 0 4px rgba(6, 57, 105, 0.5),
-          0 4px 20px rgba(0, 0, 0, 0.3);
-        background: rgba(255, 255, 255, 0.15);
       }
       #category-filters {
         display: flex;
@@ -760,16 +738,6 @@
         gap: 0.8rem;
       }
       /* --- END: RT Ticket Inquiries Redesign --- */
-
-      .search-highlight {
-        background: #ffe066;
-        color: #222;
-        border-radius: 3px;
-        padding: 0 2px;
-      }
-      body.dark-theme .search-highlight {
-        background: #f7d000;
-      }
 
       /* --- MOBILE & NAV --- */
       .header-controls {
@@ -1401,10 +1369,6 @@
         .hero-content p.subtitle {
           font-size: 1rem;
         }
-        .hero-section #search-box {
-          padding: 0.8rem 1.2rem;
-          font-size: 1rem;
-        }
         #rt-ticket-inquiries-container .section-title {
           font-size: 1.5rem;
           margin-bottom: 1.5rem;
@@ -1571,7 +1535,7 @@
           heroTitle: "Welcome to HengOS",
           heroSubtitle:
             "Your all-in-one productivity dashboard. Jump to your favorite tools, links, and resources in a flash!",
-          searchPlaceholder: "🔍 Search links...",
+          // REMOVED: searchPlaceholder
           filterBtnSys: "Systems Supports",
           filterBtnApp: "Applications",
           filterBtnRT: "RT Ticket Inquiries",
@@ -1611,7 +1575,7 @@
           heroTitle: "សូមស្វាគមន៍មកកាន់ HengOS",
           heroSubtitle:
             "ផ្ទាំងគ្រប់គ្រងផលិតភាពរបស់អ្នក។ ចូលទៅកាន់ឧបករណ៍ តំណ និងធនធានដែលអ្នកចូលចិត្តបានភ្លាមៗ!",
-          searchPlaceholder: "🔍 ស្វែងរកតំណ...",
+          // REMOVED: searchPlaceholder
           filterBtnSys: "ប្រព័ន្ធជំនួយ",
           filterBtnApp: "កម្មវិធីនានា",
           filterBtnRT: "សាកសួរ RT Ticket",
@@ -1918,7 +1882,6 @@
                     <h1 data-translate-key="heroTitle">Welcome to HengOS</h1>
                     <p class="subtitle" data-translate-key="heroSubtitle">Your all-in-one productivity dashboard. Jump to your favorite tools, links, and resources in a flash!</p>
                     <div class="hero-controls">
-                        <input type="text" id="search-box" data-translate-placeholder="searchPlaceholder" placeholder="🔍 Search for anything...">
                         <div id="category-filters">
                             <button class="filter-btn active" data-category="all" data-translate-key="filterBtnSys">Systems Supports</button>
                             <button class="filter-btn" data-category="social" data-translate-key="filterBtnApp">Applications</button>
@@ -1968,7 +1931,6 @@
 
       // --- RESOURCE HUB LOGIC ---
       function initResourceHub() {
-        const searchBox = document.getElementById("search-box");
         const filterButtons = document.querySelectorAll(".filter-btn");
         const containers = {
           all: document.getElementById("system-supports-container"),
@@ -1980,90 +1942,33 @@
         };
         let currentCategory = "all";
 
-        const filterByCategory = () => {
-          searchBox.value = "";
-          // Clear highlights when changing category
-          document
-            .querySelectorAll(".search-highlight")
-            .forEach((el) => (el.outerHTML = el.innerHTML));
-          // Show all items within containers before hiding the containers themselves
+        const filterByCategory = (category) => {
+          // Hide all containers
           Object.values(containers).forEach((c) => {
-            if (c) {
-              c.querySelectorAll(".link-item, .rt-card").forEach( // UPDATED SELECTOR
-                (item) => (item.style.display = "")
-              );
-              c.style.display = "none";
-            }
+            if (c) c.style.display = "none";
           });
-          if (containers[currentCategory]) {
-            containers[currentCategory].style.display = "block";
+          // Show the selected one
+          if (containers[category]) {
+            containers[category].style.display = "block";
           }
-        };
-
-        const searchAll = () => {
-          const searchTerm = searchBox.value.trim().toLowerCase();
-
-          // When searching, show all containers and deactivate category filters
-          if (searchTerm) {
-            Object.values(containers).forEach(
-              (c) => c && (c.style.display = "block")
-            );
-            filterButtons.forEach((btn) => btn.classList.remove("active"));
-          }
-
-          // Remove previous highlights
-          document
-            .querySelectorAll(".search-highlight")
-            .forEach((el) => (el.outerHTML = el.innerHTML));
-
-          if (!searchTerm) {
-            filterByCategory(); // If search is cleared, revert to category view
-            // Re-activate the correct filter button
-            const currentBtn = document.querySelector(
-              `.filter-btn[data-category="${currentCategory}"]`
-            );
-            if (currentBtn) currentBtn.classList.add("active");
-            return;
-          }
-
-          // Hide non-matching items across all containers
-          document
-            .querySelectorAll(".link-item, .rt-card") // UPDATED SELECTOR
-            .forEach((item) => {
-              const itemText = item.textContent.toLowerCase();
-              const isMatch = itemText.includes(searchTerm);
-
-              item.style.display = isMatch ? "" : "none";
-
-              if (isMatch) {
-                const regex = new RegExp(
-                  `(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
-                  "gi"
-                );
-                item.querySelectorAll("h3, h4, p, li").forEach((el) => {
-                  el.innerHTML = el.textContent.replace(
-                    regex,
-                    '<span class="search-highlight">$1</span>'
-                  );
-                });
-              }
-            });
         };
 
         filterButtons.forEach((button) => {
           button.addEventListener("click", () => {
+            // Update active state on buttons
             filterButtons.forEach((btn) => btn.classList.remove("active"));
             button.classList.add("active");
+
+            // Get the new category and filter
             currentCategory = button.dataset.category;
-            filterByCategory();
+            filterByCategory(currentCategory);
           });
         });
 
-        if (searchBox) {
-          searchBox.addEventListener("input", searchAll);
-        }
-        filterByCategory(); // Initial setup
+        // Initial setup on page load
+        filterByCategory(currentCategory);
       }
+
 
       // --- ABOUT PAGE LOGIC ---
       function initAboutPageLogic() {
