@@ -31,6 +31,7 @@
         --font-family: "Poppins", "Noto Sans Khmer", sans-serif;
         --khmer-font: "Noto Sans Khmer", "Khmer OS", "Hanuman", "Battambang",
           sans-serif;
+        --primary-gradient: linear-gradient(45deg, #0e1f46, #063969 80%);
 
         /* Light Theme (Default) */
         --bg-color: #f9f9fb;
@@ -39,7 +40,7 @@
         --text-color: #1e2022;
         --light-text-color: #5a6472;
         --border-color: #eaecef;
-        --shadow-color: rgba(106, 17, 203, 0.07);
+        --shadow-color: rgba(6, 57, 105, 0.08);
         --highlight-bg: color-mix(
           in srgb,
           var(--primary-color) 15%,
@@ -55,7 +56,7 @@
         --text-color: #e8e6fc;
         --light-text-color: #908ca7;
         --border-color: #2a263b;
-        --shadow-color: rgba(0, 0, 0, 0.3);
+        --shadow-color: rgba(0, 0, 0, 0.25);
         --highlight-bg: color-mix(
           in srgb,
           var(--primary-color) 20%,
@@ -109,11 +110,7 @@
       .logo {
         font-size: 1.5rem;
         font-weight: 700;
-        background: linear-gradient(
-          45deg,
-          var(--primary-color),
-          var(--secondary-color)
-        );
+        background: var(--primary-gradient);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -147,11 +144,7 @@
         transform: translateX(-50%);
         width: 50%;
         height: 3px;
-        background: linear-gradient(
-          90deg,
-          var(--primary-color),
-          var(--secondary-color)
-        );
+        background: var(--primary-gradient);
         border-radius: 2px;
       }
       .theme-switch {
@@ -347,11 +340,7 @@
       }
       .filter-btn.active,
       .hero-section .filter-btn.active {
-        background: linear-gradient(
-          45deg,
-          var(--primary-color),
-          var(--secondary-color)
-        );
+        background: var(--primary-gradient);
         color: white;
         border-color: transparent;
       }
@@ -615,118 +604,162 @@
         font-weight: 400;
         line-height: 1.5;
       }
-
-      /* RT Ticket Cards */
-      #rt-ticket-inquiries-container h2.section-title {
+      
+      /* --- START: BEST OF BEST RT Ticket Inquiries Redesign --- */
+      #rt-ticket-inquiries-container .section-title {
         font-size: 2rem;
-        margin-bottom: 2rem;
+        margin-bottom: 2.5rem;
         text-align: center;
-        background: linear-gradient(
-          45deg,
-          var(--primary-color),
-          var(--secondary-color)
-        );
+        background: var(--primary-gradient);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
       }
-      .rt-inquiries-grid {
+
+      .rt-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(4, 1fr);
         gap: 1.75rem;
-        align-items: stretch;
       }
-      .rt-inquiry-card {
+
+      .rt-card {
         background-color: var(--card-bg);
         border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 6px -1px var(--shadow-color);
+        border-radius: 18px;
+        padding: 2rem;
         display: flex;
         flex-direction: column;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        transition: all 0.3s ease-in-out;
       }
-      .rt-inquiry-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 15px -3px var(--shadow-color),
-          0 4px 6px -2px var(--shadow-color);
+
+      .rt-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 16px 30px -10px var(--shadow-color);
+        border-color: var(--primary-color);
       }
+
       .rt-card-header {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 1rem;
-        margin-bottom: 1.25rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid var(--border-color);
-      }
-      .rt-card-icon {
+        text-align: center;
+        margin-bottom: 1.5rem;
         flex-shrink: 0;
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #0e1f46;
-        color: #ffffff;
       }
-      .rt-card-icon svg {
-        width: 28px;
-        height: 28px;
+
+      .rt-card-icon-wrapper {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: var(--primary-gradient);
+        display: grid;
+        place-items: center;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 12px rgba(6, 57, 105, 0.2);
+        color: white;
       }
-      .rt-card-header h3 {
-        font-size: 1.25rem;
+      
+      body.dark-theme .rt-card-icon-wrapper {
+        box-shadow: 0 4px 12px rgba(0,0,0, 0.3);
+      }
+
+      .rt-card-icon-wrapper svg {
+        width: 32px;
+        height: 32px;
+        fill: currentColor;
+      }
+
+      .rt-card-title {
+        font-size: 1.2rem;
         font-weight: 700;
         color: var(--text-color);
         line-height: 1.3;
       }
+
+      .rt-card-body {
+        flex-grow: 1;
+      }
+
       .rt-card-body ul {
         list-style: none;
         padding: 0;
         margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
       }
-      .rt-card-body ul li {
+
+      .rt-card-body li {
         padding-left: 1.75rem;
         position: relative;
-        margin-bottom: 0.75rem;
         color: var(--light-text-color);
         font-size: 0.95rem;
         line-height: 1.5;
       }
-      .rt-card-body ul li::before {
-        content: "✓";
+
+      .rt-card-body li::before {
+        content: '✓';
         position: absolute;
         left: 0;
-        top: 1px;
+        top: 2px;
         font-weight: 700;
-        font-size: 1rem;
-        color: #ffffff;
-        background-color: #0e1f46;
-        width: 20px;
-        height: 20px;
+        color: white;
+        background-color: var(--primary-color);
+        width: 18px;
+        height: 18px;
         border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: grid;
+        place-items: center;
+        font-size: 0.75rem;
         line-height: 1;
       }
-      .rt-inquiry-card.digital-queue {
+
+      /* Full-width "Digital" card */
+      .rt-card.digital-card {
         grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 2.5rem;
+        padding: 2.5rem;
       }
-      .rt-card-subsection {
-        margin-top: 1.5rem;
+
+      .rt-card.digital-card .rt-card-header {
+        align-items: flex-start;
+        text-align: left;
+        flex-basis: 250px;
+        flex-shrink: 0;
+        margin-bottom: 0;
       }
-      .rt-card-subsection:first-child {
-        margin-top: 0;
+      
+      .rt-card.digital-card .rt-card-icon-wrapper {
+          margin-bottom: 1.5rem;
       }
-      .rt-card-subsection h4 {
-        font-size: 1.05rem;
+
+      .rt-card.digital-card .rt-card-body {
+        padding-top: 0.25rem;
+      }
+      
+      .rt-digital-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2.5rem 2rem;
+      }
+
+      .rt-digital-subsection h4 {
+        font-size: 1.1rem;
         font-weight: 600;
         color: var(--text-color);
         margin-bottom: 1rem;
         padding-bottom: 0.5rem;
         border-bottom: 1px dashed var(--border-color);
       }
+      
+      .rt-digital-subsection ul {
+        gap: 0.8rem;
+      }
+      /* --- END: RT Ticket Inquiries Redesign --- */
+
       .search-highlight {
         background: #ffe066;
         color: #222;
@@ -867,12 +900,10 @@
 
       /* --- START: PORTFOLIO ABOUT PAGE STYLES --- */
       .about-page-content {
-        font-family: "Poppins", sans-serif;
-        --primary-gradient: linear-gradient(45deg, #0e1f46, #063969 80%);
         --dark-color: #0e1f46;
       }
       .about-page-content .max-width {
-        max-width: 1100px; /* Adjusted for better spacing in 2-column layouts */
+        max-width: 1100px;
         padding: 0 40px;
         margin: auto;
       }
@@ -892,7 +923,7 @@
         flex: 1 1 60%;
       }
       .about-hero-image {
-        flex: 0 0 300px; /* Fixed width for the image container */
+        flex: 0 0 300px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -901,7 +932,7 @@
         width: 300px;
         height: 300px;
         object-fit: cover;
-        border-radius: 50%; /* Modern circular look */
+        border-radius: 50%;
         border: 6px solid var(--card-bg);
         box-shadow: 0 0 0 8px var(--primary-color),
           0 10px 40px rgba(6, 57, 105, 0.25);
@@ -1170,6 +1201,9 @@
         #link-grid {
           grid-template-columns: repeat(3, 1fr);
         }
+        .rt-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
       }
 
       /* For tablets and smaller devices */
@@ -1276,9 +1310,19 @@
         #link-grid {
           grid-template-columns: 1fr;
         }
-        .rt-inquiry-card.digital-queue .rt-card-body {
-          flex-direction: column;
+        .rt-grid {
+          grid-template-columns: 1fr;
         }
+        .rt-card.digital-card {
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+        .rt-card.digital-card .rt-card-header {
+          align-items: center;
+          text-align: center;
+          flex-basis: auto;
+        }
+
         .hero-content h1 {
           font-size: 2.2rem;
         }
@@ -1364,16 +1408,22 @@
           padding: 0.8rem 1.2rem;
           font-size: 1rem;
         }
-        #rt-ticket-inquiries-container h2.section-title {
+        #rt-ticket-inquiries-container .section-title {
           font-size: 1.5rem;
           margin-bottom: 1.5rem;
         }
-        .rt-inquiry-card {
-          padding: 1.2rem;
+        
+        .rt-card {
+            padding: 1.5rem;
         }
-        .rt-card-header h3 {
-          font-size: 1.1rem;
+        .rt-card-title {
+            font-size: 1.1rem;
         }
+        .rt-card-icon-wrapper {
+            width: 56px;
+            height: 56px;
+        }
+        
         .link-item {
           padding: 1rem;
           gap: 1rem;
@@ -1548,7 +1598,8 @@
           rt_q_delivery_h3: "Queue: Customer Delivery",
           rt_q_collection_h3: "Queue: Care Collection",
           rt_q_renewal_h3: "Queue: Care Renewal",
-          rt_q_digital_h3: "Queue: Digital (Technical Issues & Fulfillment)",
+          rt_q_digital_h3: "Queue: Digital",
+          rt_q_digital_p: "Technical Issues & Fulfillment",
           rt_digital_sub1: "Service Availability Issues",
           rt_digital_sub2: "Service Performance Issues",
           rt_digital_sub3: "Fulfillment",
@@ -1587,8 +1638,8 @@
           rt_q_delivery_h3: "ផ្នែក: ការដឹកជញ្ជូនអតិថិជន",
           rt_q_collection_h3: "ផ្នែក: ការប្រមូលបំណុល",
           rt_q_renewal_h3: "ផ្នែក: បន្តសេវាកម្ម",
-          rt_q_digital_h3:
-            "ផ្នែក: បច្ចេកទេស (បញ្ហាបច្ចេកទេស និងការបំពេញការងារ)",
+          rt_q_digital_h3: "ផ្នែក: បច្ចេកទេស",
+          rt_q_digital_p: "បញ្ហាបច្ចេកទេស និងការបំពេញការងារ",
           rt_digital_sub1: "បញ្ហាដែលអាចកើតមានលើសេវាកម្ម",
           rt_digital_sub2: "បញ្ហាដំណើរការសេវាកម្ម",
           rt_digital_sub3: "ការបំពេញការងារ",
@@ -1672,12 +1723,118 @@
       const rtTicketInquiriesContent = `
         <section>
             <h2 class="section-title" data-translate-key="rt_title">RT Ticket Inquiries</h2>
-            <div class="rt-inquiries-grid">
-                <div class="rt-inquiry-card"><div class="rt-card-header"><div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div><h3 data-translate-key="rt_q_activation_h3">Queue: Activation Team</h3></div><div class="rt-card-body"><ul><li>Re-activation after dismantle</li><li>Re-activation after termination</li><li>Connection with removed connectivity/port/device</li></ul></div></div>
-                <div class="rt-inquiry-card"><div class="rt-card-header"><div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12-4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg></div><h3 data-translate-key="rt_q_delivery_h3">Queue: Customer Delivery</h3></div><div class="rt-card-body"><ul><li>Update Profile</li><li>Upgrade / Downgrade Speed</li><li>Test Speed</li><li>Change Billing Date / Location</li><li>Change Account Name</li><li>Purchase CPE or Static IP</li></ul></div></div>
-                <div class="rt-inquiry-card"><div class="rt-card-header"><div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div><h3 data-translate-key="rt_q_collection_h3">Queue: Care Collection</h3></div><div class="rt-card-body"><ul><li>Refuse to pay (Has Pending Invoice)</li><li>Renewal/Promo (Has Pending Invoice)</li><li>Reactive Request (Has Pending Invoice)</li><li>Termination (Has Pending Invoice)</li><li>Compensation / Refund (Has Pending Invoice)</li></ul></div></div>
-                <div class="rt-inquiry-card"><div class="rt-card-header"><div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></div><h3 data-translate-key="rt_q_renewal_h3">Queue: Care Renewal</h3></div><div class="rt-card-body"><ul><li>Refuse to pay invoice</li><li>Renewal + Promotion request</li><li>Reactive Request</li><li>Terminate Request</li><li>Request Compensation or Refund</li></ul></div></div>
-                <div class="rt-inquiry-card digital-queue"><div class="rt-card-header"><div class="rt-card-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></div><h3 data-translate-key="rt_q_digital_h3">Queue: Digital (Technical Issues & Fulfillment)</h3></div><div class="rt-card-body" style="display: flex; flex-wrap: wrap; gap: 1.5rem;"><div class="rt-card-subsection" style="flex: 1; min-width: 280px;"><h4 data-translate-key="rt_digital_sub1">Service Availability Issues</h4><ul><li>Alarm / Lastsmile Alert</li><li>Many ONU Down / PON Down</li><li>Internet Not Working (Total outage)</li><li>No WiFi Signal</li></ul></div><div class="rt-card-subsection" style="flex: 1; min-width: 280px;"><h4 data-translate-key="rt_digital_sub2">Service Performance Issues</h4><ul><li>Internet Slow or Unstable</li><li>WiFi Low Signal / Poor Range</li><li>Link budget low or high</li><li>Website, App, or Game Issue</li><li>Port access / Protocol issue</li></ul></div><div class="rt-card-subsection" style="flex: 1; min-width: 280px;"><h4 data-translate-key="rt_digital_sub3">Fulfillment</h4><ul><li>Relocate / Re-Configure Modem/Router</li><li>Request Login for Modem/Router</li><li>Change WiFi Name / Password</li><li>Configure Remote Camera / NAT</li><li>Request LAN/Wi-Fi Survey</li><li>Add/Share Graph Utilization</li><li>Enable/Disable MAC Address</li></ul></div></div></div>
+            <div class="rt-grid">
+                
+                <!-- Activation Team -->
+                <div class="rt-card">
+                    <div class="rt-card-header">
+                        <div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div>
+                        <h3 class="rt-card-title" data-translate-key="rt_q_activation_h3">Queue: Activation Team</h3>
+                    </div>
+                    <div class="rt-card-body">
+                        <ul>
+                            <li>Re-activation after dismantle</li>
+                            <li>Re-activation after termination</li>
+                            <li>Connection with removed connectivity/port/device</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Customer Delivery -->
+                <div class="rt-card">
+                    <div class="rt-card-header">
+                        <div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12-4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg></div>
+                        <h3 class="rt-card-title" data-translate-key="rt_q_delivery_h3">Queue: Customer Delivery</h3>
+                    </div>
+                    <div class="rt-card-body">
+                        <ul>
+                            <li>Update Profile</li>
+                            <li>Upgrade / Downgrade Speed</li>
+                            <li>Test Speed</li>
+                            <li>Change Billing Date / Location</li>
+                            <li>Change Account Name</li>
+                            <li>Purchase CPE or Static IP</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Care Collection -->
+                <div class="rt-card">
+                    <div class="rt-card-header">
+                        <div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div>
+                        <h3 class="rt-card-title" data-translate-key="rt_q_collection_h3">Queue: Care Collection</h3>
+                    </div>
+                    <div class="rt-card-body">
+                        <ul>
+                            <li>Refuse to pay invoice</li>
+                            <p>All request relates to billing the same.</p>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Care Renewal -->
+                <div class="rt-card">
+                    <div class="rt-card-header">
+                        <div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></div>
+                        <h3 class="rt-card-title" data-translate-key="rt_q_renewal_h3">Queue: Care Renewal</h3>
+                    </div>
+                    <div class="rt-card-body">
+                        <ul>
+                            <li>Refuse to pay invoice</li>
+                            <li>Renewal + Promotion request</li>
+                            <li>Reactive Request</li>
+                            <li>Terminate Request</li>
+                            <li>Request Compensation or Refund</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Digital -->
+                <div class="rt-card digital-card">
+                    <div class="rt-card-header">
+                        <div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></div>
+                        <div>
+                          <h3 class="rt-card-title" data-translate-key="rt_q_digital_h3">Queue: Digital</h3>
+                          <p class="khmer-font" style="color: var(--light-text-color);" data-translate-key="rt_q_digital_p">Technical Issues & Fulfillment</p>
+                        </div>
+                    </div>
+                    <div class="rt-card-body">
+                        <div class="rt-digital-grid">
+                            <div class="rt-digital-subsection">
+                                <h4 data-translate-key="rt_digital_sub1">Service Availability Issues</h4>
+                                <ul>
+                                    <li>Alarm / Lastsmile Alert</li>
+                                    <li>Many ONU Down / PON Down</li>
+                                    <li>Internet Not Working (Total outage)</li>
+                                    <li>No WiFi Signal</li>
+                                </ul>
+                            </div>
+                            <div class="rt-digital-subsection">
+                                <h4 data-translate-key="rt_digital_sub2">Service Performance Issues</h4>
+                                <ul>
+                                    <li>Internet Slow or Unstable</li>
+                                    <li>WiFi Low Signal / Poor Range</li>
+                                    <li>Link budget low or high</li>
+                                    <li>Website, App, or Game Issue</li>
+                                    <li>Port access / Protocol issue</li>
+                                </ul>
+                            </div>
+                            <div class="rt-digital-subsection">
+                                <h4 data-translate-key="rt_digital_sub3">Fulfillment</h4>
+                                <ul>
+                                    <li>Relocate / Re-Configure Modem/Router</li>
+                                    <li>Request Login for Modem/Router</li>
+                                    <li>Change WiFi Name / Password</li>
+                                    <li>Configure Remote Camera / NAT</li>
+                                    <li>Request LAN/Wi-Fi Survey</li>
+                                    <li>Add/Share Graph Utilization</li>
+                                    <li>Enable/Disable MAC Address</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
         `;
@@ -1834,7 +1991,7 @@
           // Show all items within containers before hiding the containers themselves
           Object.values(containers).forEach((c) => {
             if (c) {
-              c.querySelectorAll(".link-item, .rt-inquiry-card").forEach(
+              c.querySelectorAll(".link-item, .rt-card").forEach( // UPDATED SELECTOR
                 (item) => (item.style.display = "")
               );
               c.style.display = "none";
@@ -1873,7 +2030,7 @@
 
           // Hide non-matching items across all containers
           document
-            .querySelectorAll(".link-item, .rt-inquiry-card")
+            .querySelectorAll(".link-item, .rt-card") // UPDATED SELECTOR
             .forEach((item) => {
               const itemText = item.textContent.toLowerCase();
               const isMatch = itemText.includes(searchTerm);
