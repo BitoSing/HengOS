@@ -715,21 +715,20 @@
         line-height: 1;
       }
 
-      /* Full-width "Digital" card */
+      /* --- MODIFICATION START --- */
+      /* Full-width "Digital" card with centered header and body below */
       .rt-card.digital-card {
         grid-column: 1 / -1;
-        flex-direction: row;
-        align-items: flex-start;
+        flex-direction: column; /* Puts body below header */
+        align-items: center;    /* Centers content horizontally */
         gap: 2.5rem;
         padding: 2.5rem;
       }
 
       .rt-card.digital-card .rt-card-header {
-        align-items: flex-start;
-        text-align: left;
-        flex-basis: 250px;
-        flex-shrink: 0;
-        margin-bottom: 0;
+        align-items: center;    /* Centers the icon and text block */
+        text-align: center;     /* Centers the text content */
+        margin-bottom: 0;       /* Let parent gap control spacing */
       }
       
       .rt-card.digital-card .rt-card-icon-wrapper {
@@ -737,7 +736,8 @@
       }
 
       .rt-card.digital-card .rt-card-body {
-        padding-top: 0.25rem;
+        padding-top: 0;        /* Reset old spacing */
+        width: 100%;           /* Ensure body's grid takes full width */
       }
       
       .rt-digital-grid {
@@ -745,6 +745,7 @@
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 2.5rem 2rem;
       }
+      /* --- MODIFICATION END --- */
 
       .rt-digital-subsection h4 {
         font-size: 1.1rem;
@@ -1314,13 +1315,9 @@
           grid-template-columns: 1fr;
         }
         .rt-card.digital-card {
-          flex-direction: column;
+          /* Now inherits the new default column layout, so less code is needed here. */
+          /* We can adjust the gap for mobile if needed, e.g., gap: 1.5rem */
           gap: 1.5rem;
-        }
-        .rt-card.digital-card .rt-card-header {
-          align-items: center;
-          text-align: center;
-          flex-basis: auto;
         }
 
         .hero-content h1 {
@@ -1457,6 +1454,7 @@
     </style>
   </head>
   <body>
+    <!-- The rest of the body HTML and script remains the same -->
     <div class="app-shell">
       <header class="app-header">
         <div class="logo">HengOS</div>
