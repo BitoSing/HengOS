@@ -524,66 +524,103 @@
         -webkit-text-fill-color: transparent;
         background-clip: text;
       }
-
-      /* Location Cards */
-      .location-section-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-        align-items: stretch;
-      }
-      .link-item.location-link {
-        background: linear-gradient(120deg, #1b1829 0%, #2a263b 100%);
-        color: #fff;
-        border: 1px solid #2a263b;
-        border-radius: 18px;
-        box-shadow: 0 8px 32px -8px rgba(10, 25, 41, 0.5);
-        font-size: 1rem;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        padding: 1.5rem 1.25rem 1.25rem 1.5rem;
-      }
-      .link-item.location-link .link-content h3,
-      .link-item.location-link .link-content p {
-        color: #fff;
-      }
-      .link-item.location-link .link-arrow {
-        color: #e8e6fc;
-        position: absolute;
-        right: 1.25rem;
-        top: 1.25rem;
-        transform: none;
-        opacity: 1;
-        transition: color 0.3s, transform 0.3s;
-      }
-      .link-item.location-link:hover {
-        background: linear-gradient(
-          120deg,
-          var(--primary-color) 0%,
-          #1b1829 100%
-        );
-        box-shadow: 0 16px 40px -8px rgba(10, 25, 41, 0.7);
-        transform: translateY(-6px) scale(1.03);
-        border-color: var(--primary-color);
-      }
-      .link-item.location-link:hover .link-arrow {
-        color: #fff;
-        transform: translateX(4px);
-      }
-      .link-item.location-link .link-content h3 {
-        font-size: 1.08rem;
-        margin-bottom: 0.5rem;
-        font-weight: 700;
-      }
-      .link-item.location-link .link-content p {
-        font-size: 0.97rem;
-        font-weight: 400;
-        line-height: 1.5;
-      }
       
-      /* --- START: BEST OF BEST RT Ticket Inquiries Redesign --- */
+      /* --- START: NEW LOCATION SECTION STYLES --- */
+      .location-section-container {
+          margin-top: 2rem;
+      }
+      .company-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+      }
+      .company-card {
+          background: var(--card-bg);
+          border: 1px solid var(--border-color);
+          border-radius: 18px;
+          padding: 1.5rem 2rem;
+          box-shadow: 0 8px 25px -8px var(--shadow-color);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .company-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px -10px var(--shadow-color);
+      }
+      .company-header {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding-bottom: 1.25rem;
+          margin-bottom: 1.5rem;
+          border-bottom: 1px solid var(--border-color);
+      }
+      .company-logo {
+          width: 48px;
+          height: 48px;
+          flex-shrink: 0;
+      }
+      .company-header h2 {
+          font-size: 1.75rem;
+          font-weight: 700;
+      }
+      .company-header.ezecom-header h2 { color: #6c54a3; }
+      .company-header.cellcard-header h2 { color: #e48947; }
+      .company-locations-body {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+      }
+      .location-column h4 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: var(--light-text-color);
+          margin-bottom: 1rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 2px solid var(--border-color);
+      }
+      .location-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem 1.5rem;
+      }
+      .location-item a {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.75rem;
+          text-decoration: none;
+          color: var(--text-color);
+          padding: 0.5rem;
+          border-radius: 8px;
+          transition: background-color 0.2s, color 0.2s;
+      }
+      .location-item a:hover {
+          background-color: var(--highlight-bg);
+          color: var(--primary-color);
+      }
+      .location-item .icon {
+          flex-shrink: 0;
+          color: var(--light-text-color);
+          margin-top: 4px;
+          transition: color 0.2s;
+      }
+      .location-item a:hover .icon {
+          color: var(--primary-color);
+      }
+      .location-name {
+          font-weight: 600;
+          font-size: 0.95rem;
+      }
+      .location-address {
+          font-size: 0.85rem;
+          color: var(--light-text-color);
+          line-height: 1.5;
+      }
+      /* --- END: NEW LOCATION SECTION STYLES --- */
+      
+      /* --- START: RT Ticket Inquiries Redesign --- */
       #rt-ticket-inquiries-container .section-title {
         font-size: 2rem;
         margin-bottom: 2.5rem;
@@ -693,20 +730,18 @@
         line-height: 1;
       }
 
-      /* --- MODIFICATION START --- */
-      /* Full-width "Digital" card with centered header and body below */
       .rt-card.digital-card {
         grid-column: 1 / -1;
-        flex-direction: column; /* Puts body below header */
-        align-items: center;    /* Centers content horizontally */
+        flex-direction: column; 
+        align-items: center;    
         gap: 2.5rem;
         padding: 2.5rem;
       }
 
       .rt-card.digital-card .rt-card-header {
-        align-items: center;    /* Centers the icon and text block */
-        text-align: center;     /* Centers the text content */
-        margin-bottom: 0;       /* Let parent gap control spacing */
+        align-items: center;    
+        text-align: center;     
+        margin-bottom: 0;       
       }
       
       .rt-card.digital-card .rt-card-icon-wrapper {
@@ -714,8 +749,8 @@
       }
 
       .rt-card.digital-card .rt-card-body {
-        padding-top: 0;        /* Reset old spacing */
-        width: 100%;           /* Ensure body's grid takes full width */
+        padding-top: 0;        
+        width: 100%;           
       }
       
       .rt-digital-grid {
@@ -723,7 +758,6 @@
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 2.5rem 2rem;
       }
-      /* --- MODIFICATION END --- */
 
       .rt-digital-subsection h4 {
         font-size: 1.1rem;
@@ -1238,6 +1272,11 @@
         .location-section-grid {
           grid-template-columns: 1fr;
         }
+        
+        /* Location Section Responsive */
+        .company-grid {
+            grid-template-columns: 1fr;
+        }
 
         /* About Page Responsive */
         .about-page-content .max-width {
@@ -1283,10 +1322,21 @@
           grid-template-columns: 1fr;
         }
         .rt-card.digital-card {
-          /* Now inherits the new default column layout, so less code is needed here. */
-          /* We can adjust the gap for mobile if needed, e.g., gap: 1.5rem */
           gap: 1.5rem;
         }
+
+        /* Location Section Responsive */
+        .company-locations-body {
+            grid-template-columns: 1fr;
+            gap: 2.5rem; /* Increase gap when columns stack */
+        }
+        .company-card {
+            padding: 1.5rem;
+        }
+        .company-header h2 {
+            font-size: 1.5rem;
+        }
+
 
         .hero-content h1 {
           font-size: 2.2rem;
@@ -1357,6 +1407,9 @@
         }
         #link-grid {
           grid-template-columns: 1fr;
+        }
+        .location-list {
+            grid-template-columns: 1fr;
         }
         .hero-section {
           padding: 3rem 1rem;
@@ -1535,7 +1588,6 @@
           heroTitle: "Welcome to HengOS",
           heroSubtitle:
             "Your all-in-one productivity dashboard. Jump to your favorite tools, links, and resources in a flash!",
-          // REMOVED: searchPlaceholder
           filterBtnSys: "Systems Supports",
           filterBtnApp: "Applications",
           filterBtnRT: "RT Ticket Inquiries",
@@ -1575,7 +1627,6 @@
           heroTitle: "សូមស្វាគមន៍មកកាន់ HengOS",
           heroSubtitle:
             "ផ្ទាំងគ្រប់គ្រងផលិតភាពរបស់អ្នក។ ចូលទៅកាន់ឧបករណ៍ តំណ និងធនធានដែលអ្នកចូលចិត្តបានភ្លាមៗ!",
-          // REMOVED: searchPlaceholder
           filterBtnSys: "ប្រព័ន្ធជំនួយ",
           filterBtnApp: "កម្មវិធីនានា",
           filterBtnRT: "សាកសួរ RT Ticket",
@@ -1659,26 +1710,45 @@
             </div>
         </div>
         `;
-
+        
       const locationContent = `
-        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
-            <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;"><h2 style="margin-bottom:1rem;" data-translate-key="loc_pp_title">Phnom Penh City</h2><div class="location-section-grid">
-                <a href="https://www.google.com/maps/place/EZECOM+Head+Office/@11.5562593,104.9254636,17z/data=!4m6!3m5!1s0x31095174fd02869f:0x25212418565ea9a5!8m2!3d11.5562593!4d104.9254636!16s%2Fg%2F11r8s7lky?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>ទីស្នាក់ការកណ្តាល (Mon - Sat)</h3><p>លេខ ៣១ មហាវិថីព្រះសីហនុ (២៧៤) សង្កាត់ចតុមុខ ខណ្ឌដូនពេញ ១២០២០៧ រាជធានីភ្នំពេញ</p></div><div class="link-arrow">→</div></a>
-                <a href="https://www.google.com/maps/search/11.536414,+104.886707?coh=219680&entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>ស្ទឹងមានជ័យ (Mon - Sat)</h3><p>ផ្ទះលេខ ៨អា ផ្លូវលេខ ២១៧ សង្កាត់ស្ទឹងមានជ័យ ខណ្ឌមានជ័យ រាជធានីភ្នំពេញ</p></div><div class="link-arrow">→</div></a>
-                <a href="https://www.google.com/maps/place/Street+Polaris,+Phnom+Penh/@11.5342098,104.9578599,20.64z/data=!4m6!3m5!1s0x31095723bfe3c791:0x34163542179e6a9b!8m2!3d11.5345243!4d104.9578492!16s%2Fg%2F11f4pn531g?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>ប៉េងហួតបឹងស្ងោរ (Mon - Fri)</h3><p>ផ្លូវជាតិលេខ១ ភូមិបឹងឈូក សង្កាត់និរោធ ខណ្ឌច្បារអំពៅ រាជធានីភ្នំពេញ</p></div><div class="link-arrow">→</div></a>
-                <a href="https://www.google.com/maps/place/%E1%99%80%E1%9F%92%E1%9E%9A%E1%9E%BB%E1%9E%98%E1%9E%A0%E1%9F%8A%E1%9E%BB%E1%9E%93+EZECOM/@11.5887958,104.9033051,17z/data=!4m6!3m5!1s0x3109537896a4cf59:0x4ba5aa38d2d240cc!8m2!3d11.5887958!4d104.9033051!16s%2Fg%2F11s5gvg607?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>ទួលគោក (ទួលសង្កែ) (Mon - Fri)</h3><p>ផ្ទះលេខ#៦៣-៦៥ ផ្លូវលេខ VI-១៣ សង្កាត់ទួលសង្កែ ខណ្ឌឬស្សីកែវ រាជធានីភ្នំពេញ</p></div><div class="link-arrow">→</div></a>
-                <a href="https://www.google.com/maps/place/Opennet-Phnom+Penh-Tek+Thla+Branch/@11.5604391,104.8708496,17z/data=!4m6!3m5!1s0x310951c408062eb1:0x67c3131a41c712a!8m2!3d11.5604391!4d104.8708496!16s%2Fg%2F11fg4lrdq9?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>ទឹកថ្លា (Mon - Fri)</h3><p>ផ្ទះលេខ ៣០ ផ្លូវ ១០១៩ សង្កាត់ទឹកថ្លា ខណ្ឌសែនសុខ រាជធានីភ្នំពេញ</p></div><div class="link-arrow">→</div></a>
-                <a href="https://www.google.com/maps/place/11%C2%B028'53.1%22N+104%C2%B056'53.3%22E/@11.4814167,104.9481389,17z" class="link-item location-link" target="_blank"><div class="link-content"><h3>តាខ្មៅ (Mon - Fri)</h3><p>ផ្ទះលេខ ៤៥ ផ្លូវលេខ១០៧ ភូមិតាខ្មៅ សង្កាត់តាខ្មៅ ក្រុងតាខ្មៅ ខេត្តកណ្តាល</p></div><div class="link-arrow">→</div></a>
-                <a href="https://www.google.com/maps/place/EZECOM+Chomchao+New/@11.5316446,104.6576929,12z/data=!4m7!3m6!1s0x31094f8ff9e4a1ab:0xf7726f012516dfba!8m2!3d11.5316375!4d104.8101345!16s%2Fg%2F11r2w20mcs?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>ចោមចៅ (Mon - Fri)</h3><p>ផ្ទះលេខ A03 ផ្លូវជាតិលេខ៤ ភូមិអូរដើម សង្កាត់ចោមចៅ ខណ្ឌពរសែនជ័យ រាជធានីភ្នំពេញ</p></div><div class="link-arrow">→</div></a>
-            </div></div>
-            <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;"><h2 style="margin-bottom:1rem;" data-translate-key="loc_prov_title">Provincial</h2><div class="location-section-grid">
-                <a href="https://www.google.com/maps/place/EZECOM+Bavet+Office/@11.07379,106.165445,17z/data=!4m6!3m5!1s0x310b23a218a50d3d:0x8af3d7ee4a19197a!8m2!3d11.07379!4d106.165445!16s%2Fg%2F11jkmy_cw1?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>បាវិត (Mon - Fri)</h3><p>ផ្ទះលេខ ៧-៨ ផ្លូវជាតិលេខ១ ភូមិបាវិតកណ្តាល សង្កាត់បាវិត ក្រុងបាវិតខេត្តស្វាយរៀង</p></div><div class="link-arrow">→</div></a>
-                <a href="https://www.google.com/maps/place/EZECOM+Poipet/@13.645153,102.573624,17z/data=!4m6!3m5!1s0x311b16e6174c32ff:0x5d041f0df6502e05!8m2!3d13.645153!4d102.573624!16s%2Fg%2F1ptzpsgjm?entry=ttu" class="link-item location-link" target="_blank"><div class="link-content"><h3>ប៉ោយប៉ែត (Mon - Fri)</h3><p>ផ្ទះលេខ C8-0657 ផ្លូវជាតិលេខ៥ ភូមិ៤ សង្កាត់ផ្សារកណ្តាល ក្រុងប៉ោយប៉ែត ខេត្តបន្ទាយមានជ័យ</p></div><div class="link-arrow">→</div></a>
-                <a href="https://www.google.com/maps/place/92-124+Neary+Klahan,+Kampong+Cham/@11.985518,105.3782371,12z/data=!4m6!3m5!1s0x310c6a641a73bc0f:0x5fede7599e943b23!8m2!3d11.98553!4d105.460639!16s%2Fg%2F11g606qv_f?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>កំពង់ចាម (Mon - Fri)</h3><p>ផ្ទះលេខ ៨០ ផ្លូវព្រះបាទអង្គឌួង ភូមិទួលស្បូវ សង្កាត់វាលវង់ ក្រុងកំពង់ចាម ខេត្តកំពង់ចាម</p></div><div class="link-arrow">→</div></a>
-                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Siem+Reap/@13.3593632,103.8545524,20z/data=!4m6!3m5!1s0x31101770a5909e8b:0xcdb83796db134804!8m2!3d13.3593183!4d103.8547083!16s%2Fg%2F11gz8zpjqg?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>សៀមរាប (Mon - Fri)</h3><p>#11,12 ផ្លូវស៊ីវុត្ថា ភូមិមណ្ឌល២ សង្កាត់ស្វាយដង្គំ ក្រុងសៀមរាប ខេត្តសៀមរាប</p></div><div class="link-arrow">→</div></a>
-                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Battambang/@13.0943536,103.1958162,17z/data=!4m6!3m5!1s0x3105498cb36ff109:0x73d0c8bd532dbe0f!8m2!3d13.0943536!4d103.1983911!16s%2Fg%2F1hf060w7n?entry=ttu" class="link-item location-link" target="_blank"><div class="link-content"><h3>បាត់ដំបង (Mon - Fri)</h3><p>ផ្ទះលេខ១៣៥១ ភូមិរំចេក សង្កាត់រតនៈ ក្រុងបាត់ដំបង ខេត្តបាត់ដំបង</p></div><div class="link-arrow">→</div></a>
-                <a href="https://www.google.com/maps/place/Cellcard+Shop+-+Sihanoukville/@10.6223804,103.5260101,18z/data=!4m6!3m5!1s0x3107e19d82b37785:0xd85a77996d030032!8m2!3d10.6223702!4d103.5258629!16s%2Fg%2F11fg535vj0?entry=tts" class="link-item location-link" target="_blank"><div class="link-content"><h3>ក្រុងព្រះសីហនុ (Mon - Fri)</h3><p>ផ្ទះលេខ ១៥៧ ផ្លូវឯករាជ្យ សង្កាត់លេខ២ ក្រុងព្រះសីហនុ ខេត្តព្រះសីហនុ</p></div><div class="link-arrow">→</div></a>
-            </div></div>
+        <div class="location-section-container">
+            <div class="company-grid">
+                <!-- EZECOM & Cellcard Combined Card -->
+                <div class="company-card" style="grid-column: 1 / -1;">
+                    <div class="company-header cellcard-header">
+                        <svg class="company-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="20" fill="#e48947"/><text x="50" y="62" font-family="Poppins, sans-serif" font-size="40" font-weight="bold" fill="white" text-anchor="middle">CEL</text></svg>
+                        <h2>EZECOM & Cellcard's Location</h2>
+                    </div>
+                    <div class="company-locations-body">
+                        <div class="location-column">
+                            <h4 data-translate-key="loc_pp_title">Phnom Penh City</h4>
+                            <ul class="location-list">
+                                <li class="location-item"><a href="https://maps.app.goo.gl/C2jyw6BDvUFmtybQ9" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ការិយាល័យកណ្ដាល</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ផ្ទះលេខ ៣៣ មហាវិថីព្រះសីហនុ សង្កាត់ចតុមុខ ខណ្ឌដូនពេញ រាជធានីភ្នំពេញ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/RjhckpBHwGENgb1j7" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">រ៉ូយ៉ាល់ រេលវេ</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ស្ថានីយរថភ្លើង (ផ្លូវរថភ្លើងកណ្តាល មហាវិថីសហព័ន្ធរុស្ស៊ី សង្កាត់ស្រះចក ខណ្ឌដូនពេញ រាជធានីភ្នំពេញ)</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/bQ7gcnnPXtYzfDKJA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">កាំកូ</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ផ្ទះលេខ ៤០៦ ផ្លូវ ៥៩៦ ខណ្ឌឫស្សីកែវ រាជធានីភ្នំពេញ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/C2qUyqDQ6XMqzMZn8" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ជ្រោយចង្វា</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ផ្ទះលេខ ៩០ ផ្លូវ ៥៧៩ ភូមិ៣ សង្កាត់ជ្រោយចង្វា ខណ្ឌឬស្សីកែវ រាជធានីភ្នំពេញ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/zBeX7CsRoEkyJh4f7" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ទួលទំពូង</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ផ្ទះលេខ ១៦៦ (E០,E១) ផ្លូវ ១៥៥ សង្កាត់ទួលទំពូង ១ ខណ្ឌចំការមន រាជធានីភ្នំពេញ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/yH3xNE5jAnPF8TyX7" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ទឹកថ្លា</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ផ្ទះលេខ 30 ផ្លូវ 1019 សង្កាត់ទឹកថ្លា ខណ្ឌសែនសុខ រាជធានីភ្នំពេញ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/LTnsZAMCDa8uU5vE7" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ស្ទឹងមានជ័យ</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ផ្ទះលេខ 8A ផ្លូវ 217 សង្កាត់ស្ទឹងមានជ័យ ខណ្ឌមានជ័យ រាជធានីភ្នំពេញ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/NUsqk5GRnshD827eA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ប៉េងហួតបឹងស្មោ</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ផ្លូវជាតិលេខ១ ភូមិបឹងឈូក សង្កាត់និរោធ ខណ្ឌច្បារអំពៅ រាជធានីភ្នំពេញ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/RsSp4ET1F92ncBbQ8" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">តាខ្មៅ</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ផ្ទះលេខ ៤៥ ផ្លូវលេខ១០៧ ភូមិតាខ្មៅ សង្កាត់តាខ្មៅ ក្រុងតាខ្មៅ ខេត្តកណ្តាល</div></div></a></li>
+                            </ul>
+                        </div>
+                        <div class="location-column">
+                            <h4 data-translate-key="loc_prov_title">Provincial</h4>
+                            <ul class="location-list">
+                                <li class="location-item"><a href="https://maps.app.goo.gl/GDGmZYCjkWARDPwJA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">សៀមរាប</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ផ្ទះលេខ ១១,១២ ផ្លូវស៊ីវត្ថា ភូមិមណ្ឌល២ សង្កាត់ស្វាយដង្គំ ក្រុងសៀមរាប ខេត្តសៀមរាប</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/T2JXbzhCcFKYdY2WA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">បាត់ដំបង</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ផ្លូវលេខ ១ ភូមិកម្មករ សង្កាត់ស្វាយប៉ោ ក្រុងបាត់ដំបង ខេត្តបាត់ដំបង</div></div></a></li>
+                                <li class="location-item"><a href="#" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">កំពង់ចាម</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ភូមិ ៤ ឃុំវាលវង់ ស្រុកកំពង់ចាម ខេត្តកំពង់ចាម</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/eNNfgEQMrFpWccMMA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ក្រុងព្រះសីហនុ</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ផ្ទះលេខ ១៥៧ ផ្លូវឯករាជ្យ សង្កាត់លេខ២ ក្រុងព្រះសីហនុ ខេត្តព្រះសីហនុ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/y6x9DMB4iiwZHdHq6" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">បាវិត</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ផ្ទះលេខ 7-8 ផ្លូវជាតិលេខ 1 បាវិតកណ្តាល សង្កាត់បាវិត ក្រុងបាវិត ខេត្តស្វាយរៀង</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/9qXdaR2gfXHuKTG96" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ប៉ោយប៉ែត</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) ផ្ទះលេខ c8-0657 ផ្លូវលេខ 5 ភូមិ 4 សង្កាត់ផ្សារកណ្តាល ក្រុងប៉ោយប៉ែត ខេត្តបន្ទាយមានជ័យ</div></div></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         `;
 
@@ -1686,192 +1756,19 @@
         <section>
             <h2 class="section-title" data-translate-key="rt_title">RT Ticket Inquiries</h2>
             <div class="rt-grid">
-                
-                <!-- Activation Team -->
-                <div class="rt-card">
-                    <div class="rt-card-header">
-                        <div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div>
-                        <h3 class="rt-card-title" data-translate-key="rt_q_activation_h3">Queue: Activation Team</h3>
-                    </div>
-                    <div class="rt-card-body">
-                        <ul>
-                            <li>Re-activation after dismantle</li>
-                            <li>Re-activation after termination</li>
-                            <li>Connection with removed connectivity/port/device</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Customer Delivery -->
-                <div class="rt-card">
-                    <div class="rt-card-header">
-                        <div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12-4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg></div>
-                        <h3 class="rt-card-title" data-translate-key="rt_q_delivery_h3">Queue: Customer Delivery</h3>
-                    </div>
-                    <div class="rt-card-body">
-                        <ul>
-                            <li>Update Profile</li>
-                            <li>Upgrade / Downgrade Speed</li>
-                            <li>Test Speed</li>
-                            <li>Change Billing Date / Location</li>
-                            <li>Change Account Name</li>
-                            <li>Purchase CPE or Static IP</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Care Collection -->
-                <div class="rt-card">
-                    <div class="rt-card-header">
-                        <div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div>
-                        <h3 class="rt-card-title" data-translate-key="rt_q_collection_h3">Queue: Care Collection</h3>
-                    </div>
-                    <div class="rt-card-body">
-                        <ul>
-                            <li>Refuse to pay invoice</li>
-                            <p>All request relates to billing the same.</p>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Care Renewal -->
-                <div class="rt-card">
-                    <div class="rt-card-header">
-                        <div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></div>
-                        <h3 class="rt-card-title" data-translate-key="rt_q_renewal_h3">Queue: Care Renewal</h3>
-                    </div>
-                    <div class="rt-card-body">
-                        <ul>
-                            <li>Refuse to pay invoice</li>
-                            <li>Renewal + Promotion request</li>
-                            <li>Reactive Request</li>
-                            <li>Terminate Request</li>
-                            <li>Request Compensation or Refund</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Digital -->
-                <div class="rt-card digital-card">
-                    <div class="rt-card-header">
-                        <div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></div>
-                        <div>
-                          <h3 class="rt-card-title" data-translate-key="rt_q_digital_h3">Queue: Digital</h3>
-                          <p class="khmer-font" style="color: var(--light-text-color);" data-translate-key="rt_q_digital_p">Technical Issues & Fulfillment</p>
-                        </div>
-                    </div>
-                    <div class="rt-card-body">
-                        <div class="rt-digital-grid">
-                            <div class="rt-digital-subsection">
-                                <h4 data-translate-key="rt_digital_sub1">Service Availability Issues</h4>
-                                <ul>
-                                    <li>Alarm / Lastsmile Alert</li>
-                                    <li>Many ONU Down / PON Down</li>
-                                    <li>Internet Not Working (Total outage)</li>
-                                    <li>No WiFi Signal</li>
-                                </ul>
-                            </div>
-                            <div class="rt-digital-subsection">
-                                <h4 data-translate-key="rt_digital_sub2">Service Performance Issues</h4>
-                                <ul>
-                                    <li>Internet Slow or Unstable</li>
-                                    <li>WiFi Low Signal / Poor Range</li>
-                                    <li>Link budget low or high</li>
-                                    <li>Website, App, or Game Issue</li>
-                                    <li>Port access / Protocol issue</li>
-                                </ul>
-                            </div>
-                            <div class="rt-digital-subsection">
-                                <h4 data-translate-key="rt_digital_sub3">Fulfillment</h4>
-                                <ul>
-                                    <li>Relocate / Re-Configure Modem/Router</li>
-                                    <li>Request Login for Modem/Router</li>
-                                    <li>Change WiFi Name / Password</li>
-                                    <li>Configure Remote Camera / NAT</li>
-                                    <li>Request LAN/Wi-Fi Survey</li>
-                                    <li>Add/Share Graph Utilization</li>
-                                    <li>Enable/Disable MAC Address</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                <div class="rt-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div><h3 class="rt-card-title" data-translate-key="rt_q_activation_h3">Queue: Activation Team</h3></div><div class="rt-card-body"><ul><li>Re-activation after dismantle</li><li>Re-activation after termination</li><li>Connection with removed connectivity/port/device</li></ul></div></div>
+                <div class="rt-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12-4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg></div><h3 class="rt-card-title" data-translate-key="rt_q_delivery_h3">Queue: Customer Delivery</h3></div><div class="rt-card-body"><ul><li>Update Profile</li><li>Upgrade / Downgrade Speed</li><li>Test Speed</li><li>Change Billing Date / Location</li><li>Change Account Name</li><li>Purchase CPE or Static IP</li></ul></div></div>
+                <div class="rt-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div><h3 class="rt-card-title" data-translate-key="rt_q_collection_h3">Queue: Care Collection</h3></div><div class="rt-card-body"><ul><li>Refuse to pay invoice</li><p>All request relates to billing the same.</p></ul></div></div>
+                <div class="rt-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></div><h3 class="rt-card-title" data-translate-key="rt_q_renewal_h3">Queue: Care Renewal</h3></div><div class="rt-card-body"><ul><li>Refuse to pay invoice</li><li>Renewal + Promotion request</li><li>Reactive Request</li><li>Terminate Request</li><li>Request Compensation or Refund</li></ul></div></div>
+                <div class="rt-card digital-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></div><div><h3 class="rt-card-title" data-translate-key="rt_q_digital_h3">Queue: Digital</h3><p class="khmer-font" style="color: var(--light-text-color);" data-translate-key="rt_q_digital_p">Technical Issues & Fulfillment</p></div></div><div class="rt-card-body"><div class="rt-digital-grid"><div class="rt-digital-subsection"><h4 data-translate-key="rt_digital_sub1">Service Availability Issues</h4><ul><li>Alarm / Lastsmile Alert</li><li>Many ONU Down / PON Down</li><li>Internet Not Working (Total outage)</li><li>No WiFi Signal</li></ul></div><div class="rt-digital-subsection"><h4 data-translate-key="rt_digital_sub2">Service Performance Issues</h4><ul><li>Internet Slow or Unstable</li><li>WiFi Low Signal / Poor Range</li><li>Link budget low or high</li><li>Website, App, or Game Issue</li><li>Port access / Protocol issue</li></ul></div><div class="rt-digital-subsection"><h4 data-translate-key="rt_digital_sub3">Fulfillment</h4><ul><li>Relocate / Re-Configure Modem/Router</li><li>Request Login for Modem/Router</li><li>Change WiFi Name / Password</li><li>Configure Remote Camera / NAT</li><li>Request LAN/Wi-Fi Survey</li><li>Add/Share Graph Utilization</li><li>Enable/Disable MAC Address</li></ul></div></div></div></div>
             </div>
         </section>
         `;
 
       const aboutPageContent = `
         <div class="about-page-content">
-            <!-- New Integrated Hero Section -->
-            <section class="about-hero" id="about">
-                <div class="max-width">
-                    <div class="about-hero-content">
-                        <div class="text-1">Hello, my name is</div>
-                        <div class="text-2">Ly Heng</div>
-                        <div class="text-3">And I'm a <span class="typing"></span></div>
-                        <p data-translate-key="creatorDesc">I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.</p>
-                        <div class="social-icons">
-                            <a href="https://www.facebook.com/lyhenggggg" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                            <a href="https://www.instagram.com/ly_henggg/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                            <a href="https://t.me/LyHengg" target="_blank" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
-                            <a href="https://twitter.com/CapaldiVector" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                            <a href="https://www.linkedin.com/in/ly-heng-54a474220/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-                    <div class="about-hero-image">
-                        <img src="Img/HengImg1.jpg" alt="LY Heng Profile Picture" class="creator-img">
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Main Content Section with Cards -->
-            <section class="about-cards">
-                <div class="max-width">
-                    <!-- Card 1: My Skills -->
-                    <div class="card-panel">
-                        <h2 class="card-panel-title">My Skills</h2>
-                        <div class="skills-content-grid">
-                            <div class="skills-intro">
-                                <div class="text">My creative skills & experiences</div>
-                                <p>Responsible and hardworking, I’m able to handle working under pressure as well as communicate and collaborate seamlessly in a teamwork environment. My strongest points are well-communication, open-mind set, self-motivated, active listening, honesty, patience, creativity, fast learning, and trustworthiness.</p>
-                            </div>
-                            <div class="skills-list">
-                                <div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e6f7fa;"><i class="fab fa-windows" style="color:#2563eb;"></i></span><span class="skill-title">Office Software</span><span class="skill-percent">90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%;"></div></div></div>
-                                <div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#f3e6fa;"><i class="fas fa-paint-brush" style="color:#a259c6;"></i></span><span class="skill-title">Adobe Suite</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div>
-                                <div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e6f4fa;"><i class="fas fa-film" style="color:#3bb3ce;"></i></span><span class="skill-title">Video Editing</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div>
-                                <div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e3e9f7;"><i class="fas fa-code" style="color:#457ABD;"></i></span><span class="skill-title">Front-End Dev</span><span class="skill-percent">90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%;"></div></div></div>
-                                <div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#fbeee6;"><i class="fas fa-tasks" style="color:#f59e42;"></i></span><span class="skill-title">Management</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 2: Contact Me -->
-                    <div class="card-panel">
-                        <h2 class="card-panel-title">Contact Me</h2>
-                        <div class="contact-content-grid">
-                            <div class="contact-info-col">
-                                <div class="contact-col-title">Get in Touch</div>
-                                <p style="margin-bottom: 2rem;">Have a question or a project in mind? Feel free to reach out. I'm always open to discussing new opportunities and creative ideas.</p>
-                                <div class="contact-info-list">
-                                    <div class="contact-info-item"><span class="icon"><i class="fas fa-user"></i></span><div class="text"><div class="head">Name</div><div class="sub-title">LY HENG</div></div></div>
-                                    <div class="contact-info-item"><span class="icon" style="background: #fbeee6;"><i class="fas fa-map-marker-alt" style="color:#f59e42;"></i></span><div class="text"><div class="head">Address</div><div class="sub-title">Phnom Penh, Cambodia</div></div></div>
-                                    <div class="contact-info-item"><span class="icon" style="background: #e6f4fa;"><i class="fas fa-envelope" style="color:#3bb3ce;"></i></span><div class="text"><div class="head">Email</div><div class="sub-title">Singlovesmiles@gmail.com</div></div></div>
-                                </div>
-                            </div>
-                            <div class="contact-form-col">
-                                <div class="contact-col-title">Message Me</div>
-                                <form class="contact-form" action="mailto:Singlovesmiles@gmail.com" method="post" enctype="text/plain">
-                                    <div class="field-group"><input type="text" name="name" placeholder="Name" required><input type="email" name="email" placeholder="Email" required></div>
-                                    <input type="text" name="subject" placeholder="Subject" required>
-                                    <textarea name="message" cols="30" rows="6" placeholder="Your Message.." required></textarea>
-                                    <button type="submit">Send Message</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <section class="about-hero" id="about"><div class="max-width"><div class="about-hero-content"><div class="text-1">Hello, my name is</div><div class="text-2">Ly Heng</div><div class="text-3">And I'm a <span class="typing"></span></div><p data-translate-key="creatorDesc">I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.</p><div class="social-icons"><a href="https://www.facebook.com/lyhenggggg" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="https://www.instagram.com/ly_henggg/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="https://t.me/LyHengg" target="_blank" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a><a href="https://twitter.com/CapaldiVector" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a><a href="https://www.linkedin.com/in/ly-heng-54a474220/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a></div></div><div class="about-hero-image"><img src="Img/HengImg1.jpg" alt="LY Heng Profile Picture" class="creator-img"></div></div></section>
+            <section class="about-cards"><div class="max-width"><div class="card-panel"><h2 class="card-panel-title">My Skills</h2><div class="skills-content-grid"><div class="skills-intro"><div class="text">My creative skills & experiences</div><p>Responsible and hardworking, I’m able to handle working under pressure as well as communicate and collaborate seamlessly in a teamwork environment. My strongest points are well-communication, open-mind set, self-motivated, active listening, honesty, patience, creativity, fast learning, and trustworthiness.</p></div><div class="skills-list"><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e6f7fa;"><i class="fab fa-windows" style="color:#2563eb;"></i></span><span class="skill-title">Office Software</span><span class="skill-percent">90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%;"></div></div></div><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#f3e6fa;"><i class="fas fa-paint-brush" style="color:#a259c6;"></i></span><span class="skill-title">Adobe Suite</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e6f4fa;"><i class="fas fa-film" style="color:#3bb3ce;"></i></span><span class="skill-title">Video Editing</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e3e9f7;"><i class="fas fa-code" style="color:#457ABD;"></i></span><span class="skill-title">Front-End Dev</span><span class="skill-percent">90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%;"></div></div></div><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#fbeee6;"><i class="fas fa-tasks" style="color:#f59e42;"></i></span><span class="skill-title">Management</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div></div></div></div><div class="card-panel"><h2 class="card-panel-title">Contact Me</h2><div class="contact-content-grid"><div class="contact-info-col"><div class="contact-col-title">Get in Touch</div><p style="margin-bottom: 2rem;">Have a question or a project in mind? Feel free to reach out. I'm always open to discussing new opportunities and creative ideas.</p><div class="contact-info-list"><div class="contact-info-item"><span class="icon"><i class="fas fa-user"></i></span><div class="text"><div class="head">Name</div><div class="sub-title">LY HENG</div></div></div><div class="contact-info-item"><span class="icon" style="background: #fbeee6;"><i class="fas fa-map-marker-alt" style="color:#f59e42;"></i></span><div class="text"><div class="head">Address</div><div class="sub-title">Phnom Penh, Cambodia</div></div></div><div class="contact-info-item"><span class="icon" style="background: #e6f4fa;"><i class="fas fa-envelope" style="color:#3bb3ce;"></i></span><div class="text"><div class="head">Email</div><div class="sub-title">Singlovesmiles@gmail.com</div></div></div></div></div><div class="contact-form-col"><div class="contact-col-title">Message Me</div><form class="contact-form" action="mailto:Singlovesmiles@gmail.com" method="post" enctype="text/plain"><div class="field-group"><input type="text" name="name" placeholder="Name" required><input type="email" name="email" placeholder="Email" required></div><input type="text" name="subject" placeholder="Subject" required><textarea name="message" cols="30" rows="6" placeholder="Your Message.." required></textarea><button type="submit">Send Message</button></form></div></div></div></div></section>
         </div>
         `;
 
@@ -1972,7 +1869,6 @@
 
       // --- ABOUT PAGE LOGIC ---
       function initAboutPageLogic() {
-        // Only run if .typing exists
         if (
           window.Typed &&
           document.querySelector(".about-page-content .typing")
