@@ -365,26 +365,9 @@
       /* --- LINK CARD & GRID STYLES --- */
       #link-grid {
         display: grid;
-        /* Change from auto-fit/minmax to fixed 5 columns for system supports */
         grid-template-columns: repeat(5, 1fr);
         gap: 1.75rem;
         margin-top: 2.5rem;
-      }
-      /* Responsive: fallback to fewer columns on smaller screens */
-      @media (max-width: 1200px) {
-        #link-grid {
-          grid-template-columns: repeat(3, 1fr);
-        }
-      }
-      @media (max-width: 900px) {
-        #link-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-      }
-      @media (max-width: 576px) {
-        #link-grid {
-          grid-template-columns: 1fr;
-        }
       }
       .link-item {
         text-decoration: none;
@@ -1043,16 +1026,23 @@
         color: var(--primary-color);
         font-weight: 600;
       }
+      
+      /* --- MODIFICATION FOR SOCIAL ICON BOUNCE --- */
       .about-page-content .social-icons a {
-        display: inline-block;
+        display: inline-block; /* Crucial for transform to work */
         font-size: 20px;
         color: var(--primary-color);
         margin: 0 10px;
-        transition: all 0.3s ease;
+        /* This transition creates the bounce effect */
+        transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55), color 0.3s ease;
       }
       .about-page-content .social-icons a:hover {
         color: var(--dark-color);
+        /* Move the icon up on hover */
+        transform: translateY(-5px);
       }
+      /* --- END MODIFICATION --- */
+
       .about-page-content .skills .title::after {
         content: "what I know";
       }
@@ -1250,6 +1240,13 @@
 
       /* --- RESPONSIVE DESIGN --- */
 
+      /* For tablets and larger */
+      @media (max-width: 1200px) {
+        #link-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      
       /* For tablets and smaller devices */
       @media (max-width: 992px) {
         body {
@@ -1261,19 +1258,16 @@
 
         /* --- Mobile Navigation --- */
         .main-nav {
-          /* Hide nav links by default, prepare for overlay */
           display: none;
           flex-direction: column;
           align-items: center;
           justify-content: flex-start;
           gap: 1rem;
-
           position: fixed;
-          top: 68px; /* Height of the header */
+          top: 68px;
           left: 0;
           width: 100%;
           height: calc(100vh - 68px);
-
           background-color: var(--bg-color);
           padding-top: 2rem;
           transform: translateX(-100%);
@@ -1281,7 +1275,7 @@
           z-index: 999;
         }
         .main-nav.open {
-          display: flex; /* Show when open class is added by JS */
+          display: flex;
           transform: translateX(0);
         }
         .main-nav a {
@@ -1295,14 +1289,17 @@
           width: 40%;
         }
         .hamburger {
-          display: block; /* Show hamburger icon */
+          display: block;
         }
 
         main {
           padding: 2rem 1.5rem;
         }
 
-        /* --- Page specific adjustments --- */
+        #link-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
         .hero-section {
           padding: 4rem 1.5rem;
           margin-bottom: 2rem;
@@ -1325,7 +1322,7 @@
         }
         .about-page-content .home {
           margin: -2rem -1.5rem 0;
-          background-attachment: scroll; /* Fixed attachment can be weird on mobile */
+          background-attachment: scroll;
         }
         .about-page-content .home .home-content .text-2 {
           font-size: 70px;
@@ -1333,28 +1330,18 @@
         .about-page-content .home .home-content .text-3 {
           font-size: 35px;
         }
-        .about-page-content section .title {
-          font-size: 35px;
-        }
-        .about-page-content .creator-profile,
-        .about-page-content .skills-content-grid,
-        .about-page-content .contact-content-grid {
-          flex-direction: column;
-        }
-        .about-page-content .creator-info .social-icons {
+        .about-page-content .skills-intro, .about-page-content .contact-info-col {
           text-align: center;
         }
-        .about-page-content .skills-list {
-          grid-template-columns: 1fr;
+        .about-page-content .skills-intro a, .about-page-content .contact-form button {
+          margin-left: auto;
+          margin-right: auto;
         }
         .about-page-content .contact-form button {
-          width: 100%;
+            align-self: stretch;
         }
-        .about-page-content .home {
-          margin: -1.5rem -1.5rem 0;
-        }
-        .about-page-content .card-panel {
-          padding: 1.5rem;
+        .about-page-content .contact-info-list {
+            align-items: center;
         }
       }
 
@@ -1444,13 +1431,15 @@
           font-size: 14px;
           gap: 6px;
         }
-        /* Hide text label and arrow, just show flag on smallest screens */
         #lang-label-current,
         .language-btn .arrow {
           display: none;
         }
         main {
           padding: 1.5rem 1rem;
+        }
+        #link-grid {
+          grid-template-columns: 1fr;
         }
         .hero-section {
           padding: 3rem 1rem;
@@ -1498,28 +1487,9 @@
         .about-page-content .home .home-content .text-3 {
           font-size: 27px;
         }
-        .about-page-content section .title {
-          font-size: 30px;
-        }
-        .about-page-content .creator-profile,
-        .about-page-content .skills-content-grid,
-        .about-page-content .contact-content-grid {
+        .about-page-content .contact-form .field-group {
           flex-direction: column;
-        }
-        .about-page-content .creator-info .social-icons {
-          text-align: center;
-        }
-        .about-page-content .skills-list {
-          grid-template-columns: 1fr;
-        }
-        .about-page-content .contact-form button {
-          width: 100%;
-        }
-        .about-page-content .home {
-          margin: -1.5rem -1.5rem 0;
-        }
-        .about-page-content .card-panel {
-          padding: 1.5rem;
+          gap: 1rem;
         }
       }
     </style>
@@ -2041,7 +2011,6 @@
               const itemText = item.textContent.toLowerCase();
               const isMatch = itemText.includes(searchTerm);
 
-              // CRITICAL FIX: Hide non-matches instead of showing them.
               item.style.display = isMatch ? "" : "none";
 
               if (isMatch) {
@@ -2147,11 +2116,13 @@
             themeToggle.textContent = theme === "dark" ? "☀️" : "🌙";
           localStorage.setItem("theme", theme);
         };
-        themeToggle.addEventListener("click", () =>
-          applyTheme(
-            document.body.classList.contains("dark-theme") ? "light" : "dark"
-          )
-        );
+        if (themeToggle) {
+          themeToggle.addEventListener("click", () =>
+            applyTheme(
+              document.body.classList.contains("dark-theme") ? "light" : "dark"
+            )
+          );
+        }
         applyTheme(localStorage.getItem("theme") || "light");
       }
       function initMobileMenu() {
@@ -2165,16 +2136,17 @@
           document.body.classList.toggle("no-scroll", isOpen);
           hamburger.setAttribute("aria-expanded", String(isOpen));
         };
-        hamburger.addEventListener("click", toggleMenu);
-        overlay.addEventListener("click", toggleMenu);
-        nav
-          .querySelectorAll("a")
-          .forEach((link) =>
-            link.addEventListener(
-              "click",
-              () => nav.classList.contains("open") && toggleMenu()
-            )
-          );
+        if (hamburger) hamburger.addEventListener("click", toggleMenu);
+        if (overlay) overlay.addEventListener("click", toggleMenu);
+        if (nav)
+          nav
+            .querySelectorAll("a")
+            .forEach((link) =>
+              link.addEventListener(
+                "click",
+                () => nav.classList.contains("open") && toggleMenu()
+              )
+            );
       }
       let updateLanguageSwitcherUI;
       function initLanguageSwitcher() {
@@ -2202,7 +2174,7 @@
               );
         };
         const toggleDropdown = (show) => {
-          if (!dropdown) return;
+          if (!dropdown || !btn) return;
           const toShow =
             typeof show === "boolean"
               ? show
