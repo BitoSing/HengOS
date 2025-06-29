@@ -3,495 +3,339 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprehensive Interest Calculator</title>
+    <title>Financial & Tax Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Khmer:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #063969;
-            --secondary-color: #2575fc;
-            --primary-focus: #063969;
-            --primary-light: #e8f0fe;
-            --heading-color: #1a1a1a;
-            --success: #198754;
-            --danger: #c65d57;
-            --dark-text: #1a1a1a;
-            --text-color: #1a1a1a;
-            --light-text: #555;
-            --bg-color: #f0f2f5;
-            --card-bg: #ffffff;
-            --input-bg: #ffffff;
-            --border-color: #ddd;
-            --border-radius: 16px;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s ease;
+            --primary-color: #063969; --secondary-color: #2575fc; --primary-focus: #063969;
+            --primary-light: #e8f0fe; --heading-color: #1a1a1a; --success: #198754;
+            --warning-bg: #fff3cd; --warning-border: #ffeeba; --warning-text: #856404;
+            --text-color: #1a1a1a; --light-text: #555; --bg-color: #f0f2f5; --card-bg: #ffffff;
+            --input-bg: #ffffff; --border-color: #ddd; --border-radius: 16px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); --transition: all 0.3s ease;
         }
-
         body.dark-mode {
-            --bg-color: #121212;
-            --card-bg: #2a2a2a;
-            --text-color: #e0e0e0;
-            --heading-color: #e0e0e0;
-            --light-text: #a0a0a0;
-            --border-color: #444;
-            --input-bg: #1e1e1e;
-            --primary-light: rgba(37, 117, 252, 0.12);
-            --success: #22c55e;
-            --danger: #dc3545;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            --bg-color: #121212; --card-bg: #2a2a2a; --text-color: #e0e0e0;
+            --heading-color: #e0e0e0; --light-text: #a0a0a0; --border-color: #444;
+            --input-bg: #1e1e1e; --primary-light: rgba(37, 117, 252, 0.12);
+            --success: #22c55e; --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            --warning-bg: #33270f; --warning-border: #544519; --warning-text: #ffce53;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
         .font-inter { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
-        .font-khmer { font-family: 'Noto Sans Khmer', 'Leelawadee UI', 'Khmer OS', 'Khmer UI', 'Inter', sans-serif; }
+        .font-khmer { font-family: 'Noto Sans Khmer', 'Khmer UI', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); transition: background-color 0.3s, color 0.3s; min-height: 100vh; }
+        
+        .view-container { display: none; }
+        .view-container.active-view { display: block; animation: viewFadeIn 0.5s ease; }
+        @keyframes viewFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        body {
-            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s;
-            min-height: 100vh;
-        }
-        
-        .container { max-width: 95%; margin: 0 auto; padding: 2rem 1rem; }
-        header { text-align: center; margin-bottom: 2.5rem; }
-        h1 {
-            font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--heading-color);
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .subtitle { color: var(--light-text); font-size: 1.1rem; font-weight: 400; }
-        
         .page-controls { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2.5rem 0; gap: 1rem; }
-        .back-btn {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: #fff; font-weight: 600; border: none; border-radius: 50px;
-            padding: 0.65rem 1.3rem; font-size: 0.95rem; cursor: pointer; text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: var(--transition);
-        }
+        .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); color: #fff; font-weight: 600; border: none; border-radius: 50px; padding: 0.65rem 1.3rem; font-size: 0.95rem; cursor: pointer; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: var(--transition); visibility: visible; }
         .back-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
         .right-controls { display: flex; align-items: center; gap: 1rem; }
-        
-        .theme-toggle {
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50%;
-            width: 40px; height: 40px; cursor: pointer; color: var(--light-text);
-            font-size: 1.2rem; display: grid; place-items: center; transition: var(--transition); flex-shrink: 0;
-        }
+        .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50%; width: 40px; height: 40px; cursor: pointer; color: var(--light-text); font-size: 1.2rem; display: grid; place-items: center; transition: var(--transition); flex-shrink: 0; }
         .theme-toggle:hover { color: var(--primary-focus); transform: translateY(-2px); }
+        .container { max-width: 95%; margin: 0 auto; padding: 2rem 1rem; }
+        
+        #home-view .container { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 100px); }
+        #home-view header { margin-bottom: 3rem; text-align: center; }
+        #home-view h1 { font-size: 2.5rem; font-weight: 800; }
+        .navigation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; width: 100%; max-width: 700px; }
+        @media (max-width: 600px) { .navigation-grid { grid-template-columns: 1fr; } }
+        .nav-card { background: var(--card-bg); border-radius: var(--border-radius); padding: 2.5rem 2rem; box-shadow: var(--box-shadow); border: 1px solid var(--border-color); text-decoration: none; color: var(--text-color); display: flex; flex-direction: column; align-items: center; gap: 1rem; transition: var(--transition); cursor: pointer; }
+        .nav-card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-color: var(--primary-focus); }
+        body.dark-mode .nav-card:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.25); }
+        .nav-card svg { width: 48px; height: 48px; color: var(--primary-focus); }
+        
+        header { text-align: center; margin-bottom: 2.5rem; }
+        h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--heading-color); background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: var(--light-text); font-size: 1.1rem; }
 
-        .calculator-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 2rem; }
-        @media (max-width: 900px) { .calculator-grid { grid-template-columns: 1fr; } }
+        /* --- MODIFIED: Two-Column Layout --- */
+        .two-column-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2.5rem; align-items: flex-start; }
+        .info-column { position: sticky; top: 2rem; }
+        .info-panel {
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: var(--border-radius); padding: 1.5rem;
+            max-height: calc(100vh - 14rem); /* Fixed height with space for header/title */
+            overflow-y: auto;
+        }
+        .info-panel::-webkit-scrollbar { width: 8px; }
+        .info-panel::-webkit-scrollbar-track { background: transparent; }
+        .info-panel::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 10px; border: 2px solid var(--card-bg); }
+        .info-panel::-webkit-scrollbar-thumb:hover { background-color: var(--light-text); }
+        
+        .calculator-grid { display: grid; gap: 2rem; }
+        /* Left Column: Multi-column responsive grid */
+        .calculators-column .calculator-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+        /* Right Column: Single column stack inside the panel */
+        .info-panel .calculator-grid { grid-template-columns: 1fr; }
+        
+        /* De-style the cards inside the info panel for a seamless look */
+        .info-panel .calculator-card {
+            background: transparent; box-shadow: none; padding: 0;
+            padding-bottom: 1.5rem; margin-bottom: 1.5rem;
+            border: none; border-bottom: 1px solid var(--border-color);
+            border-radius: 0;
+        }
+        .info-panel .calculator-card:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 
-        .calculator-card {
-            background: var(--card-bg); border-radius: var(--border-radius); padding: 2rem;
-            box-shadow: var(--box-shadow); border: 1px solid var(--border-color);
-            transition: var(--transition); display: flex; flex-direction: column; margin: 0 auto;
+        @media (max-width: 1024px) {
+            .two-column-layout { grid-template-columns: 1fr; }
+            .info-column { position: static; }
+            .info-panel { max-height: none; overflow-y: visible; }
         }
-
-        h2 {
-            font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--heading-color);
-            display: flex; align-items: center; gap: 0.75rem; font-weight: 600;
-        }
-        .icon-container {
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-light);
-        }
+        
+        .calculator-card { background: var(--card-bg); border-radius: var(--border-radius); padding: 2rem; box-shadow: var(--box-shadow); border: 1px solid var(--border-color); transition: var(--transition); display: flex; flex-direction: column; }
+        h2 { font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--heading-color); display: flex; align-items: center; gap: 0.75rem; font-weight: 600; }
+        .icon-container { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-light); }
         h2 svg { width: 20px; height: 20px; color: var(--primary-focus); }
         body.dark-mode h2 svg { color: var(--secondary-color); }
-
         .input-group { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
-        .input-field label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark-text); font-size: 0.9rem; }
+        .input-field label { display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem; }
         body.dark-mode .input-field label { color: var(--text-color); }
-
-        input[type="text"], select {
-            width: 100%; padding: 10px 12px; font-size: 0.95rem; border: 1px solid var(--border-color);
-            border-radius: 8px; background-color: var(--input-bg); color: var(--text-color);
-            font-family: 'Inter', sans-serif; transition: var(--transition);
-        }
+        input[type="text"], input[type="number"], select { width: 100%; padding: 10px 12px; font-size: 0.95rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--input-bg); color: var(--text-color); font-family: 'Inter', sans-serif; transition: var(--transition); }
         input:focus, select:focus { outline: none; border-color: var(--primary-focus); box-shadow: 0 0 0 3px var(--primary-light); }
-        input.input-error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25); }
-        
-        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;}
-        @media (max-width: 500px) { .input-row { grid-template-columns: 1fr; } }
-        
-        .results {
-            background-color: var(--primary-light); border-radius: var(--border-radius);
-            padding: 1.25rem; margin-top: auto; border: 1px solid rgba(37, 117, 252, 0.12);
-        }
+        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .results { background-color: var(--primary-light); border-radius: var(--border-radius); padding: 1.25rem; margin-top: auto; border: 1px solid rgba(37, 117, 252, 0.12); }
         body.dark-mode .results { background-color: rgba(37, 117, 252, 0.12); border-color: rgba(37, 117, 252, 0.18); }
         .result-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; }
         .result-item:not(:last-child) { border-bottom: 1px solid rgba(37, 117, 252, 0.15); }
-        body.dark-mode .result-item:not(:last-child) { border-bottom-color: rgba(37, 117, 252, 0.2); }
         .result-label { font-weight: 500; font-size: 0.9rem; color: var(--light-text); }
         .result-value { font-weight: 600; font-size: 1rem; color: var(--text-color); }
-        
-        /* --- NEW FORMULA SECTION STYLING --- */
-        .section-title {
-            text-align: center; margin: 3rem 0 1.5rem 0; font-size: 1.5rem;
-            font-weight: 700; color: var(--heading-color);
-        }
-        .formula-card {
-            background-color: var(--bg-color);
-            padding: 1.5rem;
-        }
-        body.dark-mode .formula-card { background-color: #1e1e1e; }
-        .formula-card h3 {
-            font-size: 1rem; font-weight: 600; color: var(--heading-color);
-            margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color);
-        }
-        .formula-box {
-            background: var(--card-bg); padding: 1rem; border-left: 4px solid var(--primary-focus);
-            margin-bottom: 1.25rem; border-radius: 8px; font-family: 'Lucida Console', Monaco, monospace;
-            font-size: 1rem; color: var(--text-color); text-align: center;
-        }
-        .variable-table { width: 100%; border-collapse: collapse; margin-bottom: 1.25rem; font-size: 0.9rem; }
-        .variable-table td { padding: 0.6rem; border: 1px solid var(--border-color); }
+        .section-title { text-align: center; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700; color: var(--heading-color); }
+        .formula-card, .info-card { background-color: var(--bg-color); padding: 1.5rem; }
+        body.dark-mode .formula-card, body.dark-mode .info-card { background-color: #1e1e1e; }
+        .formula-card h3, .info-card h3 { font-size: 1rem; font-weight: 600; color: var(--heading-color); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); }
+        .formula-box { background: var(--card-bg); padding: 1rem; border-left: 4px solid var(--primary-focus); margin-bottom: 1.25rem; border-radius: 8px; font-family: 'Lucida Console', Monaco, monospace; font-size: 1rem; color: var(--text-color); text-align: center; }
+        .variable-table, .tax-table { width: 100%; border-collapse: collapse; margin-bottom: 1.25rem; font-size: 0.9rem; }
+        .variable-table td, .tax-table td, .tax-table th { padding: 0.6rem; border: 1px solid var(--border-color); }
         .variable-table td:first-child { font-weight: 700; font-family: 'Lucida Console', Monaco, monospace; text-align: center; width: 20%; background-color: var(--primary-light); }
-        
-        .example-title {
-            font-weight: 700; font-size: 0.95rem; color: var(--heading-color);
-            margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;
-        }
+        .tax-table th { font-weight: 600; background-color: var(--primary-light); text-align: left;}
+        .tax-table td:first-child { text-align: left; }
+        .tax-table td:not(:first-child) { text-align: right; }
+        .example-title { font-weight: 700; font-size: 0.95rem; color: var(--heading-color); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
         .example-icon { color: var(--success); }
-        .example-content { font-size: 0.9rem; line-height: 1.6; color: var(--light-text); }
-        .calculation-step {
-            font-family: 'Lucida Console', Monaco, monospace; background-color: var(--primary-light);
-            padding: 0.6rem 0.85rem; border-radius: 6px; font-size: 0.9rem; margin-top: 0.75rem;
-            display: block; color: var(--text-color); word-wrap: break-word;
-        }
-
-        /* --- LANGUAGE DROPDOWN STYLING --- */
+        .example-content, .info-content, .info-list li { font-size: 0.9rem; line-height: 1.6; color: var(--light-text); }
+        .info-list { padding-left: 1.25rem; margin-top: 1rem; }
+        .calculation-step { font-family: 'Lucida Console', Monaco, monospace; background-color: var(--primary-light); padding: 0.6rem 0.85rem; border-radius: 6px; font-size: 0.9rem; margin-top: 0.75rem; display: block; color: var(--text-color); word-wrap: break-word; }
+        .disclaimer-card { background-color: var(--warning-bg); border: 1px solid var(--warning-border); color: var(--warning-text); font-size: 0.9rem; line-height: 1.5; padding: 1rem 1.5rem; border-radius: var(--border-radius); margin-bottom: 2rem; }
+        .disclaimer-card strong { color: var(--warning-text); font-weight: 700; }
         .language-selector { position: relative; display: inline-block; }
-        .language-btn {
-            background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color);
-            border-radius: 50px; padding: 8px 16px 8px 12px; font-size: 14px; font-weight: 500;
-            cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition);
-        }
-        .language-btn:hover, .language-selector.open .language-btn { background-color: var(--primary-light); color: var(--primary-focus); }
+        .language-btn { background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 50px; padding: 8px 16px 8px 12px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition); }
         .language-btn .arrow { margin-left: auto; transition: transform 0.2s; }
         .language-selector.open .language-btn .arrow { transform: rotate(180deg); }
-        .dropdown-content {
-            display: none; position: absolute; right: 0; background-color: var(--card-bg);
-            min-width: 170px; border-radius: 12px; box-shadow: var(--box-shadow); z-index: 10;
-            margin-top: 8px; overflow: hidden; border: 1px solid var(--border-color);
-            animation: fadeIn 0.18s ease;
-        }
+        .dropdown-content { display: none; position: absolute; right: 0; background-color: var(--card-bg); min-width: 170px; border-radius: 12px; box-shadow: var(--box-shadow); z-index: 10; margin-top: 8px; overflow: hidden; border: 1px solid var(--border-color); animation: fadeIn 0.18s ease; }
         .language-selector.open .dropdown-content { display: block; }
-        .language-option {
-            color: var(--text-color); padding: 12px 18px 12px 16px; display: flex; align-items: center;
-            gap: 10px; font-size: 14px; background: none; border: none; width: 100%;
-            text-align: left; cursor: pointer; transition: background 0.18s;
-        }
+        .language-option { color: var(--text-color); padding: 12px 18px 12px 16px; display: flex; align-items: center; gap: 10px; font-size: 14px; background: none; border: none; width: 100%; text-align: left; cursor: pointer; transition: background 0.18s; }
         .language-option:hover { background-color: var(--primary-light); }
         .language-flag { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px);} to { opacity: 1; transform: translateY(0);} }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="font-inter">
+    
     <div class="page-controls">
-        <a href="#" class="back-btn">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 0.2rem;"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg>
+        <a href="index.html" class="back-btn nav-link" data-target="">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg>
             <span data-translate-key="back_to_home"></span>
         </a>
         <div class="right-controls">
-            <div class="language-selector" id="langSelector">
-                <button class="language-btn" id="langBtn" type="button">
-                    <img src="https://flagcdn.com/us.svg" class="language-flag" id="langFlag" alt="language">
-                    <span id="langLabel" class="font-inter">English</span>
-                    <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-                <div class="dropdown-content" id="langDropdown"></div>
-            </div>
+            <div class="language-selector" id="langSelector"></div>
             <button class="theme-toggle" id="themeToggle">🌓</button>
         </div>
     </div>
     
-    <div class="container">
-        <header>
-            <h1 data-translate-key="main_title"></h1>
-            <p class="subtitle" data-translate-key="subtitle"></p>
-        </header>
-
-        <div class="calculator-grid">
-            <!-- Simple Interest Calculator -->
-            <div class="calculator-card">
-                <h2>
-                    <span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.5 14.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></span>
-                    <span data-translate-key="si_title"></span>
-                </h2>
-                <div class="input-group">
-                    <div class="input-field"><label for="si-principal" data-translate-key="principal_label"></label><input type="text" id="si-principal" value="1000"></div>
-                    <div class="input-row">
-                        <div class="input-field"><label for="si-rate" data-translate-key="rate_label"></label><input type="text" id="si-rate" value="5"></div>
-                        <div class="input-field"><label for="si-time" data-translate-key="time_label"></label><input type="text" id="si-time" value="3"></div>
-                    </div>
+    <!-- ====== HOME VIEW ====== -->
+    <div id="home-view" class="view-container active-view">
+        <div class="container">
+            <header>
+                <h1>Financial & Tax Hub</h1>
+                <p class="subtitle">Your one-stop tool for financial calculations.</p>
+            </header>
+            <div class="navigation-grid">
+                <div class="nav-card nav-link" data-target="interest-view">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                    <h2 data-translate-key="nav_interest_title"></h2>
+                    <p data-translate-key="nav_interest_desc"></p>
                 </div>
-                <div class="results">
-                    <div class="result-item"><span class="result-label" data-translate-key="total_interest_label"></span><span class="result-value" id="si-result-interest"></span></div>
-                    <div class="result-item"><span class="result-label" data-translate-key="total_amount_label"></span><span class="result-value" id="si-result-total"></span></div>
-                </div>
-            </div>
-
-            <!-- Compound Interest Calculator -->
-            <div class="calculator-card">
-                <h2>
-                    <span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></span>
-                    <span data-translate-key="ci_title"></span>
-                </h2>
-                <div class="input-group">
-                     <div class="input-field"><label for="ci-principal" data-translate-key="principal_label"></label><input type="text" id="ci-principal" value="1000"></div>
-                    <div class="input-row">
-                        <div class="input-field"><label for="ci-rate" data-translate-key="rate_label"></label><input type="text" id="ci-rate" value="5"></div>
-                        <div class="input-field"><label for="ci-time" data-translate-key="time_label"></label><input type="text" id="ci-time" value="3"></div>
-                    </div>
-                    <div class="input-field">
-                        <label for="ci-compounding" data-translate-key="compounding_label"></label>
-                        <select id="ci-compounding">
-                            <option value="1" data-translate-key="annually"></option><option value="2" data-translate-key="semi_annually"></option><option value="4" selected data-translate-key="quarterly"></option>
-                            <option value="12" data-translate-key="monthly"></option><option value="52" data-translate-key="weekly"></option><option value="365" data-translate-key="daily"></option>
-                            <option value="continuous" data-translate-key="continuously"></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="results">
-                    <div class="result-item"><span class="result-label" data-translate-key="total_interest_label"></span><span class="result-value" id="ci-result-interest"></span></div>
-                    <div class="result-item"><span class="result-label" data-translate-key="total_amount_label"></span><span class="result-value" id="ci-result-total"></span></div>
-                </div>
-            </div>
-
-            <!-- Effective Annual Rate (EAR) Calculator -->
-            <div class="calculator-card">
-                <h2>
-                    <span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg></span>
-                    <span data-translate-key="ear_title"></span>
-                </h2>
-                <div class="input-group">
-                    <div class="input-field"><label for="ear-nominal-rate" data-translate-key="nominal_rate_label"></label><input type="text" id="ear-nominal-rate" value="5"></div>
-                    <div class="input-field">
-                        <label for="ear-compounding" data-translate-key="compounding_label"></label>
-                        <select id="ear-compounding">
-                            <option value="1" data-translate-key="annually"></option><option value="2" data-translate-key="semi_annually"></option><option value="4" selected data-translate-key="quarterly"></option>
-                            <option value="12" data-translate-key="monthly"></option><option value="52" data-translate-key="weekly"></option><option value="365" data-translate-key="daily"></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="results">
-                    <div class="result-item"><span class="result-label" data-translate-key="ear_label"></span><span class="result-value" id="ear-result-rate"></span></div>
+                <div class="nav-card nav-link" data-target="tax-view">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    <h2 data-translate-key="nav_tax_title"></h2>
+                    <p data-translate-key="nav_tax_desc"></p>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- NEW: Standalone Formula Section -->
-        <h2 class="section-title" data-translate-key="formulas_section_title"></h2>
-        <div class="calculator-grid">
-            <!-- Formula Card: Simple Interest -->
-            <div class="calculator-card formula-card">
-                <h3 data-translate-key="si_title"></h3>
-                <div class="formula-box">Interest = P × R × T</div>
-                <table class="variable-table">
-                    <tr><td>P</td><td data-translate-key="var_p_desc"></td></tr>
-                    <tr><td>R</td><td data-translate-key="var_r_desc"></td></tr>
-                    <tr><td>T</td><td data-translate-key="var_t_desc"></td></tr>
-                </table>
-                <div class="example-title"><span class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z"/></svg></span><span data-translate-key="example"></span></div>
-                <div class="example-content" data-translate-key="si_example_desc"></div>
-                <code class="calculation-step">Interest = 1000 × 0.05 × 2 = $100</code>
+    <!-- ====== INTEREST VIEW ====== -->
+    <div id="interest-view" class="view-container">
+        <div class="container">
+            <header><h1 data-translate-key="interest_main_title"></h1><p class="subtitle" data-translate-key="interest_subtitle"></p></header>
+            <div class="two-column-layout">
+                <div class="calculators-column">
+                    <h2 class="section-title" data-translate-key="interest_calculators_title"></h2>
+                    <div class="calculator-grid">
+                        <div class="calculator-card"><h2><span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.5 14.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></span><span data-translate-key="si_title"></span></h2><div class="input-group"><div class="input-field"><label for="si-principal" data-translate-key="principal_label"></label><input type="text" id="si-principal" value="1000"></div><div class="input-row"><div class="input-field"><label for="si-rate" data-translate-key="rate_label"></label><input type="text" id="si-rate" value="5"></div><div class="input-field"><label for="si-time" data-translate-key="time_label"></label><input type="text" id="si-time" value="3"></div></div></div><div class="results"><div class="result-item"><span class="result-label" data-translate-key="total_interest_label"></span><span class="result-value" id="si-result-interest"></span></div><div class="result-item"><span class="result-label" data-translate-key="total_amount_label"></span><span class="result-value" id="si-result-total"></span></div></div></div>
+                        <div class="calculator-card"><h2><span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></span><span data-translate-key="ci_title"></span></h2><div class="input-group"><div class="input-field"><label for="ci-principal" data-translate-key="principal_label"></label><input type="text" id="ci-principal" value="1000"></div><div class="input-row"><div class="input-field"><label for="ci-rate" data-translate-key="rate_label"></label><input type="text" id="ci-rate" value="5"></div><div class="input-field"><label for="ci-time" data-translate-key="time_label"></label><input type="text" id="ci-time" value="3"></div></div><div class="input-field"><label for="ci-compounding" data-translate-key="compounding_label"></label><select id="ci-compounding"><option value="1" data-translate-key="annually"></option><option value="2" data-translate-key="semi_annually"></option><option value="4" selected data-translate-key="quarterly"></option><option value="12" data-translate-key="monthly"></option><option value="52" data-translate-key="weekly"></option><option value="365" data-translate-key="daily"></option><option value="continuous" data-translate-key="continuously"></option></select></div></div><div class="results"><div class="result-item"><span class="result-label" data-translate-key="total_interest_label"></span><span class="result-value" id="ci-result-interest"></span></div><div class="result-item"><span class="result-label" data-translate-key="total_amount_label"></span><span class="result-value" id="ci-result-total"></span></div></div></div>
+                        <div class="calculator-card"><h2><span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg></span><span data-translate-key="ear_title"></span></h2><div class="input-group"><div class="input-field"><label for="ear-nominal-rate" data-translate-key="nominal_rate_label"></label><input type="text" id="ear-nominal-rate" value="5"></div><div class="input-field"><label for="ear-compounding" data-translate-key="compounding_label"></label><select id="ear-compounding"><option value="1" data-translate-key="annually"></option><option value="2" data-translate-key="semi_annually"></option><option value="4" selected data-translate-key="quarterly"></option><option value="12" data-translate-key="monthly"></option><option value="52" data-translate-key="weekly"></option><option value="365" data-translate-key="daily"></option></select></div></div><div class="results"><div class="result-item"><span class="result-label" data-translate-key="ear_label"></span><span class="result-value" id="ear-result-rate"></span></div></div></div>
+                    </div>
+                </div>
+                <div class="info-column">
+                    <h2 class="section-title" data-translate-key="info_section_title"></h2>
+                    <div class="info-panel">
+                        <div class="calculator-grid">
+                            <div class="calculator-card formula-card"><h3 data-translate-key="si_title"></h3><div class="formula-box">Interest = P × R × T</div><table class="variable-table"><tr><td>P</td><td data-translate-key="var_p_desc"></td></tr><tr><td>R</td><td data-translate-key="var_r_desc"></td></tr><tr><td>T</td><td data-translate-key="var_t_desc"></td></tr></table><div class="example-title"><span class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z"/></svg></span><span data-translate-key="example"></span></div><div class="example-content" data-translate-key="si_example_desc"></div><code class="calculation-step">Interest = 1000 × 0.05 × 2 = $100</code></div>
+                            <div class="calculator-card formula-card"><h3 data-translate-key="ci_title"></h3><div class="formula-box">Amount = P(1 + R/n)ⁿᵗ</div><table class="variable-table"><tr><td>P</td><td data-translate-key="var_p_desc"></td></tr><tr><td>R</td><td data-translate-key="var_r_desc"></td></tr><tr><td>t</td><td data-translate-key="var_t_desc"></td></tr><tr><td>n</td><td data-translate-key="var_n_desc"></td></tr></table><div class="example-title"><span class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z"/></svg></span><span data-translate-key="example"></span></div><div class="example-content" data-translate-key="ci_example_desc"></div><code class="calculation-step">Amount = 1000(1 + 0.05/4)⁽⁴*²⁾ = $1,104.49</code></div>
+                            <div class="calculator-card formula-card"><h3 data-translate-key="ear_title"></h3><div class="formula-box">EAR = (1 + R/n)ⁿ - 1</div><table class="variable-table"><tr><td>R</td><td data-translate-key="var_r_desc_nominal"></td></tr><tr><td>n</td><td data-translate-key="var_n_desc"></td></tr></table><div class="example-title"><span class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z"/></svg></span><span data-translate-key="example"></span></div><div class="example-content" data-translate-key="ear_example_desc"></div><code class="calculation-step">EAR = (1 + 0.05/4)⁴ - 1 = 0.050945 ≈ 5.095%</code></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <!-- Formula Card: Compound Interest -->
-            <div class="calculator-card formula-card">
-                <h3 data-translate-key="ci_title"></h3>
-                <div class="formula-box">Amount = P(1 + R/n)ⁿᵗ</div>
-                <table class="variable-table">
-                    <tr><td>P</td><td data-translate-key="var_p_desc"></td></tr>
-                    <tr><td>R</td><td data-translate-key="var_r_desc"></td></tr>
-                    <tr><td>t</td><td data-translate-key="var_t_desc"></td></tr>
-                    <tr><td>n</td><td data-translate-key="var_n_desc"></td></tr>
-                </table>
-                <div class="example-title"><span class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z"/></svg></span><span data-translate-key="example"></span></div>
-                <div class="example-content" data-translate-key="ci_example_desc"></div>
-                <code class="calculation-step">Amount = 1000(1 + 0.05/4)⁽⁴*²⁾ = $1,104.49</code>
-            </div>
-
-            <!-- Formula Card: Effective Annual Rate -->
-            <div class="calculator-card formula-card">
-                <h3 data-translate-key="ear_title"></h3>
-                <div class="formula-box">EAR = (1 + R/n)ⁿ - 1</div>
-                <table class="variable-table">
-                    <tr><td>R</td><td data-translate-key="var_r_desc_nominal"></td></tr>
-                    <tr><td>n</td><td data-translate-key="var_n_desc"></td></tr>
-                </table>
-                <div class="example-title"><span class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z"/></svg></span><span data-translate-key="example"></span></div>
-                <div class="example-content" data-translate-key="ear_example_desc"></div>
-                <code class="calculation-step">EAR = (1 + 0.05/4)⁴ - 1 = 0.050945 ≈ 5.095%</code>
+        </div>
+    </div>
+    
+    <!-- ====== TAX VIEW ====== -->
+    <div id="tax-view" class="view-container">
+        <div class="container">
+            <header><h1 data-translate-key="tax_main_title"></h1><p class="subtitle" data-translate-key="tax_subtitle"></p></header>
+            <div class="two-column-layout">
+                <div class="calculators-column">
+                    <h2 class="section-title" data-translate-key="tax_calculators_title"></h2>
+                    <div class="disclaimer-card"><strong data-translate-key="disclaimer_title"></strong> <span data-translate-key="disclaimer_text"></span></div>
+                    <div class="calculator-grid">
+                        <div class="calculator-card"><h2><span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></span><span data-translate-key="salary_tax_title"></span></h2><div class="input-group"><div class="input-field"><label for="salary-gross" data-translate-key="gross_salary_label"></label><input type="number" id="salary-gross" value="3000000"></div><div class="input-field"><label for="salary-dependents" data-translate-key="dependents_label"></label><input type="number" id="salary-dependents" value="0" min="0"></div></div><div class="results"><div class="result-item"><span class="result-label" data-translate-key="taxable_salary_label"></span><span class="result-value" id="salary-tax-taxable"></span></div><div class="result-item"><span class="result-label" data-translate-key="monthly_tax_label"></span><span class="result-value" id="salary-tax-amount"></span></div></div></div>
+                        <div class="calculator-card"><h2><span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 4H6C4.9 4 4 4.9 4 6v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H6V6h12v12zM8 12h8v2H8zm0-4h8v2H8z"/></svg></span><span data-translate-key="vat_title"></span></h2><div class="input-group"><div class="input-field"><label for="vat-amount" data-translate-key="amount_excl_vat_label"></label><input type="number" id="vat-amount" value="100000"></div></div><div class="results"><div class="result-item"><span class="result-label" data-translate-key="vat_amount_label"></span><span class="result-value" id="vat-result-amount"></span></div><div class="result-item"><span class="result-label" data-translate-key="total_incl_vat_label"></span><span class="result-value" id="vat-result-total"></span></div></div></div>
+                        <div class="calculator-card"><h2><span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="m12 3-9 4.5v9l9 4.5 9-4.5v-9L12 3zm0 13.5-5-2.5v-3l5 2.5v3zm0-4.5-5-2.5 5-2.5 5 2.5-5 2.5z"/></svg></span><span data-translate-key="property_tax_title"></span></h2><div class="input-group"><div class="input-field"><label for="property-value" data-translate-key="property_value_label"></label><input type="number" id="property-value" value="100000"></div></div><div class="results"><div class="result-item"><span class="result-label" data-translate-key="transfer_tax_label"></span><span class="result-value" id="property-tax-amount"></span></div></div></div>
+                    </div>
+                </div>
+                <div class="info-column">
+                    <h2 class="section-title" data-translate-key="tax_info_section_title"></h2>
+                    <div class="info-panel">
+                        <div class="calculator-grid">
+                            <div class="calculator-card info-card"><h3 data-translate-key="kh_tax_overview_title"></h3><p class="info-content" data-translate-key="kh_tax_overview_text"></p><ul class="info-list"><li data-translate-key="kh_tax_tos"></li><li data-translate-key="kh_tax_cit"></li><li data-translate-key="kh_tax_vat"></li><li data-translate-key="kh_tax_wht"></li><li data-translate-key="kh_tax_property"></li></ul></div>
+                            <div class="calculator-card info-card"><h3 data-translate-key="kh_tos_rates_title"></h3><p class="info-content" data-translate-key="kh_tos_rates_desc"></p><table class="tax-table"><thead><tr><th data-translate-key="th_taxable_salary"></th><th data-translate-key="th_rate"></th><th data-translate-key="th_deduction"></th></tr></thead><tbody><tr><td>0 - 1,500,000</td><td>0%</td><td>75,000</td></tr><tr><td>1,500,001 - 2,000,000</td><td>5%</td><td>175,000</td></tr><tr><td>2,000,001 - 8,500,000</td><td>10%</td><td>600,000</td></tr><tr><td>8,500,001 - 12,500,000</td><td>15%</td><td>1,225,000</td></tr><tr><td>> 12,500,000</td><td>20%</td><td>1,225,000</td></tr></tbody></table></div>
+                            <div class="calculator-card info-card"><h3 data-translate-key="global_tax_title"></h3><ul class="info-list"><li data-translate-key="tax_concept_progressive"></li><li data-translate-key="tax_concept_regressive"></li><li data-translate-key="tax_concept_flat"></li><li data-translate-key="tax_concept_consumption"></li></ul></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        const languageOptions = [
-            { code: 'en', label: 'English', flag: 'https://flagcdn.com/us.svg', fontClass: 'font-inter' },
-            { code: 'km', label: 'ភាសាខ្មែរ', flag: 'https://flagcdn.com/kh.svg', fontClass: 'font-khmer' }
-        ];
-        
+        const CAMBODIA_SALARY_TAX_BRACKETS = [{ threshold: 1500000, rate: 0.00, deduction: 0 }, { threshold: 2000000, rate: 0.05, deduction: 75000 }, { threshold: 8500000, rate: 0.10, deduction: 175000 }, { threshold: 12500000, rate: 0.15, deduction: 600000 }, { threshold: Infinity, rate: 0.20, deduction: 1225000 }];
+        const DEPENDENT_REBATE = 150000;
+        const languageOptions = [{ code: 'en', label: 'English', flag: 'https://flagcdn.com/us.svg', fontClass: 'font-inter' }, { code: 'km', label: 'ភាសាខ្មែរ', flag: 'https://flagcdn.com/kh.svg', fontClass: 'font-khmer' }];
         const translations = {
             'back_to_home': { en: 'Back to Home', km: 'ត្រឡប់ទៅទំព័រដើម' },
-            'main_title': { en: 'Comprehensive Interest Calculator', km: 'កម្មវិធីគណនាការប្រាក់គ្រប់ជ្រុងជ្រោយ' },
-            'subtitle': { en: 'Tools for simple, compound, and effective rate calculations', km: 'ឧបករណ៍សម្រាប់គណនាការប្រាក់ធម្មតា, ការប្រាក់ផ្សំ, និងអត្រាពិតប្រាកដ' },
-            'formulas_section_title': { en: 'How The Formulas Work', km: 'របៀបដែលរូបមន្តដំណើរការ' },
-            'si_title': { en: 'Simple Interest', km: 'ការប្រាក់ធម្មតា' },
-            'ci_title': { en: 'Compound Interest', km: 'ការប្រាក់ផ្សំ' },
-            'ear_title': { en: 'Effective Annual Rate (EAR)', km: 'អត្រាការប្រាក់ប្រចាំឆ្នាំពិតប្រាកដ' },
-            'principal_label':    { en: 'Principal ($)', km: 'ប្រាក់ដើម ($)' },
-            'rate_label':         { en: 'Annual Rate (%)', km: 'អត្រាប្រចាំឆ្នាំ (%)' },
-            'time_label':         { en: 'Time (Years)', km: 'រយៈពេល (ឆ្នាំ)' },
-            'compounding_label':  { en: 'Compounding Frequency', km: 'ប្រេកង់ផ្សំ' },
-            'nominal_rate_label': { en: 'Nominal Annual Rate (%)', km: 'អត្រាកំណត់ប្រចាំឆ្នាំ (%)' },
-            'total_interest_label': { en: 'Total Interest:', km: 'ការប្រាក់សរុប:' },
-            'total_amount_label': { en: 'Total Amount:', km: 'ចំនួនសរុប:' },
-            'ear_label': { en: 'Effective Annual Rate:', km: 'អត្រាការប្រាក់ពិតប្រាកដ:' },
-            'annually': { en: 'Annually', km: 'ប្រចាំឆ្នាំ' },
-            'semi_annually': { en: 'Semi-annually', km: 'ប្រចាំឆមាស' },
-            'quarterly': { en: 'Quarterly', km: 'ប្រចាំត្រីមាស' },
-            'monthly': { en: 'Monthly', km: 'ប្រចាំខែ' },
-            'weekly': { en: 'Weekly', km: 'ប្រចាំសប្តាហ៍' },
-            'daily': { en: 'Daily', km: 'ប្រចាំថ្ងៃ' },
-            'continuously': { en: 'Continuously', km: 'បន្តเนื่อง' },
-            'var_p_desc': { en: 'Principal amount', km: 'ចំនួនប្រាក់ដើម' },
-            'var_r_desc': { en: 'Annual interest rate (decimal)', km: 'អត្រាការប្រាក់ប្រចាំឆ្នាំ (ជាទសភាគ)' },
-            'var_r_desc_nominal': { en: 'Nominal annual rate (decimal)', km: 'អត្រាកំណត់ប្រចាំឆ្នាំ (ជាទសភាគ)' },
-            'var_t_desc': { en: 'Time in years', km: 'រយៈពេលគិតជាឆ្នាំ' },
-            'var_n_desc': { en: 'Compounding periods per year', km: 'ចំនួនដងនៃការផ្សំក្នុងមួយឆ្នាំ' },
-            'example': { en: 'Example', km: 'ឧទាហរណ៍' },
-            'si_example_desc': { en: 'If you invest $1,000 at a simple annual interest rate of 5% for 2 years:', km: 'ប្រសិនបើអ្នកវិនិយោគ $1,000 ក្នុងអត្រាការប្រាក់ធម្មតា 5% រយៈពេល 2 ឆ្នាំ:' },
-            'ci_example_desc': { en: 'If you invest $1,000 at 5% annual interest, compounded quarterly (4 times a year) for 2 years:', km: 'ប្រសិនបើអ្នកវិនិយោគ $1,000 ក្នុងអត្រា 5% ដោយផ្សំប្រចាំត្រីមាស (4 ដងក្នុងមួយឆ្នាំ) រយៈពេល 2 ឆ្នាំ:' },
-            'ear_example_desc': { en: 'For a nominal rate of 5% compounded quarterly, the actual rate you earn per year is:', km: 'សម្រាប់អត្រាកំណត់ 5% ដែលផ្សំប្រចាំត្រីមាស, អត្រាពិតប្រាកដដែលអ្នករកបានក្នុងមួយឆ្នាំគឺ:' }
+            'nav_interest_title': { en: 'Interest Calculators', km: 'គណនាការប្រាក់' }, 'nav_interest_desc': { en: 'Calculate simple, compound, and effective annual interest rates.', km: 'គណនាការប្រាក់ធម្មតា, ផ្សំ, និងអត្រាប្រចាំឆ្នាំពិតប្រាកដ។' },
+            'nav_tax_title': { en: 'Tax Calculators', km: 'គណនាពន្ធ' }, 'nav_tax_desc': { en: 'Estimate Cambodian salary tax, VAT, and property transfer tax.', km: 'ប៉ាន់ស្មានពន្ធលើប្រាក់បៀវត្ស, អតប, និងពន្ធប្រថាប់ត្រា។' },
+            'interest_main_title': { en: 'Interest Calculators', km: 'កម្មវិធីគណនាការប្រាក់' }, 'interest_subtitle': { en: 'Tools for simple, compound, and effective rate calculations', km: 'ឧបករណ៍សម្រាប់គណនាការប្រាក់ធម្មតា, ការប្រាក់ផ្សំ, និងអត្រាពិតប្រាកដ' },
+            'interest_calculators_title': { en: 'Interest Calculators', km: 'កម្មវិធីគណនាការប្រាក់' }, 'info_section_title': { en: 'How The Formulas Work', km: 'របៀបដែលរូបមន្តដំណើរការ' },
+            'si_title': { en: 'Simple Interest', km: 'ការប្រាក់ធម្មតា' }, 'ci_title': { en: 'Compound Interest', km: 'ការប្រាក់ផ្សំ' }, 'ear_title': { en: 'Effective Annual Rate (EAR)', km: 'អត្រាការប្រាក់ប្រចាំឆ្នាំពិតប្រាកដ' },
+            'principal_label': { en: 'Principal ($)', km: 'ប្រាក់ដើម ($)' }, 'rate_label': { en: 'Annual Rate (%)', km: 'អត្រាប្រចាំឆ្នាំ (%)' }, 'time_label': { en: 'Time (Years)', km: 'រយៈពេល (ឆ្នាំ)' },
+            'compounding_label': { en: 'Compounding Frequency', km: 'ប្រេកង់ផ្សំ' }, 'nominal_rate_label': { en: 'Nominal Annual Rate (%)', km: 'អត្រាកំណត់ប្រចាំឆ្នាំ (%)' },
+            'total_interest_label': { en: 'Total Interest:', km: 'ការប្រាក់សរុប:' }, 'total_amount_label': { en: 'Total Amount:', km: 'ចំនួនសរុប:' }, 'ear_label': { en: 'Effective Annual Rate:', km: 'អត្រាការប្រាក់ពិតប្រាកដ:' },
+            'annually': { en: 'Annually', km: 'ប្រចាំឆ្នាំ' }, 'semi_annually': { en: 'Semi-annually', km: 'ប្រចាំឆមាស' }, 'quarterly': { en: 'Quarterly', km: 'ប្រចាំត្រីមាស' }, 'monthly': { en: 'Monthly', km: 'ប្រចាំខែ' }, 'weekly': { en: 'Weekly', km: 'ប្រចាំសប្តាហ៍' }, 'daily': { en: 'Daily', km: 'ប្រចាំថ្ងៃ' }, 'continuously': { en: 'Continuously', km: 'បន្តเนื่อง' },
+            'example': { en: 'Example', km: 'ឧទាហរណ៍' }, 'var_p_desc': { en: 'Principal amount', km: 'ចំនួនប្រាក់ដើម' }, 'var_r_desc': { en: 'Annual interest rate (decimal)', km: 'អត្រាការប្រាក់ប្រចាំឆ្នាំ (ជាទសភាគ)' }, 'var_r_desc_nominal': { en: 'Nominal annual rate (decimal)', km: 'អត្រាកំណត់ប្រចាំឆ្នាំ (ជាទសភាគ)' }, 'var_t_desc': { en: 'Time in years', km: 'រយៈពេលគិតជាឆ្នាំ' }, 'var_n_desc': { en: 'Compounding periods per year', km: 'ចំនួនដងនៃការផ្សំក្នុងមួយឆ្នាំ' },
+            'si_example_desc': { en: 'If you invest $1,000 at a simple annual interest rate of 5% for 2 years:', km: 'ប្រសិនបើអ្នកវិនិយោគ $1,000 ក្នុងអត្រាការប្រាក់ធម្មតា 5% រយៈពេល 2 ឆ្នាំ:' }, 'ci_example_desc': { en: 'If you invest $1,000 at 5% annual interest, compounded quarterly (4 times a year) for 2 years:', km: 'ប្រសិនបើអ្នកវិនិយោគ $1,000 ក្នុងអត្រា 5% ដោយផ្សំប្រចាំត្រីមាស (4 ដងក្នុងមួយឆ្នាំ) រយៈពេល 2 ឆ្នាំ:' }, 'ear_example_desc': { en: 'For a nominal rate of 5% compounded quarterly, the actual rate you earn per year is:', km: 'សម្រាប់អត្រាកំណត់ 5% ដែលផ្សំប្រចាំត្រីមាស, អត្រាពិតប្រាកដដែលអ្នករកបានក្នុងមួយឆ្នាំគឺ:' },
+            'tax_main_title': { en: 'Tax Calculators (Cambodia Focus)', km: 'កម្មវិធីគណនាពន្ធ (សម្រាប់កម្ពុជា)' }, 'tax_subtitle': { en: 'Tools for Salary Tax, VAT, and Property Transfer Tax', km: 'ឧបករណ៍សម្រាប់ពន្ធលើប្រាក់បៀវត្ស, អតប, និងពន្ធប្រថាប់ត្រា' },
+            'tax_calculators_title': { en: 'Tax Calculators', km: 'កម្មវិធីគណនាពន្ធ' }, 'tax_info_section_title': { en: 'Tax Information & Concepts', km: 'ព័ត៌មាន និងគោលគំនិតពន្ធដារ' },
+            'disclaimer_title': { en: 'Disclaimer:', km: 'ការបដិសេធ:' }, 'disclaimer_text': { en: 'Tax laws are complex and change often. This tool provides simplified estimates for educational purposes only and is not professional tax advice. Always consult a qualified tax professional.', km: 'ច្បាប់ពន្ធដារមានភាពស្មុគស្មាញ និងផ្លាស់ប្តូរជាញឹកញាប់។ ឧបករណ៍នេះផ្តល់ការប៉ាន់ស្មានសាមញ្ញសម្រាប់គោលបំណងអប់រំតែប៉ុណ្ណោះ ហើយមិនមែនជាដំបូន្មានពន្ធដារឡើយ។ សូមពិគ្រោះជាមួយអ្នកជំនាញពន្ធដារជានិច្ច។' },
+            'salary_tax_title': { en: 'Tax on Salary', km: 'ពន្ធលើប្រាក់បៀវត្ស' }, 'vat_title': { en: 'Value Added Tax (VAT)', km: 'អាករលើតម្លៃបន្ថែម (អតប)' }, 'property_tax_title': { en: 'Property Transfer Tax', km: 'ពន្ធប្រថាប់ត្រាអចលនទ្រព្យ' },
+            'gross_salary_label': { en: 'Gross Monthly Salary (KHR)', km: 'ប្រាក់បៀវត្សសរុបប្រចាំខែ (រៀល)' }, 'dependents_label': { en: 'Number of Dependents', km: 'ចំនួនអ្នកក្នុងបន្ទុក' },
+            'taxable_salary_label': { en: 'Taxable Salary:', km: 'ប្រាក់បៀវត្សជាប់ពន្ធ:' }, 'monthly_tax_label': { en: 'Estimated Monthly Tax:', km: 'ពន្ធប្រចាំខែប៉ាន់ស្មាន:' },
+            'amount_excl_vat_label': { en: 'Amount Excl. VAT (KHR)', km: 'ចំនួនមិនរួមបញ្ចូលអតប (រៀល)' }, 'vat_amount_label': { en: 'VAT (10%):', km: 'អតប (10%):' }, 'total_incl_vat_label': { en: 'Total Incl. VAT:', km: 'សរុបរួមទាំងអតប:' },
+            'property_value_label': { en: 'Assessed Property Value ($)', km: 'តម្លៃអចលនទ្រព្យវាយតម្លៃ ($)' }, 'transfer_tax_label': { en: 'Transfer Tax (4%):', km: 'ពន្ធប្រថាប់ត្រា (4%):' },
+            'kh_tax_overview_title': { en: 'Cambodia Tax Overview', km: 'ទិដ្ឋភាពទូទៅនៃពន្ធដារកម្ពុជា' }, 'kh_tax_overview_text': { en: 'Key taxes in Cambodia include:', km: 'ពន្ធសំខាន់ៗនៅកម្ពុជា រួមមាន៖' },
+            'kh_tax_tos': { en: 'Tax on Salary (ToS) for employees.', km: 'ពន្ធលើប្រាក់បៀវត្ស (ToS) សម្រាប់បុគ្គលិក។' }, 'kh_tax_cit': { en: 'Corporate Income Tax (CIT) for businesses.', km: 'ពន្ធលើប្រាក់ចំណូល (CIT) សម្រាប់អាជីវកម្ម។' }, 'kh_tax_vat': { en: 'Value Added Tax (VAT) on goods and services.', km: 'អាករលើតម្លៃបន្ថែម (VAT) លើទំនិញและសេវាកម្ម។' }, 'kh_tax_wht': { en: 'Withholding Tax (WHT) on specific payments.', km: 'ពន្ធកាត់ទុក (WHT) លើការទូទាត់ជាក់លាក់។' }, 'kh_tax_property': { en: 'Property and Transfer Taxes.', km: 'ពន្ធលើអចលនទ្រព្យ និងពន្ធប្រថាប់ត្រា។' },
+            'kh_tos_rates_title': { en: 'ToS Rates (Resident, Monthly)', km: 'អត្រាពន្ធលើប្រាក់បៀវត្ស (និវាសនជន, ប្រចាំខែ)' }, 'kh_tos_rates_desc': { en: 'Tax is calculated on the taxable salary, after deducting a 150,000 KHR rebate per dependent.', km: 'ពន្ធត្រូវបានគណនាលើប្រាក់បៀវត្សជាប់ពន្ធ បន្ទាប់ពីដកការអនុគ្រោះ 150,000 រៀលក្នុងមួយអ្នកក្នុងបន្ទុក។' },
+            'th_taxable_salary': { en: 'Taxable Salary (KHR)', km: 'ប្រាក់បៀវត្សជាប់ពន្ធ (រៀល)' }, 'th_rate': { en: 'Rate', km: 'អត្រា' }, 'th_deduction': { en: 'Deduction', km: 'ការកាត់បន្ថយ' },
+            'global_tax_title': { en: 'Global Tax Concepts', km: 'គោលគំនិតពន្ធដារសកល' },
+            'tax_concept_progressive': { en: '<strong>Progressive Tax:</strong> Higher earners pay a higher percentage.', km: '<strong>ពន្ធតាមឋានានុក្រម:</strong> អ្នកមានចំណូលខ្ពស់បង់ភាគរយខ្ពស់ជាង។' }, 'tax_concept_regressive': { en: '<strong>Regressive Tax:</strong> Lower earners pay a higher percentage of their income.', km: '<strong>ពន្ធថយក្រោយ:</strong> អ្នកមានចំណូលទាបបង់ភាគរយខ្ពស់ជាងនៃប្រាក់ចំណូលរបស់ពួកគេ។' }, 'tax_concept_flat': { en: '<strong>Flat Tax:</strong> Everyone pays the same percentage.', km: '<strong>ពន្ធអត្រាស្មើ:</strong> មនុស្សគ្រប់គ្នាបង់ភាគរយដូចគ្នា។' }, 'tax_concept_consumption': { en: '<strong>Consumption Tax:</strong> Tax on goods and services (e.g., VAT).', km: '<strong>ពន្ធលើការប្រើប្រាស់:</strong> ពន្ធលើទំនិញและសេវាកម្ម (ឧ. អតប)។' }
         };
-
         let currentLang = localStorage.getItem('calculatorLanguage') || 'en';
-
-        function translatePage() {
-            const elements = document.querySelectorAll('[data-translate-key]');
-            const body = document.body;
-            const currentFont = languageOptions.find(l => l.code === currentLang).fontClass;
-            
-            body.classList.remove('font-inter', 'font-khmer');
-            body.classList.add(currentFont);
-
-            elements.forEach(el => {
-                const key = el.dataset.translateKey;
-                const translation = translations[key]?.[currentLang] || translations[key]?.['en'] || '';
-                el.innerHTML = translation;
-            });
-        }
-
-        function setupLanguageSelector() {
-            const selector = document.getElementById('langSelector');
-            const btn = document.getElementById('langBtn');
-            const dropdown = document.getElementById('langDropdown');
-            const currentFlag = document.getElementById('langFlag');
-            const currentLabel = document.getElementById('langLabel');
-
+        function translatePage() { const elements = document.querySelectorAll('[data-translate-key]'); const body = document.body; const currentFont = languageOptions.find(l => l.code === currentLang).fontClass; body.classList.remove('font-inter', 'font-khmer'); body.classList.add(currentFont); elements.forEach(el => { el.innerHTML = translations[el.dataset.translateKey]?.[currentLang] || translations[el.dataset.translateKey]?.['en'] || ''; }); }
+        function createLanguageSelector() {
+            const container = document.getElementById('langSelector');
+            if (!container) return;
+            container.innerHTML = `<button class="language-btn" type="button"><img src="" class="language-flag" alt="language"><span class="font-inter"></span><svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="dropdown-content"></div>`;
+            const btn = container.querySelector('button'), dropdown = container.querySelector('.dropdown-content');
             languageOptions.forEach(lang => {
                 const option = document.createElement('button');
                 option.className = `language-option ${lang.fontClass}`;
-                option.onclick = () => {
-                    currentLang = lang.code;
-                    localStorage.setItem('calculatorLanguage', currentLang);
-                    updateLangButton();
-                    translatePage();
-                    selector.classList.remove('open');
-                };
+                option.onclick = () => { currentLang = lang.code; localStorage.setItem('calculatorLanguage', currentLang); updateLanguageSelector(); translatePage(); container.classList.remove('open'); };
                 option.innerHTML = `<img src="${lang.flag}" class="language-flag" alt="${lang.label}"> ${lang.label}`;
                 dropdown.appendChild(option);
             });
-            
-            const updateLangButton = () => {
-                const langData = languageOptions.find(l => l.code === currentLang);
-                currentFlag.src = langData.flag;
-                currentLabel.textContent = langData.label;
-                currentLabel.className = langData.fontClass;
+            btn.addEventListener('click', (e) => { e.stopPropagation(); container.classList.toggle('open'); });
+        }
+        function updateLanguageSelector() { const container = document.getElementById('langSelector'); if (!container) return; const btn = container.querySelector('button'); const langData = languageOptions.find(l => l.code === currentLang); if (btn && langData) { btn.querySelector('img').src = langData.flag; btn.querySelector('span').textContent = langData.label; btn.querySelector('span').className = langData.fontClass; } }
+        function formatNumber(num, decimals = 2, currency = '') { if (isNaN(num) || !isFinite(num)) { num = 0; } const formatted = num.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }); return currency ? `${currency}${formatted}` : formatted; }
+        function stripSeparators(value) { if (typeof value !== 'string') return value; return value.replace(/[, ]/g, ''); }
+        function validateAndGet(inputId) { const input = document.getElementById(inputId); if (!input) return 0; let value = parseFloat(stripSeparators(input.value)); input.classList.remove('input-error'); if (input.value.trim() !== '' && (isNaN(value) || value < 0)) { input.classList.add('input-error'); return NaN; } return isNaN(value) ? 0 : value; }
+        function calculateAll() { calculateSimpleInterest(); calculateCompoundInterest(); calculateEAR(); calculateCambodiaSalaryTax(); calculateCambodiaVAT(); calculateCambodiaPropertyTax(); }
+        function calculateSimpleInterest() { const P = validateAndGet('si-principal'), R = validateAndGet('si-rate') / 100, T = validateAndGet('si-time'); const SI = P * R * T, A = P + SI; document.getElementById('si-result-interest').textContent = formatNumber(SI, 2, '$'); document.getElementById('si-result-total').textContent = formatNumber(A, 2, '$'); }
+        function calculateCompoundInterest() { const P = validateAndGet('ci-principal'), R = validateAndGet('ci-rate') / 100, T = validateAndGet('ci-time'); const compoundingFreq = document.getElementById('ci-compounding').value; let A; if (compoundingFreq === 'continuous') A = P * Math.exp(R * T); else { const n = parseInt(compoundingFreq, 10); A = n > 0 ? P * Math.pow((1 + R / n), (n * T)) : P; } const CI = A - P; document.getElementById('ci-result-interest').textContent = formatNumber(CI, 2, '$'); document.getElementById('ci-result-total').textContent = formatNumber(A, 2, '$'); }
+        function calculateEAR() { const R_nominal = validateAndGet('ear-nominal-rate') / 100; const n = parseInt(document.getElementById('ear-compounding').value, 10); const EAR = n > 0 ? Math.pow((1 + R_nominal / n), n) - 1 : 0; document.getElementById('ear-result-rate').textContent = `${formatNumber(EAR * 100, 3)}%`; }
+        function calculateCambodiaSalaryTax() { const grossSalary = validateAndGet('salary-gross'), dependents = validateAndGet('salary-dependents'); const totalRebate = dependents * DEPENDENT_REBATE; let taxableSalary = grossSalary - totalRebate; taxableSalary = taxableSalary < 0 ? 0 : taxableSalary; let taxAmount = 0; for (const bracket of CAMBODIA_SALARY_TAX_BRACKETS) { if (taxableSalary <= bracket.threshold) { taxAmount = (taxableSalary * bracket.rate) - bracket.deduction; break; } } taxAmount = taxAmount < 0 ? 0 : taxAmount; document.getElementById('salary-tax-taxable').textContent = formatNumber(taxableSalary, 0, 'KHR '); document.getElementById('salary-tax-amount').textContent = formatNumber(taxAmount, 0, 'KHR '); }
+        function calculateCambodiaVAT() { const amountExcl = validateAndGet('vat-amount'), vatAmount = amountExcl * 0.10, totalIncl = amountExcl + vatAmount; document.getElementById('vat-result-amount').textContent = formatNumber(vatAmount, 0, 'KHR '); document.getElementById('vat-result-total').textContent = formatNumber(totalIncl, 0, 'KHR '); }
+        function calculateCambodiaPropertyTax() { const propValue = validateAndGet('property-value'), taxAmount = propValue * 0.04; document.getElementById('property-tax-amount').textContent = formatNumber(taxAmount, 2, '$'); }
+        function setupThemeToggle() { const toggle = document.getElementById('themeToggle'); if (toggle) { toggle.addEventListener('click', function() { document.body.classList.toggle('dark-mode'); const isDarkMode = document.body.classList.contains('dark-mode'); localStorage.setItem('darkMode', isDarkMode); toggle.textContent = isDarkMode ? '🌞' : '🌓'; }); } if (localStorage.getItem('darkMode') === 'true') { document.body.classList.add('dark-mode'); toggle.textContent = '🌞'; } }
+        
+        function setupNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const views = document.querySelectorAll('.view-container');
+            const backBtn = document.querySelector('.back-btn');
+
+            const updateBackButtonState = (activeViewId) => {
+                if (activeViewId === 'home-view') {
+                    backBtn.href = 'index.html'; 
+                    backBtn.dataset.target = '';
+                } else {
+                    backBtn.href = '#';
+                    backBtn.dataset.target = 'home-view';
+                }
             };
 
-            btn.addEventListener('click', (e) => { e.stopPropagation(); selector.classList.toggle('open'); });
-            document.addEventListener('click', (e) => { if (!selector.contains(e.target)) selector.classList.remove('open'); });
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const targetId = link.dataset.target;
+                    
+                    if (targetId) {
+                        e.preventDefault();
+                        views.forEach(view => view.classList.remove('active-view'));
+                        const targetView = document.getElementById(targetId);
+                        
+                        if (targetView) {
+                            targetView.classList.add('active-view');
+                            window.scrollTo(0, 0);
+                            updateBackButtonState(targetId);
+                        }
+                    }
+                });
+            });
             
-            updateLangButton();
+            const initialView = document.querySelector('.view-container.active-view');
+            updateBackButtonState(initialView ? initialView.id : 'home-view');
         }
 
-        function formatNumber(num, decimals = 2) {
-            if (isNaN(num) || !isFinite(num)) return (0).toFixed(decimals);
-            return num.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
-        }
-
-        function stripSeparators(value) {
-            if (typeof value !== 'string') return value;
-            return value.replace(/[, ]/g, '');
-        }
-
-        function validateAndGet(inputId) {
-            const input = document.getElementById(inputId);
-            let value = parseFloat(stripSeparators(input.value));
-            
-            input.classList.remove('input-error');
-            if (input.value.trim() !== '' && (isNaN(value) || value < 0)) {
-               input.classList.add('input-error');
-               return NaN;
-            }
-            return isNaN(value) ? 0 : value;
-        }
-
-        function calculateAll() {
-            calculateSimpleInterest();
-            calculateCompoundInterest();
-            calculateEAR();
-        }
-
-        function calculateSimpleInterest() {
-            const P = validateAndGet('si-principal'), R = validateAndGet('si-rate') / 100, T = validateAndGet('si-time');
-            const SI = P * R * T, A = P + SI;
-            document.getElementById('si-result-interest').textContent = `$${formatNumber(SI)}`;
-            document.getElementById('si-result-total').textContent = `$${formatNumber(A)}`;
-        }
-
-        function calculateCompoundInterest() {
-            const P = validateAndGet('ci-principal'), R = validateAndGet('ci-rate') / 100, T = validateAndGet('ci-time');
-            const compoundingFreq = document.getElementById('ci-compounding').value;
-            let A;
-            if (compoundingFreq === 'continuous') A = P * Math.exp(R * T);
-            else {
-                const n = parseInt(compoundingFreq, 10);
-                A = n > 0 ? P * Math.pow((1 + R / n), (n * T)) : P;
-            }
-            const CI = A - P;
-            document.getElementById('ci-result-interest').textContent = `$${formatNumber(CI)}`;
-            document.getElementById('ci-result-total').textContent = `$${formatNumber(A)}`;
-        }
-
-        function calculateEAR() {
-            const R_nominal = validateAndGet('ear-nominal-rate') / 100;
-            const n = parseInt(document.getElementById('ear-compounding').value, 10);
-            const EAR = n > 0 ? Math.pow((1 + R_nominal / n), n) - 1 : 0;
-            document.getElementById('ear-result-rate').textContent = `${formatNumber(EAR * 100, 3)}%`;
-        }
-
-        document.getElementById('themeToggle').addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            const isDarkMode = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDarkMode);
-            this.textContent = isDarkMode ? '🌞' : '🌓';
-        });
-
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.body.classList.add('dark-mode');
-            document.getElementById('themeToggle').textContent = '🌞';
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            setupLanguageSelector();
-            translatePage();
-            document.querySelectorAll('input[type="text"], select').forEach(input => input.addEventListener('input', calculateAll));
-            calculateAll();
+        document.addEventListener('DOMContentLoaded', function() { 
+            setupNavigation(); 
+            createLanguageSelector(); 
+            updateLanguageSelector(); 
+            setupThemeToggle(); 
+            translatePage(); 
+            document.querySelectorAll('input, select').forEach(input => input.addEventListener('input', calculateAll)); 
+            calculateAll(); 
+            document.addEventListener('click', (e) => { 
+                const langSelector = document.getElementById('langSelector'); 
+                if (langSelector && !langSelector.contains(e.target)) {
+                    langSelector.classList.remove('open');
+                }
+            }); 
         });
     </script>
 </body>
