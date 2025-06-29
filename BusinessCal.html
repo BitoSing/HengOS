@@ -3,235 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Calculator - Final Design</title>
+    <title>Business Calculator - Aligned</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Khmer:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
-        /* --- UPDATED COLOR THEME TO MATCH REFERENCE --- */
+        /* --- ALIGNED THEME --- */
         :root {
-            --primary-color: #063969;
-            --secondary-color: #2575fc;
-            --primary-focus: #063969;
-            --primary-light: #e8f0fe;
-            --heading-color: #1a1a1a;
-            --success: #198754;
-            --danger: #c65d57;
-            --dark-text: #1a1a1a;
-            --text-color: #1a1a1a;
-            --light-text: #555;
-            --bg-color: #f0f2f5;
-            --card-bg: #ffffff;
-            --input-bg: #ffffff;
-            --border-color: #ddd;
+            --bg-color: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --accent-color: #4F46E5;
+            --accent-hover: #4338CA;
+            --primary-light: #eef2ff;
+            --success: #16A34A;
+            --danger: #DC2626;
             --border-radius: 12px;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
             --transition: all 0.3s ease;
         }
-
-        body.dark-mode {
-            --bg-color: #121212;
-            --card-bg: #2a2a2a;
-            --text-color: #e0e0e0;
-            --heading-color: #e0e0e0;
-            --light-text: #a0a0a0;
-            --border-color: #444;
-            --input-bg: #1e1e1e;
-            --primary-light: rgba(37, 117, 252, 0.12);
+        html.dark {
+            --bg-color: #0F172A;
+            --card-bg: #1E293B;
+            --text-primary: #F1F5F9;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --border-color: #334155;
+            --primary-light: rgba(79, 70, 229, 0.15);
             --success: #22c55e;
+            --danger: #ef4444;
             --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        /* --- FONT UTILITY CLASSES --- */
         .font-inter { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
         .font-khmer { font-family: 'Noto Sans Khmer', 'Leelawadee UI', 'Khmer OS', 'Khmer UI', 'Inter', sans-serif; }
 
         body {
             font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
+            color: var(--text-primary);
             transition: background-color 0.3s, color 0.3s;
             min-height: 100vh;
         }
         
-        body.dark-mode { color: var(--text-color); }
-
         .container { max-width: 95%; margin: 0 auto; padding: 2rem 1rem; }
-
-        /* --- HEADER --- */
         header { text-align: center; margin-bottom: 2.5rem; }
-
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--heading-color);
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .subtitle { color: var(--light-text); font-size: 1.1rem; font-weight: 400; }
+        h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); }
+        .subtitle { color: var(--text-secondary); font-size: 1.1rem; font-weight: 400; }
         
-        /* --- PAGE CONTROLS --- */
         .page-controls { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2.5rem 0; }
-
+        /* --- ALIGNED BACK BUTTON STYLE --- */
         .back-btn {
             display: inline-flex; align-items: center; gap: 0.5rem;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: #fff; font-weight: 600; border: none; border-radius: 50px;
-            padding: 0.65rem 1.3rem; font-size: 0.95rem; cursor: pointer; text-decoration: none;
-            box-shadow: 0 4px 15px var(--box-shadow); transition: var(--transition);
+            padding: 0.5rem 1rem; border-radius: 9999px;
+            background: var(--card-bg); color: var(--text-secondary);
+            font-weight: 600; border: 1px solid var(--border-color);
+            text-decoration: none; transition: all 0.2s;
+            box-shadow: var(--box-shadow);
         }
-        .back-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--box-shadow); }
-
+        .back-btn:hover { background-color: var(--accent-color); color: white; border-color: var(--accent-color); }
         .theme-toggle {
             background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50%;
-            width: 40px; height: 40px; cursor: pointer; color: var(--light-text);
+            width: 40px; height: 40px; cursor: pointer; color: var(--text-secondary);
             font-size: 1.2rem; display: grid; place-items: center; transition: var(--transition);
         }
-        .theme-toggle:hover { color: var(--primary-focus); transform: translateY(-2px); }
+        .theme-toggle:hover { color: var(--accent-color); transform: translateY(-2px); }
 
-        /* --- CALCULATOR GRID & CARD --- */
         .calculator-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; }
-
-        .calculator-card {
-            background: var(--card-bg); border-radius: var(--border-radius); padding: 1.5rem;
-            box-shadow: var(--box-shadow); border: 1px solid var(--border-color);
-            transition: var(--transition); display: flex; flex-direction: column;
-        }
-
-        h2 {
-            font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--heading-color);
-            display: flex; align-items: center; gap: 0.75rem; font-weight: 600;
-        }
+        .calculator-card { background: var(--card-bg); border-radius: var(--border-radius); padding: 1.5rem; box-shadow: var(--box-shadow); border: 1px solid var(--border-color); transition: var(--transition); display: flex; flex-direction: column; }
+        h2 { font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.75rem; font-weight: 600; }
+        .icon-container { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-light); }
+        h2 svg { width: 20px; height: 20px; color: var(--accent-color); }
         
-        .icon-container {
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-light);
-        }
-        
-        h2 svg { width: 20px; height: 20px; color: var(--primary-focus); }
-        body.dark-mode h2 svg { color: var(--secondary-color); }
-
-        /* --- INPUTS & LABELS --- */
         .input-group, .billing-adjustment-fields { display: flex; flex-direction: column; gap: 1rem; }
         .input-group { margin-bottom: 1.5rem; }
-
-        .input-field label, .billing-col label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark-text); font-size: 0.9rem; }
-        body.dark-mode .input-field label, body.dark-mode .billing-col label { color: var(--text-color); }
-
-        .language-label {
-            font-family: 'Noto Sans Khmer', 'Leelawadee UI', 'Khmer OS', 'Khmer UI', 'Inter', sans-serif;
-            font-size: 0.9rem;
-            color: var(--light-text);
-            margin-left: 5px;
-            font-weight: 400;
-        }
-
-        input, select {
-            width: 100%; padding: 10px 12px; font-size: 0.95rem; border: 1px solid var(--border-color);
-            border-radius: 8px; background-color: var(--input-bg); color: var(--text-color);
-            font-family: var(--font-family); transition: var(--transition);
-        }
-        body.dark-mode input, body.dark-mode select { color: var(--text-color); }
-        input::placeholder { color: var(--light-text); opacity: 0.5; font-size: 14px;}
-        input:focus, select:focus { outline: none; border-color: var(--primary-focus); box-shadow: 0 0 0 3px var(--primary-light); }
-        input.input-error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(198, 93, 87, 0.2); }
+        .input-field label, .billing-col label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary); font-size: 0.9rem; }
+        .language-label { font-family: 'Noto Sans Khmer', sans-serif; font-size: 0.9rem; color: var(--text-secondary); margin-left: 5px; font-weight: 400; }
+        input, select { width: 100%; padding: 10px 12px; font-size: 0.95rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-primary); transition: var(--transition); }
+        input::placeholder { color: var(--text-muted); opacity: 0.8; font-size: 14px;}
+        input:focus, select:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px var(--primary-light); }
+        input.input-error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2); }
         
         .billing-row { display: flex; gap: 1rem; }
         .billing-col { flex: 1; }
         @media (max-width: 500px) { .billing-row { flex-direction: column; gap: 1rem; } }
 
-        /* --- RESULTS DESIGN --- */
-        .results {
-            background-color: var(--primary-light);
-            border-radius: var(--border-radius);
-            padding: 1rem;
-            margin-top: auto;
-            border: 1px solid rgba(37, 117, 252, 0.12);
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.6rem 0;
-        }
-
-        .result-item:not(:last-child) { border-bottom: 1px solid rgba(37, 117, 252, 0.10); }
-        .result-label { font-weight: 500; font-size: 0.9rem; color: var(--light-text); }
-        body.dark-mode .result-label { color: var(--light-text); }
-        .result-value { font-weight: 600; font-size: 1rem; color: var(--text-color); }
-        body.dark-mode .result-value { color: var(--text-color); }
-
-        .date-result {
-            font-weight: 600; font-size: 1rem; color: var(--text-color); text-align: right;
-            width: auto; border: none; background: transparent; padding: 0; cursor: default;
-        }
+        .results, .billing-results-card { background-color: var(--primary-light); border-radius: var(--border-radius); padding: 1rem; margin-top: auto; border: 1px solid transparent; }
+        .result-item, .billing-result-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; }
+        .result-item:not(:last-child), .billing-result-row:not(:last-child) { border-bottom: 1px solid var(--border-color); }
+        .result-label, .billing-result-label { font-weight: 500; font-size: 0.9rem; color: var(--text-secondary); }
+        .result-value, .billing-result-value { font-weight: 600; font-size: 1rem; color: var(--text-primary); }
+        .date-result { font-weight: 600; font-size: 1rem; color: var(--text-primary); text-align: right; width: auto; border: none; background: transparent; padding: 0; cursor: default; }
         .date-result:focus { box-shadow: none; }
-        body.dark-mode .date-result { color: var(--text-color); }
-        
-        .billing-results-card {
-            background: var(--primary-light);
-            border-radius: var(--border-radius);
-            padding: 1rem;
-            margin-top: 1.5rem;
-            border: 1px solid rgba(37, 117, 252, 0.12);
-        }
-        .billing-result-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0.6rem 0;
-        }
-        .billing-result-row:not(:last-child) { border-bottom: 1px solid rgba(37, 117, 252, 0.10); }
-        .billing-result-label { font-size: 0.9rem; font-weight: 500; color: var(--light-text); }
-        .billing-result-value { font-weight: 700; font-size: 1rem; color: var(--text-color); }
-        body.dark-mode .billing-result-value { color: var(--text-color); }
-
-        body.dark-mode .results, body.dark-mode .billing-results-card {
-            background-color: rgba(37, 117, 252, 0.12);
-            border-color: rgba(37, 117, 252, 0.18);
-        }
+        .billing-results-card { margin-top: 1.5rem; }
 
         .positive { color: var(--success) !important; }
         .negative { color: var(--danger) !important; }
-        .neutral { color: var(--text-color) !important; }
-        body.dark-mode .neutral { color: var(--text-color) !important; }
-
+        .neutral { color: var(--text-primary) !important; }
         .tooltip { cursor: help; }
-        .tooltip .tooltiptext {
-            visibility: hidden; width: 180px; background-color: var(--text-color); color: white; text-align: center;
-            border-radius: 6px; padding: 8px; position: absolute; z-index: 1; bottom: 125%; left: 50%;
-            transform: translateX(-50%); opacity: 0; transition: opacity 0.3s; font-size: 0.8rem;
-            font-weight: normal; line-height: 1.4;
-        }
+        .tooltip .tooltiptext { visibility: hidden; width: 180px; background-color: #334155; color: white; text-align: center; border-radius: 6px; padding: 8px; position: absolute; z-index: 1; bottom: 125%; left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s; font-size: 0.8rem; font-weight: normal; line-height: 1.4; }
+        html.dark .tooltip .tooltiptext { background-color: var(--text-primary); color: var(--bg-color); }
         .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
-        body.dark-mode .tooltip .tooltiptext { background-color: var(--text-color); color: var(--card-bg); }
 
-        /* --- TWO COLUMN INPUT GROUP FOR PRICING & SUBSCRIPTION --- */
-        .input-group.two-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem 2rem;
-        }
-        .input-group.two-col .input-field {
-            margin-bottom: 0;
-        }
-        @media (max-width: 700px) {
-            .input-group.two-col {
-                grid-template-columns: 1fr;
-            }
-        }
+        .input-group.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 2rem; }
+        .input-group.two-col .input-field { margin-bottom: 0; }
+        @media (max-width: 700px) { .input-group.two-col { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
     <div class="page-controls">
         <a href="index.html" class="back-btn">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 0.2rem;">
-              <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
             Back to Home
         </a>
         <button class="theme-toggle" id="themeToggle">🌓</button>
@@ -244,6 +129,7 @@
         </header>
 
         <div class="calculator-grid">
+            <!-- The rest of the HTML body content remains the same... -->
             <!-- Pricing Calculator -->
             <div class="calculator-card">
                 <h2>
@@ -381,351 +267,40 @@
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        // Restored JS to work with the original result layout
-        // All functionality from the original code is preserved.
-
-        // Format number for output
-        function formatNumber(num, isPercentage = false) {
-            if (isPercentage) { return num.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 }); }
-            return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-
-        function stripSeparators(value) {
-            if (!value) return '';
-            const cleaned = value.replace(/[, ]/g, '').trim();
-            return cleaned.match(/^[.]*$/) ? '' : cleaned;
-        }
-
-        function formatInputNumber(input) {
-            let value = input.value.replace(/[^0-9.-]/g, '');
-            const isAdditionalDays = input.id === 'additionalDays';
-            if (isAdditionalDays) {
-                value = value.replace(/[^0-9-]/g, '');
-                input.value = value;
-                return;
-            }
-            let [integerPart, decimalPart] = value.split('.');
-            integerPart = parseInt(integerPart.replace(/[^0-9-]/g, '') || '0').toLocaleString('en-US');
-            if (decimalPart !== undefined) {
-                decimalPart = decimalPart.slice(0, input.id === 'discountPercent' ? 4 : 2);
-                input.value = `${integerPart}.${decimalPart}`;
-            } else {
-                input.value = integerPart;
-            }
-        }
-
-        function formatDate(date) {
-            const day = date.getDate().toString().padStart(2, '0');
-            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            const month = monthNames[date.getMonth()];
-            const year = date.getFullYear();
-            return `${day} / ${month} / ${year}`;
-        }
-
-        function parseCustomDate(dateString) {
-            if (!dateString) return null;
-            const parts = dateString.split(' / ');
-            if (parts.length !== 3) return null;
-            const day = parseInt(parts[0], 10);
-            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            const month = monthNames.indexOf(parts[1]);
-            const year = parseInt(parts[2], 10);
-            if (isNaN(day) || month === -1 || isNaN(year)) return null;
-            const date = new Date(year, month, day);
-            return isNaN(date.getTime()) ? null : date;
-        }
-
-        function calculatePricing(triggeredBy) {
-            const originalPriceInput = document.getElementById('originalPrice');
-            const discountPercentInput = document.getElementById('discountPercent');
-            const priceAfterDiscountInput = document.getElementById('priceAfterDiscount');
-            const resultAfterDiscount = document.getElementById('resultAfterDiscount');
-            const resultOfDiscount = document.getElementById('resultOfDiscount');
-            const losingProfit = document.getElementById('losingProfit');
-
-            const originalPrice = parseFloat(stripSeparators(originalPriceInput.value));
-            let discountPercent = parseFloat(stripSeparators(discountPercentInput.value));
-            let priceAfterDiscount = parseFloat(stripSeparators(priceAfterDiscountInput.value));
-
-            [originalPriceInput, discountPercentInput, priceAfterDiscountInput].forEach(el => el.classList.remove('input-error'));
-            resultAfterDiscount.innerText = '$0.00';
-            resultOfDiscount.innerText = '0.0000%';
-            losingProfit.innerText = '$0.00';
-            resultOfDiscount.className = 'result-value neutral';
-            losingProfit.className = 'result-value neutral';
-
-            if (originalPriceInput.value.trim() !== '' && (isNaN(originalPrice) || originalPrice <= 0)) {
-                originalPriceInput.classList.add('input-error'); return;
-            }
-            if (discountPercentInput.value.trim() !== '' && (isNaN(discountPercent) || discountPercent < 0)) {
-                discountPercentInput.classList.add('input-error'); return;
-            }
-            if (priceAfterDiscountInput.value.trim() !== '' && (isNaN(priceAfterDiscount) || priceAfterDiscount < 0)) {
-                priceAfterDiscountInput.classList.add('input-error'); return;
-            }
-            if ((!originalPrice || originalPrice <= 0) || ((isNaN(discountPercent) || discountPercent < 0) && (isNaN(priceAfterDiscount) || priceAfterDiscount < 0))) {
-                 return;
-            }
-
-            if (triggeredBy === 'discountPercent' && !isNaN(discountPercent)) {
-                priceAfterDiscount = originalPrice * (1 - discountPercent / 100);
-            } else if (triggeredBy === 'priceAfterDiscount' && !isNaN(priceAfterDiscount)) {
-                discountPercent = ((originalPrice - priceAfterDiscount) / originalPrice) * 100;
-            }
-
-            if (!isNaN(priceAfterDiscount)) {
-                const calcDiscount = ((originalPrice - priceAfterDiscount) / originalPrice) * 100;
-                resultAfterDiscount.innerText = `$${formatNumber(priceAfterDiscount)}`;
-                resultOfDiscount.innerText = `${formatNumber(Math.abs(calcDiscount), true)}%`;
-                const profit = priceAfterDiscount - originalPrice;
-                losingProfit.innerText = `${profit < 0 ? '-' : '+'}$${formatNumber(Math.abs(profit))}`;
-                resultOfDiscount.className = `result-value ${calcDiscount > 0 ? 'positive' : calcDiscount < 0 ? 'negative' : 'neutral'}`;
-                losingProfit.className = `result-value ${profit < 0 ? 'negative' : profit > 0 ? 'positive' : 'neutral'}`;
-            } else if (!isNaN(discountPercent)) {
-                const calcPrice = originalPrice * (1 - discountPercent / 100);
-                resultAfterDiscount.innerText = `$${formatNumber(calcPrice)}`;
-                resultOfDiscount.innerText = `${formatNumber(discountPercent, true)}%`;
-                const profit = originalPrice - calcPrice;
-                losingProfit.innerText = `-${formatNumber(profit)}`;
-                losingProfit.className = `result-value ${profit > 0 ? 'negative' : 'neutral'}`;
-            }
-        }
+        // ... (The entire script block remains the same, but with the updated theme toggle logic below)
+        function formatNumber(num, isPercentage = false) { if (isPercentage) { return num.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 }); } return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+        function stripSeparators(value) { if (!value) return ''; const cleaned = value.replace(/[, ]/g, '').trim(); return cleaned.match(/^[.]*$/) ? '' : cleaned; }
+        function formatInputNumber(input) { let value = input.value.replace(/[^0-9.-]/g, ''); const isAdditionalDays = input.id === 'additionalDays'; if (isAdditionalDays) { value = value.replace(/[^0-9-]/g, ''); input.value = value; return; } let [integerPart, decimalPart] = value.split('.'); integerPart = parseInt(integerPart.replace(/[^0-9-]/g, '') || '0').toLocaleString('en-US'); if (decimalPart !== undefined) { decimalPart = decimalPart.slice(0, input.id === 'discountPercent' ? 4 : 2); input.value = `${integerPart}.${decimalPart}`; } else { input.value = integerPart; } }
+        function formatDate(date) { const day = date.getDate().toString().padStart(2, '0'); const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]; const month = monthNames[date.getMonth()]; const year = date.getFullYear(); return `${day} / ${month} / ${year}`; }
+        function parseCustomDate(dateString) { if (!dateString) return null; const parts = dateString.split(' / '); if (parts.length !== 3) return null; const day = parseInt(parts[0], 10); const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]; const month = monthNames.indexOf(parts[1]); const year = parseInt(parts[2], 10); if (isNaN(day) || month === -1 || isNaN(year)) return null; const date = new Date(year, month, day); return isNaN(date.getTime()) ? null : date; }
+        function calculatePricing(triggeredBy) { const originalPriceInput = document.getElementById('originalPrice'); const discountPercentInput = document.getElementById('discountPercent'); const priceAfterDiscountInput = document.getElementById('priceAfterDiscount'); const resultAfterDiscount = document.getElementById('resultAfterDiscount'); const resultOfDiscount = document.getElementById('resultOfDiscount'); const losingProfit = document.getElementById('losingProfit'); const originalPrice = parseFloat(stripSeparators(originalPriceInput.value)); let discountPercent = parseFloat(stripSeparators(discountPercentInput.value)); let priceAfterDiscount = parseFloat(stripSeparators(priceAfterDiscountInput.value)); [originalPriceInput, discountPercentInput, priceAfterDiscountInput].forEach(el => el.classList.remove('input-error')); resultAfterDiscount.innerText = '$0.00'; resultOfDiscount.innerText = '0.0000%'; losingProfit.innerText = '$0.00'; resultOfDiscount.className = 'result-value neutral'; losingProfit.className = 'result-value neutral'; if (originalPriceInput.value.trim() !== '' && (isNaN(originalPrice) || originalPrice <= 0)) { originalPriceInput.classList.add('input-error'); return; } if (discountPercentInput.value.trim() !== '' && (isNaN(discountPercent) || discountPercent < 0)) { discountPercentInput.classList.add('input-error'); return; } if (priceAfterDiscountInput.value.trim() !== '' && (isNaN(priceAfterDiscount) || priceAfterDiscount < 0)) { priceAfterDiscountInput.classList.add('input-error'); return; } if ((!originalPrice || originalPrice <= 0) || ((isNaN(discountPercent) || discountPercent < 0) && (isNaN(priceAfterDiscount) || priceAfterDiscount < 0))) { return; } if (triggeredBy === 'discountPercent' && !isNaN(discountPercent)) { priceAfterDiscount = originalPrice * (1 - discountPercent / 100); } else if (triggeredBy === 'priceAfterDiscount' && !isNaN(priceAfterDiscount)) { discountPercent = ((originalPrice - priceAfterDiscount) / originalPrice) * 100; } if (!isNaN(priceAfterDiscount)) { const calcDiscount = ((originalPrice - priceAfterDiscount) / originalPrice) * 100; resultAfterDiscount.innerText = `$${formatNumber(priceAfterDiscount)}`; resultOfDiscount.innerText = `${formatNumber(Math.abs(calcDiscount), true)}%`; const profit = priceAfterDiscount - originalPrice; losingProfit.innerText = `${profit < 0 ? '-' : '+'}$${formatNumber(Math.abs(profit))}`; resultOfDiscount.className = `result-value ${calcDiscount > 0 ? 'positive' : calcDiscount < 0 ? 'negative' : 'neutral'}`; losingProfit.className = `result-value ${profit < 0 ? 'negative' : profit > 0 ? 'positive' : 'neutral'}`; } else if (!isNaN(discountPercent)) { const calcPrice = originalPrice * (1 - discountPercent / 100); resultAfterDiscount.innerText = `$${formatNumber(calcPrice)}`; resultOfDiscount.innerText = `${formatNumber(discountPercent, true)}%`; const profit = originalPrice - calcPrice; losingProfit.innerText = `-${formatNumber(profit)}`; losingProfit.className = `result-value ${profit > 0 ? 'negative' : 'neutral'}`; } }
+        function calculateYearMonthDiff(start, end) { let months = (end.getFullYear() - start.getFullYear()) * 12; months += end.getMonth() - start.getMonth(); if (end.getDate() >= start.getDate()) { months += 1; } if (months < 0) months = 0; const years = Math.floor(months / 12); const remainMonths = months % 12; return { years, months: remainMonths, total: months }; }
+        function calculateEndDate() { const startChargeDateInput = document.getElementById('startChargeDate'); const startChargeDate = parseCustomDate(startChargeDateInput.value); const monthRenewInput = document.getElementById('monthRenew'); const freeMonthInput = document.getElementById('freeMonth'); const additionalDaysInput = document.getElementById('additionalDays'); const endDateField = document.getElementById('endDate'); const durationResultField = document.getElementById('durationResult'); const monthRenew = parseInt(stripSeparators(monthRenewInput.value)); const freeMonth = freeMonthInput.value ? parseInt(stripSeparators(freeMonthInput.value)) : 0; const additionalDays = additionalDaysInput.value ? parseInt(stripSeparators(additionalDaysInput.value)) : 0; startChargeDateInput.classList.remove('input-error'); additionalDaysInput.classList.remove('input-error'); if (startChargeDateInput.value.trim() !== '' && !startChargeDate) { startChargeDateInput.classList.add('input-error'); endDateField.value = 'Invalid Date'; durationResultField.innerText = '0 months'; return; } if (!startChargeDate) { endDateField.value = 'DD / MMM / YYYY'; durationResultField.innerText = '0 months'; return; } if (additionalDaysInput.value.trim() !== '' && isNaN(additionalDays)) { additionalDaysInput.classList.add('input-error'); return; } if ((!monthRenewInput.value.trim() || isNaN(monthRenew)) && (!freeMonthInput.value.trim() || isNaN(freeMonth)) && (!additionalDaysInput.value.trim() || isNaN(additionalDays))) { endDateField.value = formatDate(startChargeDate); durationResultField.innerText = '0 months'; return; } const startDate = new Date(startChargeDate); startDate.setHours(0,0,0,0); let expiryDate; let durationText = '0 months'; if ((!monthRenewInput.value.trim() || isNaN(monthRenew)) && (!freeMonthInput.value.trim() || isNaN(freeMonth)) && (additionalDaysInput.value.trim() && !isNaN(additionalDays))) { expiryDate = new Date(startDate); expiryDate.setDate(expiryDate.getDate() + additionalDays - 1); let tempDate = new Date(startDate); let years = 0, months = 0, days = 0; while (true) { let next = new Date(tempDate); next.setFullYear(next.getFullYear() + 1); if (next > expiryDate) break; tempDate = next; years++; } while (true) { let next = new Date(tempDate); next.setMonth(next.getMonth() + 1); if (next > expiryDate) break; tempDate = next; months++; } days = Math.floor((expiryDate - tempDate) / (1000 * 60 * 60 * 24)) + 1; let parts = []; if (years > 0) parts.push(years + 'Y'); if (months > 0) parts.push(months + 'M'); if (days > 0) parts.push(days + 'D'); durationText = parts.length > 0 ? parts.join(' ') : '0M'; } else { const totalMonths = (!isNaN(monthRenew) ? monthRenew : 0) + (!isNaN(freeMonth) ? freeMonth : 0); expiryDate = new Date(startDate); expiryDate.setMonth(expiryDate.getMonth() + totalMonths); expiryDate.setDate(expiryDate.getDate() - 1 + (isNaN(additionalDays) ? 0 : additionalDays)); if (startChargeDate && expiryDate) { let tempDate = new Date(startDate); let years = 0, months = 0, days = 0; while (true) { let next = new Date(tempDate); next.setFullYear(next.getFullYear() + 1); if (next > expiryDate) break; tempDate = next; years++; } while (true) { let next = new Date(tempDate); next.setMonth(next.getMonth() + 1); if (next > expiryDate) break; tempDate = next; months++; } days = Math.floor((expiryDate - tempDate) / (1000 * 60 * 60 * 24)) + 1; let parts = []; if (years > 0) parts.push(years + 'Y'); if (months > 0) parts.push(months + 'M'); if (days > 0) parts.push(days + 'D'); durationText = parts.length > 0 ? parts.join(' ') : '0M'; } } endDateField.value = formatDate(expiryDate); durationResultField.innerText = durationText; }
+        function calculateBillingAdjustment() { const monthlyFeeInput = document.getElementById('billingMonthlyFee'); const daysOfMonthInput = document.getElementById('billingDaysOfMonth'); const remainingFeeInput = document.getElementById('remainingFee'); const daysToProRateInput = document.getElementById('daysToProRate'); const changeDateFromInput = document.getElementById('changeDateFrom'); const changeDateToInput = document.getElementById('changeDateTo'); const proRateDaysResult = document.getElementById('proRateDays'); const daysToChargeResult = document.getElementById('daysToChargeResult'); const extraChargeResult = document.getElementById('extraCharge'); [monthlyFeeInput, remainingFeeInput, daysToProRateInput, changeDateFromInput, changeDateToInput].forEach(el => el.classList.remove('input-error')); proRateDaysResult.innerText = '0 Days'; daysToChargeResult.innerText = '0 Days'; extraChargeResult.innerText = '$0.00'; [proRateDaysResult, daysToChargeResult, extraChargeResult].forEach(el => el.className = 'billing-result-value'); const monthlyFeeNum = parseFloat(stripSeparators(monthlyFeeInput.value)); const daysOfMonth = parseInt(daysOfMonthInput.value); const remainingFeeNum = parseFloat(stripSeparators(remainingFeeInput.value)); const daysToProRate = parseInt(stripSeparators(daysToProRateInput.value)); let isValid = true; if (monthlyFeeInput.value.trim() !== '' && (isNaN(monthlyFeeNum) || monthlyFeeNum <= 0)) { monthlyFeeInput.classList.add('input-error'); isValid = false; } if (isValid && daysToProRateInput.value.trim() !== '' && !isNaN(daysToProRate) && daysToProRate > 0) { const extraCharge = (monthlyFeeNum / daysOfMonth) * daysToProRate; proRateDaysResult.innerText = `${daysToProRate} Days`; extraChargeResult.innerText = `$${formatNumber(extraCharge)}`; daysToChargeResult.innerText = `${daysToProRate} Days`; [proRateDaysResult, extraChargeResult, daysToChargeResult].forEach(el => el.classList.add('positive')); return; } if (isValid && remainingFeeInput.value.trim() !== '' && !isNaN(remainingFeeNum) && remainingFeeNum >= 0) { const proRateDays = (remainingFeeNum * daysOfMonth) / monthlyFeeNum; proRateDaysResult.innerText = `${Math.round(proRateDays)} Days`; proRateDaysResult.classList.add('positive'); } else if (remainingFeeInput.value.trim() !== '' && isNaN(remainingFeeNum)) { remainingFeeInput.classList.add('input-error'); } const fromDate = parseCustomDate(changeDateFromInput.value); const toDate = parseCustomDate(changeDateToInput.value); if (isValid && !isNaN(monthlyFeeNum) && fromDate && toDate) { if (toDate >= fromDate) { const daysToCharge = Math.round((toDate - fromDate) / (1000 * 60 * 60 * 24)) + 1; const extraCharge = (monthlyFeeNum / daysOfMonth) * daysToCharge; daysToChargeResult.innerText = `${daysToCharge} Days`; extraChargeResult.innerText = `$${formatNumber(extraCharge)}`; [daysToChargeResult, extraChargeResult].forEach(el => el.classList.add('positive')); } else { changeDateToInput.classList.add('input-error'); } } }
         
-        function calculateYearMonthDiff(start, end) {
-            let months = (end.getFullYear() - start.getFullYear()) * 12;
-            months += end.getMonth() - start.getMonth();
-            if (end.getDate() >= start.getDate()) {
-                months += 1;
-            }
-            if (months < 0) months = 0;
-            const years = Math.floor(months / 12);
-            const remainMonths = months % 12;
-            return { years, months: remainMonths, total: months };
-        }
-
-        function calculateEndDate() {
-            const startChargeDateInput = document.getElementById('startChargeDate');
-            const startChargeDate = parseCustomDate(startChargeDateInput.value);
-            const monthRenewInput = document.getElementById('monthRenew');
-            const freeMonthInput = document.getElementById('freeMonth');
-            const additionalDaysInput = document.getElementById('additionalDays');
-            const endDateField = document.getElementById('endDate');
-            const durationResultField = document.getElementById('durationResult');
-
-            const monthRenew = parseInt(stripSeparators(monthRenewInput.value));
-            const freeMonth = freeMonthInput.value ? parseInt(stripSeparators(freeMonthInput.value)) : 0;
-            const additionalDays = additionalDaysInput.value ? parseInt(stripSeparators(additionalDaysInput.value)) : 0;
-
-            startChargeDateInput.classList.remove('input-error');
-            additionalDaysInput.classList.remove('input-error');
-            
-            if (startChargeDateInput.value.trim() !== '' && !startChargeDate) {
-                startChargeDateInput.classList.add('input-error');
-                endDateField.value = 'Invalid Date';
-                durationResultField.innerText = '0 months';
-                return;
-            }
-            if (!startChargeDate) {
-                endDateField.value = 'DD / MMM / YYYY';
-                durationResultField.innerText = '0 months';
-                return;
-            }
-            if (additionalDaysInput.value.trim() !== '' && isNaN(additionalDays)) {
-                additionalDaysInput.classList.add('input-error'); return;
-            }
-            if ((!monthRenewInput.value.trim() || isNaN(monthRenew)) && (!freeMonthInput.value.trim() || isNaN(freeMonth)) && (!additionalDaysInput.value.trim() || isNaN(additionalDays))) {
-                endDateField.value = formatDate(startChargeDate);
-                durationResultField.innerText = '0 months';
-                return;
-            }
-
-            const startDate = new Date(startChargeDate);
-            startDate.setHours(0,0,0,0);
-            let expiryDate;
-            let durationText = '0 months';
-            
-            if ((!monthRenewInput.value.trim() || isNaN(monthRenew)) && (!freeMonthInput.value.trim() || isNaN(freeMonth)) && (additionalDaysInput.value.trim() && !isNaN(additionalDays))) {
-                expiryDate = new Date(startDate);
-                expiryDate.setDate(expiryDate.getDate() + additionalDays - 1);
-
-                // Calculate years, months, days
-                let tempDate = new Date(startDate);
-                let years = 0, months = 0, days = 0;
-
-                // Years
-                while (true) {
-                    let next = new Date(tempDate);
-                    next.setFullYear(next.getFullYear() + 1);
-                    if (next > expiryDate) break;
-                    tempDate = next;
-                    years++;
-                }
-                // Months
-                while (true) {
-                    let next = new Date(tempDate);
-                    next.setMonth(next.getMonth() + 1);
-                    if (next > expiryDate) break;
-                    tempDate = next;
-                    months++;
-                }
-                // Days
-                days = Math.floor((expiryDate - tempDate) / (1000 * 60 * 60 * 24)) + 1;
-
-                let parts = [];
-                if (years > 0) parts.push(years + 'Y');
-                if (months > 0) parts.push(months + 'M');
-                if (days > 0) parts.push(days + 'D');
-                durationText = parts.length > 0 ? parts.join(' ') : '0M';
+        // --- UPDATED THEME TOGGLE LOGIC ---
+        const themeToggle = document.getElementById('themeToggle');
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                themeToggle.textContent = '🌞';
             } else {
-                const totalMonths = (!isNaN(monthRenew) ? monthRenew : 0) + (!isNaN(freeMonth) ? freeMonth : 0);
-                expiryDate = new Date(startDate);
-                expiryDate.setMonth(expiryDate.getMonth() + totalMonths);
-                expiryDate.setDate(expiryDate.getDate() - 1 + (isNaN(additionalDays) ? 0 : additionalDays));
-                if (startChargeDate && expiryDate) {
-                    // Calculate years, months, days
-                    let tempDate = new Date(startDate);
-                    let years = 0, months = 0, days = 0;
-
-                    // Years
-                    while (true) {
-                        let next = new Date(tempDate);
-                        next.setFullYear(next.getFullYear() + 1);
-                        if (next > expiryDate) break;
-                        tempDate = next;
-                        years++;
-                    }
-                    // Months
-                    while (true) {
-                        let next = new Date(tempDate);
-                        next.setMonth(next.getMonth() + 1);
-                        if (next > expiryDate) break;
-                        tempDate = next;
-                        months++;
-                    }
-                    // Days
-                    days = Math.floor((expiryDate - tempDate) / (1000 * 60 * 60 * 24)) + 1;
-
-                    let parts = [];
-                    if (years > 0) parts.push(years + 'Y');
-                    if (months > 0) parts.push(months + 'M');
-                    if (days > 0) parts.push(days + 'D');
-                    durationText = parts.length > 0 ? parts.join(' ') : '0M';
-                }
+                document.documentElement.classList.remove('dark');
+                themeToggle.textContent = '🌓';
             }
-            endDateField.value = formatDate(expiryDate);
-            durationResultField.innerText = durationText;
-        }
-
-        function calculateBillingAdjustment() {
-            const monthlyFeeInput = document.getElementById('billingMonthlyFee');
-            const daysOfMonthInput = document.getElementById('billingDaysOfMonth');
-            const remainingFeeInput = document.getElementById('remainingFee');
-            const daysToProRateInput = document.getElementById('daysToProRate');
-            const changeDateFromInput = document.getElementById('changeDateFrom');
-            const changeDateToInput = document.getElementById('changeDateTo');
-            const proRateDaysResult = document.getElementById('proRateDays');
-            const daysToChargeResult = document.getElementById('daysToChargeResult');
-            const extraChargeResult = document.getElementById('extraCharge');
-
-            [monthlyFeeInput, remainingFeeInput, daysToProRateInput, changeDateFromInput, changeDateToInput].forEach(el => el.classList.remove('input-error'));
-            proRateDaysResult.innerText = '0 Days';
-            daysToChargeResult.innerText = '0 Days';
-            extraChargeResult.innerText = '$0.00';
-            [proRateDaysResult, daysToChargeResult, extraChargeResult].forEach(el => el.className = 'billing-result-value');
-            
-            const monthlyFeeNum = parseFloat(stripSeparators(monthlyFeeInput.value));
-            const daysOfMonth = parseInt(daysOfMonthInput.value);
-            const remainingFeeNum = parseFloat(stripSeparators(remainingFeeInput.value));
-            const daysToProRate = parseInt(stripSeparators(daysToProRateInput.value));
-            
-            let isValid = true;
-            if (monthlyFeeInput.value.trim() !== '' && (isNaN(monthlyFeeNum) || monthlyFeeNum <= 0)) {
-                monthlyFeeInput.classList.add('input-error'); isValid = false;
-            }
-
-            if (isValid && daysToProRateInput.value.trim() !== '' && !isNaN(daysToProRate) && daysToProRate > 0) {
-                const extraCharge = (monthlyFeeNum / daysOfMonth) * daysToProRate;
-                proRateDaysResult.innerText = `${daysToProRate} Days`;
-                extraChargeResult.innerText = `$${formatNumber(extraCharge)}`;
-                daysToChargeResult.innerText = `${daysToProRate} Days`;
-                [proRateDaysResult, extraChargeResult, daysToChargeResult].forEach(el => el.classList.add('positive'));
-                return;
-            }
-            
-            if (isValid && remainingFeeInput.value.trim() !== '' && !isNaN(remainingFeeNum) && remainingFeeNum >= 0) {
-                const proRateDays = (remainingFeeNum * daysOfMonth) / monthlyFeeNum;
-                proRateDaysResult.innerText = `${Math.round(proRateDays)} Days`;
-                proRateDaysResult.classList.add('positive');
-            } else if (remainingFeeInput.value.trim() !== '' && isNaN(remainingFeeNum)) {
-                remainingFeeInput.classList.add('input-error');
-            }
-            
-            const fromDate = parseCustomDate(changeDateFromInput.value);
-            const toDate = parseCustomDate(changeDateToInput.value);
-            if (isValid && !isNaN(monthlyFeeNum) && fromDate && toDate) {
-                if (toDate >= fromDate) {
-                    const daysToCharge = Math.round((toDate - fromDate) / (1000 * 60 * 60 * 24)) + 1;
-                    const extraCharge = (monthlyFeeNum / daysOfMonth) * daysToCharge;
-                    daysToChargeResult.innerText = `${daysToCharge} Days`;
-                    extraChargeResult.innerText = `$${formatNumber(extraCharge)}`;
-                    [daysToChargeResult, extraChargeResult].forEach(el => el.classList.add('positive'));
-                } else { changeDateToInput.classList.add('input-error'); }
-            }
-        }
-        
-        document.getElementById('themeToggle').addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            const isDarkMode = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDarkMode);
-            this.textContent = isDarkMode ? '🌞' : '🌓';
+            localStorage.setItem('theme', theme);
+        };
+        themeToggle.addEventListener('click', () => {
+            const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+            applyTheme(newTheme);
         });
-
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.body.classList.add('dark-mode');
-            document.getElementById('themeToggle').textContent = '🌞';
-        }
+        applyTheme(localStorage.getItem('theme') || 'light');
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Add SVG icons
-            document.querySelectorAll('.icon-container').forEach((container, index) => {
-                const icons = [
-                    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>',
-                    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>',
-                    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l4 4m-4-12V4m0 16v-4m-4-4H4m12 0h4m-8 8v4m0-16V4m-4 4H4m12 0h4" /></svg>'
-                ];
-                container.innerHTML = icons[index];
-            });
-
-            flatpickr('.date-picker', {
-                dateFormat: 'd / M / Y',
-                onChange: function(selectedDates, dateStr, instance) {
-                    const card = instance.element.closest('.calculator-card');
-                    if (card.contains(document.getElementById('startChargeDate'))) calculateEndDate();
-                    if (card.contains(document.getElementById('billingMonthlyFee'))) calculateBillingAdjustment();
-                }
-            });
-            
-            const allInputsAndSelects = document.querySelectorAll('input, select');
-            allInputsAndSelects.forEach(field => {
-                if (field.type === 'text' && (field.pattern || field.getAttribute('data-step'))) {
-                    field.addEventListener('input', () => formatInputNumber(field));
-                }
-                const calculatorCard = field.closest('.calculator-card');
-                if (!calculatorCard) return;
-                
-                const triggerCalculation = () => {
-                    if (calculatorCard.contains(document.getElementById('originalPrice'))) calculatePricing(field.id);
-                    if (calculatorCard.contains(document.getElementById('startChargeDate'))) calculateEndDate();
-                    if (calculatorCard.contains(document.getElementById('billingMonthlyFee'))) calculateBillingAdjustment();
-                };
-                
-                field.addEventListener('input', triggerCalculation);
-                field.addEventListener('change', triggerCalculation);
-            });
-            
-            calculatePricing();
-            calculateEndDate();
-            calculateBillingAdjustment();
+            document.querySelectorAll('.icon-container').forEach((container, index) => { const icons = [ '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>', '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>', '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l4 4m-4-12V4m0 16v-4m-4-4H4m12 0h4m-8 8v4m0-16V4m-4 4H4m12 0h4" /></svg>' ]; container.innerHTML = icons[index]; });
+            flatpickr('.date-picker', { dateFormat: 'd / M / Y', onChange: function(selectedDates, dateStr, instance) { const card = instance.element.closest('.calculator-card'); if (card.contains(document.getElementById('startChargeDate'))) calculateEndDate(); if (card.contains(document.getElementById('billingMonthlyFee'))) calculateBillingAdjustment(); } });
+            const allInputsAndSelects = document.querySelectorAll('input, select'); allInputsAndSelects.forEach(field => { if (field.type === 'text' && (field.pattern || field.getAttribute('data-step'))) { field.addEventListener('input', () => formatInputNumber(field)); } const calculatorCard = field.closest('.calculator-card'); if (!calculatorCard) return; const triggerCalculation = () => { if (calculatorCard.contains(document.getElementById('originalPrice'))) calculatePricing(field.id); if (calculatorCard.contains(document.getElementById('startChargeDate'))) calculateEndDate(); if (calculatorCard.contains(document.getElementById('billingMonthlyFee'))) calculateBillingAdjustment(); }; field.addEventListener('input', triggerCalculation); field.addEventListener('change', triggerCalculation); });
+            calculatePricing(); calculateEndDate(); calculateBillingAdjustment();
         });
     </script>
 </body>
