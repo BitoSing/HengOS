@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial Calculation</title>
+    <title>Comprehensive Interest Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Khmer:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
-        /* --- UPDATED COLOR THEME TO MATCH REFERENCE --- */
         :root {
             --primary-color: #063969;
             --secondary-color: #2575fc;
@@ -23,7 +21,7 @@
             --card-bg: #ffffff;
             --input-bg: #ffffff;
             --border-color: #ddd;
-            --border-radius: 12px;
+            --border-radius: 16px;
             --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             --transition: all 0.3s ease;
         }
@@ -38,12 +36,11 @@
             --input-bg: #1e1e1e;
             --primary-light: rgba(37, 117, 252, 0.12);
             --success: #22c55e;
+            --danger: #dc3545;
             --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        /* --- FONT UTILITY CLASSES --- */
         .font-inter { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
         .font-khmer { font-family: 'Noto Sans Khmer', 'Leelawadee UI', 'Khmer OS', 'Khmer UI', 'Inter', sans-serif; }
 
@@ -55,358 +52,446 @@
             min-height: 100vh;
         }
         
-        body.dark-mode { color: var(--text-color); }
-
         .container { max-width: 95%; margin: 0 auto; padding: 2rem 1rem; }
-
-        /* --- HEADER --- */
         header { text-align: center; margin-bottom: 2.5rem; }
-
         h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--heading-color);
+            font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--heading-color);
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
         }
-
         .subtitle { color: var(--light-text); font-size: 1.1rem; font-weight: 400; }
         
-        /* --- PAGE CONTROLS --- */
-        .page-controls { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2.5rem 0; }
-
+        .page-controls { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2.5rem 0; gap: 1rem; }
         .back-btn {
             display: inline-flex; align-items: center; gap: 0.5rem;
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             color: #fff; font-weight: 600; border: none; border-radius: 50px;
             padding: 0.65rem 1.3rem; font-size: 0.95rem; cursor: pointer; text-decoration: none;
-            box-shadow: 0 4px 15px var(--box-shadow); transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: var(--transition);
         }
-        .back-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--box-shadow); }
-
+        .back-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+        .right-controls { display: flex; align-items: center; gap: 1rem; }
+        
         .theme-toggle {
             background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50%;
             width: 40px; height: 40px; cursor: pointer; color: var(--light-text);
-            font-size: 1.2rem; display: grid; place-items: center; transition: var(--transition);
+            font-size: 1.2rem; display: grid; place-items: center; transition: var(--transition); flex-shrink: 0;
         }
         .theme-toggle:hover { color: var(--primary-focus); transform: translateY(-2px); }
 
-        /* --- CALCULATOR GRID & CARD --- */
-        .calculator-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-        @media (max-width: 900px) {
-            .calculator-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        .calculator-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 2rem; }
+        @media (max-width: 900px) { .calculator-grid { grid-template-columns: 1fr; } }
 
         .calculator-card {
-            background: var(--card-bg); border-radius: var(--border-radius); padding: 1.5rem;
+            background: var(--card-bg); border-radius: var(--border-radius); padding: 2rem;
             box-shadow: var(--box-shadow); border: 1px solid var(--border-color);
-            transition: var(--transition); display: flex; flex-direction: column;
-            max-width: 420px;
-            margin: 0 auto;
+            transition: var(--transition); display: flex; flex-direction: column; margin: 0 auto;
         }
 
         h2 {
             font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--heading-color);
             display: flex; align-items: center; gap: 0.75rem; font-weight: 600;
         }
-        
         .icon-container {
             display: inline-flex; align-items: center; justify-content: center;
             width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-light);
         }
-        
         h2 svg { width: 20px; height: 20px; color: var(--primary-focus); }
         body.dark-mode h2 svg { color: var(--secondary-color); }
 
-        /* --- INPUTS & LABELS --- */
-        .input-group, .billing-adjustment-fields { display: flex; flex-direction: column; gap: 1rem; }
-        .input-group { margin-bottom: 1.5rem; }
+        .input-group { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+        .input-field label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark-text); font-size: 0.9rem; }
+        body.dark-mode .input-field label { color: var(--text-color); }
 
-        .input-field label, .billing-col label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--dark-text); font-size: 0.9rem; }
-        body.dark-mode .input-field label, body.dark-mode .billing-col label { color: var(--text-color); }
-
-        .language-label {
-            font-family: 'Noto Sans Khmer', 'Leelawadee UI', 'Khmer OS', 'Khmer UI', 'Inter', sans-serif;
-            font-size: 0.9rem;
-            color: var(--light-text);
-            margin-left: 5px;
-            font-weight: 400;
-        }
-
-        input, select {
+        input[type="text"], select {
             width: 100%; padding: 10px 12px; font-size: 0.95rem; border: 1px solid var(--border-color);
             border-radius: 8px; background-color: var(--input-bg); color: var(--text-color);
-            font-family: var(--font-family); transition: var(--transition);
+            font-family: 'Inter', sans-serif; transition: var(--transition);
         }
-        body.dark-mode input, body.dark-mode select { color: var(--text-color); }
-        input::placeholder { color: var(--light-text); opacity: 0.5; font-size: 14px;}
         input:focus, select:focus { outline: none; border-color: var(--primary-focus); box-shadow: 0 0 0 3px var(--primary-light); }
-        input.input-error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(198, 93, 87, 0.2); }
+        input.input-error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25); }
         
-        .billing-row { display: flex; gap: 1rem; }
-        .billing-col { flex: 1; }
-        @media (max-width: 500px) { .billing-row { flex-direction: column; gap: 1rem; } }
-
-        /* --- RESULTS DESIGN --- */
+        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;}
+        @media (max-width: 500px) { .input-row { grid-template-columns: 1fr; } }
+        
         .results {
-            background-color: var(--primary-light);
-            border-radius: var(--border-radius);
-            padding: 1rem;
-            margin-top: auto;
-            border: 1px solid rgba(37, 117, 252, 0.12);
+            background-color: var(--primary-light); border-radius: var(--border-radius);
+            padding: 1.25rem; margin-top: auto; border: 1px solid rgba(37, 117, 252, 0.12);
         }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.6rem 0;
-        }
-
-        .result-item:not(:last-child) { border-bottom: 1px solid rgba(37, 117, 252, 0.10); }
+        body.dark-mode .results { background-color: rgba(37, 117, 252, 0.12); border-color: rgba(37, 117, 252, 0.18); }
+        .result-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; }
+        .result-item:not(:last-child) { border-bottom: 1px solid rgba(37, 117, 252, 0.15); }
+        body.dark-mode .result-item:not(:last-child) { border-bottom-color: rgba(37, 117, 252, 0.2); }
         .result-label { font-weight: 500; font-size: 0.9rem; color: var(--light-text); }
-        body.dark-mode .result-label { color: var(--light-text); }
         .result-value { font-weight: 600; font-size: 1rem; color: var(--text-color); }
-        body.dark-mode .result-value { color: var(--text-color); }
-
-        .date-result {
-            font-weight: 600; font-size: 1rem; color: var(--text-color); text-align: right;
-            width: auto; border: none; background: transparent; padding: 0; cursor: default;
-        }
-        .date-result:focus { box-shadow: none; }
-        body.dark-mode .date-result { color: var(--text-color); }
         
-        .billing-results-card {
-            background: var(--primary-light);
-            border-radius: var(--border-radius);
-            padding: 1rem;
-            margin-top: 1.5rem;
-            border: 1px solid rgba(37, 117, 252, 0.12);
+        /* --- NEW FORMULA SECTION STYLING --- */
+        .section-title {
+            text-align: center; margin: 3rem 0 1.5rem 0; font-size: 1.5rem;
+            font-weight: 700; color: var(--heading-color);
         }
-        .billing-result-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0.6rem 0;
+        .formula-card {
+            background-color: var(--bg-color);
+            padding: 1.5rem;
         }
-        .billing-result-row:not(:last-child) { border-bottom: 1px solid rgba(37, 117, 252, 0.10); }
-        .billing-result-label { font-size: 0.9rem; font-weight: 500; color: var(--light-text); }
-        .billing-result-value { font-weight: 700; font-size: 1rem; color: var(--text-color); }
-        body.dark-mode .billing-result-value { color: var(--text-color); }
-
-        body.dark-mode .results, body.dark-mode .billing-results-card {
-            background-color: rgba(37, 117, 252, 0.12);
-            border-color: rgba(37, 117, 252, 0.18);
+        body.dark-mode .formula-card { background-color: #1e1e1e; }
+        .formula-card h3 {
+            font-size: 1rem; font-weight: 600; color: var(--heading-color);
+            margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color);
         }
-
-        .positive { color: var(--success) !important; }
-        .negative { color: var(--danger) !important; }
-        .neutral { color: var(--text-color) !important; }
-        body.dark-mode .neutral { color: var(--text-color) !important; }
-
-        .tooltip { cursor: help; }
-        .tooltip .tooltiptext {
-            visibility: hidden; width: 180px; background-color: var(--text-color); color: white; text-align: center;
-            border-radius: 6px; padding: 8px; position: absolute; z-index: 1; bottom: 125%; left: 50%;
-            transform: translateX(-50%); opacity: 0; transition: opacity 0.3s; font-size: 0.8rem;
-            font-weight: normal; line-height: 1.4;
+        .formula-box {
+            background: var(--card-bg); padding: 1rem; border-left: 4px solid var(--primary-focus);
+            margin-bottom: 1.25rem; border-radius: 8px; font-family: 'Lucida Console', Monaco, monospace;
+            font-size: 1rem; color: var(--text-color); text-align: center;
         }
-        .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
-        body.dark-mode .tooltip .tooltiptext { background-color: var(--text-color); color: var(--card-bg); }
-
-        /* Hide other calculators */
-        .hide-calculator {
-            display: none !important;
+        .variable-table { width: 100%; border-collapse: collapse; margin-bottom: 1.25rem; font-size: 0.9rem; }
+        .variable-table td { padding: 0.6rem; border: 1px solid var(--border-color); }
+        .variable-table td:first-child { font-weight: 700; font-family: 'Lucida Console', Monaco, monospace; text-align: center; width: 20%; background-color: var(--primary-light); }
+        
+        .example-title {
+            font-weight: 700; font-size: 0.95rem; color: var(--heading-color);
+            margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;
+        }
+        .example-icon { color: var(--success); }
+        .example-content { font-size: 0.9rem; line-height: 1.6; color: var(--light-text); }
+        .calculation-step {
+            font-family: 'Lucida Console', Monaco, monospace; background-color: var(--primary-light);
+            padding: 0.6rem 0.85rem; border-radius: 6px; font-size: 0.9rem; margin-top: 0.75rem;
+            display: block; color: var(--text-color); word-wrap: break-word;
         }
 
-        /* --- Add: Two-column layout for Interest Rate Calculator results --- */
-        .interest-results-row {
-            display: flex;
-            gap: 1.5rem;
+        /* --- LANGUAGE DROPDOWN STYLING --- */
+        .language-selector { position: relative; display: inline-block; }
+        .language-btn {
+            background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color);
+            border-radius: 50px; padding: 8px 16px 8px 12px; font-size: 14px; font-weight: 500;
+            cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition);
         }
-        .interest-results-row .result-item {
-            flex: 1 1 0;
-            padding: 0;
-            border-bottom: none;
+        .language-btn:hover, .language-selector.open .language-btn { background-color: var(--primary-light); color: var(--primary-focus); }
+        .language-btn .arrow { margin-left: auto; transition: transform 0.2s; }
+        .language-selector.open .language-btn .arrow { transform: rotate(180deg); }
+        .dropdown-content {
+            display: none; position: absolute; right: 0; background-color: var(--card-bg);
+            min-width: 170px; border-radius: 12px; box-shadow: var(--box-shadow); z-index: 10;
+            margin-top: 8px; overflow: hidden; border: 1px solid var(--border-color);
+            animation: fadeIn 0.18s ease;
         }
-        @media (max-width: 600px) {
-            .interest-results-row {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
+        .language-selector.open .dropdown-content { display: block; }
+        .language-option {
+            color: var(--text-color); padding: 12px 18px 12px 16px; display: flex; align-items: center;
+            gap: 10px; font-size: 14px; background: none; border: none; width: 100%;
+            text-align: left; cursor: pointer; transition: background 0.18s;
         }
-
-        /* --- Add: Two-column layout for Interest Rate Calculator inputs --- */
-        .interest-inputs-row {
-            display: flex;
-            gap: 1rem;
-        }
-        .interest-inputs-row .input-field {
-            flex: 1 1 0;
-        }
-        @media (max-width: 600px) {
-            .interest-inputs-row {
-                flex-direction: column;
-                gap: 1rem;
-            }
-        }
-
-        /* --- TWO COLUMN INPUT GROUP FOR ALL CALCULATORS --- */
-        .input-group.two-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem 2rem;
-            margin-bottom: 1.5rem;
-        }
-        .input-group.two-col .input-field {
-            margin-bottom: 0;
-        }
-        @media (max-width: 700px) {
-            .input-group.two-col {
-                grid-template-columns: 1fr;
-            }
-        }
+        .language-option:hover { background-color: var(--primary-light); }
+        .language-flag { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px);} to { opacity: 1; transform: translateY(0);} }
     </style>
 </head>
-<body>
+<body class="font-inter">
     <div class="page-controls">
-        <a href="index.html" class="back-btn">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 0.2rem;">
-              <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-            </svg>
-            Back to Home
+        <a href="#" class="back-btn">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 0.2rem;"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg>
+            <span data-translate-key="back_to_home"></span>
         </a>
-        <button class="theme-toggle" id="themeToggle">🌓</button>
+        <div class="right-controls">
+            <div class="language-selector" id="langSelector">
+                <button class="language-btn" id="langBtn" type="button">
+                    <img src="https://flagcdn.com/us.svg" class="language-flag" id="langFlag" alt="language">
+                    <span id="langLabel" class="font-inter">English</span>
+                    <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <div class="dropdown-content" id="langDropdown"></div>
+            </div>
+            <button class="theme-toggle" id="themeToggle">🌓</button>
+        </div>
     </div>
     
     <div class="container">
         <header>
-            <h1>Financial Calculator</h1>
-            <p class="subtitle">Essential tools for pricing, subscription, and interest calculations</p>
+            <h1 data-translate-key="main_title"></h1>
+            <p class="subtitle" data-translate-key="subtitle"></p>
         </header>
 
         <div class="calculator-grid">
-            <!-- Interest Rate Calculator (only section kept) -->
+            <!-- Simple Interest Calculator -->
             <div class="calculator-card">
                 <h2>
-                    <span class="icon-container">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l4 4m-4-12V4m0 16v-4m-4-4H4m12 0h4m-8 8v4m0-16V4m-4 4H4m12 0h4" />
-                        </svg>
-                    </span>
-                    Interest Rate Calculator
+                    <span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.5 14.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg></span>
+                    <span data-translate-key="si_title"></span>
                 </h2>
-                <div class="input-group two-col">
-                    <div class="input-field">
-                        <label for="principalAmount">Amount ($)<span class="language-label">ប្រាក់ដើម</span></label>
-                        <input type="text" id="principalAmount" placeholder="Enter amount ($)" pattern="[0-9,.]+">
-                    </div>
-                    <div class="input-field">
-                        <label for="interestRate">Interest (%) <span class="language-label">អត្រាការប្រាក់</span></label>
-                        <input type="text" id="interestRate" placeholder="Enter rate (%)" pattern="[0-9,.]+">
-                    </div>
-                    <div class="input-field">
-                        <label for="interestPeriod">Duration <span class="language-label">រយៈពេល</span></label>
-                        <input type="text" id="interestPeriod" placeholder="Enter months" pattern="[0-9]+">
+                <div class="input-group">
+                    <div class="input-field"><label for="si-principal" data-translate-key="principal_label"></label><input type="text" id="si-principal" value="1000"></div>
+                    <div class="input-row">
+                        <div class="input-field"><label for="si-rate" data-translate-key="rate_label"></label><input type="text" id="si-rate" value="5"></div>
+                        <div class="input-field"><label for="si-time" data-translate-key="time_label"></label><input type="text" id="si-time" value="3"></div>
                     </div>
                 </div>
                 <div class="results">
-                    <div class="interest-results-row">
-                        <div class="result-item">
-                            <span class="result-label">Total Interest <span class="language-label">សរុបការប្រាក់</span>:</span>
-                            <span class="result-value" id="totalInterest">$0.00</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Total Amount <span class="language-label">ប្រាក់សរុប</span>:</span>
-                            <span class="result-value" id="totalAmount">$0.00</span>
-                        </div>
+                    <div class="result-item"><span class="result-label" data-translate-key="total_interest_label"></span><span class="result-value" id="si-result-interest"></span></div>
+                    <div class="result-item"><span class="result-label" data-translate-key="total_amount_label"></span><span class="result-value" id="si-result-total"></span></div>
+                </div>
+            </div>
+
+            <!-- Compound Interest Calculator -->
+            <div class="calculator-card">
+                <h2>
+                    <span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></span>
+                    <span data-translate-key="ci_title"></span>
+                </h2>
+                <div class="input-group">
+                     <div class="input-field"><label for="ci-principal" data-translate-key="principal_label"></label><input type="text" id="ci-principal" value="1000"></div>
+                    <div class="input-row">
+                        <div class="input-field"><label for="ci-rate" data-translate-key="rate_label"></label><input type="text" id="ci-rate" value="5"></div>
+                        <div class="input-field"><label for="ci-time" data-translate-key="time_label"></label><input type="text" id="ci-time" value="3"></div>
+                    </div>
+                    <div class="input-field">
+                        <label for="ci-compounding" data-translate-key="compounding_label"></label>
+                        <select id="ci-compounding">
+                            <option value="1" data-translate-key="annually"></option><option value="2" data-translate-key="semi_annually"></option><option value="4" selected data-translate-key="quarterly"></option>
+                            <option value="12" data-translate-key="monthly"></option><option value="52" data-translate-key="weekly"></option><option value="365" data-translate-key="daily"></option>
+                            <option value="continuous" data-translate-key="continuously"></option>
+                        </select>
                     </div>
                 </div>
+                <div class="results">
+                    <div class="result-item"><span class="result-label" data-translate-key="total_interest_label"></span><span class="result-value" id="ci-result-interest"></span></div>
+                    <div class="result-item"><span class="result-label" data-translate-key="total_amount_label"></span><span class="result-value" id="ci-result-total"></span></div>
+                </div>
+            </div>
+
+            <!-- Effective Annual Rate (EAR) Calculator -->
+            <div class="calculator-card">
+                <h2>
+                    <span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg></span>
+                    <span data-translate-key="ear_title"></span>
+                </h2>
+                <div class="input-group">
+                    <div class="input-field"><label for="ear-nominal-rate" data-translate-key="nominal_rate_label"></label><input type="text" id="ear-nominal-rate" value="5"></div>
+                    <div class="input-field">
+                        <label for="ear-compounding" data-translate-key="compounding_label"></label>
+                        <select id="ear-compounding">
+                            <option value="1" data-translate-key="annually"></option><option value="2" data-translate-key="semi_annually"></option><option value="4" selected data-translate-key="quarterly"></option>
+                            <option value="12" data-translate-key="monthly"></option><option value="52" data-translate-key="weekly"></option><option value="365" data-translate-key="daily"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="results">
+                    <div class="result-item"><span class="result-label" data-translate-key="ear_label"></span><span class="result-value" id="ear-result-rate"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW: Standalone Formula Section -->
+        <h2 class="section-title" data-translate-key="formulas_section_title"></h2>
+        <div class="calculator-grid">
+            <!-- Formula Card: Simple Interest -->
+            <div class="calculator-card formula-card">
+                <h3 data-translate-key="si_title"></h3>
+                <div class="formula-box">Interest = P × R × T</div>
+                <table class="variable-table">
+                    <tr><td>P</td><td data-translate-key="var_p_desc"></td></tr>
+                    <tr><td>R</td><td data-translate-key="var_r_desc"></td></tr>
+                    <tr><td>T</td><td data-translate-key="var_t_desc"></td></tr>
+                </table>
+                <div class="example-title"><span class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z"/></svg></span><span data-translate-key="example"></span></div>
+                <div class="example-content" data-translate-key="si_example_desc"></div>
+                <code class="calculation-step">Interest = 1000 × 0.05 × 2 = $100</code>
+            </div>
+
+            <!-- Formula Card: Compound Interest -->
+            <div class="calculator-card formula-card">
+                <h3 data-translate-key="ci_title"></h3>
+                <div class="formula-box">Amount = P(1 + R/n)ⁿᵗ</div>
+                <table class="variable-table">
+                    <tr><td>P</td><td data-translate-key="var_p_desc"></td></tr>
+                    <tr><td>R</td><td data-translate-key="var_r_desc"></td></tr>
+                    <tr><td>t</td><td data-translate-key="var_t_desc"></td></tr>
+                    <tr><td>n</td><td data-translate-key="var_n_desc"></td></tr>
+                </table>
+                <div class="example-title"><span class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z"/></svg></span><span data-translate-key="example"></span></div>
+                <div class="example-content" data-translate-key="ci_example_desc"></div>
+                <code class="calculation-step">Amount = 1000(1 + 0.05/4)⁽⁴*²⁾ = $1,104.49</code>
+            </div>
+
+            <!-- Formula Card: Effective Annual Rate -->
+            <div class="calculator-card formula-card">
+                <h3 data-translate-key="ear_title"></h3>
+                <div class="formula-box">EAR = (1 + R/n)ⁿ - 1</div>
+                <table class="variable-table">
+                    <tr><td>R</td><td data-translate-key="var_r_desc_nominal"></td></tr>
+                    <tr><td>n</td><td data-translate-key="var_n_desc"></td></tr>
+                </table>
+                <div class="example-title"><span class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z"/></svg></span><span data-translate-key="example"></span></div>
+                <div class="example-content" data-translate-key="ear_example_desc"></div>
+                <code class="calculation-step">EAR = (1 + 0.05/4)⁴ - 1 = 0.050945 ≈ 5.095%</code>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        // Only keep calculation logic for Interest Rate Calculator
-        function formatNumber(num, isPercentage = false) {
-            if (isPercentage) { return num.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 }); }
-            return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const languageOptions = [
+            { code: 'en', label: 'English', flag: 'https://flagcdn.com/us.svg', fontClass: 'font-inter' },
+            { code: 'km', label: 'ភាសាខ្មែរ', flag: 'https://flagcdn.com/kh.svg', fontClass: 'font-khmer' }
+        ];
+        
+        const translations = {
+            'back_to_home': { en: 'Back to Home', km: 'ត្រឡប់ទៅទំព័រដើម' },
+            'main_title': { en: 'Comprehensive Interest Calculator', km: 'កម្មវិធីគណនាការប្រាក់គ្រប់ជ្រុងជ្រោយ' },
+            'subtitle': { en: 'Tools for simple, compound, and effective rate calculations', km: 'ឧបករណ៍សម្រាប់គណនាការប្រាក់ធម្មតា, ការប្រាក់ផ្សំ, និងអត្រាពិតប្រាកដ' },
+            'formulas_section_title': { en: 'How The Formulas Work', km: 'របៀបដែលរូបមន្តដំណើរការ' },
+            'si_title': { en: 'Simple Interest', km: 'ការប្រាក់ធម្មតា' },
+            'ci_title': { en: 'Compound Interest', km: 'ការប្រាក់ផ្សំ' },
+            'ear_title': { en: 'Effective Annual Rate (EAR)', km: 'អត្រាការប្រាក់ប្រចាំឆ្នាំពិតប្រាកដ' },
+            'principal_label':    { en: 'Principal ($)', km: 'ប្រាក់ដើម ($)' },
+            'rate_label':         { en: 'Annual Rate (%)', km: 'អត្រាប្រចាំឆ្នាំ (%)' },
+            'time_label':         { en: 'Time (Years)', km: 'រយៈពេល (ឆ្នាំ)' },
+            'compounding_label':  { en: 'Compounding Frequency', km: 'ប្រេកង់ផ្សំ' },
+            'nominal_rate_label': { en: 'Nominal Annual Rate (%)', km: 'អត្រាកំណត់ប្រចាំឆ្នាំ (%)' },
+            'total_interest_label': { en: 'Total Interest:', km: 'ការប្រាក់សរុប:' },
+            'total_amount_label': { en: 'Total Amount:', km: 'ចំនួនសរុប:' },
+            'ear_label': { en: 'Effective Annual Rate:', km: 'អត្រាការប្រាក់ពិតប្រាកដ:' },
+            'annually': { en: 'Annually', km: 'ប្រចាំឆ្នាំ' },
+            'semi_annually': { en: 'Semi-annually', km: 'ប្រចាំឆមាស' },
+            'quarterly': { en: 'Quarterly', km: 'ប្រចាំត្រីមាស' },
+            'monthly': { en: 'Monthly', km: 'ប្រចាំខែ' },
+            'weekly': { en: 'Weekly', km: 'ប្រចាំសប្តាហ៍' },
+            'daily': { en: 'Daily', km: 'ប្រចាំថ្ងៃ' },
+            'continuously': { en: 'Continuously', km: 'បន្តเนื่อง' },
+            'var_p_desc': { en: 'Principal amount', km: 'ចំនួនប្រាក់ដើម' },
+            'var_r_desc': { en: 'Annual interest rate (decimal)', km: 'អត្រាការប្រាក់ប្រចាំឆ្នាំ (ជាទសភាគ)' },
+            'var_r_desc_nominal': { en: 'Nominal annual rate (decimal)', km: 'អត្រាកំណត់ប្រចាំឆ្នាំ (ជាទសភាគ)' },
+            'var_t_desc': { en: 'Time in years', km: 'រយៈពេលគិតជាឆ្នាំ' },
+            'var_n_desc': { en: 'Compounding periods per year', km: 'ចំនួនដងនៃការផ្សំក្នុងមួយឆ្នាំ' },
+            'example': { en: 'Example', km: 'ឧទាហរណ៍' },
+            'si_example_desc': { en: 'If you invest $1,000 at a simple annual interest rate of 5% for 2 years:', km: 'ប្រសិនបើអ្នកវិនិយោគ $1,000 ក្នុងអត្រាការប្រាក់ធម្មតា 5% រយៈពេល 2 ឆ្នាំ:' },
+            'ci_example_desc': { en: 'If you invest $1,000 at 5% annual interest, compounded quarterly (4 times a year) for 2 years:', km: 'ប្រសិនបើអ្នកវិនិយោគ $1,000 ក្នុងអត្រា 5% ដោយផ្សំប្រចាំត្រីមាស (4 ដងក្នុងមួយឆ្នាំ) រយៈពេល 2 ឆ្នាំ:' },
+            'ear_example_desc': { en: 'For a nominal rate of 5% compounded quarterly, the actual rate you earn per year is:', km: 'សម្រាប់អត្រាកំណត់ 5% ដែលផ្សំប្រចាំត្រីមាស, អត្រាពិតប្រាកដដែលអ្នករកបានក្នុងមួយឆ្នាំគឺ:' }
+        };
+
+        let currentLang = localStorage.getItem('calculatorLanguage') || 'en';
+
+        function translatePage() {
+            const elements = document.querySelectorAll('[data-translate-key]');
+            const body = document.body;
+            const currentFont = languageOptions.find(l => l.code === currentLang).fontClass;
+            
+            body.classList.remove('font-inter', 'font-khmer');
+            body.classList.add(currentFont);
+
+            elements.forEach(el => {
+                const key = el.dataset.translateKey;
+                const translation = translations[key]?.[currentLang] || translations[key]?.['en'] || '';
+                el.innerHTML = translation;
+            });
         }
+
+        function setupLanguageSelector() {
+            const selector = document.getElementById('langSelector');
+            const btn = document.getElementById('langBtn');
+            const dropdown = document.getElementById('langDropdown');
+            const currentFlag = document.getElementById('langFlag');
+            const currentLabel = document.getElementById('langLabel');
+
+            languageOptions.forEach(lang => {
+                const option = document.createElement('button');
+                option.className = `language-option ${lang.fontClass}`;
+                option.onclick = () => {
+                    currentLang = lang.code;
+                    localStorage.setItem('calculatorLanguage', currentLang);
+                    updateLangButton();
+                    translatePage();
+                    selector.classList.remove('open');
+                };
+                option.innerHTML = `<img src="${lang.flag}" class="language-flag" alt="${lang.label}"> ${lang.label}`;
+                dropdown.appendChild(option);
+            });
+            
+            const updateLangButton = () => {
+                const langData = languageOptions.find(l => l.code === currentLang);
+                currentFlag.src = langData.flag;
+                currentLabel.textContent = langData.label;
+                currentLabel.className = langData.fontClass;
+            };
+
+            btn.addEventListener('click', (e) => { e.stopPropagation(); selector.classList.toggle('open'); });
+            document.addEventListener('click', (e) => { if (!selector.contains(e.target)) selector.classList.remove('open'); });
+            
+            updateLangButton();
+        }
+
+        function formatNumber(num, decimals = 2) {
+            if (isNaN(num) || !isFinite(num)) return (0).toFixed(decimals);
+            return num.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+        }
+
         function stripSeparators(value) {
-            if (!value) return '';
-            const cleaned = value.replace(/[, ]/g, '').trim();
-            return cleaned.match(/^[.]*$/) ? '' : cleaned;
+            if (typeof value !== 'string') return value;
+            return value.replace(/[, ]/g, '');
         }
-        function formatInputNumber(input) {
-            let value = input.value.replace(/[^0-9.-]/g, '');
-            let [integerPart, decimalPart] = value.split('.');
-            integerPart = parseInt(integerPart.replace(/[^0-9-]/g, '') || '0').toLocaleString('en-US');
-            if (decimalPart !== undefined) {
-                decimalPart = decimalPart.slice(0, input.id === 'discountPercent' ? 4 : 2);
-                input.value = `${integerPart}.${decimalPart}`;
-            } else {
-                input.value = integerPart;
+
+        function validateAndGet(inputId) {
+            const input = document.getElementById(inputId);
+            let value = parseFloat(stripSeparators(input.value));
+            
+            input.classList.remove('input-error');
+            if (input.value.trim() !== '' && (isNaN(value) || value < 0)) {
+               input.classList.add('input-error');
+               return NaN;
             }
+            return isNaN(value) ? 0 : value;
         }
-        function calculateInterest() {
-            const principalInput = document.getElementById('principalAmount');
-            const rateInput = document.getElementById('interestRate');
-            const periodInput = document.getElementById('interestPeriod');
-            const totalInterestField = document.getElementById('totalInterest');
-            const totalAmountField = document.getElementById('totalAmount');
-            [principalInput, rateInput, periodInput].forEach(el => el && el.classList.remove('input-error'));
-            totalInterestField.innerText = '$0.00';
-            totalAmountField.innerText = '$0.00';
-            const principal = parseFloat(stripSeparators(principalInput?.value));
-            const rate = parseFloat(stripSeparators(rateInput?.value));
-            const period = parseInt(stripSeparators(periodInput?.value));
-            if (principalInput && principalInput.value.trim() !== '' && (isNaN(principal) || principal <= 0)) {
-                principalInput.classList.add('input-error'); return;
-            }
-            if (rateInput && rateInput.value.trim() !== '' && (isNaN(rate) || rate < 0)) {
-                rateInput.classList.add('input-error'); return;
-            }
-            if (periodInput && periodInput.value.trim() !== '' && (isNaN(period) || period <= 0)) {
-                periodInput.classList.add('input-error'); return;
-            }
-            if (isNaN(principal) || isNaN(rate) || isNaN(period)) return;
-            const totalInterest = principal * (rate / 100) * period;
-            const totalAmount = principal + totalInterest;
-            totalInterestField.innerText = `$${formatNumber(totalInterest)}`;
-            totalAmountField.innerText = `$${formatNumber(totalAmount)}`;
+
+        function calculateAll() {
+            calculateSimpleInterest();
+            calculateCompoundInterest();
+            calculateEAR();
         }
+
+        function calculateSimpleInterest() {
+            const P = validateAndGet('si-principal'), R = validateAndGet('si-rate') / 100, T = validateAndGet('si-time');
+            const SI = P * R * T, A = P + SI;
+            document.getElementById('si-result-interest').textContent = `$${formatNumber(SI)}`;
+            document.getElementById('si-result-total').textContent = `$${formatNumber(A)}`;
+        }
+
+        function calculateCompoundInterest() {
+            const P = validateAndGet('ci-principal'), R = validateAndGet('ci-rate') / 100, T = validateAndGet('ci-time');
+            const compoundingFreq = document.getElementById('ci-compounding').value;
+            let A;
+            if (compoundingFreq === 'continuous') A = P * Math.exp(R * T);
+            else {
+                const n = parseInt(compoundingFreq, 10);
+                A = n > 0 ? P * Math.pow((1 + R / n), (n * T)) : P;
+            }
+            const CI = A - P;
+            document.getElementById('ci-result-interest').textContent = `$${formatNumber(CI)}`;
+            document.getElementById('ci-result-total').textContent = `$${formatNumber(A)}`;
+        }
+
+        function calculateEAR() {
+            const R_nominal = validateAndGet('ear-nominal-rate') / 100;
+            const n = parseInt(document.getElementById('ear-compounding').value, 10);
+            const EAR = n > 0 ? Math.pow((1 + R_nominal / n), n) - 1 : 0;
+            document.getElementById('ear-result-rate').textContent = `${formatNumber(EAR * 100, 3)}%`;
+        }
+
         document.getElementById('themeToggle').addEventListener('click', function() {
             document.body.classList.toggle('dark-mode');
             const isDarkMode = document.body.classList.contains('dark-mode');
             localStorage.setItem('darkMode', isDarkMode);
             this.textContent = isDarkMode ? '🌞' : '🌓';
         });
+
         if (localStorage.getItem('darkMode') === 'true') {
             document.body.classList.add('dark-mode');
             document.getElementById('themeToggle').textContent = '🌞';
         }
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Add SVG icon for interest calculator
-            document.querySelectorAll('.icon-container').forEach((container) => {
-                container.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l4 4m-4-12V4m0 16v-4m-4-4H4m12 0h4m-8 8v4m0-16V4m-4 4H4m12 0h4" /></svg>';
-            });
-            // Input events for interest calculator
-            ['principalAmount','interestRate','interestPeriod'].forEach(id => {
-                const field = document.getElementById(id);
-                if (field) {
-                    field.addEventListener('input', () => { formatInputNumber(field); calculateInterest(); });
-                    field.addEventListener('change', calculateInterest);
-                }
-            });
-            calculateInterest();
+            setupLanguageSelector();
+            translatePage();
+            document.querySelectorAll('input[type="text"], select').forEach(input => input.addEventListener('input', calculateAll));
+            calculateAll();
         });
     </script>
 </body>
