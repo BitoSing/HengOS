@@ -24,45 +24,48 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.11/typed.min.js"></script>
 
     <style>
-      /* --- GLOBAL STYLES & THEME VARIABLES --- */
+      /* --- REFINED COLOR PALETTE & THEME --- */
       :root {
-        --primary-color: #063969;
-        --secondary-color: #0e1f46;
+        /* Core Colors */
+        --primary-color: #0a4da6; /* A more vibrant, modern evolution of the original blue */
+        --secondary-color: #081a3d; /* A deeper navy for contrast and depth */
+        --accent-color: #33c1ff; /* A bright, energetic cyan for highlights and active states */
         --font-family: "Poppins", "Noto Sans Khmer", sans-serif;
         --khmer-font: "Noto Sans Khmer", "Khmer OS", "Hanuman", "Battambang",
           sans-serif;
-        --primary-gradient: linear-gradient(45deg, #0e1f46, #063969 80%);
+        --primary-gradient: linear-gradient(
+          45deg,
+          var(--secondary-color),
+          var(--primary-color)
+        );
+
+        /* For easier use in rgba() */
+        --primary-rgb: 10, 77, 166;
+        --accent-rgb: 51, 193, 255;
 
         /* Light Theme (Default) */
-        --bg-color: #f9f9fb;
-        --header-bg: rgba(255, 255, 255, 0.75);
+        --bg-color: #f6f8fa; /* A soft, modern off-white, common in dev tools */
+        --header-bg: rgba(255, 255, 255, 0.7);
         --card-bg: #ffffff;
-        --text-color: #1e2022;
-        --light-text-color: #5a6472;
-        --border-color: #eaecef;
-        --shadow-color: rgba(6, 57, 105, 0.08);
-        --highlight-bg: color-mix(
-          in srgb,
-          var(--primary-color) 15%,
-          transparent
-        );
+        --text-color: #1e2022; /* A strong, dark gray for readability */
+        --light-text-color: #57606a; /* A standard, accessible gray for secondary text */
+        --border-color: #d0d7de;
+        --shadow-color: rgba(var(--primary-rgb), 0.08);
+        --highlight-bg: rgba(var(--primary-rgb), 0.1);
       }
 
       /* Dark Theme */
       body.dark-theme {
-        --bg-color: #12101c;
-        --header-bg: rgba(18, 16, 28, 0.8);
-        --card-bg: #1b1829;
-        --text-color: #e8e6fc;
-        --light-text-color: #908ca7;
-        --border-color: #2a263b;
-        --shadow-color: rgba(0, 0, 0, 0.25);
-        --highlight-bg: color-mix(
-          in srgb,
-          var(--primary-color) 20%,
-          transparent
-        );
+        --bg-color: #0d1117; /* A deep navy, inspired by modern dev platforms */
+        --header-bg: rgba(13, 17, 23, 0.75);
+        --card-bg: #161b22;
+        --text-color: #e6edf3; /* Clean, readable off-white */
+        --light-text-color: #8b949e;
+        --border-color: #30363d;
+        --shadow-color: rgba(0, 0, 0, 0.4);
+        --highlight-bg: rgba(var(--primary-rgb), 0.15);
       }
+      /* --- END OF REFINED PALETTE --- */
 
       * {
         box-sizing: border-box;
@@ -127,9 +130,12 @@
         border-radius: 8px;
         transition: color 0.3s, background-color 0.3s;
         position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
       }
       .main-nav a:hover {
-        color: var(--text-color);
+        color: var(--primary-color);
         background-color: var(--highlight-bg);
       }
       .main-nav a.active {
@@ -142,9 +148,9 @@
         bottom: -4px;
         left: 50%;
         transform: translateX(-50%);
-        width: 50%;
-        height: 3px;
-        background: var(--primary-gradient);
+        width: 28px;
+        height: 4px;
+        background: var(--accent-color); /* Using accent color for a sharp highlight */
         border-radius: 2px;
       }
       .theme-switch {
@@ -170,7 +176,7 @@
         padding: 6rem 2rem;
         margin-bottom: 2.5rem;
         border-radius: 2rem;
-        background-color: #12101c;
+        background-color: var(--secondary-color);
         color: #fff;
         text-align: center;
         overflow: hidden;
@@ -252,7 +258,11 @@
       .hero-content h1 {
         font-size: 3.5rem;
         font-weight: 700;
-        background: linear-gradient(90deg, #ffffff, #c9c4f3);
+        background: linear-gradient(
+          90deg,
+          #ffffff,
+          #dde8ff
+        ); /* Adjusted gradient for better harmony */
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -261,7 +271,7 @@
       }
       .hero-content p.subtitle {
         font-size: 1.25rem;
-        color: #e8e6fc;
+        color: #e6edf3;
         max-width: 600px;
         line-height: 1.6;
         animation-delay: 0.4s;
@@ -309,7 +319,7 @@
       .hero-section .filter-btn:hover {
         background-color: var(--highlight-bg);
         border-color: var(--primary-color);
-        color: var(--text-color);
+        color: var(--primary-color);
       }
       .hero-section .filter-btn:hover {
         background: rgba(255, 255, 255, 0.15);
@@ -323,10 +333,11 @@
         border-color: transparent;
       }
       .hero-section .filter-btn.active {
-        background: #fff;
-        color: var(--primary-color);
-        border-color: #fff;
-        box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
+        background: var(--accent-color);
+        color: var(--secondary-color);
+        border-color: var(--accent-color);
+        font-weight: 700;
+        box-shadow: 0 2px 10px rgba(var(--accent-rgb), 0.3);
       }
 
       /* --- LINK CARD & GRID STYLES --- */
@@ -340,9 +351,13 @@
         text-decoration: none;
       }
       .link-item.system-support-link {
-        background: linear-gradient(120deg, #1b1829 0%, #2a263b 100%);
+        background: linear-gradient(
+          120deg,
+          #161b22 0%,
+          #21262d 100%
+        ); /* Darker, more neutral background */
         color: #fff;
-        border: 1px solid #2a263b;
+        border: 1px solid #30363d;
         border-radius: 18px;
         box-shadow: 0 8px 32px -8px rgba(10, 25, 41, 0.5);
         padding: 2rem 1.5rem 1.5rem 1.5rem;
@@ -351,18 +366,19 @@
         align-items: flex-start;
         position: relative;
         min-height: 160px;
-        transition: box-shadow 0.3s, transform 0.3s, background 0.3s;
+        transition: box-shadow 0.3s, transform 0.3s, background 0.3s,
+          border-color 0.3s;
         overflow: hidden;
       }
       .link-item.system-support-link:hover {
         background: linear-gradient(
           120deg,
           var(--primary-color) 0%,
-          #1b1829 100%
+          #161b22 100%
         );
-        box-shadow: 0 16px 40px -8px rgba(10, 25, 41, 0.7);
+        box-shadow: 0 16px 40px -8px rgba(var(--primary-rgb), 0.4);
         transform: translateY(-6px) scale(1.03);
-        border-color: var(--primary-color);
+        border-color: var(--accent-color);
       }
       .link-item.system-support-link .link-icon {
         background: rgba(255, 255, 255, 0.08);
@@ -374,7 +390,7 @@
         justify-content: center;
         margin-bottom: 1.1rem;
         transition: transform 0.4s cubic-bezier(0.4, 2, 0.6, 1), box-shadow 0.3s;
-        box-shadow: 0 2px 12px 0 rgba(106, 17, 203, 0.2);
+        box-shadow: 0 2px 12px 0 rgba(var(--accent-rgb), 0.2);
         will-change: transform;
       }
       .hero-icon-anim {
@@ -406,7 +422,7 @@
         margin-bottom: 0.5rem;
       }
       .link-item.system-support-link .link-arrow {
-        color: #e8e6fc;
+        color: var(--accent-color);
         position: absolute;
         right: 1.5rem;
         top: 1.5rem;
@@ -469,6 +485,7 @@
       .link-item:hover .link-arrow {
         opacity: 1;
         transform: translateY(-50%) translateX(0);
+        color: var(--primary-color);
       }
       .link-item.cellcard-link,
       .link-item.ezecom-link,
@@ -524,102 +541,106 @@
         -webkit-text-fill-color: transparent;
         background-clip: text;
       }
-      
+
       /* --- START: NEW LOCATION SECTION STYLES --- */
       .location-section-container {
-          margin-top: 2rem;
+        margin-top: 2rem;
       }
       .company-grid {
-          display: grid;
-          grid-template-columns: 1fr; /* Default to 1 column */
-          gap: 2rem;
+        display: grid;
+        grid-template-columns: 1fr; /* Default to 1 column */
+        gap: 2rem;
       }
       .company-card {
-          background: var(--card-bg);
-          border: 1px solid var(--border-color);
-          border-radius: 18px;
-          padding: 1.5rem 2rem;
-          box-shadow: 0 8px 25px -8px var(--shadow-color);
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 18px;
+        padding: 1.5rem 2rem;
+        box-shadow: 0 8px 25px -8px var(--shadow-color);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
       .company-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 12px 30px -10px var(--shadow-color);
       }
       .company-header {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          padding-bottom: 1.25rem;
-          margin-bottom: 1.5rem;
-          border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding-bottom: 1.25rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
       }
       .company-logo {
-          width: 48px;
-          height: 48px;
-          flex-shrink: 0;
+        width: 48px;
+        height: 48px;
+        flex-shrink: 0;
       }
       .company-header h2 {
-          font-size: 1.75rem;
-          font-weight: 700;
+        font-size: 1.75rem;
+        font-weight: 700;
       }
-      .company-header.ezecom-header h2 { color: #6c54a3; }
-      .company-header.cellcard-header h2 { color: #e48947; }
+      .company-header.ezecom-header h2 {
+        color: #6c54a3;
+      }
+      .company-header.cellcard-header h2 {
+        color: #e48947;
+      }
       .company-locations-body {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
       }
       .location-column h4 {
-          font-size: 1.1rem;
-          font-weight: 600;
-          color: var(--light-text-color);
-          margin-bottom: 1rem;
-          padding-bottom: 0.5rem;
-          border-bottom: 2px solid var(--border-color);
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--light-text-color);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--border-color);
       }
       .location-list {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem 1.5rem;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem 1.5rem;
       }
       .location-item a {
-          display: flex;
-          align-items: flex-start;
-          gap: 0.75rem;
-          text-decoration: none;
-          color: var(--text-color);
-          padding: 0.5rem;
-          border-radius: 8px;
-          transition: background-color 0.2s, color 0.2s;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        text-decoration: none;
+        color: var(--text-color);
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: background-color 0.2s, color 0.2s;
       }
       .location-item a:hover {
-          background-color: var(--highlight-bg);
-          color: var(--primary-color);
+        background-color: var(--highlight-bg);
+        color: var(--primary-color);
       }
       .location-item .icon {
-          flex-shrink: 0;
-          color: var(--light-text-color);
-          margin-top: 4px;
-          transition: color 0.2s;
+        flex-shrink: 0;
+        color: var(--primary-color); /* Made icon color primary */
+        margin-top: 4px;
+        transition: color 0.2s;
       }
       .location-item a:hover .icon {
-          color: var(--primary-color);
+        color: var(--accent-color);
       }
       .location-name {
-          font-weight: 600;
-          font-size: 0.95rem;
+        font-weight: 600;
+        font-size: 0.95rem;
       }
       .location-address {
-          font-size: 0.85rem;
-          color: var(--light-text-color);
-          line-height: 1.5;
+        font-size: 0.85rem;
+        color: var(--light-text-color);
+        line-height: 1.5;
       }
       /* --- END: NEW LOCATION SECTION STYLES --- */
-      
+
       /* --- START: RT Ticket Inquiries Redesign --- */
       #rt-ticket-inquiries-container .section-title {
         font-size: 2rem;
@@ -671,12 +692,12 @@
         display: grid;
         place-items: center;
         margin-bottom: 1rem;
-        box-shadow: 0 4px 12px rgba(6, 57, 105, 0.2);
+        box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
         color: white;
       }
-      
+
       body.dark-theme .rt-card-icon-wrapper {
-        box-shadow: 0 4px 12px rgba(0,0,0, 0.3);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       }
 
       .rt-card-icon-wrapper svg {
@@ -714,13 +735,17 @@
       }
 
       .rt-card-body li::before {
-        content: '✓';
+        content: "✓";
         position: absolute;
         left: 0;
         top: 2px;
         font-weight: 700;
-        color: white;
-        background-color: var(--primary-color);
+        color: var(
+          --secondary-color
+        ); /* Dark text on bright background for contrast */
+        background-color: var(
+          --accent-color
+        ); /* Using accent for high visibility */
         width: 18px;
         height: 18px;
         border-radius: 50%;
@@ -732,27 +757,27 @@
 
       .rt-card.digital-card {
         grid-column: 1 / -1;
-        flex-direction: column; 
-        align-items: center;    
+        flex-direction: column;
+        align-items: center;
         gap: 2.5rem;
         padding: 2.5rem;
       }
 
       .rt-card.digital-card .rt-card-header {
-        align-items: center;    
-        text-align: center;     
-        margin-bottom: 0;       
+        align-items: center;
+        text-align: center;
+        margin-bottom: 0;
       }
-      
+
       .rt-card.digital-card .rt-card-icon-wrapper {
-          margin-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
       }
 
       .rt-card.digital-card .rt-card-body {
-        padding-top: 0;        
-        width: 100%;           
+        padding-top: 0;
+        width: 100%;
       }
-      
+
       .rt-digital-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -767,7 +792,7 @@
         padding-bottom: 0.5rem;
         border-bottom: 1px dashed var(--border-color);
       }
-      
+
       .rt-digital-subsection ul {
         gap: 0.8rem;
       }
@@ -903,7 +928,9 @@
 
       /* --- START: PORTFOLIO ABOUT PAGE STYLES --- */
       .about-page-content {
-        --dark-color: #0e1f46;
+        --dark-color: var(
+          --secondary-color
+        ); /* linking to main theme color */
       }
       .about-page-content .max-width {
         max-width: 1100px;
@@ -938,7 +965,7 @@
         border-radius: 50%;
         border: 6px solid var(--card-bg);
         box-shadow: 0 0 0 8px var(--primary-color),
-          0 10px 40px rgba(6, 57, 105, 0.25);
+          0 10px 40px rgba(var(--primary-rgb), 0.25);
         animation: floatAnimation 4s ease-in-out infinite;
         margin-top: 2rem;
       }
@@ -989,7 +1016,7 @@
         background: var(--card-bg);
         border-radius: 16px;
         border: 1px solid var(--border-color);
-        box-shadow: 0 4px 12px rgba(6, 57, 105, 0.08);
+        box-shadow: 0 4px 12px var(--shadow-color);
         padding: 2rem 2.5rem;
         margin-bottom: 2rem;
       }
@@ -1019,7 +1046,7 @@
           color 0.3s ease;
       }
       .about-page-content .social-icons a:hover {
-        color: var(--dark-color);
+        color: var(--accent-color);
         transform: translateY(-5px);
       }
 
@@ -1056,7 +1083,7 @@
       }
       .about-page-content .skill-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 6px 16px rgba(6, 57, 105, 0.12);
+        box-shadow: 0 6px 16px var(--shadow-color);
       }
       .about-page-content .skill-card-header {
         display: flex;
@@ -1163,7 +1190,7 @@
         font-family: "Poppins", sans-serif;
         border-radius: 8px;
         border: 1.5px solid var(--border-color);
-        transition: border-color 0.2s ease;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
       }
       .about-page-content .contact-form .field-group input {
         flex: 1 1 150px;
@@ -1172,8 +1199,7 @@
       .about-page-content .contact-form textarea:focus {
         border-color: var(--primary-color);
         outline: none;
-        box-shadow: 0 0 0 3px
-          color-mix(in srgb, var(--primary-color) 20%, transparent);
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
       }
       .about-page-content .contact-form textarea {
         min-height: 120px;
@@ -1244,6 +1270,7 @@
           padding: 1rem 2rem;
           width: 80%;
           text-align: center;
+          justify-content: center; /* Center icon and text */
         }
         .main-nav a.active::after {
           bottom: 4px;
@@ -1271,9 +1298,9 @@
         .app-section-grid {
           grid-template-columns: 1fr;
         }
-        
+
         .company-grid {
-            grid-template-columns: 1fr;
+          grid-template-columns: 1fr;
         }
 
         /* --- START: ABOUT PAGE RESPONSIVE FIXES --- */
@@ -1307,7 +1334,7 @@
         .about-page-content .contact-form button {
           align-self: stretch;
         }
-        
+
         /* FIX: This centers the "Get in Touch" info block on mobile */
         .about-page-content .contact-info-list {
           display: inline-flex;
@@ -1331,14 +1358,14 @@
         }
 
         .company-locations-body {
-            grid-template-columns: 1fr;
-            gap: 2.5rem; /* Increase gap when columns stack */
+          grid-template-columns: 1fr;
+          gap: 2.5rem; /* Increase gap when columns stack */
         }
         .company-card {
-            padding: 1.5rem;
+          padding: 1.5rem;
         }
         .company-header h2 {
-            font-size: 1.5rem;
+          font-size: 1.5rem;
         }
 
         .hero-content h1 {
@@ -1366,6 +1393,11 @@
         }
         .about-page-content .skills-list {
           grid-template-columns: 1fr;
+          /* FIX: Center the skill cards container on mobile */
+          width: 100%;
+          max-width: 400px;
+          margin-left: auto;
+          margin-right: auto;
         }
         .about-page-content .contact-form button {
           width: 100%;
@@ -1409,7 +1441,7 @@
           grid-template-columns: 1fr;
         }
         .location-list {
-            grid-template-columns: 1fr; /* FIX: single column on small phones */
+          grid-template-columns: 1fr; /* FIX: single column on small phones */
         }
         .hero-section {
           padding: 3rem 1rem;
@@ -1426,18 +1458,18 @@
           font-size: 1.5rem;
           margin-bottom: 1.5rem;
         }
-        
+
         .rt-card {
-            padding: 1.5rem;
+          padding: 1.5rem;
         }
         .rt-card-title {
-            font-size: 1.1rem;
+          font-size: 1.1rem;
         }
         .rt-card-icon-wrapper {
-            width: 56px;
-            height: 56px;
+          width: 56px;
+          height: 56px;
         }
-        
+
         .link-item {
           padding: 1rem;
           gap: 1rem;
@@ -1451,7 +1483,7 @@
           height: 200px;
           border-width: 4px;
           box-shadow: 0 0 0 6px var(--primary-color),
-            0 5px 20px rgba(6, 57, 105, 0.2);
+            0 5px 20px rgba(var(--primary-rgb), 0.2);
         }
         .about-hero-content .text-1 {
           font-size: 1.2rem;
@@ -1471,7 +1503,6 @@
     </style>
   </head>
   <body>
-    <!-- The rest of the body HTML and script remains the same -->
     <div class="app-shell">
       <header class="app-header">
         <div class="logo">HengOS</div>
@@ -1484,20 +1515,18 @@
             >Home</a
           >
           <a href="#about" id="about-link" data-translate-key="navAbout">
-            <span style="display: inline-block; vertical-align: middle">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                style="margin-right: 5px; vertical-align: middle"
-              >
-                <path
-                  d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
-                  fill="currentColor"
-                />
-              </svg>
-            </span>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
+              />
+            </svg>
             About
           </a>
         </nav>
@@ -1586,78 +1615,290 @@
           navHome: "Home",
           navAbout: "About",
           heroTitle: "Welcome to HengOS",
-          heroSubtitle:
-            "Your all-in-one productivity dashboard. Jump to your favorite tools, links, and resources in a flash!",
+          heroSubtitle: "Your all-in-one productivity dashboard. Jump to your favorite tools, links, and resources in a flash!",
           filterBtnSys: "Systems Supports",
           filterBtnApp: "Applications",
           filterBtnRT: "RT Ticket Inquiries",
           filterBtnLoc: "Location",
+          
           ss_bizCalc_h3: "Business Calculation",
           ss_bizCalc_p: "Quickly calculate business numbers and scenarios.",
           ss_finTools_h3: "Finance Tools",
-          ss_finTools_p:
-            "Interest, pricing, and billing calculators for business and personal finance.",
+          ss_finTools_p: "Interest, pricing, and billing calculators for business and personal finance.",
           ss_sampleEmail_h3: "Sample Email",
           ss_sampleEmail_p: "Sample of Email and Text.",
           ss_textExtract_h3: "Text Extraction",
-          ss_textExtract_p:
-            "Extract and transcribe text from images, PDFs, and audio files.",
+          ss_textExtract_p: "Extract and transcribe text from images, PDFs, and audio files.",
+          ss_compress_h3: "Compressor Tool",
+          ss_compress_p: "Compress PDF, images, videos, Word, Excel, and PowerPoint files.",
+          
           app_cat_cellcard: "Cellcard",
           app_cat_ezecom: "EZECOM",
           app_cat_altogether: "Altogether",
+          
+          app_cc_ameyo_h3: "CC - Ameyo",
+          app_cc_ameyo_p: "Cellcard Call Center Ameyo",
+          app_cc_bs4_h3: "CC - BS4",
+          app_cc_bs4_p: "Customer service Management (BS4)",
+          app_cc_ccos_h3: "CCOS Portal",
+          app_cc_ccos_p: "CCOS Portal",
+          app_cc_meta_h3: "BS4 - Metabase",
+          app_cc_meta_p: "BS4 Daily Utilization Dashboard",
+
+          app_eze_ameyo_h3: "Eze - Ameyo",
+          app_eze_ameyo_p: "Customer Care Portal",
+          app_eze_bs2_h3: "CSM - BS2",
+          app_eze_bs2_p: "Customer Service Management (BS2)",
+          app_eze_eos_h3: "EOS - Portal",
+          app_eze_eos_p: "EOS Portal",
+          app_eze_meta_h3: "BS2 - Metabase",
+          app_eze_meta_p: "BS2 Daily Utilization Dashboard",
+
+          app_alt_eze24_h3: "Eze 24",
+          app_alt_eze24_p: "Business Process Portal",
+          app_alt_rt_h3: "RT Ticket",
+          app_alt_rt_p: "Live Monitoring & Ticketing",
+          app_alt_intranet_h3: "Intranet",
+          app_alt_intranet_p: "Internal Company Portal",
+          app_alt_mihcm_h3: "MiHCM",
+          app_alt_mihcm_p: "Human Capital Management",
+          app_alt_sm_h3: "SM Portal",
+          app_alt_sm_p: "Service Management Portal",
+          app_alt_smsurvey_h3: "SM Portal - Survey",
+          app_alt_smsurvey_p: "Customer Onsite Survey",
+          app_alt_teams_h3: "Microsoft Teams",
+          app_alt_teams_p: "Collaboration Platform",
+          app_alt_outlook_h3: "Microsoft Outlook",
+          app_alt_outlook_p: "Email Platform",
+
+          loc_main_title: "EZECOM & Cellcard's Location",
           loc_pp_title: "Phnom Penh City",
           loc_prov_title: "Provincial",
+          loc_hours: "(Mon - Sun, 8:00AM - 6:00PM)",
+          
           rt_title: "RT Ticket Inquiries",
           rt_q_activation_h3: "Queue: Activation Team",
+          rt_li_react_dismantle: "Re-activation after dismantle",
+          rt_li_react_terminate: "Re-activation after termination",
+          rt_li_conn_removed: "Connection with removed connectivity/port/device",
+          
           rt_q_delivery_h3: "Queue: Customer Delivery",
+          rt_li_update_profile: "Update Profile",
+          rt_li_up_down_grade: "Upgrade / Downgrade Speed",
+          rt_li_test_speed: "Test Speed",
+          rt_li_change_billing: "Change Billing Date / Location",
+          rt_li_change_name: "Change Account Name",
+          rt_li_purchase: "Purchase CPE or Static IP",
+
           rt_q_collection_h3: "Queue: Care Collection",
+          rt_li_refuse_pay: "Refuse to pay invoice",
+          rt_p_billing_related: "All request relates to billing the same.",
+
           rt_q_renewal_h3: "Queue: Care Renewal",
+          rt_li_renew_promo: "Renewal + Promotion request",
+          rt_li_reactive: "Reactive Request",
+          rt_li_terminate: "Terminate Request",
+          rt_li_compensate: "Request Compensation or Refund",
+
           rt_q_digital_h3: "Queue: Digital",
           rt_q_digital_p: "Technical Issues & Fulfillment",
           rt_digital_sub1: "Service Availability Issues",
+          rt_li_alarm: "Alarm / Lastsmile Alert",
+          rt_li_onu_down: "Many ONU Down / PON Down",
+          rt_li_no_internet: "Internet Not Working (Total outage)",
+          rt_li_no_wifi: "No WiFi Signal",
+          
           rt_digital_sub2: "Service Performance Issues",
+          rt_li_slow: "Internet Slow or Unstable",
+          rt_li_low_signal: "WiFi Low Signal / Poor Range",
+          rt_li_link_budget: "Link budget low or high",
+          rt_li_web_issue: "Website, App, or Game Issue",
+          rt_li_port_issue: "Port access / Protocol issue",
+
           rt_digital_sub3: "Fulfillment",
-          creatorDesc:
-            "I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.",
+          rt_li_relocate: "Relocate / Re-Configure Modem/Router",
+          rt_li_req_login: "Request Login for Modem/Router",
+          rt_li_change_wifi: "Change WiFi Name / Password",
+          rt_li_config_cam: "Configure Remote Camera / NAT",
+          rt_li_req_graph: "Request LAN/Wi-Fi Survey",
+          rt_li_add_graph: "Add/Share Graph Utilization",
+          rt_li_mac_addr: "Enable/Disable MAC Address",
+
+          about_hello: "Hello, my name is",
+          about_iam: "And I'm a",
+          about_typed_1: "Freelancer.",
+          about_typed_2: "Web Developer.",
+          about_typed_3: "Graphic Designer.",
+          about_typed_4: "Content Creator.",
+          creatorDesc: "I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.",
+          
+          about_skills_title: "My Skills",
+          about_skills_intro_h: "My creative skills & experiences",
+          about_skills_intro_p: "Responsible and hardworking, I’m able to handle working under pressure as well as communicate and collaborate seamlessly in a teamwork environment. My strongest points are well-communication, open-mind set, self-motivated, active listening, honesty, patience, creativity, fast learning, and trustworthiness.",
+          skill_office: "Office Software",
+          skill_adobe: "Adobe Suite",
+          skill_video: "Video Editing",
+          skill_frontend: "Front-End Dev",
+          skill_management: "Management",
+          
+          about_contact_title: "Contact Me",
+          about_contact_getintouch_h: "Get in Touch",
+          about_contact_getintouch_p: "Have a question or a project in mind? Feel free to reach out. I'm always open to discussing new opportunities and creative ideas.",
+          about_contact_info_name: "Name",
+          about_contact_info_address: "Address",
+          about_contact_info_email: "Email",
+          about_contact_form_h: "Message Me",
+          form_placeholder_name: "Name",
+          form_placeholder_email: "Email",
+          form_placeholder_subject: "Subject",
+          form_placeholder_message: "Your Message..",
+          form_button_send: "Send Message",
+
           footerText: "All right Reserved 2025 @LYHENG.",
         },
         kh: {
           navHome: "ទំព័រដើម",
           navAbout: "អំពីប្រព័ន្ធ",
           heroTitle: "សូមស្វាគមន៍មកកាន់ HengOS",
-          heroSubtitle:
-            "ផ្ទាំងគ្រប់គ្រងផលិតភាពរបស់អ្នក។ ចូលទៅកាន់ឧបករណ៍ តំណ និងធនធានដែលអ្នកចូលចិត្តបានភ្លាមៗ!",
+          heroSubtitle: "ផ្ទាំងគ្រប់គ្រងផលិតភាពរបស់អ្នក។ ចូលទៅកាន់ឧបករណ៍ តំណ និងធនធានដែលអ្នកចូលចិត្តបានភ្លាមៗ!",
           filterBtnSys: "ប្រព័ន្ធជំនួយ",
           filterBtnApp: "កម្មវិធីនានា",
           filterBtnRT: "សាកសួរ RT Ticket",
           filterBtnLoc: "ទីតាំង",
+
           ss_bizCalc_h3: "ការគណនាអាជីវកម្ម",
           ss_bizCalc_p: "គណនាលេខអាជីវកម្ម និងសេណារីយ៉ូផ្សេងៗបានរហ័ស។",
           ss_finTools_h3: "ឧបករណ៍ហិរញ្ញវត្ថុ",
-          ss_finTools_p:
-            "ការគណនាការប្រាក់ តម្លៃ និងវិក្កយបត្រសម្រាប់អាជីវកម្ម និងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន។",
+          ss_finTools_p: "ការគណនាការប្រាក់ តម្លៃ និងវិក្កយបត្រសម្រាប់អាជីវកម្ម និងហិរញ្ញវត្ថុផ្ទាល់ខ្លួន។",
           ss_sampleEmail_h3: "គំរូអ៊ីមែល",
           ss_sampleEmail_p: "គំរូនៃអ៊ីមែល និងសារអក្សរ។",
           ss_textExtract_h3: "ការដកស្រង់អត្ថបទ",
-          ss_textExtract_p:
-            "ដកស្រង់ និងចម្លងអត្ថបទពីរូបភាព PDF និងឯកសារអូឌីយ៉ូ។",
+          ss_textExtract_p: "ដកស្រង់ និងចម្លងអត្ថបទពីរូបភាព PDF និងឯកសារអូឌីយ៉ូ។",
+          ss_compress_h3: "ឧបករណ៍បង្ហាប់ឯកសារ",
+          ss_compress_p: "បង្ហាប់ឯកសារ PDF, រូបភាព, វីដេអូ, Word, Excel, និង PowerPoint។",
+          
           app_cat_cellcard: "សែលកាត",
           app_cat_ezecom: "អ៊ីស៊ីខម",
           app_cat_altogether: "រួមគ្នា",
+          
+          app_cc_ameyo_h3: "CC - Ameyo",
+          app_cc_ameyo_p: "ប្រព័ន្ធទូរស័ព្ទសែលកាត Ameyo",
+          app_cc_bs4_h3: "CC - BS4",
+          app_cc_bs4_p: "ការគ្រប់គ្រងសេវាកម្មអតិថិជន (BS4)",
+          app_cc_ccos_h3: "CCOS Portal",
+          app_cc_ccos_p: "ផតថល CCOS",
+          app_cc_meta_h3: "BS4 - Metabase",
+          app_cc_meta_p: "ផ្ទាំងទិន្នន័យប្រើប្រាស់ប្រចាំថ្ងៃ BS4",
+
+          app_eze_ameyo_h3: "Eze - Ameyo",
+          app_eze_ameyo_p: "ផតថល chăm sóc khách hàng",
+          app_eze_bs2_h3: "CSM - BS2",
+          app_eze_bs2_p: "ការគ្រប់គ្រងសេវាកម្មអតិថិជន (BS2)",
+          app_eze_eos_h3: "EOS - Portal",
+          app_eze_eos_p: "ផតថល EOS",
+          app_eze_meta_h3: "BS2 - Metabase",
+          app_eze_meta_p: "ផ្ទាំងទិន្នន័យប្រើប្រាស់ប្រចាំថ្ងៃ BS2",
+
+          app_alt_eze24_h3: "Eze 24",
+          app_alt_eze24_p: "ផតថលដំណើរការអាជីវកម្ម",
+          app_alt_rt_h3: "RT Ticket",
+          app_alt_rt_p: "ការត្រួតពិនិត្យ និងប្រព័ន្ធ Ticket",
+          app_alt_intranet_h3: "Intranet",
+          app_alt_intranet_p: "ផតថលផ្ទៃក្នុងក្រុមហ៊ុន",
+          app_alt_mihcm_h3: "MiHCM",
+          app_alt_mihcm_p: "ការគ្រប់គ្រងធនធានមនុស្ស",
+          app_alt_sm_h3: "SM Portal",
+          app_alt_sm_p: "ផតថលគ្រប់គ្រងសេវាកម្ម",
+          app_alt_smsurvey_h3: "SM Portal - ការស្ទង់មតិ",
+          app_alt_smsurvey_p: "ការស្ទង់មតិអតិថិជននៅទីតាំង",
+          app_alt_teams_h3: "Microsoft Teams",
+          app_alt_teams_p: "វេទិកាសហប្រតិបត្តិការ",
+          app_alt_outlook_h3: "Microsoft Outlook",
+          app_alt_outlook_p: "វេទិកាអ៊ីមែល",
+
+          loc_main_title: "ទីតាំង EZECOM និង Cellcard",
           loc_pp_title: "រាជធានីភ្នំពេញ",
           loc_prov_title: "ទីតាំងតាមខេត្ត",
+          loc_hours: "(ចន្ទ - អាទិត្យ, 8:00ព្រឹក - 6:00ល្ងាច)",
+          
           rt_title: "ការសាកសួរ RT Ticket",
           rt_q_activation_h3: "ផ្នែក: ក្រុមការងារដំឡើង",
+          rt_li_react_dismantle: "ដំណើរការឡើងវិញបន្ទាប់ពីការរុះរើ",
+          rt_li_react_terminate: "ដំណើរការឡើងវិញបន្ទាប់ពីការផ្តាច់សេវា",
+          rt_li_conn_removed: "ការតភ្ជាប់ដែលបានដកឧបករណ៍/រន្ធ/ខ្សែ",
+
           rt_q_delivery_h3: "ផ្នែក: ការដឹកជញ្ជូនអតិថិជន",
+          rt_li_update_profile: "ធ្វើបច្ចុប្បន្នភាពព័ត៌មាន",
+          rt_li_up_down_grade: "តំឡើង / បន្ថយល្បឿន",
+          rt_li_test_speed: "តេស្តល្បឿន",
+          rt_li_change_billing: "ផ្លាស់ប្តូរកាលបរិច្ឆេទ / ទីតាំងវិក្កយបត្រ",
+          rt_li_change_name: "ផ្លាស់ប្តូរឈ្មោះគណនី",
+          rt_li_purchase: "ទិញឧបករណ៍ CPE ឬ Static IP",
+          
           rt_q_collection_h3: "ផ្នែក: ការប្រមូលបំណុល",
+          rt_li_refuse_pay: "បដិសេធមិនបង់វិក្កយបត្រ",
+          rt_p_billing_related: "រាល់សំណើដែលទាក់ទងនឹងវិក្កយបត្រដូចគ្នា។",
+          
           rt_q_renewal_h3: "ផ្នែក: បន្តសេវាកម្ម",
+          rt_li_renew_promo: "ការបន្ត + សំណើโปรโมชั่น",
+          rt_li_reactive: "សំណើរសុំបើកឡើងវិញ",
+          rt_li_terminate: "សំណើរសុំផ្តាច់សេវា",
+          rt_li_compensate: "សំណើសុំសំណង ឬការបង្វិលសងប្រាក់",
+
           rt_q_digital_h3: "ផ្នែក: បច្ចេកទេស",
           rt_q_digital_p: "បញ្ហាបច្ចេកទេស និងការបំពេញការងារ",
           rt_digital_sub1: "បញ្ហាដែលអាចកើតមានលើសេវាកម្ម",
+          rt_li_alarm: "ការជូនដំណឹង Alarm / Lastsmile",
+          rt_li_onu_down: "ONU ឬ PON ជាច្រើនមិនដំណើរការ",
+          rt_li_no_internet: "អ៊ីនធឺណិតមិនដំណើរការ (ដាច់ទាំងស្រុង)",
+          rt_li_no_wifi: "គ្មានសញ្ញា WiFi",
+
           rt_digital_sub2: "បញ្ហាដំណើរការសេវាកម្ម",
+          rt_li_slow: "អ៊ីនធឺណិតយឺត ឬមិនស្ថិតស្ថេរ",
+          rt_li_low_signal: "សញ្ញា WiFi ខ្សោយ / ចម្ងាយខ្លី",
+          rt_li_link_budget: "Link budget ទាប ឬខ្ពស់",
+          rt_li_web_issue: "បញ្ហាគេហទំព័រ, កម្មវិធី, ឬហ្គេម",
+          rt_li_port_issue: "បញ្ហាការចូល Port / Protocol",
+
           rt_digital_sub3: "ការបំពេញការងារ",
-          creatorDesc:
-            "ខ្ញុំ đam mê ការបង្កើតឧបករណ៍ឌីជីថលដែលជួយបង្កើនផលិតភាព និងធ្វើឱ្យការងារប្រចាំថ្ងៃកាន់តែងាយស្រួល។",
+          rt_li_relocate: "ផ្លាស់ប្តូរទីតាំង / តំឡើង Modem/Router ឡើងវិញ",
+          rt_li_req_login: "ស្នើសុំ Login សម្រាប់ Modem/Router",
+          rt_li_change_wifi: "ផ្លាស់ប្តូរឈ្មោះ / ពាក្យសម្ងាត់ WiFi",
+          rt_li_config_cam: "តំឡើងកាមេរ៉ាសុវត្ថិភាព / NAT",
+          rt_li_req_graph: "ស្នើសុំការស្ទង់មតិ LAN/Wi-Fi",
+          rt_li_add_graph: "បន្ថែម/ចែករំលែកក្រាហ្វការប្រើប្រាស់",
+          rt_li_mac_addr: "បើក/បិទ MAC Address",
+          
+          about_hello: "សួស្តី, ខ្ញុំឈ្មោះ",
+          about_iam: "ហើយខ្ញុំជា",
+          about_typed_1: "អ្នកធ្វើការឯករាជ្យ។",
+          about_typed_2: "អ្នកអភិវឌ្ឍន៍វិប។",
+          about_typed_3: "អ្នករចនាក្រាហ្វិក។",
+          about_typed_4: "អ្នកបង្កើតមាតិកា។",
+          creatorDesc: "ខ្ញុំស្រលាញ់ការបង្កើតឧបករណ៍ឌីជីថលដែលជួយបង្កើនផលិតភាព និងធ្វើឱ្យការងារប្រចាំថ្ងៃកាន់តែងាយស្រួល។ ចំណាប់អារម្មណ៍របស់ខ្ញុំរួមមាន ការអភិវឌ្ឍន៍វិប, ប្រព័ន្ធស្វ័យប្រវត្តិកម្ម, និងការចែករំលែកចំណេះដឹងជាមួយសហគមន៍។",
+          
+          about_skills_title: "ជំនាញរបស់ខ្ញុំ",
+          about_skills_intro_h: "ជំនាញ និងបទពិសោធន៍ច្នៃប្រឌិតរបស់ខ្ញុំ",
+          about_skills_intro_p: "ខ្ញុំជាមនុស្សមានការទទួលខុសត្រូវ និងឧស្សាហ៍ព្យាយាម អាចធ្វើការក្រោមសម្ពាធ ក៏ដូចជាទំនាក់ទំនង និងសហការយ៉ាងរលូនក្នុងបរិយាកាសការងារជាក្រុម។ ចំណុចខ្លាំងរបស់ខ្ញុំគឺ ការទំនាក់ទំនងល្អ, ការបើកใจទូលាយ, ការលើកទឹកចិត្តខ្លួនឯង, ការស្តាប់ដោយយកចិត្តទុកដាក់, ភាពស្មោះត្រង់, ការអត់ធ្មត់, ការច្នៃប្រឌិត, ការរៀនសូត្រលឿន, និងភាពជឿជាក់។",
+          skill_office: "កម្មវិធីការិយាល័យ",
+          skill_adobe: "កម្មវិធី Adobe",
+          skill_video: "កាត់តវីដេអូ",
+          skill_frontend: "អភិវឌ្ឍន៍ Front-End",
+          skill_management: "ការគ្រប់គ្រង",
+          
+          about_contact_title: "ទំនាក់ទំនងមកខ្ញុំ",
+          about_contact_getintouch_h: "ទាក់ទងមក",
+          about_contact_getintouch_p: "មានសំណួរ ឬគម្រោងក្នុងใจមែនទេ? សូមកុំស្ទាក់ស្ទើរក្នុងការទាក់ទងមក។ ខ្ញុំតែងតែបើកចំហរក្នុងការពិភាក្សាអំពីឱកាសថ្មីៗ និងគំនិតច្នៃប្រឌិត។",
+          about_contact_info_name: "ឈ្មោះ",
+          about_contact_info_address: "អាសយដ្ឋាន",
+          about_contact_info_email: "អ៊ីមែល",
+          about_contact_form_h: "ផ្ញើសារមកខ្ញុំ",
+          form_placeholder_name: "ឈ្មោះ",
+          form_placeholder_email: "អ៊ីមែល",
+          form_placeholder_subject: "ប្រធានបទ",
+          form_placeholder_message: "សាររបស់អ្នក...",
+          form_button_send: "ផ្ញើសារ",
+
           footerText: "រក្សាសិទ្ធិគ្រប់យ៉ាង ២០២៥ @LYHENG.",
         },
       };
@@ -1667,11 +1908,11 @@
       // === VIRTUAL PAGE CONTENT ===
       const systemSupportsContent = `
         <div id="link-grid">
-            <a href="BusinessCal.html" class="link-item system-support-link" data-category="all"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/emxxkbtx.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3 data-translate-key="ss_bizCalc_h3">Business Calculation</h3><p data-translate-key="ss_bizCalc_p">Quickly calculate business numbers and scenarios.</p></div><div class="link-arrow">→</div></a>
-            <a href="FinanceCal.html" class="link-item system-support-link" data-category="finance"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/dnupukmh.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3 data-translate-key="ss_finTools_h3">Finance Tools</h3><p data-translate-key="ss_finTools_p">Interest, pricing, and billing calculators for business and personal finance.</p></div><div class="link-arrow">→</div></a>
-            <a href="SampleEmail.html" class="link-item system-support-link" data-category="all"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/bpptgtfr.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3 data-translate-key="ss_sampleEmail_h3">Sample Email</h3><p data-translate-key="ss_sampleEmail_p">Sample of Email and Text.</p></div><div class="link-arrow">→</div></a>
-            <a href="TextExtractor.html" class="link-item system-support-link" data-category="all"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/cfkiwvcc.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3 data-translate-key="ss_textExtract_h3">Text Extraction</h3><p data-translate-key="ss_textExtract_p">Extract and transcribe text from images, PDFs, and audio files.</p></div><div class="link-arrow">→</div></a>
-            <a href="Compressor.html" class="link-item system-support-link" data-category="all"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/eoygayvy.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3>Compressor Tool</h3><p>Compress PDF, images, videos, Word, Excel, and PowerPoint files.</p></div><div class="link-arrow">→</div></a>
+            <a href="BusinessCal.html" class="link-item system-support-link"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/emxxkbtx.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3 data-translate-key="ss_bizCalc_h3">Business Calculation</h3><p data-translate-key="ss_bizCalc_p">Quickly calculate business numbers and scenarios.</p></div><div class="link-arrow">→</div></a>
+            <a href="FinanceCal.html" class="link-item system-support-link"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/dnupukmh.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3 data-translate-key="ss_finTools_h3">Finance Tools</h3><p data-translate-key="ss_finTools_p">Interest, pricing, and billing calculators for business and personal finance.</p></div><div class="link-arrow">→</div></a>
+            <a href="SampleEmail.html" class="link-item system-support-link"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/bpptgtfr.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3 data-translate-key="ss_sampleEmail_h3">Sample Email</h3><p data-translate-key="ss_sampleEmail_p">Sample of Email and Text.</p></div><div class="link-arrow">→</div></a>
+            <a href="TextExtractor.html" class="link-item system-support-link"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/cfkiwvcc.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3 data-translate-key="ss_textExtract_h3">Text Extraction</h3><p data-translate-key="ss_textExtract_p">Extract and transcribe text from images, PDFs, and audio files.</p></div><div class="link-arrow">→</div></a>
+            <a href="Compressor.html" class="link-item system-support-link"><div class="link-icon hero-icon-anim"><lord-icon src="https://cdn.lordicon.com/eoygayvy.json" trigger="hover" colors="primary:#ffffff" style="width:48px;height:48px"></lord-icon></div><div class="link-content"><h3 data-translate-key="ss_compress_h3">Compressor Tool</h3><p data-translate-key="ss_compress_p">Compress PDF, images, videos, Word, Excel, and PowerPoint files.</p></div><div class="link-arrow">→</div></a>
         </div>
         `;
 
@@ -1680,32 +1921,32 @@
             <div class="app-section-cellcard" style="flex: 1 1 350px; min-width: 320px;">
                 <h2 style="margin-bottom:1rem;" data-translate-key="app_cat_cellcard">Cellcard</h2>
                 <div class="app-section-grid">
-                    <a href="https://cca.cellcard.com.kh:8443/app/?campaign=1#!LiveMonitoring" class="link-item cellcard-link" data-category="social" target="_blank"><div class="link-content"><h3>CC - Ameyo</h3><p>Cellcard Call Center Ameyo</p></div><div class="link-arrow">→</div></a>
-                    <a href="https://ccone.cellcard.com.kh/sm/login.cgi?uri=/" class="link-item cellcard-link" data-category="social" target="_blank"><div class="link-content"><h3>CC - BS4</h3><p>Customer service Management (BS4)</p></div><div class="link-arrow">→</div></a>
-                    <a href="https://ccos.cellcard.com.kh/login" class="link-item cellcard-link" data-category="social" target="_blank"><div class="link-content"><h3>CCOS Portal</h3><p>CCOS Portal</p></div><div class="link-arrow">→</div></a>
-                    <a href="https://app-report.ezecomcorp.com/auth/login?redirect=%2Fdashboard%2F542-csm-bs4-daily-utilization-dashboard%3Fuser_name%3Dacb24d%2540megabiz%26relative_date%3Dpast7days" class="link-item cellcard-link" data-category="social" target="_blank"><div class="link-content"><h3>BS4 - Metabase</h3><p>BS4 Daily Utilization Dashboard</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://cca.cellcard.com.kh:8443/app/?campaign=1#!LiveMonitoring" class="link-item cellcard-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_cc_ameyo_h3">CC - Ameyo</h3><p data-translate-key="app_cc_ameyo_p">Cellcard Call Center Ameyo</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://ccone.cellcard.com.kh/sm/login.cgi?uri=/" class="link-item cellcard-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_cc_bs4_h3">CC - BS4</h3><p data-translate-key="app_cc_bs4_p">Customer service Management (BS4)</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://ccos.cellcard.com.kh/login" class="link-item cellcard-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_cc_ccos_h3">CCOS Portal</h3><p data-translate-key="app_cc_ccos_p">CCOS Portal</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://app-report.ezecomcorp.com/auth/login?redirect=%2Fdashboard%2F542-csm-bs4-daily-utilization-dashboard%3Fuser_name%3Dacb24d%2540megabiz%26relative_date%3Dpast7days" class="link-item cellcard-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_cc_meta_h3">BS4 - Metabase</h3><p data-translate-key="app_cc_meta_p">BS4 Daily Utilization Dashboard</p></div><div class="link-arrow">→</div></a>
                 </div>
             </div>
             <div class="app-section-ezecom" style="flex: 1 1 350px; min-width: 320px;">
                 <h2 style="margin-bottom:1rem;" data-translate-key="app_cat_ezecom">EZECOM</h2>
                 <div class="app-section-grid">
-                    <a href="https://ezecallx.ezecomcorp.com:8443/app/#!home" class="link-item ezecom-link" data-category="social" target="_blank"><div class="link-content"><h3>Eze - Ameyo</h3><p>Customer Care Portal</p></div><div class="link-arrow">→</div></a>
-                    <a href="https://csm.ezecom.com.kh/sm/login.cgi?uri=/sm/customer/search.cgi" class="link-item ezecom-link" data-category="social" target="_blank"><div class="link-content"><h3>CSM - BS2</h3><p>Customer Service Management (BS2)</p></div><div class="link-arrow">→</div></a>
-                    <a href="https://eos.ezecom.com.kh/login" class="link-item ezecom-link" data-category="social" target="_blank"><div class="link-content"><h3>EOS - Portal</h3><p>EOS Portal</p></div><div class="link-arrow">→</div></a>
-                    <a href="https://app-report.ezecomcorp.com/auth/login?redirect=%2Fdashboard%2F3-daily-utilization-dashboard%3Fuser_name%3D%26relative_date%3D" class="link-item ezecom-link" data-category="social" target="_blank"><div class="link-content"><h3>BS2 - Metabase</h3><p>BS2 Daily Utilization Dashboard</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://ezecallx.ezecomcorp.com:8443/app/#!home" class="link-item ezecom-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_eze_ameyo_h3">Eze - Ameyo</h3><p data-translate-key="app_eze_ameyo_p">Customer Care Portal</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://csm.ezecom.com.kh/sm/login.cgi?uri=/sm/customer/search.cgi" class="link-item ezecom-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_eze_bs2_h3">CSM - BS2</h3><p data-translate-key="app_eze_bs2_p">Customer Service Management (BS2)</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://eos.ezecom.com.kh/login" class="link-item ezecom-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_eze_eos_h3">EOS - Portal</h3><p data-translate-key="app_eze_eos_p">EOS Portal</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://app-report.ezecomcorp.com/auth/login?redirect=%2Fdashboard%2F3-daily-utilization-dashboard%3Fuser_name%3D%26relative_date%3D" class="link-item ezecom-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_eze_meta_h3">BS2 - Metabase</h3><p data-translate-key="app_eze_meta_p">BS2 Daily Utilization Dashboard</p></div><div class="link-arrow">→</div></a>
                 </div>
             </div>
             <div class="app-section-altogether" style="flex: 1 1 350px; min-width: 320px;">
                 <h2 style="margin-bottom:1rem;" data-translate-key="app_cat_altogether">Altogether</h2>
                 <div class="app-section-grid">
-                    <a href="https://eze24.ezecomcorp.com/bizproc/processes/90/view/0/?list_section_id=" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>Eze 24</h3><p>Business Process Portal</p></div><div class="link-arrow">→</div></a>
-                    <a href="https://rt.telcotech.com.kh/" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>RT Ticket</h3><p>Live Monitoring & Ticketing</p></div><div class="link-arrow">→</div></a>
-                    <a href="https://intranet.ezecom.com.kh/" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>Intranet</h3><p>Internal Company Portal</p></div><div class="link-arrow">→</div></a>
-                    <a href="https://login.mihcm.com/" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>MiHCM</h3><p>Human Capital Management</p></div><div class="link-arrow">→</div></a>
-                    <a href="https://sm-portal.ezecom.com.kh/login" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>SM Portal</h3><p>Service Management Portal</p></div><div class="link-arrow">→</div></a>
-                    <a href="https://sm-portal.ezecom.com.kh/customer_onsite_survey/customer-info" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>SM Portal - Survey</h3><p>Customer Onsite Survey</p></div><div class="link-arrow">→</div></a>
-                    <a href="https://teams.microsoft.com/v2/" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>Microsoft Teams</h3><p>Collaboration Platform</p></div><div class="link-arrow">→</div></a>
-                    <a href="https://outlook.office.com/mail/" class="link-item altogether-link" data-category="social" target="_blank"><div class="link-content"><h3>Microsoft Outlook</h3><p>Email Platform</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://eze24.ezecomcorp.com/bizproc/processes/90/view/0/?list_section_id=" class="link-item altogether-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_alt_eze24_h3">Eze 24</h3><p data-translate-key="app_alt_eze24_p">Business Process Portal</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://rt.telcotech.com.kh/" class="link-item altogether-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_alt_rt_h3">RT Ticket</h3><p data-translate-key="app_alt_rt_p">Live Monitoring & Ticketing</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://intranet.ezecom.com.kh/" class="link-item altogether-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_alt_intranet_h3">Intranet</h3><p data-translate-key="app_alt_intranet_p">Internal Company Portal</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://login.mihcm.com/" class="link-item altogether-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_alt_mihcm_h3">MiHCM</h3><p data-translate-key="app_alt_mihcm_p">Human Capital Management</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://sm-portal.ezecom.com.kh/login" class="link-item altogether-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_alt_sm_h3">SM Portal</h3><p data-translate-key="app_alt_sm_p">Service Management Portal</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://sm-portal.ezecom.com.kh/customer_onsite_survey/customer-info" class="link-item altogether-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_alt_smsurvey_h3">SM Portal - Survey</h3><p data-translate-key="app_alt_smsurvey_p">Customer Onsite Survey</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://teams.microsoft.com/v2/" class="link-item altogether-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_alt_teams_h3">Microsoft Teams</h3><p data-translate-key="app_alt_teams_p">Collaboration Platform</p></div><div class="link-arrow">→</div></a>
+                    <a href="https://outlook.office.com/mail/" class="link-item altogether-link" target="_blank"><div class="link-content"><h3 data-translate-key="app_alt_outlook_h3">Microsoft Outlook</h3><p data-translate-key="app_alt_outlook_p">Email Platform</p></div><div class="link-arrow">→</div></a>
                 </div>
             </div>
         </div>
@@ -1717,32 +1958,32 @@
                 <!-- EZECOM & Cellcard Combined Card -->
                 <div class="company-card" style="grid-column: 1 / -1;">
                     <div class="company-header">
-                        <h2 style="background: linear-gradient(135deg, #e48947 0%, #6c54a3 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">EZECOM & Cellcard's Location</h2>
+                        <h2 style="background: linear-gradient(135deg, #e48947 0%, #6c54a3 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" data-translate-key="loc_main_title">EZECOM & Cellcard's Location</h2>
                     </div>
                     <div class="company-locations-body">
                         <div class="location-column">
                             <h4 data-translate-key="loc_pp_title">Phnom Penh City</h4>
                             <ul class="location-list">
-                                <li class="location-item"><a href="https://maps.app.goo.gl/C2jyw6BDvUFmtybQ9" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ការិយាល័យកណ្ដាល </div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ផ្ទះលេខ ៣៣ មហាវិថីព្រះសីហនុ សង្កាត់ចតុមុខ ខណ្ឌដូនពេញ រាជធានីភ្នំពេញ</div></div></a></li>
-                                <li class="location-item"><a href="https://maps.app.goo.gl/RjhckpBHwGENgb1j7" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">រ៉ូយ៉ាល់ រេលវេ</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ស្ថានីយរថភ្លើង (ផ្លូវរថភ្លើងកណ្តាល មហាវិថីសហព័ន្ធរុស្ស៊ី សង្កាត់ស្រះចក ខណ្ឌដូនពេញ រាជធានីភ្នំពេញ)</div></div></a></li>
-                                <li class="location-item"><a href="https://maps.app.goo.gl/bQ7gcnnPXtYzfDKJA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">កាំកូ</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ផ្ទះលេខ ៤០៦ ផ្លូវ ៥៩៦ ខណ្ឌឫស្សីកែវ រាជធានីភ្នំពេញ</div></div></a></li>
-                                <li class="location-item"><a href="https://maps.app.goo.gl/C2qUyqDQ6XMqzMZn8" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ជ្រោយចង្វា</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ផ្ទះលេខ ៩០ ផ្លូវ ៥៧៩ ភូមិ៣ សង្កាត់ជ្រោយចង្វា ខណ្ឌឬស្សីកែវ រាជធានីភ្នំពេញ</div></div></a></li>
-                                <li class="location-item"><a href="https://maps.app.goo.gl/zBeX7CsRoEkyJh4f7" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ទួលទំពូង</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ទះលេខ ១៦៦ (E០,E១) ផ្លូវ ១៥៥ សង្កាត់ទួលទំពូង ១ ខណ្ឌចំការមន រាជធានីភ្នំពេញ</div></div></a></li>
-                                <li class="location-item"><a href="https://maps.app.goo.gl/yH3xNE5jAnPF8TyX7" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ទឹកថ្លា</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ផ្ទះលេខ 30 ផ្លូវ 1019 សង្កាត់ទឹកថ្លា ខណ្ឌសែនសុខ រាជធានីភ្នំពេញ</div></div></a></li>
-                                <li class="location-item"><a href="https://maps.app.goo.gl/LTnsZAMCDa8uU5vE7" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ស្ទឹងមានជ័យ</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ផ្ទះលេខ 8A ផ្លូវ 217 សង្កាត់ស្ទឹងមានជ័យ ខណ្ឌមានជ័យ រាជធានីភ្នំពេញ</div></div></a></li>
-                                <li class="location-item"><a href="https://maps.app.goo.gl/NUsqk5GRnshD827eA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ប៉េងហួតបឹងស្មោ</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ផ្លូវជាតិលេខ១ ភូមិបឹងឈូក សង្កាត់និរោធ ខណ្ឌច្បារអំពៅ រាជធានីភ្នំពេញ</div></div></a></li>
-                                <li class="location-item"><a href="https://maps.app.goo.gl/RsSp4ET1F92ncBbQ8" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">តាខ្មៅ</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ផ្ទះលេខ ៤៥ ផ្លូវលេខ១០៧ ភូមិតាខ្មៅ សង្កាត់តាខ្មៅ ក្រុងតាខ្មៅ ខេត្តកណ្តាល</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/C2jyw6BDvUFmtybQ9" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ការិយាល័យកណ្ដាល</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ផ្ទះលេខ ៣៣ មហាវិថីព្រះសីហនុ សង្កាត់ចតុមុខ ខណ្ឌដូនពេញ រាជធានីភ្នំពេញ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/RjhckpBHwGENgb1j7" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">រ៉ូយ៉ាល់ រេលវេ</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ស្ថានីយរថភ្លើង (ផ្លូវរថភ្លើងកណ្តាល មហាវិថីសហព័ន្ធរុស្ស៊ី សង្កាត់ស្រះចក ខណ្ឌដូនពេញ រាជធានីភ្នំពេញ)</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/bQ7gcnnPXtYzfDKJA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">កាំកូ</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ផ្ទះលេខ ៤០៦ ផ្លូវ ៥៩៦ ខណ្ឌឫស្សីកែវ រាជធានីភ្នំពេញ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/C2qUyqDQ6XMqzMZn8" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ជ្រោយចង្វា</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ផ្ទះលេខ ៩០ ផ្លូវ ៥៧៩ ភូមិ៣ សង្កាត់ជ្រោយចង្វា ខណ្ឌឬស្សីកែវ រាជធានីភ្នំពេញ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/zBeX7CsRoEkyJh4f7" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ទួលទំពូង</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ទះលេខ ១៦៦ (E០,E១) ផ្លូវ ១៥៥ សង្កាត់ទួលទំពូង ១ ខណ្ឌចំការមន រាជធានីភ្នំពេញ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/yH3xNE5jAnPF8TyX7" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ទឹកថ្លា</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ផ្ទះលេខ 30 ផ្លូវ 1019 សង្កាត់ទឹកថ្លា ខណ្ឌសែនសុខ រាជធានីភ្នំពេញ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/LTnsZAMCDa8uU5vE7" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ស្ទឹងមានជ័យ</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ផ្ទះលេខ 8A ផ្លូវ 217 សង្កាត់ស្ទឹងមានជ័យ ខណ្ឌមានជ័យ រាជធានីភ្នំពេញ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/NUsqk5GRnshD827eA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ប៉េងហួតបឹងស្មោ</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ផ្លូវជាតិលេខ១ ភូមិបឹងឈូក សង្កាត់និរោធ ខណ្ឌច្បារអំពៅ រាជធានីភ្នំពេញ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/RsSp4ET1F92ncBbQ8" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">តាខ្មៅ</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ផ្ទះលេខ ៤៥ ផ្លូវលេខ១០៧ ភូមិតាខ្មៅ សង្កាត់តាខ្មៅ ក្រុងតាខ្មៅ ខេត្តកណ្តាល</div></div></a></li>
                             </ul>
                         </div>
                         <div class="location-column">
                             <h4 data-translate-key="loc_prov_title">Provincial</h4>
                             <ul class="location-list">
-                                <li class="location-item"><a href="https://maps.app.goo.gl/GDGmZYCjkWARDPwJA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">សៀមរាប</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ផ្ទះលេខ ១១,១២ ផ្លូវស៊ីវត្ថា ភូមិមណ្ឌល២ សង្កាត់ស្វាយដង្គំ ក្រុងសៀមរាប ខេត្តសៀមរាប</div></div></a></li>
-                                <li class="location-item"><a href="https://maps.app.goo.gl/T2JXbzhCcFKYdY2WA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">បាត់ដំបង</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ផ្លូវលេខ ១ ភូមិកម្មករ សង្កាត់ស្វាយប៉ោ ក្រុងបាត់ដំបង ខេត្តបាត់ដំបង</div></div></a></li>
-                                <li class="location-item"><a href="#" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">កំពង់ចាម</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ភូមិ ៤ ឃុំវាលវង់ ស្រុកកំពង់ចាម ខេត្តកំពង់ចាម</div></div></a></li>
-                                <li class="location-item"><a href="https://maps.app.goo.gl/eNNfgEQMrFpWccMMA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ក្រុងព្រះសីហនុ</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ផ្ទះលេខ ១៥៧ ផ្លូវឯករាជ្យ សង្កាត់លេខ២ ក្រុងព្រះសីហនុ ខេត្តព្រះសីហនុ</div></div></a></li>
-                                <li class="location-item"><a href="https://maps.app.goo.gl/y6x9DMB4iiwZHdHq6" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">បាវិត</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ផ្ទះលេខ 7-8 ផ្លូវជាតិលេខ 1 បាវិតកណ្តាល សង្កាត់បាវិត ក្រុងបាវិត ខេត្តស្វាយរៀង</div></div></a></li>
-                                <li class="location-item"><a href="https://maps.app.goo.gl/9qXdaR2gfXHuKTG96" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ប៉ោយប៉ែត</div><div class="location-address">(Mon - Sun, 8:00AM - 6:00PM) <br> ផ្ទះលេខ c8-0657 ផ្លូវលេខ 5 ភូមិ 4 សង្កាត់ផ្សារកណ្តាល ក្រុងប៉ោយប៉ែត ខេត្តបន្ទាយមានជ័យ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/GDGmZYCjkWARDPwJA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">សៀមរាប</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ផ្ទះលេខ ១១,១២ ផ្លូវស៊ីវត្ថា ភូមិមណ្ឌល២ សង្កាត់ស្វាយដង្គំ ក្រុងសៀមរាប ខេត្តសៀមរាប</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/T2JXbzhCcFKYdY2WA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">បាត់ដំបង</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ផ្លូវលេខ ១ ភូមិកម្មករ សង្កាត់ស្វាយប៉ោ ក្រុងបាត់ដំបង ខេត្តបាត់ដំបង</div></div></a></li>
+                                <li class="location-item"><a href="#" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">កំពង់ចាម</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ភូមិ ៤ ឃុំវាលវង់ ស្រុកកំពង់ចាម ខេត្តកំពង់ចាម</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/eNNfgEQMrFpWccMMA" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ក្រុងព្រះសីហនុ</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ផ្ទះលេខ ១៥៧ ផ្លូវឯករាជ្យ សង្កាត់លេខ២ ក្រុងព្រះសីហនុ ខេត្តព្រះសីហនុ</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/y6x9DMB4iiwZHdHq6" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">បាវិត</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ផ្ទះលេខ 7-8 ផ្លូវជាតិលេខ 1 បាវិតកណ្តាល សង្កាត់បាវិត ក្រុងបាវិត ខេត្តស្វាយរៀង</div></div></a></li>
+                                <li class="location-item"><a href="https://maps.app.goo.gl/9qXdaR2gfXHuKTG96" target="_blank"><i class="fas fa-map-marker-alt icon"></i><div><div class="location-name">ប៉ោយប៉ែត</div><div class="location-address"><span data-translate-key="loc_hours">(Mon - Sun, 8:00AM - 6:00PM)</span> <br> ផ្ទះលេខ c8-0657 ផ្លូវលេខ 5 ភូមិ 4 សង្កាត់ផ្សារកណ្តាល ក្រុងប៉ោយប៉ែត ខេត្តបន្ទាយមានជ័យ</div></div></a></li>
                             </ul>
                         </div>
                     </div>
@@ -1755,19 +1996,19 @@
         <section>
             <h2 class="section-title" data-translate-key="rt_title">RT Ticket Inquiries</h2>
             <div class="rt-grid">
-                <div class="rt-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div><h3 class="rt-card-title" data-translate-key="rt_q_activation_h3">Queue: Activation Team</h3></div><div class="rt-card-body"><ul><li>Re-activation after dismantle</li><li>Re-activation after termination</li><li>Connection with removed connectivity/port/device</li></ul></div></div>
-                <div class="rt-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12-4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg></div><h3 class="rt-card-title" data-translate-key="rt_q_delivery_h3">Queue: Customer Delivery</h3></div><div class="rt-card-body"><ul><li>Update Profile</li><li>Upgrade / Downgrade Speed</li><li>Test Speed</li><li>Change Billing Date / Location</li><li>Change Account Name</li><li>Purchase CPE or Static IP</li></ul></div></div>
-                <div class="rt-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div><h3 class="rt-card-title" data-translate-key="rt_q_collection_h3">Queue: Care Collection</h3></div><div class="rt-card-body"><ul><li>Refuse to pay invoice</li><p>All request relates to billing the same.</p></ul></div></div>
-                <div class="rt-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></div><h3 class="rt-card-title" data-translate-key="rt_q_renewal_h3">Queue: Care Renewal</h3></div><div class="rt-card-body"><ul><li>Refuse to pay invoice</li><li>Renewal + Promotion request</li><li>Reactive Request</li><li>Terminate Request</li><li>Request Compensation or Refund</li></ul></div></div>
-                <div class="rt-card digital-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></div><div><h3 class="rt-card-title" data-translate-key="rt_q_digital_h3">Queue: Digital</h3><p class="khmer-font" style="color: var(--light-text-color);" data-translate-key="rt_q_digital_p">Technical Issues & Fulfillment</p></div></div><div class="rt-card-body"><div class="rt-digital-grid"><div class="rt-digital-subsection"><h4 data-translate-key="rt_digital_sub1">Service Availability Issues</h4><ul><li>Alarm / Lastsmile Alert</li><li>Many ONU Down / PON Down</li><li>Internet Not Working (Total outage)</li><li>No WiFi Signal</li></ul></div><div class="rt-digital-subsection"><h4 data-translate-key="rt_digital_sub2">Service Performance Issues</h4><ul><li>Internet Slow or Unstable</li><li>WiFi Low Signal / Poor Range</li><li>Link budget low or high</li><li>Website, App, or Game Issue</li><li>Port access / Protocol issue</li></ul></div><div class="rt-digital-subsection"><h4 data-translate-key="rt_digital_sub3">Fulfillment</h4><ul><li>Relocate / Re-Configure Modem/Router</li><li>Request Login for Modem/Router</li><li>Change WiFi Name / Password</li><li>Configure Remote Camera / NAT</li><li>Request LAN/Wi-Fi Survey</li><li>Add/Share Graph Utilization</li><li>Enable/Disable MAC Address</li></ul></div></div></div></div>
+                <div class="rt-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div><h3 class="rt-card-title" data-translate-key="rt_q_activation_h3">Queue: Activation Team</h3></div><div class="rt-card-body"><ul><li data-translate-key="rt_li_react_dismantle">Re-activation after dismantle</li><li data-translate-key="rt_li_react_terminate">Re-activation after termination</li><li data-translate-key="rt_li_conn_removed">Connection with removed connectivity/port/device</li></ul></div></div>
+                <div class="rt-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12-4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg></div><h3 class="rt-card-title" data-translate-key="rt_q_delivery_h3">Queue: Customer Delivery</h3></div><div class="rt-card-body"><ul><li data-translate-key="rt_li_update_profile">Update Profile</li><li data-translate-key="rt_li_up_down_grade">Upgrade / Downgrade Speed</li><li data-translate-key="rt_li_test_speed">Test Speed</li><li data-translate-key="rt_li_change_billing">Change Billing Date / Location</li><li data-translate-key="rt_li_change_name">Change Account Name</li><li data-translate-key="rt_li_purchase">Purchase CPE or Static IP</li></ul></div></div>
+                <div class="rt-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div><h3 class="rt-card-title" data-translate-key="rt_q_collection_h3">Queue: Care Collection</h3></div><div class="rt-card-body"><ul><li data-translate-key="rt_li_refuse_pay">Refuse to pay invoice</li></ul><p data-translate-key="rt_p_billing_related">All request relates to billing the same.</p></div></div>
+                <div class="rt-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></div><h3 class="rt-card-title" data-translate-key="rt_q_renewal_h3">Queue: Care Renewal</h3></div><div class="rt-card-body"><ul><li data-translate-key="rt_li_renew_promo">Renewal + Promotion request</li><li data-translate-key="rt_li_reactive">Reactive Request</li><li data-translate-key="rt_li_terminate">Terminate Request</li><li data-translate-key="rt_li_compensate">Request Compensation or Refund</li></ul></div></div>
+                <div class="rt-card digital-card"><div class="rt-card-header"><div class="rt-card-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></div><div><h3 class="rt-card-title" data-translate-key="rt_q_digital_h3">Queue: Digital</h3><p class="khmer-font" style="color: var(--light-text-color);" data-translate-key="rt_q_digital_p">Technical Issues & Fulfillment</p></div></div><div class="rt-card-body"><div class="rt-digital-grid"><div class="rt-digital-subsection"><h4 data-translate-key="rt_digital_sub1">Service Availability Issues</h4><ul><li data-translate-key="rt_li_alarm">Alarm / Lastsmile Alert</li><li data-translate-key="rt_li_onu_down">Many ONU Down / PON Down</li><li data-translate-key="rt_li_no_internet">Internet Not Working (Total outage)</li><li data-translate-key="rt_li_no_wifi">No WiFi Signal</li></ul></div><div class="rt-digital-subsection"><h4 data-translate-key="rt_digital_sub2">Service Performance Issues</h4><ul><li data-translate-key="rt_li_slow">Internet Slow or Unstable</li><li data-translate-key="rt_li_low_signal">WiFi Low Signal / Poor Range</li><li data-translate-key="rt_li_link_budget">Link budget low or high</li><li data-translate-key="rt_li_web_issue">Website, App, or Game Issue</li><li data-translate-key="rt_li_port_issue">Port access / Protocol issue</li></ul></div><div class="rt-digital-subsection"><h4 data-translate-key="rt_digital_sub3">Fulfillment</h4><ul><li data-translate-key="rt_li_relocate">Relocate / Re-Configure Modem/Router</li><li data-translate-key="rt_li_req_login">Request Login for Modem/Router</li><li data-translate-key="rt_li_change_wifi">Change WiFi Name / Password</li><li data-translate-key="rt_li_config_cam">Configure Remote Camera / NAT</li><li data-translate-key="rt_li_req_graph">Request LAN/Wi-Fi Survey</li><li data-translate-key="rt_li_add_graph">Add/Share Graph Utilization</li><li data-translate-key="rt_li_mac_addr">Enable/Disable MAC Address</li></ul></div></div></div></div>
             </div>
         </section>
         `;
 
       const aboutPageContent = `
         <div class="about-page-content">
-            <section class="about-hero" id="about"><div class="max-width"><div class="about-hero-content"><div class="text-1">Hello, my name is</div><div class="text-2">Ly Heng</div><div class="text-3">And I'm a <span class="typing"></span></div><p data-translate-key="creatorDesc">I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.</p><div class="social-icons"><a href="https://www.facebook.com/lyhenggggg" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="https://www.instagram.com/ly_henggg/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="https://t.me/LyHengg" target="_blank" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a><a href="https://twitter.com/CapaldiVector" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a><a href="https://www.linkedin.com/in/ly-heng-54a474220/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a></div></div><div class="about-hero-image"><img src="Img/HengImg1.jpg" alt="LY Heng Profile Picture" class="creator-img"></div></div></section>
-            <section class="about-cards"><div class="max-width"><div class="card-panel"><h2 class="card-panel-title">My Skills</h2><div class="skills-content-grid"><div class="skills-intro"><div class="text">My creative skills & experiences</div><p>Responsible and hardworking, I’m able to handle working under pressure as well as communicate and collaborate seamlessly in a teamwork environment. My strongest points are well-communication, open-mind set, self-motivated, active listening, honesty, patience, creativity, fast learning, and trustworthiness.</p></div><div class="skills-list"><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e6f7fa;"><i class="fab fa-windows" style="color:#2563eb;"></i></span><span class="skill-title">Office Software</span><span class="skill-percent">90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%;"></div></div></div><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#f3e6fa;"><i class="fas fa-paint-brush" style="color:#a259c6;"></i></span><span class="skill-title">Adobe Suite</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e6f4fa;"><i class="fas fa-film" style="color:#3bb3ce;"></i></span><span class="skill-title">Video Editing</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e3e9f7;"><i class="fas fa-code" style="color:#457ABD;"></i></span><span class="skill-title">Front-End Dev</span><span class="skill-percent">90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%;"></div></div></div><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#fbeee6;"><i class="fas fa-tasks" style="color:#f59e42;"></i></span><span class="skill-title">Management</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div></div></div></div><div class="card-panel"><h2 class="card-panel-title">Contact Me</h2><div class="contact-content-grid"><div class="contact-info-col"><div class="contact-col-title">Get in Touch</div><p style="margin-bottom: 2rem;">Have a question or a project in mind? Feel free to reach out. I'm always open to discussing new opportunities and creative ideas.</p><div class="contact-info-list"><div class="contact-info-item"><span class="icon"><i class="fas fa-user"></i></span><div class="text"><div class="head">Name</div><div class="sub-title">LY HENG</div></div></div><div class="contact-info-item"><span class="icon" style="background: #fbeee6;"><i class="fas fa-map-marker-alt" style="color:#f59e42;"></i></span><div class="text"><div class="head">Address</div><div class="sub-title">Phnom Penh, Cambodia</div></div></div><div class="contact-info-item"><span class="icon" style="background: #e6f4fa;"><i class="fas fa-envelope" style="color:#3bb3ce;"></i></span><div class="text"><div class="head">Email</div><div class="sub-title">Singlovesmiles@gmail.com</div></div></div></div></div><div class="contact-form-col"><div class="contact-col-title">Message Me</div><form class="contact-form" action="mailto:Singlovesmiles@gmail.com" method="post" enctype="text/plain"><div class="field-group"><input type="text" name="name" placeholder="Name" required><input type="email" name="email" placeholder="Email" required></div><input type="text" name="subject" placeholder="Subject" required><textarea name="message" cols="30" rows="6" placeholder="Your Message.." required></textarea><button type="submit">Send Message</button></form></div></div></div></div></section>
+            <section class="about-hero" id="about"><div class="max-width"><div class="about-hero-content"><div class="text-1" data-translate-key="about_hello">Hello, my name is</div><div class="text-2">Ly Heng</div><div class="text-3"><span data-translate-key="about_iam">And I'm a</span> <span class="typing"></span></div><p data-translate-key="creatorDesc">I'm passionate about building digital tools that boost productivity and make daily work easier. My interests include web development, automation, and sharing knowledge with the community.</p><div class="social-icons"><a href="https://www.facebook.com/lyhenggggg" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="https://www.instagram.com/ly_henggg/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="https://t.me/LyHengg" target="_blank" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a><a href="https://twitter.com/CapaldiVector" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a><a href="https://www.linkedin.com/in/ly-heng-54a474220/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a></div></div><div class="about-hero-image"><img src="Img/HengImg1.jpg" alt="LY Heng Profile Picture" class="creator-img"></div></div></section>
+            <section class="about-cards"><div class="max-width"><div class="card-panel"><h2 class="card-panel-title" data-translate-key="about_skills_title">My Skills</h2><div class="skills-content-grid"><div class="skills-intro"><div class="text" data-translate-key="about_skills_intro_h">My creative skills & experiences</div><p data-translate-key="about_skills_intro_p">Responsible and hardworking, I’m able to handle working under pressure as well as communicate and collaborate seamlessly in a teamwork environment. My strongest points are well-communication, open-mind set, self-motivated, active listening, honesty, patience, creativity, fast learning, and trustworthiness.</p></div><div class="skills-list"><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e6f7fa;"><i class="fab fa-windows" style="color:#2563eb;"></i></span><span class="skill-title" data-translate-key="skill_office">Office Software</span><span class="skill-percent">90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%;"></div></div></div><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#f3e6fa;"><i class="fas fa-paint-brush" style="color:#a259c6;"></i></span><span class="skill-title" data-translate-key="skill_adobe">Adobe Suite</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e6f4fa;"><i class="fas fa-film" style="color:#3bb3ce;"></i></span><span class="skill-title" data-translate-key="skill_video">Video Editing</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#e3e9f7;"><i class="fas fa-code" style="color:#457ABD;"></i></span><span class="skill-title" data-translate-key="skill_frontend">Front-End Dev</span><span class="skill-percent">90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:90%;"></div></div></div><div class="skill-card"><div class="skill-card-header"><span class="skill-icon" style="background:#fbeee6;"><i class="fas fa-tasks" style="color:#f59e42;"></i></span><span class="skill-title" data-translate-key="skill_management">Management</span><span class="skill-percent">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width:85%;"></div></div></div></div></div></div><div class="card-panel"><h2 class="card-panel-title" data-translate-key="about_contact_title">Contact Me</h2><div class="contact-content-grid"><div class="contact-info-col"><div class="contact-col-title" data-translate-key="about_contact_getintouch_h">Get in Touch</div><p style="margin-bottom: 2rem;" data-translate-key="about_contact_getintouch_p">Have a question or a project in mind? Feel free to reach out. I'm always open to discussing new opportunities and creative ideas.</p><div class="contact-info-list"><div class="contact-info-item"><span class="icon"><i class="fas fa-user"></i></span><div class="text"><div class="head" data-translate-key="about_contact_info_name">Name</div><div class="sub-title">LY HENG</div></div></div><div class="contact-info-item"><span class="icon" style="background: #fbeee6;"><i class="fas fa-map-marker-alt" style="color:#f59e42;"></i></span><div class="text"><div class="head" data-translate-key="about_contact_info_address">Address</div><div class="sub-title">Phnom Penh, Cambodia</div></div></div><div class="contact-info-item"><span class="icon" style="background: #e6f4fa;"><i class="fas fa-envelope" style="color:#3bb3ce;"></i></span><div class="text"><div class="head" data-translate-key="about_contact_info_email">Email</div><div class="sub-title">Singlovesmiles@gmail.com</div></div></div></div></div><div class="contact-form-col"><div class="contact-col-title" data-translate-key="about_contact_form_h">Message Me</div><form class="contact-form" action="mailto:Singlovesmiles@gmail.com" method="post" enctype="text/plain"><div class="field-group"><input type="text" name="name" data-translate-placeholder="form_placeholder_name" placeholder="Name" required><input type="email" name="email" data-translate-placeholder="form_placeholder_email" placeholder="Email" required></div><input type="text" name="subject" data-translate-placeholder="form_placeholder_subject" placeholder="Subject" required><textarea name="message" cols="30" rows="6" data-translate-placeholder="form_placeholder_message" placeholder="Your Message.." required></textarea><button type="submit" data-translate-key="form_button_send">Send Message</button></form></div></div></div></div></section>
         </div>
         `;
 
@@ -1854,13 +2095,20 @@
         filterByCategory(currentCategory);
       }
 
-
       // --- ABOUT PAGE LOGIC ---
       function initAboutPageLogic() {
         const typingElement = document.querySelector(".about-page-content .typing");
         if (window.Typed && typingElement) {
+          const lang = currentLanguage;
+          const typedStrings = [
+            translations[lang].about_typed_1,
+            translations[lang].about_typed_2,
+            translations[lang].about_typed_3,
+            translations[lang].about_typed_4,
+          ];
+
           new Typed(typingElement, {
-            strings: ["Freelancer.", "Web Developer.", "Graphic Designer.", "Content Creator."],
+            strings: typedStrings,
             typeSpeed: 60,
             backSpeed: 20,
             loop: true,
@@ -1871,17 +2119,19 @@
       // --- GENERAL INITIALIZERS (UNCHANGED) ---
       function applyTranslations() {
         const lang = currentLanguage;
+        // Update regular text content
         document.querySelectorAll("[data-translate-key]").forEach((el) => {
           const key = el.dataset.translateKey;
-          if (translations[lang] && translations[lang][key])
+          if (translations[lang] && translations[lang][key]) {
             el.innerHTML = translations[lang][key];
+          }
         });
-        document
-          .querySelectorAll("[data-translate-placeholder]")
-          .forEach((el) => {
+        // Update placeholder text for form inputs
+        document.querySelectorAll("[data-translate-placeholder]").forEach((el) => {
             const key = el.dataset.translatePlaceholder;
-            if (translations[lang] && translations[lang][key])
+            if (translations[lang] && translations[lang][key]) {
               el.placeholder = translations[lang][key];
+            }
           });
         document.documentElement.lang = lang === "kh" ? "km" : "en";
       }
@@ -1890,9 +2140,14 @@
         if (!translations[lang]) return;
         currentLanguage = lang;
         localStorage.setItem("userLanguage", lang);
-        applyTranslations();
-        if (typeof updateLanguageSwitcherUI === "function")
-          updateLanguageSwitcherUI(lang);
+        
+        // When language changes, we need to reload the current page's content
+        // to re-initialize scripts like Typed.js with the new language.
+        handleNavigation();
+        
+        if (typeof updateLanguageSwitcherUI === "function") {
+            updateLanguageSwitcherUI(lang);
+        }
       }
 
       function initTheme() {
@@ -1991,7 +2246,7 @@
       // --- DOMContentLoaded ---
       document.addEventListener("DOMContentLoaded", () => {
         const savedLang = localStorage.getItem("userLanguage") || "en";
-        setLanguage(savedLang);
+        currentLanguage = savedLang; // Set language before initial load
         handleNavigation();
         initTheme();
         initMobileMenu();
