@@ -241,32 +241,18 @@
         max-height: calc(100vh - 14rem);
         overflow-y: auto;
       }
-      .info-panel::-webkit-scrollbar {
-        width: 8px;
-      }
-      .info-panel::-webkit-scrollbar-track {
-        background: transparent;
-      }
+      .info-panel::-webkit-scrollbar { width: 8px; }
+      .info-panel::-webkit-scrollbar-track { background: transparent; }
       .info-panel::-webkit-scrollbar-thumb {
         background-color: var(--border-color);
         border-radius: 10px;
         border: 2px solid var(--card-bg);
       }
-      .info-panel::-webkit-scrollbar-thumb:hover {
-        background-color: var(--light-text);
-      }
+      .info-panel::-webkit-scrollbar-thumb:hover { background-color: var(--light-text); }
 
-      .calculator-grid {
-        display: grid;
-        gap: 2rem;
-      }
-
-      .calculators-column .calculator-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      }
-      .info-panel .calculator-grid {
-        grid-template-columns: 1fr;
-      }
+      .calculator-grid { display: grid; gap: 2rem; }
+      .calculators-column .calculator-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+      .info-panel .calculator-grid { grid-template-columns: 1fr; }
 
       .info-panel .calculator-card {
         background: transparent;
@@ -278,23 +264,12 @@
         border-bottom: 1px solid var(--border-color);
         border-radius: 0;
       }
-      .info-panel .calculator-card:last-child {
-        margin-bottom: 0;
-        padding-bottom: 0;
-        border-bottom: none;
-      }
+      .info-panel .calculator-card:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 
       @media (max-width: 1024px) {
-        .two-column-layout {
-          grid-template-columns: 1fr;
-        }
-        .info-column {
-          position: static;
-        }
-        .info-panel {
-          max-height: none;
-          overflow-y: visible;
-        }
+        .two-column-layout { grid-template-columns: 1fr; }
+        .info-column { position: static; }
+        .info-panel { max-height: none; overflow-y: visible; }
       }
 
       .calculator-card {
@@ -325,14 +300,8 @@
         border-radius: 50%;
         background-color: var(--primary-light);
       }
-      h2 svg {
-        width: 20px;
-        height: 20px;
-        color: var(--primary-focus);
-      }
-      body.dark-mode h2 svg {
-        color: var(--secondary-color);
-      }
+      h2 svg { width: 20px; height: 20px; color: var(--primary-focus); }
+      body.dark-mode h2 svg { color: var(--secondary-color); }
       .input-group {
         display: flex;
         flex-direction: column;
@@ -345,9 +314,7 @@
         font-weight: 500;
         font-size: 0.9rem;
       }
-      body.dark-mode .input-field label {
-        color: var(--text-color);
-      }
+      body.dark-mode .input-field label { color: var(--text-color); }
       input[type="text"],
       input[type="number"],
       select {
@@ -361,23 +328,14 @@
         font-family: "Inter", sans-serif;
         transition: var(--transition);
       }
-      input:focus,
-      select:focus {
+      input:focus, select:focus {
         outline: none;
         border-color: var(--primary-focus);
         box-shadow: 0 0 0 3px var(--primary-light);
       }
-      .input-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-      }
+      .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
-      .output-section {
-        margin-top: auto;
-        padding-top: 1.5rem;
-        border-top: 1px solid var(--border-color);
-      }
+      .output-section { margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--border-color); }
       .primary-result {
         text-align: center;
         margin-bottom: 1.25rem;
@@ -385,9 +343,7 @@
         border-radius: 12px;
         padding: 0.75rem 1rem;
       }
-      body.dark-mode .primary-result {
-        background-color: rgba(37, 117, 252, 0.12);
-      }
+      body.dark-mode .primary-result { background-color: rgba(37, 117, 252, 0.12); }
       .primary-result-label {
         font-size: 0.8rem;
         font-weight: 600;
@@ -402,7 +358,6 @@
         display: block;
         line-height: 1.2;
       }
-
       .secondary-results {
         display: flex;
         justify-content: center;
@@ -417,228 +372,112 @@
         padding: 0.5rem;
         min-width: 130px;
       }
-      .result-label {
-        font-size: 0.8rem;
-        color: var(--light-text);
-        font-weight: 500;
-        margin-bottom: 0.25rem;
-      }
-      .result-value {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--text-color);
-      }
-      .positive {
-        color: var(--success) !important;
-      }
-      .negative {
-        color: var(--danger) !important;
-      }
-      .neutral {
-        color: var(--text-color) !important;
-      }
+      .result-label { font-size: 0.8rem; color: var(--light-text); font-weight: 500; margin-bottom: 0.25rem; }
+      .result-value { font-size: 1rem; font-weight: 600; color: var(--text-color); }
 
-      .section-title {
-        text-align: center;
-        margin-bottom: 1.5rem;
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--heading-color);
-      }
-      .formula-card,
-      .info-card {
-        background-color: var(--bg-color);
-        padding: 1.5rem;
-      }
-      body.dark-mode .formula-card,
-      body.dark-mode .info-card {
-        background-color: #1e1e1e;
-      }
-      .formula-card h3,
-      .info-card h3 {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--heading-color);
-        margin-bottom: 1rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid var(--border-color);
+      /* Info Panel & Formulas */
+      .section-title { text-align: center; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700; color: var(--heading-color); }
+      .formula-card, .info-card, .calculation-breakdown-card { background-color: var(--bg-color); padding: 1.5rem; }
+      body.dark-mode .formula-card, body.dark-mode .info-card, body.dark-mode .calculation-breakdown-card { background-color: #1e1e1e; }
+      .formula-card h3, .info-card h3, .calculation-breakdown-card h3 {
+        font-size: 1rem; font-weight: 600; color: var(--heading-color); margin-bottom: 1rem;
+        padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color);
       }
       .formula-box {
-        background: var(--card-bg);
-        padding: 1rem;
-        border-left: 4px solid var(--primary-focus);
-        margin-bottom: 1.25rem;
-        border-radius: 8px;
-        font-family: "Lucida Console", Monaco, monospace;
-        font-size: 1rem;
-        color: var(--text-color);
-        text-align: center;
+        background: var(--card-bg); padding: 1rem; border-left: 4px solid var(--primary-focus);
+        margin-bottom: 1.25rem; border-radius: 8px; font-family: "Lucida Console", Monaco, monospace;
+        font-size: 1rem; color: var(--text-color); text-align: center;
       }
-      .variable-table,
-      .tax-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 1.25rem;
-        font-size: 0.9rem;
+      .variable-table, .tax-table {
+        width: 100%; border-collapse: collapse; margin-bottom: 1.25rem; font-size: 0.9rem;
       }
-      .variable-table td,
-      .tax-table td,
-      .tax-table th {
-        padding: 0.6rem;
-        border: 1px solid var(--border-color);
-      }
-      .variable-table td:first-child {
-        font-weight: 700;
-        font-family: "Lucida Console", Monaco, monospace;
-        text-align: center;
-        width: 20%;
-        background-color: var(--primary-light);
-      }
-      .tax-table th {
-        font-weight: 600;
-        background-color: var(--primary-light);
-        text-align: left;
-      }
-      .tax-table td:first-child {
-        text-align: left;
-      }
-      .tax-table td:not(:first-child) {
-        text-align: right;
-      }
+      .variable-table td, .tax-table td, .tax-table th { padding: 0.6rem; border: 1px solid var(--border-color); }
+      .variable-table td:first-child { font-weight: 700; font-family: "Lucida Console", Monaco, monospace; text-align: center; width: 20%; background-color: var(--primary-light); }
+      .tax-table th { font-weight: 600; background-color: var(--primary-light); text-align: left; }
+      .tax-table td:first-child { text-align: left; }
+      .tax-table td:not(:first-child) { text-align: right; }
       .example-title {
-        font-weight: 700;
-        font-size: 0.95rem;
-        color: var(--heading-color);
-        margin-bottom: 0.75rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+        font-weight: 700; font-size: 0.95rem; color: var(--heading-color); margin-bottom: 0.75rem;
+        display: flex; align-items: center; gap: 0.5rem;
       }
-      .example-icon {
-        color: var(--success);
+      .example-icon { color: var(--success); }
+      .example-content, .info-content, .info-list li, .breakdown-step p {
+        font-size: 0.9rem; line-height: 1.6; color: var(--light-text);
       }
-      .example-content,
-      .info-content,
-      .info-list li {
-        font-size: 0.9rem;
-        line-height: 1.6;
-        color: var(--light-text);
-      }
-      .info-list {
-        padding-left: 1.25rem;
-        margin-top: 1rem;
-      }
+      .info-list { padding-left: 1.25rem; margin-top: 1rem; }
       .calculation-step {
-        font-family: "Lucida Console", Monaco, monospace;
-        background-color: var(--primary-light);
-        padding: 0.6rem 0.85rem;
-        border-radius: 6px;
-        font-size: 0.9rem;
-        margin-top: 0.75rem;
-        display: block;
-        color: var(--text-color);
-        word-wrap: break-word;
+        font-family: "Lucida Console", Monaco, monospace; background-color: var(--primary-light);
+        padding: 0.6rem 0.85rem; border-radius: 6px; font-size: 0.9rem;
+        margin-top: 0.75rem; display: block; color: var(--text-color); word-wrap: break-word;
       }
+      .breakdown-step { margin-bottom: 1.25rem; }
+      .breakdown-step strong { font-weight: 600; color: var(--heading-color); }
+
+      /* Disclaimers & Language Selector */
       .disclaimer-card {
-        background-color: var(--warning-bg);
-        border: 1px solid var(--warning-border);
-        color: var(--warning-text);
-        font-size: 0.9rem;
-        line-height: 1.5;
-        padding: 1rem 1.5rem;
-        border-radius: var(--border-radius);
-        margin-bottom: 2rem;
+        background-color: var(--warning-bg); border: 1px solid var(--warning-border);
+        color: var(--warning-text); font-size: 0.9rem; line-height: 1.5;
+        padding: 1rem 1.5rem; border-radius: var(--border-radius); margin-bottom: 2rem;
       }
-      .disclaimer-card strong {
-        color: var(--warning-text);
-        font-weight: 700;
-      }
-      .language-selector {
-        position: relative;
-        display: inline-block;
-      }
+      .disclaimer-card strong { color: var(--warning-text); font-weight: 700; }
+      .language-selector { position: relative; display: inline-block; }
       .language-btn {
-        background-color: var(--card-bg);
-        color: var(--text-color);
-        border: 1px solid var(--border-color);
-        border-radius: 50px;
-        padding: 8px 16px 8px 12px;
-        font-size: 14px;
-        font-weight: 500;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        transition: var(--transition);
+        background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color);
+        border-radius: 50px; padding: 8px 16px 8px 12px; font-size: 14px; font-weight: 500;
+        cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition);
       }
-      .language-btn .arrow {
-        margin-left: auto;
-        transition: transform 0.2s;
-      }
-      .language-selector.open .language-btn .arrow {
-        transform: rotate(180deg);
-      }
+      .language-btn .arrow { margin-left: auto; transition: transform 0.2s; }
+      .language-selector.open .language-btn .arrow { transform: rotate(180deg); }
       .dropdown-content {
-        display: none;
-        position: absolute;
-        right: 0;
-        background-color: var(--card-bg);
-        min-width: 170px;
-        border-radius: 12px;
-        box-shadow: var(--box-shadow);
-        z-index: 10;
-        margin-top: 8px;
-        overflow: hidden;
-        border: 1px solid var(--border-color);
-        animation: fadeIn 0.18s ease;
+        display: none; position: absolute; right: 0; background-color: var(--card-bg);
+        min-width: 170px; border-radius: 12px; box-shadow: var(--box-shadow); z-index: 10;
+        margin-top: 8px; overflow: hidden; border: 1px solid var(--border-color); animation: fadeIn 0.18s ease;
       }
-      .language-selector.open .dropdown-content {
-        display: block;
-      }
+      .language-selector.open .dropdown-content { display: block; }
       .language-option {
-        color: var(--text-color);
-        padding: 12px 18px 12px 16px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 14px;
-        background: none;
-        border: none;
-        width: 100%;
-        text-align: left;
-        cursor: pointer;
-        transition: background 0.18s;
+        color: var(--text-color); padding: 12px 18px 12px 16px; display: flex; align-items: center;
+        gap: 10px; font-size: 14px; background: none; border: none; width: 100%; text-align: left;
+        cursor: pointer; transition: background 0.18s;
       }
-      .language-option:hover {
-        background-color: var(--primary-light);
-      }
-      .language-flag {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
+      .language-option:hover { background-color: var(--primary-light); }
+      .language-flag { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
       @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
       }
+      
+      /* NEW: Currency Switcher Styles */
+      .currency-switcher {
+        display: flex;
+        margin-left: auto;
+        background-color: var(--bg-color);
+        border-radius: 50px;
+        padding: 4px;
+      }
+      .currency-btn {
+        background-color: transparent;
+        border: none;
+        border-radius: 50px;
+        padding: 4px 12px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--light-text);
+        transition: all 0.2s ease-in-out;
+      }
+      .currency-btn.active {
+        background-color: var(--card-bg);
+        color: var(--primary-focus);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      }
+      body.dark-mode .currency-switcher { background-color: #1e1e1e; }
+      body.dark-mode .currency-btn.active { color: var(--secondary-color); }
     </style>
   </head>
   <body class="font-inter">
     <div class="page-controls">
       <a href="index.html" class="back-btn nav-link" data-target="">
-        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-          <path
-            fill-rule="evenodd"
-            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
-          />
-        </svg>
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" /></svg>
         <span data-translate-key="back_to_home"></span>
       </a>
       <div class="right-controls">
@@ -650,34 +489,15 @@
     <!-- ====== HOME VIEW ====== -->
     <div id="home-view" class="view-container active-view">
       <div class="container">
-        <header>
-          <h1>Financial & Tax Hub</h1>
-          <p class="subtitle">Your one-stop tool for financial calculations.</p>
-        </header>
+        <header><h1>Financial & Tax Hub</h1><p class="subtitle">Your one-stop tool for financial calculations.</p></header>
         <div class="navigation-grid">
           <div class="nav-card nav-link" data-target="interest-view">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path
-                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
-              />
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" /></svg>
             <h2 data-translate-key="nav_interest_title"></h2>
             <p data-translate-key="nav_interest_desc"></p>
           </div>
           <div class="nav-card nav-link" data-target="tax-view">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path
-                d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"
-              />
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" /></svg>
             <h2 data-translate-key="nav_tax_title"></h2>
             <p data-translate-key="nav_tax_desc"></p>
           </div>
@@ -688,350 +508,101 @@
     <!-- ====== INTEREST VIEW ====== -->
     <div id="interest-view" class="view-container">
       <div class="container">
-        <header>
-          <h1 data-translate-key="interest_main_title"></h1>
-          <p class="subtitle" data-translate-key="interest_subtitle"></p>
-        </header>
+        <header><h1 data-translate-key="interest_main_title"></h1><p class="subtitle" data-translate-key="interest_subtitle"></p></header>
         <div class="two-column-layout">
           <div class="calculators-column">
-            <h2
-              class="section-title"
-              data-translate-key="interest_calculators_title"
-            ></h2>
+            <h2 class="section-title" data-translate-key="interest_calculators_title"></h2>
             <div class="calculator-grid">
               <div class="calculator-card">
-                <h2>
-                  <span class="icon-container"
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path
-                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.5 14.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"
-                      /></svg></span
-                  ><span data-translate-key="si_title"></span>
-                </h2>
+                <h2><span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.5 14.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" /></svg></span><span data-translate-key="si_title"></span></h2>
                 <div class="input-group">
-                  <div class="input-field">
-                    <label
-                      for="si-principal"
-                      data-translate-key="principal_label"
-                    ></label
-                    ><input type="text" id="si-principal" value="1000" />
-                  </div>
+                  <div class="input-field"><label for="si-principal" data-translate-key="principal_label"></label><input type="text" id="si-principal" value="1000" /></div>
                   <div class="input-row">
-                    <div class="input-field">
-                      <label
-                        for="si-rate"
-                        data-translate-key="rate_label"
-                      ></label
-                      ><input type="text" id="si-rate" value="5" />
-                    </div>
-                    <div class="input-field">
-                      <label
-                        for="si-time"
-                        data-translate-key="time_label"
-                      ></label
-                      ><input type="text" id="si-time" value="3" />
-                    </div>
+                    <div class="input-field"><label for="si-rate" data-translate-key="rate_label"></label><input type="text" id="si-rate" value="5" /></div>
+                    <div class="input-field"><label for="si-time" data-translate-key="time_label"></label><input type="text" id="si-time" value="3" /></div>
                   </div>
                 </div>
                 <div class="output-section">
-                  <div class="primary-result">
-                    <span
-                      class="primary-result-label"
-                      data-translate-key="total_amount_label"
-                    ></span
-                    ><span
-                      class="primary-result-value"
-                      id="si-result-total"
-                    ></span>
-                  </div>
-                  <div class="secondary-results">
-                    <div class="result-item">
-                      <span
-                        class="result-label"
-                        data-translate-key="total_interest_label"
-                      ></span
-                      ><span
-                        class="result-value"
-                        id="si-result-interest"
-                      ></span>
-                    </div>
-                  </div>
+                  <div class="primary-result"><span class="primary-result-label" data-translate-key="total_amount_label"></span><span class="primary-result-value" id="si-result-total"></span></div>
+                  <div class="secondary-results"><div class="result-item"><span class="result-label" data-translate-key="total_interest_label"></span><span class="result-value" id="si-result-interest"></span></div></div>
                 </div>
               </div>
               <div class="calculator-card">
-                <h2>
-                  <span class="icon-container"
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path
-                        d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
-                      /></svg></span
-                  ><span data-translate-key="ci_title"></span>
-                </h2>
+                <h2><span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" /></svg></span><span data-translate-key="ci_title"></span></h2>
                 <div class="input-group">
-                  <div class="input-field">
-                    <label
-                      for="ci-principal"
-                      data-translate-key="principal_label"
-                    ></label
-                    ><input type="text" id="ci-principal" value="1000" />
-                  </div>
+                  <div class="input-field"><label for="ci-principal" data-translate-key="principal_label"></label><input type="text" id="ci-principal" value="1000" /></div>
                   <div class="input-row">
-                    <div class="input-field">
-                      <label
-                        for="ci-rate"
-                        data-translate-key="rate_label"
-                      ></label
-                      ><input type="text" id="ci-rate" value="5" />
-                    </div>
-                    <div class="input-field">
-                      <label
-                        for="ci-time"
-                        data-translate-key="time_label"
-                      ></label
-                      ><input type="text" id="ci-time" value="3" />
-                    </div>
+                    <div class="input-field"><label for="ci-rate" data-translate-key="rate_label"></label><input type="text" id="ci-rate" value="5" /></div>
+                    <div class="input-field"><label for="ci-time" data-translate-key="time_label"></label><input type="text" id="ci-time" value="3" /></div>
                   </div>
                   <div class="input-field">
-                    <label
-                      for="ci-compounding"
-                      data-translate-key="compounding_label"
-                    ></label
-                    ><select id="ci-compounding">
-                      <option value="1" data-translate-key="annually"></option>
-                      <option
-                        value="2"
-                        data-translate-key="semi_annually"
-                      ></option>
-                      <option
-                        value="4"
-                        selected
-                        data-translate-key="quarterly"
-                      ></option>
-                      <option value="12" data-translate-key="monthly"></option>
-                      <option value="52" data-translate-key="weekly"></option>
-                      <option value="365" data-translate-key="daily"></option>
-                      <option
-                        value="continuous"
-                        data-translate-key="continuously"
-                      ></option>
+                    <label for="ci-compounding" data-translate-key="compounding_label"></label>
+                    <select id="ci-compounding">
+                      <option value="1" data-translate-key="annually"></option><option value="2" data-translate-key="semi_annually"></option>
+                      <option value="4" selected data-translate-key="quarterly"></option><option value="12" data-translate-key="monthly"></option>
+                      <option value="52" data-translate-key="weekly"></option><option value="365" data-translate-key="daily"></option>
+                      <option value="continuous" data-translate-key="continuously"></option>
                     </select>
                   </div>
                 </div>
                 <div class="output-section">
-                  <div class="primary-result">
-                    <span
-                      class="primary-result-label"
-                      data-translate-key="total_amount_label"
-                    ></span
-                    ><span
-                      class="primary-result-value"
-                      id="ci-result-total"
-                    ></span>
-                  </div>
-                  <div class="secondary-results">
-                    <div class="result-item">
-                      <span
-                        class="result-label"
-                        data-translate-key="total_interest_label"
-                      ></span
-                      ><span
-                        class="result-value"
-                        id="ci-result-interest"
-                      ></span>
-                    </div>
-                  </div>
+                  <div class="primary-result"><span class="primary-result-label" data-translate-key="total_amount_label"></span><span class="primary-result-value" id="ci-result-total"></span></div>
+                  <div class="secondary-results"><div class="result-item"><span class="result-label" data-translate-key="total_interest_label"></span><span class="result-value" id="ci-result-interest"></span></div></div>
                 </div>
               </div>
               <div class="calculator-card">
-                <h2>
-                  <span class="icon-container"
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path
-                        d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"
-                      /></svg></span
-                  ><span data-translate-key="ear_title"></span>
-                </h2>
+                <h2><span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" /></svg></span><span data-translate-key="ear_title"></span></h2>
                 <div class="input-group">
+                  <div class="input-field"><label for="ear-nominal-rate" data-translate-key="nominal_rate_label"></label><input type="text" id="ear-nominal-rate" value="5" /></div>
                   <div class="input-field">
-                    <label
-                      for="ear-nominal-rate"
-                      data-translate-key="nominal_rate_label"
-                    ></label
-                    ><input type="text" id="ear-nominal-rate" value="5" />
-                  </div>
-                  <div class="input-field">
-                    <label
-                      for="ear-compounding"
-                      data-translate-key="compounding_label"
-                    ></label
-                    ><select id="ear-compounding">
-                      <option value="1" data-translate-key="annually"></option>
-                      <option
-                        value="2"
-                        data-translate-key="semi_annually"
-                      ></option>
-                      <option
-                        value="4"
-                        selected
-                        data-translate-key="quarterly"
-                      ></option>
-                      <option value="12" data-translate-key="monthly"></option>
-                      <option value="52" data-translate-key="weekly"></option>
-                      <option value="365" data-translate-key="daily"></option>
+                    <label for="ear-compounding" data-translate-key="compounding_label"></label>
+                    <select id="ear-compounding">
+                      <option value="1" data-translate-key="annually"></option><option value="2" data-translate-key="semi_annually"></option>
+                      <option value="4" selected data-translate-key="quarterly"></option><option value="12" data-translate-key="monthly"></option>
+                      <option value="52" data-translate-key="weekly"></option><option value="365" data-translate-key="daily"></option>
                     </select>
                   </div>
                 </div>
                 <div class="output-section">
-                  <div class="primary-result">
-                    <span
-                      class="primary-result-label"
-                      data-translate-key="ear_label"
-                    ></span
-                    ><span
-                      class="primary-result-value"
-                      id="ear-result-rate"
-                    ></span>
-                  </div>
+                  <div class="primary-result"><span class="primary-result-label" data-translate-key="ear_label"></span><span class="primary-result-value" id="ear-result-rate"></span></div>
                   <div class="secondary-results"></div>
                 </div>
               </div>
             </div>
           </div>
           <div class="info-column">
-            <h2
-              class="section-title"
-              data-translate-key="info_section_title"
-            ></h2>
+            <h2 class="section-title" data-translate-key="info_section_title"></h2>
             <div class="info-panel">
               <div class="calculator-grid">
                 <div class="calculator-card formula-card">
-                  <h3 data-translate-key="si_title"></h3>
-                  <div class="formula-box">Interest = P × R × T</div>
+                  <h3 data-translate-key="si_title"></h3><div class="formula-box">Interest = P × R × T</div>
                   <table class="variable-table">
-                    <tr>
-                      <td>P</td>
-                      <td data-translate-key="var_p_desc"></td>
-                    </tr>
-                    <tr>
-                      <td>R</td>
-                      <td data-translate-key="var_r_desc"></td>
-                    </tr>
-                    <tr>
-                      <td>T</td>
-                      <td data-translate-key="var_t_desc"></td>
-                    </tr>
+                    <tr><td>P</td><td data-translate-key="var_p_desc"></td></tr>
+                    <tr><td>R</td><td data-translate-key="var_r_desc"></td></tr>
+                    <tr><td>T</td><td data-translate-key="var_t_desc"></td></tr>
                   </table>
-                  <div class="example-title">
-                    <span class="example-icon"
-                      ><svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        fill="currentColor"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z"
-                        /></svg></span
-                    ><span data-translate-key="example"></span>
-                  </div>
-                  <div
-                    class="example-content"
-                    data-translate-key="si_example_desc"
-                  ></div>
-                  <code class="calculation-step"
-                    >Interest = 1,000 × 0.05 × 2 = $100.00</code
-                  >
+                  <div class="example-title"><span class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z" /></svg></span><span data-translate-key="example"></span></div>
+                  <div class="example-content" data-translate-key="si_example_desc"></div><code class="calculation-step">Interest = 1,000 × 0.05 × 2 = $100.00</code>
                 </div>
                 <div class="calculator-card formula-card">
-                  <h3 data-translate-key="ci_title"></h3>
-                  <div class="formula-box">Amount = P(1 + R/n)ⁿᵗ</div>
+                  <h3 data-translate-key="ci_title"></h3><div class="formula-box">Amount = P(1 + R/n)ⁿᵗ</div>
                   <table class="variable-table">
-                    <tr>
-                      <td>P</td>
-                      <td data-translate-key="var_p_desc"></td>
-                    </tr>
-                    <tr>
-                      <td>R</td>
-                      <td data-translate-key="var_r_desc"></td>
-                    </tr>
-                    <tr>
-                      <td>t</td>
-                      <td data-translate-key="var_t_desc"></td>
-                    </tr>
-                    <tr>
-                      <td>n</td>
-                      <td data-translate-key="var_n_desc"></td>
-                    </tr>
+                    <tr><td>P</td><td data-translate-key="var_p_desc"></td></tr>
+                    <tr><td>R</td><td data-translate-key="var_r_desc"></td></tr>
+                    <tr><td>t</td><td data-translate-key="var_t_desc"></td></tr>
+                    <tr><td>n</td><td data-translate-key="var_n_desc"></td></tr>
                   </table>
-                  <div class="example-title">
-                    <span class="example-icon"
-                      ><svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        fill="currentColor"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z"
-                        /></svg></span
-                    ><span data-translate-key="example"></span>
-                  </div>
-                  <div
-                    class="example-content"
-                    data-translate-key="ci_example_desc"
-                  ></div>
-                  <code class="calculation-step"
-                    >Amount = 1,000(1 + 0.05/4)<sup>4×2</sup> = $1,104.49</code
-                  >
+                  <div class="example-title"><span class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z" /></svg></span><span data-translate-key="example"></span></div>
+                  <div class="example-content" data-translate-key="ci_example_desc"></div><code class="calculation-step">Amount = 1,000(1 + 0.05/4)<sup>4×2</sup> = $1,104.49</code>
                 </div>
                 <div class="calculator-card formula-card">
-                  <h3 data-translate-key="ear_title"></h3>
-                  <div class="formula-box">EAR = (1 + R/n)ⁿ - 1</div>
+                  <h3 data-translate-key="ear_title"></h3><div class="formula-box">EAR = (1 + R/n)ⁿ - 1</div>
                   <table class="variable-table">
-                    <tr>
-                      <td>R</td>
-                      <td data-translate-key="var_r_desc_nominal"></td>
-                    </tr>
-                    <tr>
-                      <td>n</td>
-                      <td data-translate-key="var_n_desc"></td>
-                    </tr>
+                    <tr><td>R</td><td data-translate-key="var_r_desc_nominal"></td></tr>
+                    <tr><td>n</td><td data-translate-key="var_n_desc"></td></tr>
                   </table>
-                  <div class="example-title">
-                    <span class="example-icon"
-                      ><svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        fill="currentColor"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z"
-                        /></svg></span
-                    ><span data-translate-key="example"></span>
-                  </div>
-                  <div
-                    class="example-content"
-                    data-translate-key="ear_example_desc"
-                  ></div>
-                  <code class="calculation-step"
-                    >EAR = (1 + 0.05/4)⁴ - 1 = 0.050945 ≈ 5.095%</code
-                  >
+                  <div class="example-title"><span class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z" /></svg></span><span data-translate-key="example"></span></div>
+                  <div class="example-content" data-translate-key="ear_example_desc"></div><code class="calculation-step">EAR = (1 + 0.05/4)⁴ - 1 = 0.050945 ≈ 5.095%</code>
                 </div>
               </div>
             </div>
@@ -1043,234 +614,99 @@
     <!-- ====== TAX VIEW ====== -->
     <div id="tax-view" class="view-container">
       <div class="container">
-        <header>
-          <h1 data-translate-key="tax_main_title"></h1>
-          <p class="subtitle" data-translate-key="tax_subtitle"></p>
-        </header>
+        <header><h1 data-translate-key="tax_main_title"></h1><p class="subtitle" data-translate-key="tax_subtitle"></p></header>
         <div class="two-column-layout">
           <div class="calculators-column">
-            <h2
-              class="section-title"
-              data-translate-key="tax_calculators_title"
-            ></h2>
-            <div class="disclaimer-card">
-              <strong data-translate-key="disclaimer_title"></strong>
-              <span data-translate-key="disclaimer_text"></span>
-            </div>
+            <h2 class="section-title" data-translate-key="tax_calculators_title"></h2>
+            <div class="disclaimer-card"><strong data-translate-key="disclaimer_title"></strong> <span data-translate-key="disclaimer_text"></span></div>
             <div class="calculator-grid">
-              <div class="calculator-card">
+              <div class="calculator-card" id="salary-tax-card" data-currency="khr">
                 <h2>
-                  <span class="icon-container"
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path
-                        d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"
-                      /></svg></span
-                  ><span data-translate-key="salary_tax_title"></span>
+                  <span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" /></svg></span>
+                  <span data-translate-key="salary_tax_title"></span>
+                  <div class="currency-switcher"><button class="currency-btn active" data-currency="khr">៛</button><button class="currency-btn" data-currency="usd">$</button></div>
                 </h2>
                 <div class="input-group">
-                  <div class="input-field">
-                    <label
-                      for="salary-gross"
-                      data-translate-key="gross_salary_label"
-                    ></label
-                    ><input type="text" id="salary-gross" value="3000000" />
-                  </div>
-                  <div class="input-field">
-                    <label
-                      for="salary-dependents"
-                      data-translate-key="dependents_label"
-                    ></label
-                    ><input
-                      type="number"
-                      id="salary-dependents"
-                      value="0"
-                      min="0"
-                    />
-                  </div>
+                  <div class="input-field"><label for="salary-gross"></label><input type="text" id="salary-gross" value="3000000" /></div>
+                  <div class="input-field"><label for="salary-dependents" data-translate-key="dependents_label"></label><input type="number" id="salary-dependents" value="0" min="0"/></div>
                 </div>
                 <div class="output-section">
-                  <div class="primary-result">
-                    <span
-                      class="primary-result-label"
-                      data-translate-key="monthly_tax_label"
-                    ></span
-                    ><span
-                      class="primary-result-value"
-                      id="salary-tax-amount"
-                    ></span>
-                  </div>
-                  <div class="secondary-results">
-                    <div class="result-item">
-                      <span
-                        class="result-label"
-                        data-translate-key="taxable_salary_label"
-                      ></span
-                      ><span
-                        class="result-value"
-                        id="salary-tax-taxable"
-                      ></span>
-                    </div>
-                  </div>
+                  <div class="primary-result"><span class="primary-result-label" data-translate-key="monthly_tax_label"></span><span class="primary-result-value" id="salary-tax-amount"></span></div>
+                  <div class="secondary-results"><div class="result-item"><span class="result-label" data-translate-key="taxable_salary_label"></span><span class="result-value" id="salary-tax-taxable"></span></div></div>
                 </div>
               </div>
-              <div class="calculator-card">
+              <div class="calculator-card" id="vat-tax-card" data-currency="khr">
                 <h2>
-                  <span class="icon-container"
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path
-                        d="M18 4H6C4.9 4 4 4.9 4 6v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H6V6h12v12zM8 12h8v2H8zm0-4h8v2H8z"
-                      /></svg></span
-                  ><span data-translate-key="vat_title"></span>
+                  <span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 4H6C4.9 4 4 4.9 4 6v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H6V6h12v12zM8 12h8v2H8zm0-4h8v2H8z" /></svg></span>
+                  <span data-translate-key="vat_title"></span>
+                  <div class="currency-switcher"><button class="currency-btn active" data-currency="khr">៛</button><button class="currency-btn" data-currency="usd">$</button></div>
                 </h2>
-                <div class="input-group">
-                  <div class="input-field">
-                    <label
-                      for="vat-amount"
-                      data-translate-key="amount_excl_vat_label"
-                    ></label
-                    ><input type="text" id="vat-amount" value="100000" />
-                  </div>
-                </div>
+                <div class="input-group"><div class="input-field"><label for="vat-amount"></label><input type="text" id="vat-amount" value="100000" /></div></div>
                 <div class="output-section">
-                  <div class="primary-result">
-                    <span
-                      class="primary-result-label"
-                      data-translate-key="total_incl_vat_label"
-                    ></span
-                    ><span
-                      class="primary-result-value"
-                      id="vat-result-total"
-                    ></span>
-                  </div>
-                  <div class="secondary-results">
-                    <div class="result-item">
-                      <span
-                        class="result-label"
-                        data-translate-key="vat_amount_label"
-                      ></span
-                      ><span class="result-value" id="vat-result-amount"></span>
-                    </div>
-                  </div>
+                  <div class="primary-result"><span class="primary-result-label" data-translate-key="total_incl_vat_label"></span><span class="primary-result-value" id="vat-result-total"></span></div>
+                  <div class="secondary-results"><div class="result-item"><span class="result-label" data-translate-key="vat_amount_label"></span><span class="result-value" id="vat-result-amount"></span></div></div>
                 </div>
               </div>
-              <div class="calculator-card">
+              <div class="calculator-card" id="property-tax-card" data-currency="usd">
                 <h2>
-                  <span class="icon-container"
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path
-                        d="m12 3-9 4.5v9l9 4.5 9-4.5v-9L12 3zm0 13.5-5-2.5v-3l5 2.5v3zm0-4.5-5-2.5 5-2.5 5 2.5-5 2.5z"
-                      /></svg></span
-                  ><span data-translate-key="property_tax_title"></span>
+                  <span class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="m12 3-9 4.5v9l9 4.5 9-4.5v-9L12 3zm0 13.5-5-2.5v-3l5 2.5v3zm0-4.5-5-2.5 5-2.5 5 2.5-5 2.5z" /></svg></span>
+                  <span data-translate-key="property_tax_title"></span>
+                  <div class="currency-switcher"><button class="currency-btn" data-currency="khr">៛</button><button class="currency-btn active" data-currency="usd">$</button></div>
                 </h2>
-                <div class="input-group">
-                  <div class="input-field">
-                    <label
-                      for="property-value"
-                      data-translate-key="property_value_label"
-                    ></label
-                    ><input type="text" id="property-value" value="100000" />
-                  </div>
-                </div>
+                <div class="input-group"><div class="input-field"><label for="property-value"></label><input type="text" id="property-value" value="100000" /></div></div>
                 <div class="output-section">
-                  <div class="primary-result">
-                    <span
-                      class="primary-result-label"
-                      data-translate-key="transfer_tax_label"
-                    ></span
-                    ><span
-                      class="primary-result-value"
-                      id="property-tax-amount"
-                    ></span>
-                  </div>
+                  <div class="primary-result"><span class="primary-result-label" data-translate-key="transfer_tax_label"></span><span class="primary-result-value" id="property-tax-amount"></span></div>
                   <div class="secondary-results"></div>
                 </div>
               </div>
             </div>
           </div>
           <div class="info-column">
-            <h2
-              class="section-title"
-              data-translate-key="tax_info_section_title"
-            ></h2>
+            <h2 class="section-title" data-translate-key="tax_info_section_title"></h2>
             <div class="info-panel">
               <div class="calculator-grid">
+                <!-- UPDATED: More detailed info cards -->
                 <div class="calculator-card info-card">
-                  <h3 data-translate-key="kh_tax_overview_title"></h3>
-                  <p
-                    class="info-content"
-                    data-translate-key="kh_tax_overview_text"
-                  ></p>
-                  <ul class="info-list">
-                    <li data-translate-key="kh_tax_tos"></li>
-                    <li data-translate-key="kh_tax_cit"></li>
-                    <li data-translate-key="kh_tax_vat"></li>
-                    <li data-translate-key="kh_tax_wht"></li>
-                    <li data-translate-key="kh_tax_property"></li>
-                  </ul>
+                    <h3 data-translate-key="kh_tos_rates_title"></h3>
+                    <p class="info-content" data-translate-key="kh_tos_rates_desc"></p>
+                    <table class="tax-table">
+                        <thead>
+                            <tr><th data-translate-key="th_taxable_salary"></th><th data-translate-key="th_rate"></th><th data-translate-key="th_deduction"></th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>0 - 1,500,000</td><td>0%</td><td>0</td></tr>
+                            <tr><td>1,500,001 - 2,000,000</td><td>5%</td><td>75,000</td></tr>
+                            <tr><td>2,000,001 - 8,500,000</td><td>10%</td><td>175,000</td></tr>
+                            <tr><td>8,500,001 - 12,500,000</td><td>15%</td><td>600,000</td></tr>
+                            <tr><td>> 12,500,000</td><td>20%</td><td>1,225,000</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="calculator-card calculation-breakdown-card">
+                    <h3 data-translate-key="tos_breakdown_title"></h3>
+                    <div class="breakdown-step"><p><strong data-translate-key="tos_breakdown_step1_title"></strong> <span data-translate-key="tos_breakdown_step1_desc"></span></p></div>
+                    <div class="breakdown-step"><p><strong data-translate-key="tos_breakdown_step2_title"></strong> <span data-translate-key="tos_breakdown_step2_desc"></span></p></div>
+                    <div class="breakdown-step"><p><strong data-translate-key="tos_breakdown_step3_title"></strong> <span data-translate-key="tos_breakdown_step3_desc"></span></p><code class="calculation-step" data-translate-key="tos_breakdown_step3_formula"></code></div>
+                    <div class="breakdown-step"><p><strong data-translate-key="tos_breakdown_step4_title"></strong> <span data-translate-key="tos_breakdown_step4_desc"></span></p><code class="calculation-step" data-translate-key="tos_breakdown_step4_formula"></code></div>
+                    <div class="example-title"><span class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A6 6 0 0 1 2 6zm6 8.5a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H8.5a.5.5 0 0 1-.5-.5z" /></svg></span><span data-translate-key="example"></span></div>
+                    <div class="example-content" data-translate-key="tos_breakdown_example_desc"></div>
+                    <code class="calculation-step" data-translate-key="tos_breakdown_example_calc"></code>
                 </div>
                 <div class="calculator-card info-card">
-                  <h3 data-translate-key="kh_tos_rates_title"></h3>
-                  <p
-                    class="info-content"
-                    data-translate-key="kh_tos_rates_desc"
-                  ></p>
-                  <table class="tax-table">
-                    <thead>
-                      <tr>
-                        <th data-translate-key="th_taxable_salary"></th>
-                        <th data-translate-key="th_rate"></th>
-                        <th data-translate-key="th_deduction"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <!-- CORRECTION: Updated deduction values to be accurate for each bracket -->
-                      <tr>
-                        <td>0 - 1,500,000</td>
-                        <td>0%</td>
-                        <td>0</td>
-                      </tr>
-                      <tr>
-                        <td>1,500,001 - 2,000,000</td>
-                        <td>5%</td>
-                        <td>75,000</td>
-                      </tr>
-                      <tr>
-                        <td>2,000,001 - 8,500,000</td>
-                        <td>10%</td>
-                        <td>175,000</td>
-                      </tr>
-                      <tr>
-                        <td>8,500,001 - 12,500,000</td>
-                        <td>15%</td>
-                        <td>600,000</td>
-                      </tr>
-                      <tr>
-                        <td>> 12,500,000</td>
-                        <td>20%</td>
-                        <td>1,225,000</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <h3 data-translate-key="vat_title"></h3>
+                  <p class="info-content" data-translate-key="vat_info_desc"></p>
+                  <div class="formula-box" data-translate-key="vat_info_formula"></div>
+                </div>
+                <div class="calculator-card info-card">
+                  <h3 data-translate-key="property_tax_title"></h3>
+                  <p class="info-content" data-translate-key="property_tax_info_desc"></p>
+                  <div class="formula-box" data-translate-key="property_tax_info_formula"></div>
                 </div>
                 <div class="calculator-card info-card">
                   <h3 data-translate-key="global_tax_title"></h3>
                   <ul class="info-list">
-                    <li data-translate-key="tax_concept_progressive"></li>
-                    <li data-translate-key="tax_concept_regressive"></li>
-                    <li data-translate-key="tax_concept_flat"></li>
-                    <li data-translate-key="tax_concept_consumption"></li>
+                    <li data-translate-key="tax_concept_progressive"></li><li data-translate-key="tax_concept_regressive"></li>
+                    <li data-translate-key="tax_concept_flat"></li><li data-translate-key="tax_concept_consumption"></li>
                   </ul>
                 </div>
               </div>
@@ -1282,75 +718,38 @@
 
     <script>
       const CAMBODIA_SALARY_TAX_BRACKETS = [
-        { threshold: 1500000, rate: 0.0, deduction: 0 },
-        { threshold: 2000000, rate: 0.05, deduction: 75000 },
-        { threshold: 8500000, rate: 0.1, deduction: 175000 },
-        { threshold: 12500000, rate: 0.15, deduction: 600000 },
+        { threshold: 1500000, rate: 0.0, deduction: 0 }, { threshold: 2000000, rate: 0.05, deduction: 75000 },
+        { threshold: 8500000, rate: 0.1, deduction: 175000 }, { threshold: 12500000, rate: 0.15, deduction: 600000 },
         { threshold: Infinity, rate: 0.2, deduction: 1225000 },
       ];
       const DEPENDENT_REBATE = 150000;
+      const KHR_USD_RATE = 4000;
+
       const languageOptions = [
-        {
-          code: "en",
-          label: "English",
-          flag: "https://flagcdn.com/us.svg",
-          fontClass: "font-inter",
-        },
-        {
-          code: "km",
-          label: "ភាសាខ្មែរ",
-          flag: "https://flagcdn.com/kh.svg",
-          fontClass: "font-khmer",
-        },
+        { code: "en", label: "English", flag: "https://flagcdn.com/us.svg", fontClass: "font-inter" },
+        { code: "km", label: "ភាសាខ្មែរ", flag: "https://flagcdn.com/kh.svg", fontClass: "font-khmer" },
       ];
       const translations = {
         back_to_home: { en: "Back to Home", km: "ត្រឡប់ទៅទំព័រដើម" },
         nav_interest_title: { en: "Interest Calculators", km: "គណនាការប្រាក់" },
-        nav_interest_desc: {
-          en: "Calculate simple, compound, and effective annual interest rates.",
-          km: "គណនាការប្រាក់ធម្មតា, ផ្សំ, និងអត្រាប្រចាំឆ្នាំពិតប្រាកដ។",
-        },
+        nav_interest_desc: { en: "Calculate simple, compound, and effective annual interest rates.", km: "គណនាការប្រាក់ធម្មតា, ផ្សំ, និងអត្រាប្រចាំឆ្នាំពិតប្រាកដ។" },
         nav_tax_title: { en: "Tax Calculators", km: "គណនាពន្ធ" },
-        nav_tax_desc: {
-          en: "Estimate Cambodian salary tax, VAT, and property transfer tax.",
-          km: "ប៉ាន់ស្មានពន្ធលើប្រាក់បៀវត្ស, អតប, និងពន្ធប្រថាប់ត្រា។",
-        },
-        interest_main_title: {
-          en: "Interest Calculators",
-          km: "កម្មវិធីគណនាការប្រាក់",
-        },
-        interest_subtitle: {
-          en: "Tools for simple, compound, and effective rate calculations",
-          km: "ឧបករណ៍សម្រាប់គណនាការប្រាក់ធម្មតា, ការប្រាក់ផ្សំ, និងអត្រាពិតប្រាកដ",
-        },
-        interest_calculators_title: {
-          en: "Interest Calculators",
-          km: "កម្មវិធីគណនាការប្រាក់",
-        },
-        info_section_title: {
-          en: "How The Formulas Work",
-          km: "របៀបដែលរូបមន្តដំណើរការ",
-        },
+        nav_tax_desc: { en: "Estimate Cambodian salary tax, VAT, and property transfer tax.", km: "ប៉ាន់ស្មានពន្ធលើប្រាក់បៀវត្ស, អតប, និងពន្ធប្រថាប់ត្រា។" },
+        interest_main_title: { en: "Interest Calculators", km: "កម្មវិធីគណនាការប្រាក់" },
+        interest_subtitle: { en: "Tools for simple, compound, and effective rate calculations", km: "ឧបករណ៍សម្រាប់គណនាការប្រាក់ធម្មតា, ការប្រាក់ផ្សំ, និងអត្រាពិតប្រាកដ" },
+        interest_calculators_title: { en: "Interest Calculators", km: "កម្មវិធីគណនាការប្រាក់" },
+        info_section_title: { en: "How The Formulas Work", km: "របៀបដែលរូបមន្តដំណើរការ" },
         si_title: { en: "Simple Interest", km: "ការប្រាក់ធម្មតា" },
         ci_title: { en: "Compound Interest", km: "ការប្រាក់ផ្សំ" },
-        ear_title: {
-          en: "Effective Annual Rate (EAR)",
-          km: "អត្រាការប្រាក់ប្រចាំឆ្នាំពិតប្រាកដ",
-        },
+        ear_title: { en: "Effective Annual Rate (EAR)", km: "អត្រាការប្រាក់ប្រចាំឆ្នាំពិតប្រាកដ" },
         principal_label: { en: "Principal ($)", km: "ប្រាក់ដើម ($)" },
         rate_label: { en: "Annual Rate (%)", km: "អត្រាប្រចាំឆ្នាំ (%)" },
         time_label: { en: "Time (Years)", km: "រយៈពេល (ឆ្នាំ)" },
         compounding_label: { en: "Compounding Frequency", km: "ប្រេកង់ផ្សំ" },
-        nominal_rate_label: {
-          en: "Nominal Annual Rate (%)",
-          km: "អត្រាកំណត់ប្រចាំឆ្នាំ (%)",
-        },
+        nominal_rate_label: { en: "Nominal Annual Rate (%)", km: "អត្រាកំណត់ប្រចាំឆ្នាំ (%)" },
         total_interest_label: { en: "Total Interest", km: "ការប្រាក់សរុប" },
         total_amount_label: { en: "Total Amount", km: "ចំនួនសរុប" },
-        ear_label: {
-          en: "Effective Annual Rate",
-          km: "អត្រាការប្រាក់ពិតប្រាកដ",
-        },
+        ear_label: { en: "Effective Annual Rate", km: "អត្រាការប្រាក់ពិតប្រាកដ" },
         annually: { en: "Annually", km: "ប្រចាំឆ្នាំ" },
         semi_annually: { en: "Semi-annually", km: "ប្រចាំឆមាស" },
         quarterly: { en: "Quarterly", km: "ប្រចាំត្រីមាស" },
@@ -1360,450 +759,329 @@
         continuously: { en: "Continuously", km: "បន្តเนื่อง" },
         example: { en: "Example", km: "ឧទាហរណ៍" },
         var_p_desc: { en: "Principal amount", km: "ចំនួនប្រាក់ដើម" },
-        var_r_desc: {
-          en: "Annual interest rate (decimal)",
-          km: "អត្រាការប្រាក់ប្រចាំឆ្នាំ (ជាទសភាគ)",
-        },
-        var_r_desc_nominal: {
-          en: "Nominal annual rate (decimal)",
-          km: "អត្រាកំណត់ប្រចាំឆ្នាំ (ជាទសភាគ)",
-        },
+        var_r_desc: { en: "Annual interest rate (decimal)", km: "អត្រាការប្រាក់ប្រចាំឆ្នាំ (ជាទសភាគ)" },
+        var_r_desc_nominal: { en: "Nominal annual rate (decimal)", km: "អត្រាកំណត់ប្រចាំឆ្នាំ (ជាទសភាគ)" },
         var_t_desc: { en: "Time in years", km: "រយៈពេលគិតជាឆ្នាំ" },
-        var_n_desc: {
-          en: "Compounding periods per year",
-          km: "ចំនួនដងនៃការផ្សំក្នុងមួយឆ្នាំ",
-        },
-        si_example_desc: {
-          en: "If you invest $1,000 at a simple annual interest rate of 5% for 2 years:",
-          km: "ប្រសិនបើអ្នកវិនិយោគ $1,000 ក្នុងអត្រាការប្រាក់ធម្មតា 5% រយៈពេល 2 ឆ្នាំ:",
-        },
-        ci_example_desc: {
-          en: "If you invest $1,000 at 5% annual interest, compounded quarterly (4 times a year) for 2 years:",
-          km: "ប្រសិនបើអ្នកវិនិយោគ $1,000 ក្នុងអត្រា 5% ដោយផ្សំប្រចាំត្រីមាស (4 ដងក្នុងមួយឆ្នាំ) រយៈពេល 2 ឆ្នាំ:",
-        },
-        ear_example_desc: {
-          en: "For a nominal rate of 5% compounded quarterly, the actual rate you earn per year is:",
-          km: "សម្រាប់អត្រាកំណត់ 5% ដែលផ្សំប្រចាំត្រីមាស, អត្រាពិតប្រាកដដែលអ្នករកបានក្នុងមួយឆ្នាំគឺ:",
-        },
-        tax_main_title: {
-          en: "Tax Calculators (Cambodia Focus)",
-          km: "កម្មវិធីគណនាពន្ធ (សម្រាប់កម្ពុជា)",
-        },
-        tax_subtitle: {
-          en: "Tools for Salary Tax, VAT, and Property Transfer Tax",
-          km: "ឧបករណ៍សម្រាប់ពន្ធលើប្រាក់បៀវត្ស, អតប, និងពន្ធប្រថាប់ត្រា",
-        },
-        tax_calculators_title: {
-          en: "Tax Calculators",
-          km: "កម្មវិធីគណនាពន្ធ",
-        },
-        tax_info_section_title: {
-          en: "Tax Information & Concepts",
-          km: "ព័ត៌មាន និងគោលគំនិតពន្ធដារ",
-        },
+        var_n_desc: { en: "Compounding periods per year", km: "ចំនួនដងនៃការផ្សំក្នុងមួយឆ្នាំ" },
+        si_example_desc: { en: "If you invest $1,000 at a simple annual interest rate of 5% for 2 years:", km: "ប្រសិនបើអ្នកវិនិយោគ $1,000 ក្នុងអត្រាការប្រាក់ធម្មតា 5% រយៈពេល 2 ឆ្នាំ:" },
+        ci_example_desc: { en: "If you invest $1,000 at 5% annual interest, compounded quarterly (4 times a year) for 2 years:", km: "ប្រសិនបើអ្នកវិនិយោគ $1,000 ក្នុងអត្រា 5% ដោយផ្សំប្រចាំត្រីមាស (4 ដងក្នុងមួយឆ្នាំ) រយៈពេល 2 ឆ្នាំ:" },
+        ear_example_desc: { en: "For a nominal rate of 5% compounded quarterly, the actual rate you earn per year is:", km: "សម្រាប់អត្រាកំណត់ 5% ដែលផ្សំប្រចាំត្រីមាស, អត្រាពិតប្រាកដដែលអ្នករកបានក្នុងមួយឆ្នាំគឺ:" },
+        tax_main_title: { en: "Tax Calculators (Cambodia Focus)", km: "កម្មវិធីគណនាពន្ធ (សម្រាប់កម្ពុជា)" },
+        tax_subtitle: { en: "Tools for Salary Tax, VAT, and Property Transfer Tax", km: "ឧបករណ៍សម្រាប់ពន្ធលើប្រាក់បៀវត្ស, អតប, និងពន្ធប្រថាប់ត្រា" },
+        tax_calculators_title: { en: "Tax Calculators", km: "កម្មវិធីគណនាពន្ធ" },
+        tax_info_section_title: { en: "Tax Information & Breakdowns", km: "ព័ត៌មាន និងការវិភាគពន្ធដារ" },
         disclaimer_title: { en: "Disclaimer:", km: "ការបដិសេធ:" },
-        disclaimer_text: {
-          en: "Tax laws are complex and change often. This tool provides simplified estimates for educational purposes only and is not professional tax advice. Always consult a qualified tax professional.",
-          km: "ច្បាប់ពន្ធដារមានភាពស្មុគស្មាញ និងផ្លាស់ប្តូរជាញឹកញាប់។ ឧបករណ៍នេះផ្តល់ការប៉ាន់ស្មានសាមញ្ញសម្រាប់គោលបំណងអប់រំតែប៉ុណ្ណោះ ហើយមិនមែនជាដំបូន្មានពន្ធដារឡើយ។ សូមពិគ្រោះជាមួយអ្នកជំនាញពន្ធដារជានិច្ច។",
-        },
+        disclaimer_text: { en: "Tax laws are complex and change often. This tool provides simplified estimates for educational purposes only and is not professional tax advice. Always consult a qualified tax professional.", km: "ច្បាប់ពន្ធដារមានភាពស្មុគស្មាញ និងផ្លាស់ប្តូរជាញឹកញាប់។ ឧបករណ៍នេះផ្តល់ការប៉ាន់ស្មានសាមញ្ញសម្រាប់គោលបំណងអប់រំតែប៉ុណ្ណោះ ហើយមិនមែនជាដំបូន្មានពន្ធដារឡើយ។ សូមពិគ្រោះជាមួយអ្នកជំនាញពន្ធដារជានិច្ច។" },
         salary_tax_title: { en: "Tax on Salary", km: "ពន្ធលើប្រាក់បៀវត្ស" },
-        vat_title: {
-          en: "Value Added Tax (VAT)",
-          km: "អាករលើតម្លៃបន្ថែម (អតប)",
-        },
-        property_tax_title: {
-          en: "Property Transfer Tax",
-          km: "ពន្ធប្រថាប់ត្រាអចលនទ្រព្យ",
-        },
-        gross_salary_label: {
-          en: "Gross Monthly Salary (៛)",
-          km: "ប្រាក់បៀវត្សសរុបប្រចាំខែ (៛)",
-        },
-        dependents_label: {
-          en: "Number of Dependents",
-          km: "ចំនួនអ្នកក្នុងបន្ទុក",
-        },
-        taxable_salary_label: {
-          en: "Taxable Salary (៛)",
-          km: "ប្រាក់បៀវត្សជាប់ពន្ធ (៛)",
-        },
-        monthly_tax_label: {
-          en: "Estimated Monthly Tax",
-          km: "ពន្ធប្រចាំខែប៉ាន់ស្មាន",
-        },
-        amount_excl_vat_label: {
-          en: "Amount Excl. VAT (៛)",
-          km: "ចំនួនមិនរួមបញ្ចូលអតប (៛)",
-        },
+        vat_title: { en: "Value Added Tax (VAT)", km: "អាករលើតម្លៃបន្ថែម (អតប)" },
+        property_tax_title: { en: "Property Transfer Tax", km: "ពន្ធប្រថាប់ត្រាអចលនទ្រព្យ" },
+        gross_salary_label_khr: { en: "Gross Monthly Salary (៛)", km: "ប្រាក់បៀវត្សសរុបប្រចាំខែ (៛)" },
+        gross_salary_label_usd: { en: "Gross Monthly Salary ($)", km: "ប្រាក់បៀវត្សសរុបប្រចាំខែ ($)" },
+        dependents_label: { en: "Number of Dependents", km: "ចំនួនអ្នកក្នុងបន្ទុក" },
+        taxable_salary_label: { en: "Taxable Salary", km: "ប្រាក់បៀវត្សជាប់ពន្ធ" },
+        monthly_tax_label: { en: "Estimated Monthly Tax", km: "ពន្ធប្រចាំខែប៉ាន់ស្មាន" },
+        amount_excl_vat_label_khr: { en: "Amount Excl. VAT (៛)", km: "ចំនួនមិនរួមបញ្ចូលអតប (៛)" },
+        amount_excl_vat_label_usd: { en: "Amount Excl. VAT ($)", km: "ចំនួនមិនរួមបញ្ចូលអតប ($)" },
         vat_amount_label: { en: "VAT (10%)", km: "អតប (10%)" },
         total_incl_vat_label: { en: "Total Incl. VAT", km: "សរុបរួមទាំងអតប" },
-        property_value_label: {
-          en: "Assessed Property Value ($)",
-          km: "តម្លៃអចលនទ្រព្យវាយតម្លៃ ($)",
-        },
-        transfer_tax_label: {
-          en: "Transfer Tax (4%)",
-          km: "ពន្ធប្រថាប់ត្រា (4%)",
-        },
-        kh_tax_overview_title: {
-          en: "Cambodia Tax Overview",
-          km: "ទិដ្ឋភាពទូទៅនៃពន្ធដារកម្ពុជា",
-        },
-        kh_tax_overview_text: {
-          en: "Key taxes in Cambodia include:",
-          km: "ពន្ធសំខាន់ៗនៅកម្ពុជា រួមមាន៖",
-        },
-        kh_tax_tos: {
-          en: "Tax on Salary (ToS) for employees.",
-          km: "ពន្ធលើប្រាក់បៀវត្ស (ToS) សម្រាប់បុគ្គលិក។",
-        },
-        kh_tax_cit: {
-          en: "Corporate Income Tax (CIT) for businesses.",
-          km: "ពន្ធលើប្រាក់ចំណូល (CIT) សម្រាប់អាជីវកម្ម។",
-        },
-        kh_tax_vat: {
-          en: "Value Added Tax (VAT) on goods and services.",
-          km: "អាករលើតម្លៃបន្ថែម (VAT) លើទំនិញ និងសេវាកម្ម។",
-        },
-        kh_tax_wht: {
-          en: "Withholding Tax (WHT) on specific payments.",
-          km: "ពន្ធកាត់ទុក (WHT) លើការទូទាត់ជាក់លាក់។",
-        },
-        kh_tax_property: {
-          en: "Property and Transfer Taxes.",
-          km: "ពន្ធលើអចលនទ្រព្យ និងពន្ធប្រថាប់ត្រា។",
-        },
-        kh_tos_rates_title: {
-          en: "ToS Rates (Resident, Monthly)",
-          km: "អត្រាពន្ធលើប្រាក់បៀវត្ស (និវាសនជន, ប្រចាំខែ)",
-        },
-        kh_tos_rates_desc: {
-          en: "Tax is calculated on the taxable salary, after deducting a 150,000 KHR rebate per dependent.",
-          km: "ពន្ធត្រូវបានគណនាលើប្រាក់បៀវត្សជាប់ពន្ធ បន្ទាប់ពីដកការអនុគ្រោះ 150,000 រៀលក្នុងមួយអ្នកក្នុងបន្ទុក។",
-        },
-        th_taxable_salary: {
-          en: "Taxable Salary (៛)",
-          km: "ប្រាក់បៀវត្សជាប់ពន្ធ (៛)",
-        },
+        property_value_label_khr: { en: "Assessed Property Value (៛)", km: "តម្លៃអចលនទ្រព្យវាយតម្លៃ (៛)" },
+        property_value_label_usd: { en: "Assessed Property Value ($)", km: "តម្លៃអចលនទ្រព្យវាយតម្លៃ ($)" },
+        transfer_tax_label: { en: "Transfer Tax (4%)", km: "ពន្ធប្រថាប់ត្រា (4%)" },
+        kh_tos_rates_title: { en: "ToS Rates (Resident, Monthly)", km: "អត្រាពន្ធលើប្រាក់បៀវត្ស (និវាសនជន, ប្រចាំខែ)" },
+        kh_tos_rates_desc: { en: "Tax is calculated on a progressive scale in KHR. A rebate of 150,000 KHR per dependent is deducted before calculating the tax.", km: "ពន្ធត្រូវបានគណនាលើជញ្ជីងរីកចម្រើនជាប្រាក់រៀល។ ការអនុគ្រោះ 150,000 រៀលក្នុងមួយអ្នកនៅក្នុងបន្ទុកត្រូវបានកាត់ចេញមុនពេលគណនាពន្ធ។" },
+        th_taxable_salary: { en: "Taxable Salary (៛)", km: "ប្រាក់បៀវត្សជាប់ពន្ធ (៛)" },
         th_rate: { en: "Rate", km: "អត្រា" },
         th_deduction: { en: "Deduction", km: "ការកាត់បន្ថយ" },
-        global_tax_title: {
-          en: "Global Tax Concepts",
-          km: "គោលគំនិតពន្ធដារសកល",
-        },
-        tax_concept_progressive: {
-          en: "<strong>Progressive Tax:</strong> Higher earners pay a higher percentage.",
-          km: "<strong>ពន្ធតាមឋានានុក្រម:</strong> អ្នកមានចំណូលខ្ពស់បង់ភាគរយខ្ពស់ជាង។",
-        },
-        tax_concept_regressive: {
-          en: "<strong>Regressive Tax:</strong> Lower earners pay a higher percentage of their income.",
-          km: "<strong>ពន្ធថយក្រោយ:</strong> អ្នកមានចំណូលទាបបង់ភាគរយខ្ពស់ជាងនៃប្រាក់ចំណូលរបស់ពួកគេ។",
-        },
-        tax_concept_flat: {
-          en: "<strong>Flat Tax:</strong> Everyone pays the same percentage.",
-          km: "<strong>ពន្ធអត្រាស្មើ:</strong> មនុស្សគ្រប់គ្នាបង់ភាគរយដូចគ្នា។",
-        },
-        tax_concept_consumption: {
-          en: "<strong>Consumption Tax:</strong> Tax on goods and services (e.g., VAT).",
-          km: "<strong>ពន្ធលើការប្រើប្រាស់:</strong> ពន្ធលើទំនិញ និងសេវាកម្ម (ឧ. អតប)។",
-        },
+        global_tax_title: { en: "Global Tax Concepts", km: "គោលគំនិតពន្ធដារសកល" },
+        tax_concept_progressive: { en: "<strong>Progressive Tax:</strong> Higher earners pay a higher percentage of their income.", km: "<strong>ពន្ធតាមឋានានុក្រម:</strong> អ្នកមានចំណូលខ្ពស់បង់ភាគរយខ្ពស់ជាងនៃប្រាក់ចំណូលរបស់ពួកគេ។" },
+        tax_concept_regressive: { en: "<strong>Regressive Tax:</strong> Lower earners pay a higher percentage of their income.", km: "<strong>ពន្ធថយក្រោយ:</strong> អ្នកមានចំណូលទាបបង់ភាគរយខ្ពស់ជាងនៃប្រាក់ចំណូលរបស់ពួកគេ។" },
+        tax_concept_flat: { en: "<strong>Flat Tax:</strong> Everyone pays the same percentage.", km: "<strong>ពន្ធអត្រាស្មើ:</strong> មនុស្សគ្រប់គ្នាបង់ភាគរយដូចគ្នា។" },
+        tax_concept_consumption: { en: "<strong>Consumption Tax:</strong> Tax on goods and services (e.g., VAT).", km: "<strong>ពន្ធលើការប្រើប្រាស់:</strong> ពន្ធលើទំនិញ និងសេវាកម្ម (ឧ. អតប)។" },
+        tos_breakdown_title: { en: "Tax on Salary Calculation Breakdown", km: "ការវិភាគការគណនាពន្ធលើប្រាក់បៀវត្ស" },
+        tos_breakdown_step1_title: { en: "1. Gross Salary:", km: "១. ប្រាក់បៀវត្សសរុប:" },
+        tos_breakdown_step1_desc: { en: "This is your total monthly salary before any deductions.", km: "នេះគឺជាប្រាក់បៀវត្សប្រចាំខែសរុបរបស់អ្នកមុនការកាត់កងណាមួយ។" },
+        tos_breakdown_step2_title: { en: "2. Dependent Deduction:", km: "២. ការកាត់កងអ្នកក្នុងបន្ទុក:" },
+        tos_breakdown_step2_desc: { en: "Subtract 150,000 KHR for each dependent (e.g., spouse, children).", km: "ដក 150,000 រៀលសម្រាប់អ្នកក្នុងបន្ទុកម្នាក់ៗ (ឧ. ប្តី/ប្រពន្ធ, កូន)។" },
+        tos_breakdown_step3_title: { en: "3. Find Taxable Salary:", km: "៣. រកប្រាក់បៀវត្សជាប់ពន្ធ:" },
+        tos_breakdown_step3_desc: { en: "This is the amount the tax rates will be applied to.", km: "នេះគឺជាចំនួនទឹកប្រាក់ដែលអត្រាពន្ធនឹងត្រូវអនុវត្ត។" },
+        tos_breakdown_step3_formula: { en: "Taxable Salary = Gross Salary - (Dependents × 150,000)", km: "ប្រាក់បៀវត្សជាប់ពន្ធ = ប្រាក់បៀវត្សសរុប - (អ្នកក្នុងបន្ទុក × 150,000)" },
+        tos_breakdown_step4_title: { en: "4. Apply Tax Formula:", km: "៤. អនុវត្តរូបមន្តពន្ធ:" },
+        tos_breakdown_step4_desc: { en: "Find the correct bracket for the Taxable Salary and apply its rate and deduction.", km: "ស្វែងរកតង្កៀបត្រឹមត្រូវសម្រាប់ប្រាក់បៀវត្សជាប់ពន្ធ ហើយអនុវត្តអត្រា និងការកាត់បន្ថយរបស់វា។" },
+        tos_breakdown_step4_formula: { en: "Tax = (Taxable Salary × Rate) - Deduction Amount", km: "ពន្ធ = (ប្រាក់បៀវត្សជាប់ពន្ធ × អត្រា) - ចំនួនកាត់បន្ថយ" },
+        tos_breakdown_example_desc: { en: "Example: Gross Salary of 3,000,000 KHR with 1 dependent:", km: "ឧទាហរណ៍៖ ប្រាក់បៀវត្សសរុប 3,000,000 រៀល មានអ្នកក្នុងបន្ទុក 1 នាក់៖" },
+        tos_breakdown_example_calc: { en: "Taxable Salary = 3,000,000 - 150,000 = 2,850,000 KHR<br>Tax = (2,850,000 × 10%) - 175,000 = 110,000 KHR", km: "ប្រាក់បៀវត្សជាប់ពន្ធ = 3,000,000 - 150,000 = 2,850,000 រៀល<br>ពន្ធ = (2,850,000 × 10%) - 175,000 = 110,000 រៀល" },
+        vat_info_desc: { en: "Value Added Tax (VAT) is a 10% consumption tax applied to the price of most goods and services supplied in Cambodia.", km: "អាករលើតម្លៃបន្ថែម (អតប) គឺជាពន្ធលើការប្រើប្រាស់ 10% ដែលអនុវត្តលើតម្លៃទំនិញ និងសេវាកម្មភាគច្រើនដែលផ្គត់ផ្គង់ក្នុងប្រទេសកម្ពុជា។" },
+        vat_info_formula: { en: "Total Price = Price_Excluding_VAT × 1.10", km: "តម្លៃសរុប = តម្លៃមិនរួមបញ្ចូលអតប × 1.10" },
+        property_tax_info_desc: { en: "A 4% tax is levied on the transfer of ownership of immovable property (e.g., land, buildings). It is calculated on the assessed value of the property, which is determined by the tax authorities and may be higher than the sale price.", km: "ពន្ធ 4% ត្រូវបានយកលើការផ្ទេរកម្មសិទ្ធិអចលនទ្រព្យ (ឧ. ដីធ្លី, អគារ)។ វាត្រូវបានគណនាលើតម្លៃវាយតម្លៃនៃអចលនទ្រព្យ ដែលកំណត់ដោយអាជ្ញាធរពន្ធដារ ហើយអាចខ្ពស់ជាងតម្លៃលក់។" },
+        property_tax_info_formula: { en: "Transfer Tax = Assessed Property Value × 4%", km: "ពន្ធប្រថាប់ត្រា = តម្លៃអចលនទ្រព្យវាយតម្លៃ × 4%" }
       };
+      
       let currentLang = localStorage.getItem("calculatorLanguage") || "en";
-      function translatePage() {
-        const elements = document.querySelectorAll("[data-translate-key]");
-        const body = document.body;
-        const currentFont = languageOptions.find(
-          (l) => l.code === currentLang
-        ).fontClass;
-        body.classList.remove("font-inter", "font-khmer");
-        body.classList.add(currentFont);
-        elements.forEach((el) => {
-          el.innerHTML =
-            translations[el.dataset.translateKey]?.[currentLang] ||
-            translations[el.dataset.translateKey]?.["en"] ||
-            "";
-        });
-      }
-      function createLanguageSelector() {
-        const container = document.getElementById("langSelector");
-        if (!container) return;
-        container.innerHTML = `<button class="language-btn" type="button"><img src="" class="language-flag" alt="language"><span class="font-inter"></span><svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="dropdown-content"></div>`;
-        const btn = container.querySelector("button"),
-          dropdown = container.querySelector(".dropdown-content");
-        languageOptions.forEach((lang) => {
-          const option = document.createElement("button");
-          option.className = `language-option ${lang.fontClass}`;
-          option.onclick = () => {
-            currentLang = lang.code;
-            localStorage.setItem("calculatorLanguage", currentLang);
-            updateLanguageSelector();
-            translatePage();
-            container.classList.remove("open");
-          };
-          option.innerHTML = `<img src="${lang.flag}" class="language-flag" alt="${lang.label}"> ${lang.label}`;
-          dropdown.appendChild(option);
-        });
-        btn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          container.classList.toggle("open");
-        });
-      }
-      function updateLanguageSelector() {
-        const container = document.getElementById("langSelector");
-        if (!container) return;
-        const btn = container.querySelector("button");
-        const langData = languageOptions.find((l) => l.code === currentLang);
-        if (btn && langData) {
-          btn.querySelector("img").src = langData.flag;
-          btn.querySelector("span").textContent = langData.label;
-          btn.querySelector("span").className = langData.fontClass;
-        }
-      }
+
+      // --- UTILITY FUNCTIONS ---
       function formatNumber(num, decimals = 2, currency = "") {
-        if (isNaN(num) || !isFinite(num)) {
-          num = 0;
-        }
-        const formatted = num.toLocaleString("en-US", {
-          minimumFractionDigits: decimals,
-          maximumFractionDigits: decimals,
-        });
+        if (isNaN(num) || !isFinite(num)) num = 0;
+        const formatted = num.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
         return currency ? `${currency} ${formatted}` : formatted;
       }
 
-      function formatDualCurrency(khrAmount, useBrForPrimary = false) {
-        const usdAmount = khrAmount / 4000;
-        const khrFormatted = formatNumber(khrAmount, 2, "៛");
-        const usdFormatted = formatNumber(usdAmount, 2, "$");
-
-        if (useBrForPrimary) {
-          return `${khrFormatted}<br><span style="font-size: 0.5em; color: var(--light-text);">${usdFormatted}</span>`;
-        } else {
-          return `${khrFormatted} (${usdFormatted})`;
-        }
+      function formatDisplayCurrency(amount, currency) {
+        if (currency === 'khr') return formatNumber(amount, 0, "៛");
+        if (currency === 'usd') return formatNumber(amount, 2, "$");
+        return formatNumber(amount, 2);
+      }
+      
+      function formatDualCurrency(amount, displayCurrency) {
+          if (displayCurrency === 'khr') {
+              const usdAmount = amount / KHR_USD_RATE;
+              return `${formatNumber(amount, 0, "៛")}<br><span style="font-size: 0.5em; color: var(--light-text);">${formatNumber(usdAmount, 2, "$")}</span>`;
+          } else { // usd
+              const khrAmount = amount * KHR_USD_RATE;
+              return `${formatNumber(amount, 2, "$")}<br><span style="font-size: 0.5em; color: var(--light-text);">${formatNumber(khrAmount, 0, "៛")}</span>`;
+          }
       }
 
       function stripSeparators(value) {
         if (typeof value !== "string") return String(value);
-        return value.replace(/[, ៛$]/g, "");
+        return value.replace(/[, ៛$]/g, "").trim();
       }
+      
       function validateAndGet(inputId) {
         const input = document.getElementById(inputId);
         if (!input) return 0;
         let value = parseFloat(stripSeparators(input.value));
-        input.classList.remove("input-error");
-        if (input.value.trim() !== "" && (isNaN(value) || value < 0)) {
-          input.classList.add("input-error");
-          return NaN;
-        }
         return isNaN(value) ? 0 : value;
       }
+
+      // --- CALCULATION FUNCTIONS ---
       function calculateAll() {
-        calculateSimpleInterest();
-        calculateCompoundInterest();
-        calculateEAR();
-        calculateCambodiaSalaryTax();
-        calculateCambodiaVAT();
-        calculateCambodiaPropertyTax();
+        calculateSimpleInterest(); calculateCompoundInterest(); calculateEAR();
+        calculateCambodiaSalaryTax(); calculateCambodiaVAT(); calculateCambodiaPropertyTax();
       }
       function calculateSimpleInterest() {
-        const P = validateAndGet("si-principal"),
-          R = validateAndGet("si-rate") / 100,
-          T = validateAndGet("si-time");
-        const SI = P * R * T,
-          A = P + SI;
-        // CORRECTION: Changed from 3 to 2 decimal places for currency
-        document.getElementById("si-result-interest").textContent =
-          formatNumber(SI, 2, "$");
-        document.getElementById("si-result-total").textContent = formatNumber(
-          A,
-          2,
-          "$"
-        );
+        const P = validateAndGet("si-principal"), R = validateAndGet("si-rate") / 100, T = validateAndGet("si-time");
+        const SI = P * R * T, A = P + SI;
+        document.getElementById("si-result-interest").textContent = formatNumber(SI, 2, "$");
+        document.getElementById("si-result-total").textContent = formatNumber(A, 2, "$");
       }
       function calculateCompoundInterest() {
-        const P = validateAndGet("ci-principal"),
-          R = validateAndGet("ci-rate") / 100,
-          T = validateAndGet("ci-time");
-        const compoundingFreq = document.getElementById("ci-compounding").value;
-        let A;
-        if (compoundingFreq === "continuous") A = P * Math.exp(R * T);
-        else {
-          const n = parseInt(compoundingFreq, 10);
-          A = n > 0 ? P * Math.pow(1 + R / n, n * T) : P;
-        }
+        const P = validateAndGet("ci-principal"), R = validateAndGet("ci-rate") / 100, T = validateAndGet("ci-time");
+        const freq = document.getElementById("ci-compounding").value;
+        let A = (freq === "continuous") ? P * Math.exp(R * T) : P * Math.pow(1 + R / parseInt(freq, 10), parseInt(freq, 10) * T);
         const CI = A - P;
-        // CORRECTION: Changed from 3 to 2 decimal places for currency
-        document.getElementById("ci-result-interest").textContent =
-          formatNumber(CI, 2, "$");
-        document.getElementById("ci-result-total").textContent = formatNumber(
-          A,
-          2,
-          "$"
-        );
+        document.getElementById("ci-result-interest").textContent = formatNumber(CI, 2, "$");
+        document.getElementById("ci-result-total").textContent = formatNumber(A, 2, "$");
       }
       function calculateEAR() {
-        const R_nominal = validateAndGet("ear-nominal-rate") / 100;
-        const n = parseInt(
-          document.getElementById("ear-compounding").value,
-          10
-        );
+        const R_nominal = validateAndGet("ear-nominal-rate") / 100, n = parseInt(document.getElementById("ear-compounding").value, 10);
         const EAR = n > 0 ? Math.pow(1 + R_nominal / n, n) - 1 : 0;
-        document.getElementById(
-          "ear-result-rate"
-        ).textContent = `${formatNumber(EAR * 100, 3)}%`;
+        document.getElementById("ear-result-rate").textContent = `${formatNumber(EAR * 100, 3)}%`;
       }
+
       function calculateCambodiaSalaryTax() {
-        const grossSalary = validateAndGet("salary-gross"),
-          dependents = validateAndGet("salary-dependents");
+        const card = document.getElementById('salary-tax-card');
+        const displayCurrency = card.dataset.currency;
+        const grossInput = validateAndGet("salary-gross");
+        const dependents = validateAndGet("salary-dependents");
+
+        // Convert input to KHR for calculation
+        const grossSalaryKHR = (displayCurrency === 'usd') ? grossInput * KHR_USD_RATE : grossInput;
+        
         const totalRebate = dependents * DEPENDENT_REBATE;
-        let taxableSalary = grossSalary - totalRebate;
-        taxableSalary = taxableSalary < 0 ? 0 : taxableSalary;
-        let taxAmount = 0;
+        let taxableSalaryKHR = Math.max(0, grossSalaryKHR - totalRebate);
+        
+        let taxAmountKHR = 0;
         for (const bracket of CAMBODIA_SALARY_TAX_BRACKETS) {
-          if (taxableSalary <= bracket.threshold) {
-            taxAmount = taxableSalary * bracket.rate - bracket.deduction;
+          if (taxableSalaryKHR <= bracket.threshold) {
+            taxAmountKHR = taxableSalaryKHR * bracket.rate - bracket.deduction;
             break;
           }
         }
-        taxAmount = taxAmount < 0 ? 0 : taxAmount;
-        document.getElementById("salary-tax-taxable").innerHTML =
-          formatDualCurrency(taxableSalary, false);
-        document.getElementById("salary-tax-amount").innerHTML =
-          formatDualCurrency(taxAmount, true);
+        taxAmountKHR = Math.max(0, taxAmountKHR);
+
+        // Convert results back to display currency
+        const taxableSalaryDisplay = (displayCurrency === 'usd') ? taxableSalaryKHR / KHR_USD_RATE : taxableSalaryKHR;
+        const taxAmountDisplay = (displayCurrency === 'usd') ? taxAmountKHR / KHR_USD_RATE : taxAmountKHR;
+
+        document.getElementById("salary-tax-taxable").textContent = formatDisplayCurrency(taxableSalaryDisplay, displayCurrency);
+        document.getElementById("salary-tax-amount").innerHTML = formatDualCurrency(taxAmountDisplay, displayCurrency);
       }
+
       function calculateCambodiaVAT() {
-        const amountExcl = validateAndGet("vat-amount"),
-          vatAmount = amountExcl * 0.1,
-          totalIncl = amountExcl + vatAmount;
-        document.getElementById("vat-result-amount").innerHTML =
-          formatDualCurrency(vatAmount, false);
-        document.getElementById("vat-result-total").innerHTML =
-          formatDualCurrency(totalIncl, true);
+        const card = document.getElementById('vat-tax-card');
+        const displayCurrency = card.dataset.currency;
+        const amountExclInput = validateAndGet("vat-amount");
+
+        const amountExclKHR = (displayCurrency === 'usd') ? amountExclInput * KHR_USD_RATE : amountExclInput;
+        const vatAmountKHR = amountExclKHR * 0.1;
+        const totalInclKHR = amountExclKHR + vatAmountKHR;
+
+        const vatAmountDisplay = (displayCurrency === 'usd') ? vatAmountKHR / KHR_USD_RATE : vatAmountKHR;
+        const totalInclDisplay = (displayCurrency === 'usd') ? totalInclKHR / KHR_USD_RATE : totalInclKHR;
+        
+        document.getElementById("vat-result-amount").textContent = formatDisplayCurrency(vatAmountDisplay, displayCurrency);
+        document.getElementById("vat-result-total").innerHTML = formatDualCurrency(totalInclDisplay, displayCurrency);
       }
+
       function calculateCambodiaPropertyTax() {
-        const propValue = validateAndGet("property-value"),
-          taxAmount = propValue * 0.04;
-        // CORRECTION: Changed from 3 to 2 decimal places for currency
-        document.getElementById("property-tax-amount").textContent =
-          formatNumber(taxAmount, 2, "$");
-      }
-      function setupThemeToggle() {
-        const toggle = document.getElementById("themeToggle");
-        if (toggle) {
-          toggle.addEventListener("click", function () {
-            document.body.classList.toggle("dark-mode");
-            const isDarkMode = document.body.classList.contains("dark-mode");
-            localStorage.setItem("darkMode", isDarkMode);
-            toggle.textContent = isDarkMode ? "🌞" : "🌓";
-          });
-        }
-        if (localStorage.getItem("darkMode") === "true") {
-          document.body.classList.add("dark-mode");
-          if (toggle) toggle.textContent = "🌞";
-        }
+        const card = document.getElementById('property-tax-card');
+        const displayCurrency = card.dataset.currency;
+        const propValueInput = validateAndGet("property-value");
+        
+        const propValueUSD = (displayCurrency === 'khr') ? propValueInput / KHR_USD_RATE : propValueInput;
+        const taxAmountUSD = propValueUSD * 0.04;
+
+        const taxAmountDisplay = (displayCurrency === 'khr') ? taxAmountUSD * KHR_USD_RATE : taxAmountUSD;
+        
+        document.getElementById("property-tax-amount").innerHTML = formatDualCurrency(taxAmountDisplay, displayCurrency);
       }
 
-      function setupNavigation() {
-        const navLinks = document.querySelectorAll(".nav-link");
-        const views = document.querySelectorAll(".view-container");
-        const backBtn = document.querySelector(".back-btn");
-
-        const updateBackButtonState = (activeViewId) => {
-          if (activeViewId === "home-view") {
-            backBtn.href = "index.html";
-            backBtn.dataset.target = "";
-          } else {
-            backBtn.href = "#";
-            backBtn.dataset.target = "home-view";
-          }
-        };
-
-        navLinks.forEach((link) => {
-          link.addEventListener("click", (e) => {
-            const targetId = link.dataset.target;
-            if (targetId) {
-              e.preventDefault();
-              views.forEach((view) => view.classList.remove("active-view"));
-              const targetView = document.getElementById(targetId);
-
-              if (targetView) {
-                targetView.classList.add("active-view");
-                window.scrollTo(0, 0);
-                updateBackButtonState(targetId);
-              }
-            }
-          });
-        });
-
-        const initialView = document.querySelector(
-          ".view-container.active-view"
-        );
-        updateBackButtonState(initialView ? initialView.id : "home-view");
-      }
-
-      // REFACTORED: Currency formatting logic for better UX and efficiency
-      function setupFormattedInputs() {
-        const fieldsToFormat = [
-          { id: "salary-gross", currency: "៛" },
-          { id: "vat-amount", currency: "៛" },
-          { id: "property-value", currency: "$" },
-          { id: "si-principal", currency: "$" },
-          { id: "ci-principal", currency: "$" },
-        ];
-
-        const formatValue = (inputEl, currency) => {
-          let raw = stripSeparators(inputEl.value);
-          if (raw === "" || isNaN(parseFloat(raw))) {
-            inputEl.value = "";
-            return;
-          }
-          let num = parseFloat(raw);
-          inputEl.value = `${currency} ${num.toLocaleString("en-US", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}`;
-        };
-
-        fieldsToFormat.forEach(({ id, currency }) => {
-          const input = document.getElementById(id);
-          if (!input) return;
-
-          // On focus, strip formatting for easy editing
-          input.addEventListener("focus", function () {
-            this.value = stripSeparators(this.value);
-          });
-
-          // On blur, re-apply formatting
-          input.addEventListener("blur", function () {
-            formatValue(this, currency);
-          });
-          
-          // Apply initial format on page load
-          formatValue(input, currency);
-        });
-      }
-
-      document.addEventListener("DOMContentLoaded", function () {
+      // --- UI SETUP & EVENT LISTENERS ---
+      function setupUI() {
         setupNavigation();
         createLanguageSelector();
         updateLanguageSelector();
         setupThemeToggle();
-        translatePage();
+        setupCurrencySwitchers();
         setupFormattedInputs();
-        
-        document
-          .querySelectorAll("input, select")
-          .forEach((input) => input.addEventListener("input", calculateAll));
-        
-        calculateAll(); // Run once on load after initial setup
-        
+        updateAllTaxLabels();
+        translatePage();
+        calculateAll();
+
+        document.querySelectorAll("input, select").forEach(el => el.addEventListener("input", calculateAll));
         document.addEventListener("click", (e) => {
           const langSelector = document.getElementById("langSelector");
-          if (langSelector && !langSelector.contains(e.target)) {
-            langSelector.classList.remove("open");
-          }
+          if (langSelector && !langSelector.contains(e.target)) langSelector.classList.remove("open");
         });
-      });
+      }
+
+      function setupNavigation() {
+        const navLinks = document.querySelectorAll(".nav-link"), views = document.querySelectorAll(".view-container"), backBtn = document.querySelector(".back-btn");
+        const updateBackBtn = id => { backBtn.href = (id === "home-view") ? "index.html" : "#"; backBtn.dataset.target = (id === "home-view") ? "" : "home-view"; };
+        navLinks.forEach(link => link.addEventListener("click", e => {
+          const targetId = link.dataset.target;
+          if (targetId) { e.preventDefault(); views.forEach(v => v.classList.remove("active-view")); document.getElementById(targetId)?.classList.add("active-view"); window.scrollTo(0, 0); updateBackBtn(targetId); }
+        }));
+        const initialView = document.querySelector(".view-container.active-view");
+        updateBackBtn(initialView ? initialView.id : "home-view");
+      }
+      
+      function createLanguageSelector() {
+        const container = document.getElementById("langSelector");
+        if (!container) return;
+        container.innerHTML = `<button class="language-btn" type="button"><img src="" class="language-flag" alt="language"><span class="font-inter"></span><svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="dropdown-content"></div>`;
+        const btn = container.querySelector("button"), dropdown = container.querySelector(".dropdown-content");
+        languageOptions.forEach(lang => {
+          const option = document.createElement("button");
+          option.className = `language-option ${lang.fontClass}`;
+          option.onclick = () => { currentLang = lang.code; localStorage.setItem("calculatorLanguage", currentLang); updateLanguageSelector(); translatePage(); container.classList.remove("open"); };
+          option.innerHTML = `<img src="${lang.flag}" class="language-flag" alt="${lang.label}"> ${lang.label}`;
+          dropdown.appendChild(option);
+        });
+        btn.addEventListener("click", e => { e.stopPropagation(); container.classList.toggle("open"); });
+      }
+      
+      function updateLanguageSelector() {
+        const container = document.getElementById("langSelector"), btn = container?.querySelector("button");
+        const langData = languageOptions.find(l => l.code === currentLang);
+        if (btn && langData) { btn.querySelector("img").src = langData.flag; btn.querySelector("span").textContent = langData.label; btn.querySelector("span").className = langData.fontClass; }
+      }
+      
+      function setupThemeToggle() {
+        const toggle = document.getElementById("themeToggle");
+        const applyTheme = (isDark) => { document.body.classList.toggle("dark-mode", isDark); if (toggle) toggle.textContent = isDark ? "🌞" : "🌓"; };
+        toggle?.addEventListener("click", () => { const isDark = !document.body.classList.contains("dark-mode"); localStorage.setItem("darkMode", isDark); applyTheme(isDark); });
+        applyTheme(localStorage.getItem("darkMode") === "true");
+      }
+
+      function setupCurrencySwitchers() {
+        document.querySelectorAll('.currency-switcher').forEach(switcher => {
+            switcher.addEventListener('click', e => {
+                const btn = e.target.closest('.currency-btn');
+                if (!btn) return;
+
+                const card = btn.closest('.calculator-card');
+                const newCurrency = btn.dataset.currency;
+                const oldCurrency = card.dataset.currency;
+                
+                if (newCurrency === oldCurrency) return;
+
+                const input = card.querySelector('input[type="text"]');
+                let value = validateAndGet(input.id);
+
+                if (newCurrency === 'usd' && oldCurrency === 'khr') value /= KHR_USD_RATE;
+                else if (newCurrency === 'khr' && oldCurrency === 'usd') value *= KHR_USD_RATE;
+                
+                card.dataset.currency = newCurrency;
+                input.value = value;
+                
+                switcher.querySelectorAll('.currency-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                updateTaxLabels(card.id, newCurrency);
+                input.dispatchEvent(new Event('blur')); // Reformat the input
+                calculateAll();
+            });
+        });
+      }
+
+      function updateTaxLabels(cardId, currency) {
+          const card = document.getElementById(cardId);
+          const label = card.querySelector('label');
+          const lang = currentLang;
+          let key;
+
+          if (cardId === 'salary-tax-card') key = `gross_salary_label_${currency}`;
+          else if (cardId === 'vat-tax-card') key = `amount_excl_vat_label_${currency}`;
+          else if (cardId === 'property-tax-card') key = `property_value_label_${currency}`;
+          
+          if(key && label) {
+              label.textContent = translations[key]?.[lang] || translations[key]?.['en'];
+          }
+      }
+      function updateAllTaxLabels() {
+          document.querySelectorAll('.calculator-card[data-currency]').forEach(card => {
+              updateTaxLabels(card.id, card.dataset.currency);
+          });
+      }
+
+      function setupFormattedInputs() {
+        const formatValue = (inputEl) => {
+          const card = inputEl.closest('.calculator-card');
+          const currencySymbol = card?.dataset.currency === 'usd' ? '$' : '៛';
+          const decimals = card?.dataset.currency === 'usd' ? 2 : 0;
+          
+          let raw = stripSeparators(inputEl.value);
+          if (raw === '' || isNaN(parseFloat(raw))) { inputEl.value = ''; return; }
+          let num = parseFloat(raw);
+          inputEl.value = formatNumber(num, decimals, currencySymbol);
+        };
+
+        ['salary-gross', 'vat-amount', 'property-value', 'si-principal', 'ci-principal'].forEach(id => {
+          const input = document.getElementById(id);
+          if (!input) return;
+          input.addEventListener('focus', function () { this.value = stripSeparators(this.value); });
+          input.addEventListener('blur', function () { formatValue(this); });
+          formatValue(input);
+        });
+      }
+
+      function translatePage() {
+        const elements = document.querySelectorAll("[data-translate-key]");
+        const body = document.body;
+        const currentFont = languageOptions.find(l => l.code === currentLang).fontClass;
+        body.classList.remove("font-inter", "font-khmer");
+        body.classList.add(currentFont);
+        
+        elements.forEach(el => {
+          const key = el.dataset.translateKey;
+          const translation = translations[key]?.[currentLang] || translations[key]?.['en'];
+          if(translation) el.innerHTML = translation;
+        });
+        updateAllTaxLabels(); // Update currency-specific labels on language change
+      }
+      
+      document.addEventListener("DOMContentLoaded", setupUI);
     </script>
   </body>
 </html>
