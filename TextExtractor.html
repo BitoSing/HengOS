@@ -140,6 +140,10 @@
 
     <script type="text/babel">
         const App = () => {
+            // --- NEW: Global file size limit constant
+            const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
+            const MAX_FILE_SIZE_MB = 20;
+
             const [mode, setMode] = React.useState('file');
             const [selectedFile, setSelectedFile] = React.useState(null);
             const [filePreview, setFilePreview] = React.useState(null);
@@ -176,15 +180,18 @@
                     'subtitle': { en: 'Extract text from files or transcribe audio with AI.', km: 'ស្រង់អក្សរពីឯកសារ ឬបំប្លែងសំឡេងជាមួយ AI។' },
                     'file_tab': { en: 'File Extractor', km: 'ស្រង់ពីឯកសារ' },
                     'audio_tab': { en: 'Audio Transcriber', km: 'បម្លែងសំឡេង' },
-                    'upload_hint': { en: 'Drag & Drop or Click to Upload', km: 'អូសនិងទម្លាក់ ឬចុចដើម្បីផ្ទុកឯកសារ' },
-                    'pdf_img_limit': { en: 'PDF (max 10MB), Image (max 4MB)', km: 'PDF (អតិបរមា 10MB), រូបភាព (អតិបរមា 4MB)' },
+                    // UPDATED: Added "Paste" to the hint text
+                    'upload_hint': { en: 'Drag & Drop, Paste, or Click to Upload', km: 'អូសនិងទម្លាក់ បិទភ្ជាប់ ឬចុចដើម្បីផ្ទុកឯកសារ' },
+                    // UPDATED: Changed file size limits to 20MB
+                    'file_limit': { en: `PDF & Image (max ${MAX_FILE_SIZE_MB}MB)`, km: `PDF និង រូបភាព (អតិបរមា ${MAX_FILE_SIZE_MB}MB)` },
                     'extract_btn': { en: 'Extract Text from File', km: 'ស្រង់អត្ថបទពីឯកសារ' },
                     'extracting': { en: 'Extracting...', km: 'កំពុងស្រង់...' },
                     'or': { en: 'Or', km: 'ឬ' },
                     'record_audio': { en: 'Record Audio', km: 'ថតសំឡេង' },
                     'stop_recording': { en: 'Stop Recording', km: 'បញ្ឈប់ការថត' },
                     'upload_audio': { en: 'Upload an Audio File', km: 'ផ្ទុកឯកសារសំឡេង' },
-                    'audio_limit': { en: 'Max 10MB', km: 'អតិបរមា 10MB' },
+                    // UPDATED: Changed audio limit to 20MB
+                    'audio_limit': { en: `Max ${MAX_FILE_SIZE_MB}MB`, km: `អតិបរមា ${MAX_FILE_SIZE_MB}MB` },
                     'audio_preview_title': { en: 'Audio Ready', km: 'សំឡេងរួចរាល់' },
                     'transcribe_btn': { en: 'Transcribe Audio', km: 'បម្លែងសំឡេងជាអត្ថបទ' },
                     'transcribing': { en: 'Transcribing...', km: 'កំពុងបម្លែង...' },
@@ -244,8 +251,10 @@
             const handleFileSelect = (file) => {
                 if (!file) return;
                 clearState(false);
-                if (file.type.startsWith('image/') && file.size > 4*1024*1024) return setError('Image file must be under 4MB.');
-                if (file.type === 'application/pdf' && file.size > 10*1024*1024) return setError('PDF file must be under 10MB.');
+                // UPDATED: Unified file size check
+                if (file.size > MAX_FILE_SIZE) {
+                    return setError(`File must be under ${MAX_FILE_SIZE_MB}MB.`);
+                }
                 if (file.type.startsWith('image/')) {
                     setFileType('image');
                     setSelectedFile(file);
@@ -259,6 +268,36 @@
             
             const handleDragEvents = (e, isEntering) => { e.preventDefault(); e.stopPropagation(); setIsDragging(isEntering); };
             const handleDrop = (e) => { handleDragEvents(e, false); handleFileSelect(e.dataTransfer.files?.[0]); };
+            
+            // --- NEW: Paste Handler ---
+            // This effect adds a global event listener to handle pasting images from the clipboard.
+            React.useEffect(() => {
+                const handlePaste = (event) => {
+                    // Ignore paste events if user is typing in an input field.
+                    if (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA") {
+                        return;
+                    }
+
+                    const items = event.clipboardData.items;
+                    for (let i = 0; i < items.length; i++) {
+                        // Find the first image file in the clipboard.
+                        if (items[i].type.startsWith('image/')) {
+                            const file = items[i].getAsFile();
+                            if (file) {
+                                event.preventDefault(); // Stop the browser from its default paste action.
+                                switchMode('file');     // Ensure we're on the file extractor tab.
+                                handleFileSelect(file); // Process the pasted file.
+                            }
+                            break; // Stop after finding the first image.
+                        }
+                    }
+                };
+                window.addEventListener('paste', handlePaste);
+                // Cleanup function to remove the listener when the component unmounts.
+                return () => {
+                    window.removeEventListener('paste', handlePaste);
+                };
+            }, []); // Empty dependency array means this runs only once on component mount.
 
             const renderPdfPreview = async (file) => {
                 try {
@@ -286,8 +325,12 @@
                     mediaRecorderRef.current.ondataavailable = e => audioChunksRef.current.push(e.data);
                     mediaRecorderRef.current.onstop = () => {
                         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-                        if (audioBlob.size > 10*1024*1024) { setError('Recording is too large (max 10MB).'); setAudioFile(null); } 
-                        else { setAudioFile(audioBlob); setAudioPreviewUrl(URL.createObjectURL(audioBlob)); }
+                        // UPDATED: Recording size check
+                        if (audioBlob.size > MAX_FILE_SIZE) { 
+                            setError(`Recording is too large (max ${MAX_FILE_SIZE_MB}MB).`); setAudioFile(null); 
+                        } else { 
+                            setAudioFile(audioBlob); setAudioPreviewUrl(URL.createObjectURL(audioBlob)); 
+                        }
                         stream.getTracks().forEach(track => track.stop());
                         clearInterval(recordIntervalRef.current); setRecordSeconds(0);
                     };
@@ -302,7 +345,8 @@
                 const file = event.target.files[0];
                 clearState(false);
                 if (!file) return;
-                if (file.size > 10*1024*1024) return setError('Audio file must be under 10MB.');
+                // UPDATED: Audio upload size check
+                if (file.size > MAX_FILE_SIZE) return setError(`Audio file must be under ${MAX_FILE_SIZE_MB}MB.`);
                 if (file.type.startsWith('audio/')) { setAudioFile(file); setAudioPreviewUrl(URL.createObjectURL(file)); } 
                 else { setError('Please select a valid audio file.'); }
             };
@@ -314,7 +358,7 @@
                 // --- CRITICAL: REPLACE WITH YOUR OWN KEY ---
                 // You must get your own API key from Google AI Studio.
                 // The tool WILL NOT WORK without a valid key.
-                const apiKey = "v"; 
+                const apiKey = "AIzaSyDydw9gsfTJX7nRse3A1wLNsHLV36_HfTU"; 
                 // ---------------------------------------------
 
                 if (apiKey.includes("PASTE_YOUR")) {
@@ -350,8 +394,8 @@
                 <div className={`page-container ${getFontClass()}`}>
                     <div className="content-wrapper">
                         <div className="flex justify-between items-center w-full mb-4">
-                            <a href="index.html" className="back-btn">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                            <a href="#" className="back-btn" onClick={(e) => { e.preventDefault(); alert('Navigation link clicked.'); }}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
                                 <span>{t('back-to-home')}</span>
                             </a>
                         </div>
@@ -400,7 +444,7 @@
                                                 <div className="flex flex-col items-center justify-center h-48 cursor-pointer" onClick={() => fileInputRef.current.click()}>
                                                     <svg className="h-12 w-12 mb-3" style={{color: 'var(--text-muted)'}} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
                                                     <p className="font-semibold">{t('upload_hint')}</p>
-                                                    <p className="text-sm mt-1" style={{color: 'var(--text-muted)'}}>{t('pdf_img_limit')}</p>
+                                                    <p className="text-sm mt-1" style={{color: 'var(--text-muted)'}}>{t('file_limit')}</p>
                                                 </div>
                                             ) : (
                                                 <div className="relative">
