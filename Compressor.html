@@ -452,7 +452,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     fileInput.addEventListener('change', (e) => {
         handleFiles(e.target.files);
-        e.target.value = ''; // FIX: Reset input to allow selecting the same file again.
+        // CRITICAL FIX: Reset the input value. This allows selecting the same file again without needing to refresh.
+        e.target.value = '';
     });
 
     const handleFiles = (files) => {
@@ -485,6 +486,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (file.type === 'application/pdf') {
                 compressedBlob = await compressPDF(file, onProgress);
             } else if (name.match(/\.(docx|xlsx|pptx)$/i)) {
+                // NOTE: This only supports modern, XML-based Office formats (.docx, .xlsx, .pptx).
+                // Legacy formats like .doc, .xls, and .ppt are not ZIP archives and cannot be
+                // compressed with this method. They will be correctly marked as "Unsupported" below.
                 compressedBlob = await compressOfficeFile(file, onProgress);
             } else {
                 throw new Error('unsupported');
@@ -564,12 +568,10 @@ document.addEventListener('DOMContentLoaded', () => {
         URL.revokeObjectURL(link.href);
     });
 
-    // UPDATED: "Add More" button just opens the file dialog
     addMoreBtn.addEventListener('click', () => {
         fileInput.click();
     });
 
-    // UPDATED: "Clear All" button performs the full reset
     clearAllBtn.addEventListener('click', () => {
         fileQueue.innerHTML = '';
         actionButtons.classList.add('hidden');
