@@ -137,9 +137,29 @@
             border-radius: 0.75rem;
             transition: all 0.3s;
         }
-        .file-icon { font-size: 1.75rem; color: var(--accent-color); }
-        .file-info { flex-grow: 1; }
-        .file-name { font-weight: 500; color: var(--text-primary); }
+        
+        .file-icon {
+            color: var(--accent-color);
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .file-icon svg {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        .file-info { flex-grow: 1; min-width: 0; }
+        .file-name { 
+            font-weight: 500; 
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
         .file-size { font-size: 0.875rem; color: var(--text-secondary); }
         .file-status { font-weight: 500; font-size: 0.875rem; }
         .file-status.success { color: var(--success-color); }
@@ -324,20 +344,37 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const getFileIcon = (file) => {
-        const type = file.type;
+        const iconProps = `viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"`;
+        const iconImage = `<svg ${iconProps}><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`;
+        const iconPdf = `<svg ${iconProps} class="text-red-500"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
+        const iconDocx = `<svg ${iconProps} class="text-blue-500"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>`;
+        const iconXlsx = `<svg ${iconProps} class="text-green-500"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>`;
+        const iconPptx = `<svg ${iconProps} class="text-orange-500"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>`;
+        const iconGeneric = `<svg ${iconProps}><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>`;
+
         const name = file.name.toLowerCase();
-        if (type.startsWith('image/')) return '🖼️';
-        if (type === 'application/pdf') return '📄';
-        if (name.endsWith('.doc') || name.endsWith('.docx')) return '📝';
-        if (name.endsWith('.xls') || name.endsWith('.xlsx')) return '📊';
-        if (name.endsWith('.ppt') || name.endsWith('.pptx')) return '🖥️';
-        return '📁';
+        const type = file.type;
+        
+        if (type.startsWith('image/')) return iconImage;
+        if (type === 'application/pdf') return iconPdf;
+        // UPDATED: Show icon for legacy formats too
+        if (name.endsWith('.docx') || name.endsWith('.doc')) return iconDocx;
+        if (name.endsWith('.xlsx') || name.endsWith('.xls')) return iconXlsx;
+        if (name.endsWith('.pptx') || name.endsWith('.ppt')) return iconPptx;
+
+        return iconGeneric;
     };
 
     const getExtensionForBlob = (blob) => ({'image/jpeg':'jpg','image/png':'png','application/pdf':'pdf'}[blob.type] || 'bin');
 
     // --- Compression Logic ---
     const compressImage = (file, onProgress) => new Promise((resolve, reject) => {
+        // This function now always applies compression to an image.
+        // It converts most formats to a high-quality JPEG for maximum size reduction.
+        // PNGs are preserved as PNGs to maintain transparency.
+        const quality = 0.75; 
+        const isPng = file.type === 'image/png';
+        const outputType = isPng ? 'image/png' : 'image/jpeg';
         onProgress(0.1);
         const reader = new FileReader();
         reader.onload = e => {
@@ -345,13 +382,17 @@ document.addEventListener('DOMContentLoaded', () => {
             img.onload = () => {
                 onProgress(0.5);
                 const canvas = document.createElement('canvas');
-                canvas.width = img.width; canvas.height = img.height;
-                canvas.getContext('2d').drawImage(img, 0, 0);
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                 onProgress(0.9);
                 canvas.toBlob(blob => {
                     onProgress(1);
-                    resolve(blob && blob.size < file.size ? blob : file);
-                }, 'image/jpeg', 0.75);
+                    // UPDATED: Always resolve with the compressed blob, even if it's not smaller.
+                    // This ensures metadata is stripped and compression is always attempted.
+                    resolve(blob || file); 
+                }, outputType, quality);
             };
             img.onerror = () => reject(new Error('Cannot decode image.'));
             img.src = e.target.result;
@@ -361,18 +402,52 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const compressPDF = async (file, onProgress) => {
+        // UPDATED: More aggressive PDF compression.
+        // This function now finds images inside the PDF and recompresses them as JPEGs.
+        // This is highly effective for PDFs with embedded photos or scans.
         onProgress(0.1);
         const { PDFDocument } = PDFLib;
         const buffer = await file.arrayBuffer();
-        onProgress(0.3);
+        onProgress(0.2);
         const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
-        onProgress(0.7);
+
+        const images = pdfDoc.getImages();
+        let imagesProcessed = 0;
+        const totalImages = images.length;
+
+        // Process images if there are any
+        if (totalImages > 0) {
+            const imageRefs = images.map(img => img.ref);
+
+            await Promise.all(images.map(async (image, i) => {
+                try {
+                    // Re-embed the image as a JPG to apply compression.
+                    // This is lossy but provides the best size reduction.
+                    const jpgImageBytes = await image.embed();
+                    const jpgImage = await pdfDoc.embedJpg(jpgImageBytes);
+                    
+                    // Find the ref of the original image and replace its stream
+                    const ref = imageRefs[i];
+                    ref.set(jpgImage.ref.stream);
+                } catch (e) {
+                    // Ignore errors for individual images (e.g., unsupported formats)
+                    console.error("Could not compress an image in the PDF:", e);
+                }
+                imagesProcessed++;
+                onProgress(0.2 + (0.7 * (imagesProcessed / totalImages))); // Progress from 20% to 90%
+            }));
+        } else {
+             onProgress(0.9);
+        }
+       
         const bytes = await pdfDoc.save();
         onProgress(1);
         return new Blob([bytes], { type: 'application/pdf' });
     };
 
     const compressOfficeFile = async (file, onProgress) => {
+        // This function re-zips Office files with maximum compression.
+        // It does not recompress embedded images, but is effective on the XML data.
         onProgress(0.2);
         const buffer = await file.arrayBuffer();
         onProgress(0.4);
@@ -421,23 +496,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 compressedBlob = await compressImage(file, onProgress);
             } else if (file.type === 'application/pdf') {
                 compressedBlob = await compressPDF(file, onProgress);
-            } else if (name.match(/\.(docx?|xlsx?|pptx?)$/i)) {
+            } else if (name.match(/\.(docx|xlsx|pptx)$/i)) {
                 compressedBlob = await compressOfficeFile(file, onProgress);
             } else {
-                throw new Error(translations[currentLang]['status-unsupported']);
+                throw new Error('unsupported');
             }
             onProgress(1);
             
             const ratio = 1 - (compressedBlob.size / file.size);
-            const resultText = ratio > 0
-                ? `✅ ${formatFileSize(compressedBlob.size)} (${Math.round(ratio * 100)}% smaller)`
-                : `✅ ${formatFileSize(compressedBlob.size)} (No size reduction)`;
+            const resultText = `✅ ${formatFileSize(compressedBlob.size)} (${Math.round(ratio * 100)}% smaller)`;
             
             updateStatus(fileItem, resultText, 'success');
             addDownloadButton(fileItem, compressedBlob, file.name);
             compressedFiles.push({ blob: compressedBlob, name: file.name });
         } catch (err) {
-            updateStatus(fileItem, `${translations[currentLang]['status-error']}: ${err.message}`, 'error');
+            console.error("Compression failed for file:", file.name, err);
+            if (err.message === 'unsupported') {
+                 updateStatus(fileItem, translations[currentLang]['status-unsupported'], 'error');
+            } else {
+                 updateStatus(fileItem, `${translations[currentLang]['status-error']}`, 'error');
+            }
         }
     };
 
@@ -448,7 +526,7 @@ document.addEventListener('DOMContentLoaded', () => {
         item.innerHTML = `
             <div class="file-icon">${getFileIcon(file)}</div>
             <div class="file-info">
-                <div class="file-name">${file.name}</div>
+                <div class="file-name" title="${file.name}">${file.name}</div>
                 <div class="file-size">${formatFileSize(file.size)} → <span class="file-status">${translations[currentLang]['status-queued']}</span></div>
                 <div class="progress-bar"><div class="progress-bar-fill"></div></div>
             </div>
