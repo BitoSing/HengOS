@@ -167,6 +167,12 @@
         
         .progress-bar { width: 100%; height: 6px; background-color: var(--border-color); border-radius: 3px; margin-top: 0.5rem; overflow: hidden; }
         .progress-bar-fill { height: 100%; width: 0%; background-color: var(--accent-color); border-radius: 3px; transition: width 0.3s ease-in-out; }
+
+        /* Styles for disabled buttons */
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body class="font-inter">
@@ -283,6 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentLang = 'en';
     let compressedFiles = [];
+    let processingCount = 0; // NEW: Track active compression tasks
 
     // --- Theme Switcher ---
     const applyTheme = (theme) => {
@@ -347,6 +354,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (bytes === 0) return '0 Bytes';
         const k = 1024, sizes = ['Bytes', 'KB', 'MB', 'GB'], i = Math.floor(Math.log(bytes) / Math.log(k));
         return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+    };
+    
+    // NEW: Helper function to sanitize filenames for download.
+    const sanitizeFilename = (name) => {
+        // Replaces characters that are invalid in Windows/macOS/Linux filenames.
+        return name.replace(/[<>:"/\\|?*]/g, '_');
+    };
+
+    // NEW: Function to manage the enabled/disabled state of action buttons.
+    const updateActionButtonsState = () => {
+        const shouldBeDisabled = processingCount > 0;
+        clearAllBtn.disabled = shouldBeDisabled;
+        downloadAllBtn.disabled = shouldBeDisabled;
+        addMoreBtn.disabled = shouldBeDisabled; // Also disable 'Add More' to avoid queue confusion
     };
 
     const getFileIcon = (file) => {
@@ -416,8 +437,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         const jpgImage = await pdfDoc.embedJpg(await image.embed());
                         image.ref.set(jpgImage.ref.stream);
                     }
-                    // pdf-lib doesn't have a simple way to replace other formats without complex re-drawing.
-                    // For now, we focus on re-compressing JPEGs, which is the most common case.
                 } catch (e) {
                     console.error("Could not re-compress an image in the PDF:", e);
                 }
@@ -448,11 +467,11 @@ document.addEventListener('DOMContentLoaded', () => {
     uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('dragover'));
     uploadBox.addEventListener('drop', (e) => {
         uploadBox.classList.remove('dragover');
+        if (addMoreBtn.disabled) return;
         handleFiles(e.dataTransfer.files);
     });
     fileInput.addEventListener('change', (e) => {
         handleFiles(e.target.files);
-        // CRITICAL FIX: Reset the input value. This allows selecting the same file again without needing to refresh.
         e.target.value = '';
     });
 
@@ -465,6 +484,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const processFile = async (file) => {
+        processingCount++;
+        updateActionButtonsState();
+
         const fileId = `file-${Date.now()}-${Math.random()}`;
         const fileItem = createQueueItem(file, fileId);
         fileQueue.appendChild(fileItem);
@@ -473,6 +495,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (file.size > 100 * 1024 * 1024) {
             updateStatus(fileItem, 'Error: File size exceeds 100MB', 'error');
+            processingCount--;
+            updateActionButtonsState();
             return;
         }
 
@@ -486,9 +510,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (file.type === 'application/pdf') {
                 compressedBlob = await compressPDF(file, onProgress);
             } else if (name.match(/\.(docx|xlsx|pptx)$/i)) {
-                // NOTE: This only supports modern, XML-based Office formats (.docx, .xlsx, .pptx).
-                // Legacy formats like .doc, .xls, and .ppt are not ZIP archives and cannot be
-                // compressed with this method. They will be correctly marked as "Unsupported" below.
                 compressedBlob = await compressOfficeFile(file, onProgress);
             } else {
                 throw new Error('unsupported');
@@ -508,6 +529,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                  updateStatus(fileItem, `${translations[currentLang]['status-error']}`, 'error');
             }
+        } finally {
+            processingCount--;
+            updateActionButtonsState();
         }
     };
 
@@ -537,9 +561,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const addDownloadButton = (item, blob, originalName) => {
         const actionDiv = item.querySelector('.file-actions');
-        const base = originalName.substring(0, originalName.lastIndexOf('.'));
-        const ext = blob.type === "application/octet-stream" ? originalName.split('.').pop() : getExtensionForBlob(blob);
+        const sanitizedName = sanitizeFilename(originalName);
+        const base = sanitizedName.substring(0, sanitizedName.lastIndexOf('.'));
+        const ext = blob.type === "application/octet-stream" ? sanitizedName.split('.').pop() : getExtensionForBlob(blob);
         const dlName = `${base}-compressed.${ext}`;
+        
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = dlName;
@@ -553,13 +579,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     downloadAllBtn.addEventListener('click', async () => {
-        if (compressedFiles.length === 0) return;
+        if (compressedFiles.length === 0 || downloadAllBtn.disabled) return;
+        
         const zip = new JSZip();
         compressedFiles.forEach(f => {
-            const base = f.name.substring(0, f.name.lastIndexOf('.'));
-            const ext = f.blob.type === "application/octet-stream" ? f.name.split('.').pop() : getExtensionForBlob(f.blob);
+            const sanitizedName = sanitizeFilename(f.name);
+            const base = sanitizedName.substring(0, sanitizedName.lastIndexOf('.'));
+            const ext = f.blob.type === "application/octet-stream" ? sanitizedName.split('.').pop() : getExtensionForBlob(f.blob);
             zip.file(`${base}-compressed.${ext}`, f.blob);
         });
+
         const zipBlob = await zip.generateAsync({ type: "blob" });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(zipBlob);
@@ -569,15 +598,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     addMoreBtn.addEventListener('click', () => {
+        if (addMoreBtn.disabled) return;
         fileInput.click();
     });
 
     clearAllBtn.addEventListener('click', () => {
+        if (clearAllBtn.disabled) return;
+
+        // FIXED: Revoke all created object URLs to prevent memory leaks.
+        fileQueue.querySelectorAll('a[download]').forEach(link => {
+            if (link.href.startsWith('blob:')) {
+                URL.revokeObjectURL(link.href);
+            }
+        });
+
         fileQueue.innerHTML = '';
         actionButtons.classList.add('hidden');
         actionButtons.classList.remove('grid');
         document.getElementById('upload-module').style.display = 'block';
-        fileInput.value = ''; // Clear input value
+        fileInput.value = '';
         compressedFiles = [];
     });
 });
