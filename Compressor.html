@@ -93,16 +93,40 @@
       }
 
       /* ✅ FIX: Professionally handled 50% width request. It's responsive now. */
+      html, body {
+        box-sizing: border-box;
+        max-width: 100vw;
+        overflow-x: hidden;
+      }
+      *, *::before, *::after {
+        box-sizing: inherit;
+      }
+
       .page-wrapper {
         width: 90%; /* For mobile devices */
         max-width: 1400px; /* Safety max-width */
         margin-left: auto;
         margin-right: auto;
+        max-width: 100vw; /* Prevent overflow on small screens */
       }
       @media (min-width: 1024px) {
         /* On desktop screens... */
         .page-wrapper {
           width: 50%; /* ...use 50% width as requested. */
+        }
+      }
+
+      .main-card {
+        background: var(--surface);
+        border-radius: 1.5rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+        padding: 2.5rem;
+        /* Responsive padding for small screens */
+      }
+      @media (max-width: 640px) {
+        .main-card {
+          padding: 1rem;
         }
       }
 
@@ -249,6 +273,9 @@
         border: 1px solid var(--border);
         border-radius: 1rem;
       }
+      .file-item .font-title {
+        word-break: break-all;
+      }
       .file-status-icon {
         width: 2.25rem;
         height: 2.25rem;
@@ -324,9 +351,32 @@
         background-color: color-mix(in srgb, var(--accent) 10%, transparent);
         color: var(--accent);
       }
+
+      /* === Smooth Fade-In Animation for Page Reload === */
+      body.page-fade-init {
+        opacity: 0;
+        pointer-events: none;
+        overflow-x: hidden;
+      }
+      body.page-fade-in {
+        animation: pageFadeIn 0.5s cubic-bezier(.4,0,.2,1);
+        opacity: 1;
+        pointer-events: auto;
+        overflow-x: hidden;
+      }
+      @keyframes pageFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
     </style>
   </head>
-  <body class="font-inter">
+  <body class="font-inter page-fade-init">
     <!-- NO CHANGES NEEDED TO THE BODY OR SCRIPT -->
     <main
       class="w-full min-h-screen p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center"
@@ -493,6 +543,10 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        // Smooth fade-in on reload
+        document.body.classList.remove("page-fade-init");
+        document.body.classList.add("page-fade-in");
+
         // --- Translations and Language Map ---
         const translations = {
           en: {
