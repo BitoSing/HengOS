@@ -222,9 +222,10 @@
                     <div id="file-queue" class="flex flex-col gap-4"></div>
 
                     <!-- Action Buttons -->
-                    <div id="action-buttons" class="hidden mt-4 flex flex-col sm:flex-row gap-4">
-                        <button class="w-full text-white font-semibold py-3 px-4 rounded-lg transition" style="background-color: var(--accent-color);" onmouseover="this.style.backgroundColor=getComputedStyle(this).getPropertyValue('--accent-hover')" onmouseout="this.style.backgroundColor=getComputedStyle(this).getPropertyValue('--accent-color')" id="download-all-btn" data-i18n-key="download-all-btn">Download All (.zip)</button>
-                        <button class="w-full font-semibold py-3 px-4 rounded-lg transition border" style="border-color: var(--border-color); color: var(--text-secondary); background-color: var(--bg-color);" id="compress-more-btn" data-i18n-key="compress-more-btn">Compress More</button>
+                    <div id="action-buttons" class="hidden mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <button class="w-full font-semibold py-3 px-4 rounded-lg transition border" style="border-color: var(--border-color); color: var(--text-secondary); background-color: var(--bg-color);" id="clear-all-btn" data-i18n-key="clear-all-btn">Clear All</button>
+                        <button class="w-full text-white font-semibold py-3 px-4 rounded-lg transition" style="background-color: var(--accent-color);" onmouseover="this.style.backgroundColor=getComputedStyle(this).getPropertyValue('--accent-hover')" onmouseout="this.style.backgroundColor=getComputedStyle(this).getPropertyValue('--accent-color')" id="add-more-btn" data-i18n-key="add-more-btn">Add More Files</button>
+                        <button class="w-full text-white font-semibold py-3 px-4 rounded-lg transition" style="background-color: var(--success-color);" id="download-all-btn" data-i18n-key="download-all-btn">Download All (.zip)</button>
                     </div>
                 </main>
             </div>
@@ -243,7 +244,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'back-to-home': 'Back to Home', 'main-heading': 'Compress Files', 'sub-heading': 'Reduce file size for images, PDFs, and Office docs.',
             'drop-title': 'Drag & drop files here', 'drop-subtitle': 'or click to select',
             'disclaimer': 'All processing is done in your browser. Max 100MB.',
-            'download-all-btn': 'Download All (.zip)', 'compress-more-btn': 'Compress More',
+            'download-all-btn': 'Download All (.zip)',
+            'add-more-btn': 'Add More Files',
+            'clear-all-btn': 'Clear All',
             'footer-text': '© 2024 QuantumCompress. Built for performance and privacy.',
             'status-queued': 'Queued', 'status-compressing': 'Compressing...', 'status-complete': 'Complete!',
             'status-error': 'Error', 'status-unsupported': 'Unsupported File Type', 'download-btn': 'Download'
@@ -252,7 +255,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'back-to-home': 'ត្រឡប់ទៅទំព័រដើម', 'main-heading': 'បង្ហាប់ឯកសារ', 'sub-heading': 'កាត់បន្ថយទំហំឯកសាររូបភាព, PDF, និង Office។',
             'drop-title': 'អូសឯកសារទម្លាក់នៅទីនេះ', 'drop-subtitle': 'ឬចុចដើម្បីជ្រើសរើស',
             'disclaimer': 'ការដំណើរការទាំងអស់គឺនៅក្នុងកម្មវិធីរុករករបស់អ្នក។ អតិបរមា 100MB។',
-            'download-all-btn': 'ទាញយកទាំងអស់ (.zip)', 'compress-more-btn': 'បង្ហាប់បន្ថែម',
+            'download-all-btn': 'ទាញយកទាំងអស់ (.zip)',
+            'add-more-btn': 'បន្ថែមឯកសារ',
+            'clear-all-btn': 'លុបទាំងអស់',
             'footer-text': '© 2024 QuantumCompress។ បង្កើតឡើងសម្រាប់ប្រសិទ្ធភាពនិងភាពឯកជន។',
             'status-queued': 'កំពុងរង់ចាំ', 'status-compressing': 'កំពុងបង្ហាប់...', 'status-complete': 'រួចរាល់!',
             'status-error': 'មានបញ្ហា', 'status-unsupported': 'ប្រភេទឯកសារមិនត្រឹមត្រូវ', 'download-btn': 'ទាញយក'
@@ -269,7 +274,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileQueue = document.getElementById('file-queue');
     const actionButtons = document.getElementById('action-buttons');
     const downloadAllBtn = document.getElementById('download-all-btn');
-    const compressMoreBtn = document.getElementById('compress-more-btn');
+    const addMoreBtn = document.getElementById('add-more-btn');
+    const clearAllBtn = document.getElementById('clear-all-btn');
     const langDropdown = document.getElementById('lang-dropdown');
     const langBtn = document.getElementById('lang-btn');
     const langDropdownContent = document.getElementById('lang-dropdown-content');
@@ -357,7 +363,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (type.startsWith('image/')) return iconImage;
         if (type === 'application/pdf') return iconPdf;
-        // UPDATED: Show icon for legacy formats too
         if (name.endsWith('.docx') || name.endsWith('.doc')) return iconDocx;
         if (name.endsWith('.xlsx') || name.endsWith('.xls')) return iconXlsx;
         if (name.endsWith('.pptx') || name.endsWith('.ppt')) return iconPptx;
@@ -369,9 +374,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Compression Logic ---
     const compressImage = (file, onProgress) => new Promise((resolve, reject) => {
-        // This function now always applies compression to an image.
-        // It converts most formats to a high-quality JPEG for maximum size reduction.
-        // PNGs are preserved as PNGs to maintain transparency.
         const quality = 0.75; 
         const isPng = file.type === 'image/png';
         const outputType = isPng ? 'image/png' : 'image/jpeg';
@@ -389,8 +391,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 onProgress(0.9);
                 canvas.toBlob(blob => {
                     onProgress(1);
-                    // UPDATED: Always resolve with the compressed blob, even if it's not smaller.
-                    // This ensures metadata is stripped and compression is always attempted.
                     resolve(blob || file); 
                 }, outputType, quality);
             };
@@ -402,9 +402,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const compressPDF = async (file, onProgress) => {
-        // UPDATED: More aggressive PDF compression.
-        // This function now finds images inside the PDF and recompresses them as JPEGs.
-        // This is highly effective for PDFs with embedded photos or scans.
         onProgress(0.1);
         const { PDFDocument } = PDFLib;
         const buffer = await file.arrayBuffer();
@@ -412,29 +409,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
 
         const images = pdfDoc.getImages();
-        let imagesProcessed = 0;
-        const totalImages = images.length;
-
-        // Process images if there are any
-        if (totalImages > 0) {
-            const imageRefs = images.map(img => img.ref);
-
+        if (images.length > 0) {
             await Promise.all(images.map(async (image, i) => {
                 try {
-                    // Re-embed the image as a JPG to apply compression.
-                    // This is lossy but provides the best size reduction.
-                    const jpgImageBytes = await image.embed();
-                    const jpgImage = await pdfDoc.embedJpg(jpgImageBytes);
-                    
-                    // Find the ref of the original image and replace its stream
-                    const ref = imageRefs[i];
-                    ref.set(jpgImage.ref.stream);
+                    if (image.isJpg) {
+                        const jpgImage = await pdfDoc.embedJpg(await image.embed());
+                        image.ref.set(jpgImage.ref.stream);
+                    }
+                    // pdf-lib doesn't have a simple way to replace other formats without complex re-drawing.
+                    // For now, we focus on re-compressing JPEGs, which is the most common case.
                 } catch (e) {
-                    // Ignore errors for individual images (e.g., unsupported formats)
-                    console.error("Could not compress an image in the PDF:", e);
+                    console.error("Could not re-compress an image in the PDF:", e);
                 }
-                imagesProcessed++;
-                onProgress(0.2 + (0.7 * (imagesProcessed / totalImages))); // Progress from 20% to 90%
+                onProgress(0.2 + (0.7 * ((i + 1) / images.length)));
             }));
         } else {
              onProgress(0.9);
@@ -446,8 +433,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const compressOfficeFile = async (file, onProgress) => {
-        // This function re-zips Office files with maximum compression.
-        // It does not recompress embedded images, but is effective on the XML data.
         onProgress(0.2);
         const buffer = await file.arrayBuffer();
         onProgress(0.4);
@@ -465,13 +450,16 @@ document.addEventListener('DOMContentLoaded', () => {
         uploadBox.classList.remove('dragover');
         handleFiles(e.dataTransfer.files);
     });
-    fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+    fileInput.addEventListener('change', (e) => {
+        handleFiles(e.target.files);
+        e.target.value = ''; // FIX: Reset input to allow selecting the same file again.
+    });
 
     const handleFiles = (files) => {
         if (!files.length) return;
         document.getElementById('upload-module').style.display = 'none';
         actionButtons.classList.remove('hidden');
-        actionButtons.classList.add('flex');
+        actionButtons.classList.add('grid');
         [...files].forEach(processFile);
     };
 
@@ -576,12 +564,18 @@ document.addEventListener('DOMContentLoaded', () => {
         URL.revokeObjectURL(link.href);
     });
 
-    compressMoreBtn.addEventListener('click', () => {
+    // UPDATED: "Add More" button just opens the file dialog
+    addMoreBtn.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    // UPDATED: "Clear All" button performs the full reset
+    clearAllBtn.addEventListener('click', () => {
         fileQueue.innerHTML = '';
         actionButtons.classList.add('hidden');
-        actionButtons.classList.remove('flex');
+        actionButtons.classList.remove('grid');
         document.getElementById('upload-module').style.display = 'block';
-        fileInput.value = '';
+        fileInput.value = ''; // Clear input value
         compressedFiles = [];
     });
 });
