@@ -1,625 +1,977 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compressor Tool</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compressor Tool - Professional Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+Khmer:wght@400;700&display=swap" rel="stylesheet">
-    
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Khmer:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- JSZip for creating .zip archives -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <!-- pdf-lib for PDF manipulation -->
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
+    <!-- 👇 PASTE THE UPDATED STYLE BLOCK HERE 👇 -->
     <style>
-        :root {
-            --bg-color: #F8FAFC; /* slate-50 */
-            --card-bg: #FFFFFF;
-            --text-primary: #1E293B; /* slate-800 */
-            --text-secondary: #475569; /* slate-600 */
-            --text-muted: #94A3B8; /* slate-400 */
-            --border-color: #E2E8F0; /* slate-200 */
-            --accent-color: #4F46E5; /* indigo-600 */
-            --accent-hover: #4338CA; /* indigo-700 */
-            --success-color: #16A34A; /* green-600 */
-            --error-color: #DC2626; /* red-600 */
-            --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        }
+      /* === Professional UI Redesign v4 (Final) === */
+      :root {
+        --primary-hue: 210;
+        --bg-light: #f8f9fc;
+        --surface-light: #ffffff;
+        --border-light: #eaebee;
+        --text-title-light: #1a202c;
+        --text-body-light: #4a5568;
+        --text-muted-light: #a0aec0;
+        --accent-light: hsl(var(--primary-hue), 89%, 60%);
+        --accent-hover-light: hsl(var(--primary-hue), 89%, 55%);
+        --bg-dark: #121828;
+        --surface-dark: #1a2234;
+        --border-dark: #2a364f;
+        --text-title-dark: #f7fafc;
+        --text-body-dark: #a3b3d9;
+        --text-muted-dark: #64748b;
+        --accent-dark: hsl(var(--primary-hue), 95%, 70%);
+        --accent-hover-dark: hsl(var(--primary-hue), 95%, 65%);
+        --success: #2ecc71;
+        --error: #e74c3c;
+        --bg: var(--bg-light);
+        --surface: var(--surface-light);
+        --border: var(--border-light);
+        --text-title: var(--text-title-light);
+        --text-body: var(--text-body-light);
+        --text-muted: var(--text-muted-light);
+        --accent: var(--accent-light);
+        --accent-hover: var(--accent-hover-light);
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
+          0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05),
+          0 4px 6px -4px rgba(0, 0, 0, 0.05);
+      }
+      html.dark {
+        --bg: var(--bg-dark);
+        --surface: var(--surface-dark);
+        --border: var(--border-dark);
+        --text-title: var(--text-title-dark);
+        --text-body: var(--text-body-dark);
+        --text-muted: var(--text-muted-dark);
+        --accent: var(--accent-dark);
+        --accent-hover: var(--accent-hover-dark);
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2),
+          0 2px 4px -2px rgba(0, 0, 0, 0.2);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2),
+          0 4px 6px -4px rgba(0, 0, 0, 0.2);
+      }
+      *,
+      ::before,
+      ::after {
+        transition: background-color 0.2s, border-color 0.2s, color 0.2s,
+          box-shadow 0.2s, opacity 0.2s, transform 0.2s;
+      }
+      body {
+        font-family: "Inter", "Noto Sans Khmer", sans-serif;
+        background-color: var(--bg);
+        color: var(--text-body);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .font-khmer {
+        font-family: "Noto Sans Khmer", sans-serif;
+      }
+      .font-title {
+        color: var(--text-title);
+        font-weight: 700;
+      }
+      .font-body {
+        color: var(--text-body);
+      }
+      .font-muted {
+        color: var(--text-muted);
+      }
 
-        html.dark {
-            --bg-color: #0F172A; /* slate-900 */
-            --card-bg: #1E293B; /* slate-800 */
-            --text-primary: #F1F5F9; /* slate-100 */
-            --text-secondary: #94A3B8; /* slate-400 */
-            --text-muted: #64748B; /* slate-500 */
-            --border-color: #334155; /* slate-700 */
-            --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+      /* ✅ FIX: Professionally handled 50% width request. It's responsive now. */
+      .page-wrapper {
+        width: 90%; /* For mobile devices */
+        max-width: 1400px; /* Safety max-width */
+        margin-left: auto;
+        margin-right: auto;
+      }
+      @media (min-width: 1024px) {
+        /* On desktop screens... */
+        .page-wrapper {
+          width: 50%; /* ...use 50% width as requested. */
         }
+      }
 
-        body { 
-            font-family: 'Inter', 'Noto Sans Khmer', sans-serif; 
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .font-khmer { font-family: 'Noto Sans Khmer', sans-serif; }
+      .back-to-home-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        margin-bottom: 1.5rem;
+        background: var(--surface);
+        color: var(--text-body);
+        border: 1px solid var(--border);
+        border-radius: 9999px;
+        font-weight: 500;
+        font-size: 0.875rem;
+        box-shadow: var(--shadow);
+      }
+      .back-to-home-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
 
-        /* Main Layout */
-        .page-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1rem;
-            min-height: 100vh;
-        }
-        .content-wrapper {
-            width: 100%;
-            max-width: 640px;
-        }
+      .main-card {
+        background: var(--surface);
+        border-radius: 1.5rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+        padding: 2.5rem;
+      }
+      .header-controls-wrapper button,
+      .header-controls-wrapper .language-btn {
+        background: var(--surface);
+        color: var(--text-body);
+        border: 1px solid var(--border);
+        height: 40px;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow);
+        cursor: pointer;
+      }
+      .header-controls-wrapper button:hover,
+      .header-controls-wrapper .language-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
 
-        /* Back Button & Header */
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            background: var(--card-bg);
-            color: var(--text-secondary);
-            font-weight: 600;
-            border: 1px solid var(--border-color);
-            text-decoration: none;
-            transition: all 0.2s;
-            box-shadow: var(--card-shadow);
-        }
-        .back-btn:hover {
-            background-color: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
-        }
-        
-        .main-card {
-            background: var(--card-bg);
-            border-radius: 1.25rem;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border-color);
-            padding: 2rem;
-            margin-top: 1rem;
-            transition: all 0.3s;
-        }
+      /*
+        ✨ Language Dropdown Redesign ✨
+        - Fix: The container (.language-selector) is now `position: relative` for robust, stable dropdown positioning.
+        - Enhancement: The dropdown arrow now smoothly rotates when the menu is opened, providing clear visual feedback.
+      */
+      .language-selector {
+        position: relative;
+      }
+      .language-btn {
+        padding: 0 16px;
+        gap: 8px;
+        /* The `position: relative` was here, but it's now correctly on the .language-selector container */
+      }
+      .language-selector.open .language-btn .arrow {
+        transform: rotate(180deg);
+      }
 
-        /* Header Controls (Lang/Theme) */
-        .header-controls { display: flex; align-items: center; gap: 0.75rem; }
-        .theme-toggle-btn {
-            background-color: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            width: 42px; height: 42px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.2s;
-        }
-        .theme-toggle-btn:hover { background-color: var(--accent-color); color: white; }
-        .theme-toggle-btn .sun-icon, html.dark .theme-toggle-btn .moon-icon { display: block; }
-        .theme-toggle-btn .moon-icon, html.dark .theme-toggle-btn .sun-icon { display: none; }
+      .theme-toggle-btn {
+        width: 40px;
+      }
+      .theme-toggle-btn .sun-icon,
+      html.dark .theme-toggle-btn .moon-icon {
+        display: block;
+      }
+      .theme-toggle-btn .moon-icon,
+      html.dark .theme-toggle-btn .sun-icon {
+        display: none;
+      }
 
-        .language-selector { position: relative; }
-        .language-btn { background-color: var(--card-bg); color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 24px; padding: 8px 16px 8px 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
-        .language-btn:hover { background-color: var(--accent-color); color: white; border-color: var(--accent-color); }
-        .language-btn .arrow { transition: transform 0.2s; }
-        .language-selector.open .arrow { transform: rotate(180deg); }
-        .dropdown-content { display: none; position: absolute; right: 0; background-color: var(--card-bg); min-width: 160px; border-radius: 14px; box-shadow: var(--card-shadow); z-index: 10; margin-top: 8px; overflow: hidden; border: 1px solid var(--border-color); }
-        .language-selector.open .dropdown-content { display: block; }
-        .language-option { color: var(--text-secondary); padding: 10px 16px; display: flex; align-items: center; gap: 10px; background: none; border: none; width: 100%; text-align: left; cursor: pointer; transition: background 0.18s; }
-        .language-option:hover, .language-option.active-language { background-color: var(--accent-color); color: white; }
-        .language-flag { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
-        
-        /* Upload Area */
-        #upload-box {
-            border-color: var(--border-color);
-            background-color: var(--bg-color);
-            transition: all 0.3s;
-        }
-        #upload-box.dragover {
-            border-color: var(--accent-color);
-            background-color: #4f46e51a; /* indigo-600 with opacity */
-        }
-        
-        /* File Queue */
-        .file-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background-color: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
-            transition: all 0.3s;
-        }
-        
-        .file-icon {
-            color: var(--accent-color);
-            width: 40px;
-            height: 40px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .file-icon svg {
-            width: 2rem;
-            height: 2rem;
-        }
+      .language-dropdown {
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(-0.5rem) scale(0.95);
+        transform-origin: top right;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        background-color: var(--surface);
+        min-width: 160px;
+        border-radius: 14px;
+        box-shadow: var(--shadow-lg);
+        z-index: 10;
+        overflow: hidden;
+        border: 1px solid var(--border);
+      }
+      .language-selector.open .language-dropdown {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      .language-option {
+        color: var(--text-body);
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: none;
+        border: none;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+      }
+      .language-option:hover,
+      .language-option.active-language {
+        background-color: var(--accent);
+        color: white !important;
+      }
+      .language-flag {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
 
-        .file-info { flex-grow: 1; min-width: 0; }
-        .file-name { 
-            font-weight: 500; 
-            color: var(--text-primary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+      #dropzone {
+        border: 2px dashed var(--border);
+        background-color: var(--bg);
+        border-radius: 1.25rem;
+        padding: 2.5rem;
+      }
+      #dropzone.dragover {
+        border-style: solid;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent);
+        transform: scale(1.02);
+      }
+      .file-item {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background-color: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 1rem;
+      }
+      .file-status-icon {
+        width: 2.25rem;
+        height: 2.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .file-status-icon .spinner {
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
         }
-        .file-size { font-size: 0.875rem; color: var(--text-secondary); }
-        .file-status { font-weight: 500; font-size: 0.875rem; }
-        .file-status.success { color: var(--success-color); }
-        .file-status.error { color: var(--error-color); }
-        
-        .progress-bar { width: 100%; height: 6px; background-color: var(--border-color); border-radius: 3px; margin-top: 0.5rem; overflow: hidden; }
-        .progress-bar-fill { height: 100%; width: 0%; background-color: var(--accent-color); border-radius: 3px; transition: width 0.3s ease-in-out; }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .progress-bar-wrapper {
+        width: 100%;
+        height: 6px;
+        background-color: var(--border);
+        border-radius: 3px;
+        margin-top: 0.25rem;
+        overflow: hidden;
+      }
+      .progress-bar-fill {
+        height: 100%;
+        width: 0%;
+        background-color: var(--accent);
+        border-radius: 3px;
+      }
 
-        /* Styles for disabled buttons */
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        border: 2px solid transparent;
+        cursor: pointer;
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: scale(1) !important;
+      }
+      .btn-primary {
+        background-color: var(--accent);
+        color: white;
+      }
+      .btn-primary:hover:not(:disabled) {
+        background-color: var(--accent-hover);
+        transform: translateY(-2px);
+      }
+      .btn-secondary {
+        background-color: var(--surface);
+        color: var(--text-body);
+        border: 2px solid var(--border);
+        box-shadow: var(--shadow);
+      }
+      .btn-secondary:hover:not(:disabled) {
+        border-color: var(--accent);
+        color: var(--accent);
+        transform: translateY(-2px);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--text-body);
+      }
+      .btn-ghost:hover:not(:disabled) {
+        background-color: color-mix(in srgb, var(--accent) 10%, transparent);
+        color: var(--accent);
+      }
     </style>
-</head>
-<body class="font-inter">
+  </head>
+  <body class="font-inter">
+    <!-- NO CHANGES NEEDED TO THE BODY OR SCRIPT -->
+    <main
+      class="w-full min-h-screen p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center"
+    >
+      <div class="page-wrapper">
+        <a href="index.html" class="back-to-home-btn" id="back-to-home">
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            ></path>
+          </svg>
+          <span data-i18n-key="back-to-home">Back to Home</span>
+        </a>
 
-    <div class="page-container">
-        <div class="content-wrapper">
-            <!-- Back to Home & Header -->
-            <div class="flex justify-between items-center w-full mb-4">
-                <a href="index.html" class="back-btn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-                    <span data-i18n-key="back-to-home">Back to Home</span>
-                </a>
+        <div class="main-card">
+          <header class="flex justify-between items-center gap-4 mb-8">
+            <div>
+              <h1 class="font-title text-3xl" data-i18n-key="main-title">
+                File Compressor
+              </h1>
+              <p class="font-body text-base mt-1" data-i18n-key="sub-heading">
+                Reduce file size for images, PDFs, and more.
+              </p>
+            </div>
+            <div class="flex items-center gap-2 header-controls-wrapper">
+              <div class="language-selector" id="lang-selector">
+                <button
+                  class="language-btn"
+                  id="lang-btn"
+                  type="button"
+                  title="Change language"
+                >
+                  <img
+                    src="https://flagcdn.com/us.svg"
+                    class="language-flag"
+                    id="lang-flag"
+                    alt="Language"
+                  />
+                  <span id="lang-label-short" class="hidden sm:inline">EN</span>
+                  <svg
+                    class="arrow w-4 h-4 text-gray-500"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+                <div class="language-dropdown" id="lang-dropdown"></div>
+              </div>
+              <button
+                class="theme-toggle-btn"
+                id="theme-toggle"
+                title="Toggle theme"
+              >
+                <svg
+                  class="sun-icon w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                  ></path>
+                </svg>
+                <svg
+                  class="moon-icon w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </header>
+
+          <div class="flex flex-col gap-6">
+            <div id="upload-module">
+              <label
+                for="file-input"
+                id="dropzone"
+                class="block cursor-pointer text-center transform-gpu"
+              >
+                <svg
+                  class="mx-auto h-12 w-12 font-muted"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
+                </svg>
+                <h2 class="font-title text-xl mt-4" data-i18n-key="drop-title">
+                  Click to upload or drag & drop
+                </h2>
+                <p class="font-muted text-sm mt-1" data-i18n-key="disclaimer">
+                  Max file size 100MB. All processing is done locally.
+                </p>
+              </label>
+              <input type="file" id="file-input" multiple class="hidden" />
             </div>
 
-            <!-- Main Card -->
-            <div class="main-card">
-                <header class="flex justify-between items-start gap-4 mb-6">
-                    <div>
-                        <h1 class="text-2xl font-bold" data-i18n-key="main-heading">Compress Files</h1>
-                        <p class="text-base mt-1" style="color: var(--text-secondary);" data-i18n-key="sub-heading">Reduce file size for images, PDFs, and Office docs.</p>
-                    </div>
-                    <div class="header-controls">
-                        <!-- Language Dropdown -->
-                        <div class="language-selector" id="lang-dropdown">
-                            <button class="language-btn" id="lang-btn" type="button">
-                                <img src="https://flagcdn.com/us.svg" class="language-flag" id="lang-flag" alt="English" />
-                                <span id="lang-label">English</span>
-                                <svg class="arrow w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            </button>
-                            <div class="dropdown-content" id="lang-dropdown-content"></div>
-                        </div>
-                        <!-- Theme Toggle -->
-                        <button class="theme-toggle-btn" id="theme-toggle" title="Toggle dark mode">
-                            <svg class="sun-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                            <svg class="moon-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                        </button>
-                    </div>
-                </header>
+            <div id="file-queue" class="flex flex-col gap-4"></div>
 
-                <main class="flex flex-col gap-6">
-                    <!-- Upload Module -->
-                    <div id="upload-module">
-                        <label for="file-input" id="upload-box" class="block cursor-pointer border-2 border-dashed rounded-xl p-8 text-center">
-                            <svg class="mx-auto h-12 w-12" style="color: var(--text-muted);" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
-                            <h2 class="mt-4 text-xl font-semibold" data-i18n-key="drop-title">Drag & drop files here</h2>
-                            <p class="mt-1 text-sm" style="color: var(--text-secondary);" data-i18n-key="drop-subtitle">or click to select</p>
-                            <p class="text-xs mt-4" style="color: var(--text-muted);" data-i18n-key="disclaimer">All processing is done in your browser. Max 100MB.</p>
-                        </label>
-                        <input type="file" id="file-input" multiple class="hidden">
-                    </div>
-
-                    <!-- Processing Queue -->
-                    <div id="file-queue" class="flex flex-col gap-4"></div>
-
-                    <!-- Action Buttons -->
-                    <div id="action-buttons" class="hidden mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <button class="w-full font-semibold py-3 px-4 rounded-lg transition border" style="border-color: var(--border-color); color: var(--text-secondary); background-color: var(--bg-color);" id="clear-all-btn" data-i18n-key="clear-all-btn">Clear All</button>
-                        <button class="w-full text-white font-semibold py-3 px-4 rounded-lg transition" style="background-color: var(--accent-color);" onmouseover="this.style.backgroundColor=getComputedStyle(this).getPropertyValue('--accent-hover')" onmouseout="this.style.backgroundColor=getComputedStyle(this).getPropertyValue('--accent-color')" id="add-more-btn" data-i18n-key="add-more-btn">Add More Files</button>
-                        <button class="w-full text-white font-semibold py-3 px-4 rounded-lg transition" style="background-color: var(--success-color);" id="download-all-btn" data-i18n-key="download-all-btn">Download All (.zip)</button>
-                    </div>
-                </main>
+            <div id="action-buttons" class="hidden flex-col gap-4 mt-2">
+              <button
+                class="btn btn-primary text-lg w-full"
+                id="download-all-btn"
+                data-i18n-key="download-all-btn"
+              >
+                Download All (.zip)
+              </button>
+              <div class="grid grid-cols-2 gap-4">
+                <button
+                  class="btn btn-secondary"
+                  id="add-more-btn"
+                  data-i18n-key="add-more-btn"
+                >
+                  Add More
+                </button>
+                <button
+                  class="btn btn-ghost"
+                  id="clear-all-btn"
+                  data-i18n-key="clear-all-btn"
+                >
+                  Clear All
+                </button>
+              </div>
             </div>
-            
-            <footer class="text-center mt-8 py-6 text-sm" style="color: var(--text-muted);">
-                <p data-i18n-key="footer-text">© 2024 QuantumCompress. Built for performance and privacy.</p>
-            </footer>
+          </div>
         </div>
-    </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
+        <footer class="text-center mt-6 text-sm">
+          <p class="font-muted" data-i18n-key="footer-text">
+            © 2024 Your Privacy-First Tool.
+          </p>
+        </footer>
+      </div>
+    </main>
 
-    const translations = {
-        'en': {
-            'back-to-home': 'Back to Home', 'main-heading': 'Compress Files', 'sub-heading': 'Reduce file size for images, PDFs, and Office docs.',
-            'drop-title': 'Drag & drop files here', 'drop-subtitle': 'or click to select',
-            'disclaimer': 'All processing is done in your browser. Max 100MB.',
-            'download-all-btn': 'Download All (.zip)',
-            'add-more-btn': 'Add More Files',
-            'clear-all-btn': 'Clear All',
-            'footer-text': '© 2024 QuantumCompress. Built for performance and privacy.',
-            'status-queued': 'Queued', 'status-compressing': 'Compressing...', 'status-complete': 'Complete!',
-            'status-error': 'Error', 'status-unsupported': 'Unsupported File Type', 'download-btn': 'Download'
-        },
-        'km': {
-            'back-to-home': 'ត្រឡប់ទៅទំព័រដើម', 'main-heading': 'បង្ហាប់ឯកសារ', 'sub-heading': 'កាត់បន្ថយទំហំឯកសាររូបភាព, PDF, និង Office។',
-            'drop-title': 'អូសឯកសារទម្លាក់នៅទីនេះ', 'drop-subtitle': 'ឬចុចដើម្បីជ្រើសរើស',
-            'disclaimer': 'ការដំណើរការទាំងអស់គឺនៅក្នុងកម្មវិធីរុករករបស់អ្នក។ អតិបរមា 100MB។',
-            'download-all-btn': 'ទាញយកទាំងអស់ (.zip)',
-            'add-more-btn': 'បន្ថែមឯកសារ',
-            'clear-all-btn': 'លុបទាំងអស់',
-            'footer-text': '© 2024 QuantumCompress។ បង្កើតឡើងសម្រាប់ប្រសិទ្ធភាពនិងភាពឯកជន។',
-            'status-queued': 'កំពុងរង់ចាំ', 'status-compressing': 'កំពុងបង្ហាប់...', 'status-complete': 'រួចរាល់!',
-            'status-error': 'មានបញ្ហា', 'status-unsupported': 'ប្រភេទឯកសារមិនត្រឹមត្រូវ', 'download-btn': 'ទាញយក'
-        }
-    };
-    const langMap = [
-        { code: 'en', label: 'English', flag: 'https://flagcdn.com/us.svg', fontClass: '' },
-        { code: 'km', label: 'ភាសាខ្មែរ', flag: 'https://flagcdn.com/kh.svg', fontClass: 'font-khmer' }
-    ];
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- Translations and Language Map ---
+        const translations = {
+          en: {
+            "main-title": "File Compressor",
+            "sub-heading": "Reduce file size for images, PDFs, and more.",
+            "drop-title": "Click to upload or drag & drop",
+            disclaimer: "Max file size 100MB. All processing is done locally.",
+            "download-all-btn": "Download All (.zip)",
+            "add-more-btn": "Add More",
+            "clear-all-btn": "Clear All",
+            "footer-text": "© 2024 Your Privacy-First Tool.",
+            "status-queued": "Queued",
+            "status-compressing": "Compressing...",
+            "status-complete": "Complete!",
+            "status-error": "Error",
+            "status-unsupported": "Unsupported Type",
+            "download-btn": "Download",
+            "back-to-home": "Back to Home",
+          },
+          km: {
+            "main-title": "កម្មវិធីបង្ហាប់ឯកសារ",
+            "sub-heading": "កាត់បន្ថយទំហំឯកសាររូបភាព PDF និងផ្សេងៗទៀត។",
+            "drop-title": "ចុចដើម្បីផ្ទុកឡើង ឬអូស និងទម្លាក់",
+            disclaimer:
+              "ទំហំឯកសារអតិបរមា 100MB។ ការដំណើរការទាំងអស់ធ្វើឡើងក្នុង browser។",
+            "download-all-btn": "ទាញយកទាំងអស់ (.zip)",
+            "add-more-btn": "បន្ថែមឯកសារ",
+            "clear-all-btn": "លុបទាំងអស់",
+            "footer-text": "© 2024 ឧបករណ៍រក្សាឯកជនភាពរបស់អ្នក។",
+            "status-queued": "កំពុងរង់ចាំ",
+            "status-compressing": "កំពុងបង្ហាប់...",
+            "status-complete": "រួចរាល់!",
+            "status-error": "មានបញ្ហា",
+            "status-unsupported": "ប្រភេទមិនស្គាល់",
+            "download-btn": "ទាញយក",
+            "back-to-home": "ត្រឡប់ទៅទំព័រដើម",
+          },
+        };
+        const langMap = [
+          {
+            code: "en",
+            label: "English",
+            short: "EN",
+            flag: "https://flagcdn.com/us.svg",
+          },
+          {
+            code: "km",
+            label: "ភាសាខ្មែរ",
+            short: "KH",
+            flag: "https://flagcdn.com/kh.svg",
+            fontClass: "font-khmer",
+          },
+        ];
 
-    // --- Element Selectors ---
-    const uploadBox = document.getElementById('upload-box');
-    const fileInput = document.getElementById('file-input');
-    const fileQueue = document.getElementById('file-queue');
-    const actionButtons = document.getElementById('action-buttons');
-    const downloadAllBtn = document.getElementById('download-all-btn');
-    const addMoreBtn = document.getElementById('add-more-btn');
-    const clearAllBtn = document.getElementById('clear-all-btn');
-    const langDropdown = document.getElementById('lang-dropdown');
-    const langBtn = document.getElementById('lang-btn');
-    const langDropdownContent = document.getElementById('lang-dropdown-content');
-    const themeToggle = document.getElementById('theme-toggle');
+        // --- Element Selectors ---
+        const dropzone = document.getElementById("dropzone");
+        const fileInput = document.getElementById("file-input");
+        const fileQueue = document.getElementById("file-queue");
+        const actionButtons = document.getElementById("action-buttons");
+        const downloadAllBtn = document.getElementById("download-all-btn");
+        const addMoreBtn = document.getElementById("add-more-btn");
+        const clearAllBtn = document.getElementById("clear-all-btn");
+        const langSelector = document.getElementById("lang-selector");
+        const langBtn = document.getElementById("lang-btn");
+        const langDropdown = document.getElementById("lang-dropdown");
+        const themeToggle = document.getElementById("theme-toggle");
+        const backToHomeBtn = document.getElementById("back-to-home");
 
-    let currentLang = 'en';
-    let compressedFiles = [];
-    let processingCount = 0; // NEW: Track active compression tasks
+        // --- State Variables ---
+        let currentLang = "en";
+        let compressedFiles = [];
+        let processingCount = 0;
 
-    // --- Theme Switcher ---
-    const applyTheme = (theme) => {
-        if (theme === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-        localStorage.setItem('theme', theme);
-    };
-    themeToggle.addEventListener('click', () => {
-        const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-        applyTheme(newTheme);
-    });
-    applyTheme(localStorage.getItem('theme') || 'light');
+        // --- Theme Manager ---
+        const applyTheme = (theme) => {
+          document.documentElement.classList.toggle("dark", theme === "dark");
+          localStorage.setItem("theme", theme);
+        };
+        themeToggle.addEventListener("click", () =>
+          applyTheme(
+            document.documentElement.classList.contains("dark")
+              ? "light"
+              : "dark"
+          )
+        );
+        applyTheme(localStorage.getItem("theme") || "light");
 
-
-    // --- Language Switcher ---
-    const translatePage = () => {
-        document.documentElement.lang = currentLang;
-        document.body.className = langMap.find(l => l.code === currentLang).fontClass;
-        document.querySelectorAll('[data-i18n-key]').forEach(el => {
-            const key = el.getAttribute('data-i18n-key');
+        // --- Language Manager ---
+        const translatePage = () => {
+          document.querySelectorAll("[data-i18n-key]").forEach((el) => {
+            const key = el.dataset.i18nKey;
             if (translations[currentLang]?.[key]) {
-                el.innerText = translations[currentLang][key];
+              el.textContent = translations[currentLang][key];
             }
+          });
+          document
+            .querySelectorAll(".dynamic-download-btn")
+            .forEach((btn) =>
+              btn.setAttribute(
+                "title",
+                translations[currentLang]["download-btn"]
+              )
+            );
+        };
+
+        const setLang = (langCode) => {
+          const langData =
+            langMap.find((l) => l.code === langCode) || langMap[0];
+          currentLang = langData.code;
+          document.documentElement.lang = currentLang;
+          document.getElementById("lang-flag").src = langData.flag;
+          document.getElementById("lang-label-short").textContent =
+            langData.short;
+
+          langDropdown.querySelectorAll(".language-option").forEach((btn) => {
+            btn.classList.toggle(
+              "active-language",
+              btn.dataset.lang === langCode
+            );
+          });
+
+          document.body.classList.toggle("font-khmer", !!langData.fontClass);
+          translatePage();
+          localStorage.setItem("language", langCode);
+        };
+
+        langMap.forEach((lang) => {
+          const option = document.createElement("button");
+          option.className = "language-option";
+          if (lang.fontClass) option.classList.add(lang.fontClass);
+          option.dataset.lang = lang.code;
+          option.innerHTML = `<img src="${lang.flag}" class="language-flag" alt="${lang.label}"/><span>${lang.label}</span>`;
+          // Prevent dropdown from closing before setLang runs
+          option.addEventListener("mousedown", (e) => e.stopPropagation());
+          option.addEventListener("click", (e) => {
+            e.stopPropagation();
+            setLang(lang.code);
+            langSelector.classList.remove("open"); // Close dropdown after selection
+          });
+          langDropdown.appendChild(option);
         });
-        document.querySelectorAll('.dynamic-download-btn span').forEach(span => {
-            span.textContent = translations[currentLang]['download-btn'];
+
+        langBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          langSelector.classList.toggle("open");
         });
-    };
-    
-    const setLang = (langCode) => {
-        currentLang = langCode;
-        const langData = langMap.find(l => l.code === langCode);
-        document.getElementById('lang-flag').src = langData.flag;
-        document.getElementById('lang-label').textContent = langData.label;
-        langDropdownContent.querySelectorAll('.language-option').forEach(btn => {
-            btn.classList.toggle('active-language', btn.dataset.lang === langCode);
+
+        // Only close dropdown if click is outside the language selector
+        document.addEventListener("mousedown", (e) => {
+          if (!langSelector.contains(e.target)) {
+            langSelector.classList.remove("open");
+          }
         });
-        translatePage();
-        localStorage.setItem('language', langCode);
-    };
-    
-    langMap.forEach(lang => {
-        const option = document.createElement('button');
-        option.className = 'language-option';
-        if(lang.fontClass) option.classList.add(lang.fontClass);
-        option.dataset.lang = lang.code;
-        option.innerHTML = `<img src="${lang.flag}" class="language-flag" alt="${lang.label}"/> ${lang.label}`;
-        option.onclick = () => { setLang(lang.code); langDropdown.classList.remove('open'); };
-        langDropdownContent.appendChild(option);
-    });
-    
-    langBtn.addEventListener('click', (e) => { e.stopPropagation(); langDropdown.classList.toggle('open'); });
-    document.addEventListener('click', () => langDropdown.classList.remove('open'));
-    setLang(localStorage.getItem('language') || 'en');
 
+        setLang(localStorage.getItem("language") || "en");
 
-    // --- Helper Functions ---
-    const formatFileSize = (bytes) => {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024, sizes = ['Bytes', 'KB', 'MB', 'GB'], i = Math.floor(Math.log(bytes) / Math.log(k));
-        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
-    };
-    
-    // NEW: Helper function to sanitize filenames for download.
-    const sanitizeFilename = (name) => {
-        // Replaces characters that are invalid in Windows/macOS/Linux filenames.
-        return name.replace(/[<>:"/\\|?*]/g, '_');
-    };
+        // --- Helper Functions ---
+        const formatFileSize = (bytes) => {
+          if (bytes === 0) return "0 Bytes";
+          const k = 1024;
+          const sizes = ["Bytes", "KB", "MB", "GB"];
+          const i = Math.floor(Math.log(bytes) / Math.log(k));
+          return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${
+            sizes[i]
+          }`;
+        };
 
-    // NEW: Function to manage the enabled/disabled state of action buttons.
-    const updateActionButtonsState = () => {
-        const shouldBeDisabled = processingCount > 0;
-        clearAllBtn.disabled = shouldBeDisabled;
-        downloadAllBtn.disabled = shouldBeDisabled;
-        addMoreBtn.disabled = shouldBeDisabled; // Also disable 'Add More' to avoid queue confusion
-    };
+        const sanitizeFilename = (name) => name.replace(/[<>:"/\\|?*]/g, "_");
 
-    const getFileIcon = (file) => {
-        const iconProps = `viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"`;
-        const iconImage = `<svg ${iconProps}><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`;
-        const iconPdf = `<svg ${iconProps} class="text-red-500"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
-        const iconDocx = `<svg ${iconProps} class="text-blue-500"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>`;
-        const iconXlsx = `<svg ${iconProps} class="text-green-500"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>`;
-        const iconPptx = `<svg ${iconProps} class="text-orange-500"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>`;
-        const iconGeneric = `<svg ${iconProps}><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>`;
+        const getExtensionForBlob = (blob, originalName) => {
+          const mimeMap = {
+            "image/jpeg": "jpg",
+            "image/png": "png",
+            "application/pdf": "pdf",
+          };
+          return (
+            mimeMap[blob.type] ||
+            originalName.split(".").pop().toLowerCase() ||
+            "bin"
+          );
+        };
 
-        const name = file.name.toLowerCase();
-        const type = file.type;
-        
-        if (type.startsWith('image/')) return iconImage;
-        if (type === 'application/pdf') return iconPdf;
-        if (name.endsWith('.docx') || name.endsWith('.doc')) return iconDocx;
-        if (name.endsWith('.xlsx') || name.endsWith('.xls')) return iconXlsx;
-        if (name.endsWith('.pptx') || name.endsWith('.ppt')) return iconPptx;
+        // --- UI State Management ---
+        const updateActionButtonsState = () => {
+          const hasFiles = fileQueue.children.length > 0;
+          const isProcessing = processingCount > 0;
 
-        return iconGeneric;
-    };
+          actionButtons.style.display = hasFiles ? "flex" : "none";
+          document.getElementById("upload-module").style.display = hasFiles
+            ? "none"
+            : "block";
+          backToHomeBtn.style.display = hasFiles ? "none" : "inline-flex";
 
-    const getExtensionForBlob = (blob) => ({'image/jpeg':'jpg','image/png':'png','application/pdf':'pdf'}[blob.type] || 'bin');
+          downloadAllBtn.disabled =
+            isProcessing || compressedFiles.length === 0;
+          addMoreBtn.disabled = isProcessing;
+          clearAllBtn.disabled = isProcessing;
+        };
 
-    // --- Compression Logic ---
-    const compressImage = (file, onProgress) => new Promise((resolve, reject) => {
-        const quality = 0.75; 
-        const isPng = file.type === 'image/png';
-        const outputType = isPng ? 'image/png' : 'image/jpeg';
-        onProgress(0.1);
-        const reader = new FileReader();
-        reader.onload = e => {
-            const img = new Image();
-            img.onload = () => {
+        const getStatusIcon = (status) => {
+          const iconProps = `viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"`;
+          switch (status) {
+            case "progress":
+              return `<svg class="spinner w-6 h-6" style="color:var(--accent);" ${iconProps}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
+            case "success":
+              return `<svg class="w-8 h-8" style="color:var(--success);" ${iconProps}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+            case "error":
+              return `<svg class="w-8 h-8" style="color:var(--error);" ${iconProps}><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+            default:
+              return `<svg class="w-6 h-6" style="color:var(--text-muted);" ${iconProps}><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
+          }
+        };
+
+        const createQueueItem = (file, fileId) => {
+          const item = document.createElement("div");
+          item.className = "file-item";
+          item.id = fileId;
+          item.innerHTML = `
+                    <div class="file-status-icon">${getStatusIcon(
+                      "queued"
+                    )}</div>
+                    <div class="min-w-0">
+                        <p class="font-title text-sm truncate" title="${
+                          file.name
+                        }">${file.name}</p>
+                        <p class="font-muted text-xs mt-1" role="status" aria-live="polite">
+                            ${formatFileSize(
+                              file.size
+                            )} <span class="file-status-text">→ ${
+            translations[currentLang]["status-queued"]
+          }</span>
+                        </p>
+                        <div class="progress-bar-wrapper" style="display: none;"><div class="progress-bar-fill"></div></div>
+                    </div>
+                    <div class="file-actions"></div>`;
+          return item;
+        };
+
+        const updateStatusUI = (item, status, text) => {
+          item.querySelector(".file-status-icon").innerHTML =
+            getStatusIcon(status);
+          item.querySelector(".file-status-text").textContent = text;
+          const progressBar = item.querySelector(".progress-bar-wrapper");
+          progressBar.style.display = status === "progress" ? "block" : "none";
+          if (status !== "progress") {
+            item.querySelector(".progress-bar-fill").style.width = "0%";
+          }
+        };
+
+        const addDownloadButton = (item, blob, originalName) => {
+          const actionDiv = item.querySelector(".file-actions");
+          const sanitizedName = sanitizeFilename(originalName);
+          const base =
+            sanitizedName.substring(0, sanitizedName.lastIndexOf(".")) ||
+            sanitizedName;
+          const ext = getExtensionForBlob(blob, originalName);
+
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = `${base}-compressed.${ext}`;
+          link.className = "dynamic-download-btn btn btn-ghost p-2 h-10 w-10";
+          link.title = translations[currentLang]["download-btn"];
+          link.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>`;
+          actionDiv.innerHTML = "";
+          actionDiv.appendChild(link);
+        };
+
+        // --- Core Compression Logic ---
+        const compressImage = (file, onProgress) =>
+          new Promise((resolve, reject) => {
+            onProgress(0.1);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const img = new Image();
+              img.onload = () => {
                 onProgress(0.5);
-                const canvas = document.createElement('canvas');
+                const canvas = document.createElement("canvas");
                 canvas.width = img.width;
                 canvas.height = img.height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0);
                 onProgress(0.9);
-                canvas.toBlob(blob => {
+                canvas.toBlob(
+                  (blob) => {
                     onProgress(1);
-                    resolve(blob || file); 
-                }, outputType, quality);
+                    resolve(blob || file);
+                  },
+                  file.type === "image/png" ? "image/png" : "image/jpeg",
+                  0.75
+                );
+              };
+              img.onerror = () => reject(new Error("Cannot decode image."));
+              img.src = e.target.result;
             };
-            img.onerror = () => reject(new Error('Cannot decode image.'));
-            img.src = e.target.result;
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
 
-    const compressPDF = async (file, onProgress) => {
-        onProgress(0.1);
-        const { PDFDocument } = PDFLib;
-        const buffer = await file.arrayBuffer();
-        onProgress(0.2);
-        const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
-
-        const images = pdfDoc.getImages();
-        if (images.length > 0) {
-            await Promise.all(images.map(async (image, i) => {
-                try {
-                    if (image.isJpg) {
-                        const jpgImage = await pdfDoc.embedJpg(await image.embed());
-                        image.ref.set(jpgImage.ref.stream);
-                    }
-                } catch (e) {
-                    console.error("Could not re-compress an image in the PDF:", e);
+        const compressPDF = async (file, onProgress) => {
+          onProgress(0.1);
+          const { PDFDocument } = PDFLib;
+          const buffer = await file.arrayBuffer();
+          onProgress(0.2);
+          const pdfDoc = await PDFDocument.load(buffer, {
+            ignoreEncryption: true,
+          });
+          const images = pdfDoc.getImages();
+          if (images.length > 0) {
+            let i = 0;
+            for (const image of images) {
+              try {
+                if (image.isJpg) {
+                  const jpgImage = await pdfDoc.embedJpg(await image.embed());
+                  pdfDoc.context.assign(image.ref, jpgImage.ref.stream);
                 }
-                onProgress(0.2 + (0.7 * ((i + 1) / images.length)));
-            }));
-        } else {
-             onProgress(0.9);
-        }
-       
-        const bytes = await pdfDoc.save();
-        onProgress(1);
-        return new Blob([bytes], { type: 'application/pdf' });
-    };
+              } catch (e) {
+                console.warn(
+                  "Could not re-compress a PDF image. Skipping it.",
+                  e
+                );
+              }
+              onProgress(0.2 + 0.7 * (++i / images.length));
+            }
+          } else {
+            onProgress(0.9);
+          }
+          onProgress(1);
+          return new Blob([await pdfDoc.save()], { type: "application/pdf" });
+        };
 
-    const compressOfficeFile = async (file, onProgress) => {
-        onProgress(0.2);
-        const buffer = await file.arrayBuffer();
-        onProgress(0.4);
-        const zip = await JSZip.loadAsync(buffer);
-        onProgress(0.8);
-        return await zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 9 } });
-    };
+        const compressOfficeFile = async (file, onProgress) => {
+          onProgress(0.2);
+          const buffer = await file.arrayBuffer();
+          onProgress(0.4);
+          const zip = await JSZip.loadAsync(buffer);
+          onProgress(0.8);
+          return zip.generateAsync({
+            type: "blob",
+            compression: "DEFLATE",
+            compressionOptions: { level: 9 },
+          });
+        };
 
-    // --- File Handling & UI ---
-    uploadBox.addEventListener('click', () => fileInput.click());
-    ['dragover', 'dragleave', 'drop'].forEach(ev => uploadBox.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); }));
-    uploadBox.addEventListener('dragover', () => uploadBox.classList.add('dragover'));
-    uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('dragover'));
-    uploadBox.addEventListener('drop', (e) => {
-        uploadBox.classList.remove('dragover');
-        if (addMoreBtn.disabled) return;
-        handleFiles(e.dataTransfer.files);
-    });
-    fileInput.addEventListener('change', (e) => {
-        handleFiles(e.target.files);
-        e.target.value = '';
-    });
+        // --- File Processing Pipeline ---
+        const processFile = async (file) => {
+          processingCount++;
+          updateActionButtonsState();
 
-    const handleFiles = (files) => {
-        if (!files.length) return;
-        document.getElementById('upload-module').style.display = 'none';
-        actionButtons.classList.remove('hidden');
-        actionButtons.classList.add('grid');
-        [...files].forEach(processFile);
-    };
+          const fileId = `file-${Date.now()}-${Math.random()}`;
+          const fileItem = createQueueItem(file, fileId);
+          fileQueue.appendChild(fileItem);
 
-    const processFile = async (file) => {
-        processingCount++;
-        updateActionButtonsState();
+          const onProgress = (p) =>
+            (fileItem.querySelector(".progress-bar-fill").style.width = `${
+              p * 100
+            }%`);
 
-        const fileId = `file-${Date.now()}-${Math.random()}`;
-        const fileItem = createQueueItem(file, fileId);
-        fileQueue.appendChild(fileItem);
-        const progressFill = fileItem.querySelector('.progress-bar-fill');
-        const onProgress = p => progressFill.style.width = `${p * 100}%`;
-
-        if (file.size > 100 * 1024 * 1024) {
-            updateStatus(fileItem, 'Error: File size exceeds 100MB', 'error');
+          if (file.size > 100 * 1024 * 1024) {
+            updateStatusUI(
+              fileItem,
+              "error",
+              `→ Error: File size exceeds 100MB`
+            );
             processingCount--;
             updateActionButtonsState();
             return;
-        }
+          }
 
-        try {
-            updateStatus(fileItem, translations[currentLang]['status-compressing'], 'progress');
+          try {
+            updateStatusUI(
+              fileItem,
+              "progress",
+              `→ ${translations[currentLang]["status-compressing"]}`
+            );
             let compressedBlob;
             const name = file.name.toLowerCase();
 
-            if (file.type.startsWith('image/')) {
-                compressedBlob = await compressImage(file, onProgress);
-            } else if (file.type === 'application/pdf') {
-                compressedBlob = await compressPDF(file, onProgress);
-            } else if (name.match(/\.(docx|xlsx|pptx)$/i)) {
-                compressedBlob = await compressOfficeFile(file, onProgress);
-            } else {
-                throw new Error('unsupported');
-            }
-            onProgress(1);
-            
-            const ratio = 1 - (compressedBlob.size / file.size);
-            const resultText = `✅ ${formatFileSize(compressedBlob.size)} (${Math.round(ratio * 100)}% smaller)`;
-            
-            updateStatus(fileItem, resultText, 'success');
+            if (file.type.startsWith("image/"))
+              compressedBlob = await compressImage(file, onProgress);
+            else if (file.type === "application/pdf")
+              compressedBlob = await compressPDF(file, onProgress);
+            else if (name.match(/\.(docx|xlsx|pptx)$/i))
+              compressedBlob = await compressOfficeFile(file, onProgress);
+            else throw new Error("unsupported");
+
+            const ratio =
+              file.size > 0 ? 1 - compressedBlob.size / file.size : 0;
+            updateStatusUI(
+              fileItem,
+              "success",
+              `→ ${formatFileSize(compressedBlob.size)} (${Math.round(
+                ratio * 100
+              )}% smaller)`
+            );
             addDownloadButton(fileItem, compressedBlob, file.name);
             compressedFiles.push({ blob: compressedBlob, name: file.name });
-        } catch (err) {
+          } catch (err) {
             console.error("Compression failed for file:", file.name, err);
-            if (err.message === 'unsupported') {
-                 updateStatus(fileItem, translations[currentLang]['status-unsupported'], 'error');
-            } else {
-                 updateStatus(fileItem, `${translations[currentLang]['status-error']}`, 'error');
-            }
-        } finally {
+            const key =
+              err.message === "unsupported"
+                ? "status-unsupported"
+                : "status-error";
+            updateStatusUI(
+              fileItem,
+              "error",
+              `→ ${translations[currentLang][key]}`
+            );
+          } finally {
             processingCount--;
             updateActionButtonsState();
-        }
-    };
+          }
+        };
 
-    const createQueueItem = (file, fileId) => {
-        const item = document.createElement('div');
-        item.className = 'file-item';
-        item.id = fileId;
-        item.innerHTML = `
-            <div class="file-icon">${getFileIcon(file)}</div>
-            <div class="file-info">
-                <div class="file-name" title="${file.name}">${file.name}</div>
-                <div class="file-size">${formatFileSize(file.size)} → <span class="file-status">${translations[currentLang]['status-queued']}</span></div>
-                <div class="progress-bar"><div class="progress-bar-fill"></div></div>
-            </div>
-            <div class="file-actions"></div>`;
-        return item;
-    };
+        const handleFiles = (files) => {
+          if (files.length > 0) {
+            [...files].forEach(processFile);
+            updateActionButtonsState();
+          }
+        };
 
-    const updateStatus = (item, text, type) => {
-        const statusEl = item.querySelector('.file-status');
-        statusEl.innerHTML = text;
-        statusEl.className = `file-status ${type}`;
-        if (type === 'success' || type === 'error') {
-            item.querySelector('.progress-bar').style.display = 'none';
-        }
-    };
+        // --- Global Event Listeners ---
+        const resetState = () => {
+          fileQueue
+            .querySelectorAll("a[download]")
+            .forEach((link) => URL.revokeObjectURL(link.href));
+          fileQueue.innerHTML = "";
+          fileInput.value = "";
+          compressedFiles = [];
+          processingCount = 0;
+          updateActionButtonsState();
+        };
 
-    const addDownloadButton = (item, blob, originalName) => {
-        const actionDiv = item.querySelector('.file-actions');
-        const sanitizedName = sanitizeFilename(originalName);
-        const base = sanitizedName.substring(0, sanitizedName.lastIndexOf('.'));
-        const ext = blob.type === "application/octet-stream" ? sanitizedName.split('.').pop() : getExtensionForBlob(blob);
-        const dlName = `${base}-compressed.${ext}`;
-        
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = dlName;
-        link.className = "dynamic-download-btn inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-semibold transition";
-        link.style.backgroundColor = 'var(--accent-color)';
-        link.style.color = 'white';
-        link.innerHTML = `
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-            <span>${translations[currentLang]['download-btn']}</span>`;
-        actionDiv.appendChild(link);
-    };
+        ["dragover", "dragleave", "drop"].forEach((ev) =>
+          dropzone.addEventListener(ev, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          })
+        );
 
-    downloadAllBtn.addEventListener('click', async () => {
-        if (compressedFiles.length === 0 || downloadAllBtn.disabled) return;
-        
-        const zip = new JSZip();
-        compressedFiles.forEach(f => {
-            const sanitizedName = sanitizeFilename(f.name);
-            const base = sanitizedName.substring(0, sanitizedName.lastIndexOf('.'));
-            const ext = f.blob.type === "application/octet-stream" ? sanitizedName.split('.').pop() : getExtensionForBlob(f.blob);
+        dropzone.addEventListener("dragover", () =>
+          dropzone.classList.add("dragover")
+        );
+        dropzone.addEventListener("dragleave", () =>
+          dropzone.classList.remove("dragover")
+        );
+        dropzone.addEventListener("drop", (e) => {
+          dropzone.classList.remove("dragover");
+          if (!addMoreBtn.disabled) handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener("change", (e) =>
+          handleFiles(e.target.files)
+        );
+
+        addMoreBtn.addEventListener("click", () => {
+          if (!addMoreBtn.disabled) fileInput.click();
+        });
+
+        clearAllBtn.addEventListener("click", () => {
+          if (!clearAllBtn.disabled) resetState();
+        });
+
+        downloadAllBtn.addEventListener("click", async () => {
+          if (downloadAllBtn.disabled) return;
+          const zip = new JSZip();
+          compressedFiles.forEach((f) => {
+            const base = sanitizeFilename(f.name).replace(/\.[^/.]+$/, "");
+            const ext = getExtensionForBlob(f.blob, f.name);
             zip.file(`${base}-compressed.${ext}`, f.blob);
+          });
+
+          const zipBlob = await zip.generateAsync({ type: "blob" });
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(zipBlob);
+          link.download = "Compressed-Files.zip";
+          link.click();
+          URL.revokeObjectURL(link.href);
         });
-
-        const zipBlob = await zip.generateAsync({ type: "blob" });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(zipBlob);
-        link.download = 'QuantumCompress-files.zip';
-        link.click();
-        URL.revokeObjectURL(link.href);
-    });
-
-    addMoreBtn.addEventListener('click', () => {
-        if (addMoreBtn.disabled) return;
-        fileInput.click();
-    });
-
-    clearAllBtn.addEventListener('click', () => {
-        if (clearAllBtn.disabled) return;
-
-        // FIXED: Revoke all created object URLs to prevent memory leaks.
-        fileQueue.querySelectorAll('a[download]').forEach(link => {
-            if (link.href.startsWith('blob:')) {
-                URL.revokeObjectURL(link.href);
-            }
-        });
-
-        fileQueue.innerHTML = '';
-        actionButtons.classList.add('hidden');
-        actionButtons.classList.remove('grid');
-        document.getElementById('upload-module').style.display = 'block';
-        fileInput.value = '';
-        compressedFiles = [];
-    });
-});
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>
