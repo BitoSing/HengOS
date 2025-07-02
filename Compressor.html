@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>File-Compressor</title>
+    <title>File-Compressor Enhanced</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Khmer:wght@400;700&display=swap"
@@ -15,7 +15,6 @@
     <!-- pdf-lib for PDF manipulation -->
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
-    <!-- 👇 PASTE THE UPDATED STYLE BLOCK HERE 👇 -->
     <style>
       /* === Professional UI Redesign v4 (Final) === */
       :root {
@@ -92,7 +91,6 @@
         color: var(--text-muted);
       }
 
-      /* ✅ FIX: Professionally handled 50% width request. It's responsive now. */
       html, body {
         box-sizing: border-box;
         max-width: 100vw;
@@ -101,35 +99,30 @@
       *, *::before, *::after {
         box-sizing: inherit;
       }
-
       .page-wrapper {
-        width: 90%; /* For mobile devices */
-        max-width: 1400px; /* Safety max-width */
+        width: 90%;
+        max-width: 1400px;
         margin-left: auto;
         margin-right: auto;
-        max-width: 100vw; /* Prevent overflow on small screens */
+        max-width: 100vw;
       }
       @media (min-width: 1024px) {
-        /* On desktop screens... */
         .page-wrapper {
-          width: 50%; /* ...use 50% width as requested. */
+          width: 50%;
         }
       }
-
       .main-card {
         background: var(--surface);
         border-radius: 1.5rem;
         box-shadow: var(--shadow-lg);
         border: 1px solid var(--border);
         padding: 2.5rem;
-        /* Responsive padding for small screens */
       }
       @media (max-width: 640px) {
         .main-card {
-          padding: 1rem;
+          padding: 1.5rem;
         }
       }
-
       .back-to-home-btn {
         display: inline-flex;
         align-items: center;
@@ -148,14 +141,6 @@
       .back-to-home-btn:hover {
         border-color: var(--accent);
         color: var(--accent);
-      }
-
-      .main-card {
-        background: var(--surface);
-        border-radius: 1.5rem;
-        box-shadow: var(--shadow-lg);
-        border: 1px solid var(--border);
-        padding: 2.5rem;
       }
       .header-controls-wrapper button,
       .header-controls-wrapper .language-btn {
@@ -176,23 +161,16 @@
         color: var(--accent);
       }
 
-      /*
-        ✨ Language Dropdown Redesign ✨
-        - Fix: The container (.language-selector) is now `position: relative` for robust, stable dropdown positioning.
-        - Enhancement: The dropdown arrow now smoothly rotates when the menu is opened, providing clear visual feedback.
-      */
       .language-selector {
         position: relative;
       }
       .language-btn {
         padding: 0 16px;
         gap: 8px;
-        /* The `position: relative` was here, but it's now correctly on the .language-selector container */
       }
       .language-selector.open .language-btn .arrow {
         transform: rotate(180deg);
       }
-
       .theme-toggle-btn {
         width: 40px;
       }
@@ -204,7 +182,6 @@
       html.dark .theme-toggle-btn .sun-icon {
         display: none;
       }
-
       .language-dropdown {
         display: block;
         visibility: hidden;
@@ -250,7 +227,6 @@
         border-radius: 50%;
         object-fit: cover;
       }
-
       #dropzone {
         border: 2px dashed var(--border);
         background-color: var(--bg);
@@ -283,7 +259,8 @@
         align-items: center;
         justify-content: center;
       }
-      .file-status-icon .spinner {
+      /* Shared spinner animation for all loading states */
+      .spinner {
         animation: spin 1s linear infinite;
       }
       @keyframes spin {
@@ -308,7 +285,6 @@
         background-color: var(--accent);
         border-radius: 3px;
       }
-
       .btn {
         display: inline-flex;
         align-items: center;
@@ -351,8 +327,6 @@
         background-color: color-mix(in srgb, var(--accent) 10%, transparent);
         color: var(--accent);
       }
-
-      /* === Smooth Fade-In Animation for Page Reload === */
       body.page-fade-init {
         opacity: 0;
         pointer-events: none;
@@ -377,11 +351,11 @@
     </style>
   </head>
   <body class="font-inter page-fade-init">
-    <!-- NO CHANGES NEEDED TO THE BODY OR SCRIPT -->
     <main
       class="w-full min-h-screen p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center"
     >
       <div class="page-wrapper">
+        <!-- ✅ FIX: Back to home button is now always visible for consistent navigation -->
         <a href="index.html" class="back-to-home-btn" id="back-to-home">
           <svg
             class="w-5 h-5"
@@ -502,16 +476,17 @@
               </label>
               <input type="file" id="file-input" multiple class="hidden" />
             </div>
-
-            <div id="file-queue" class="flex flex-col gap-4"></div>
+            
+            <!-- ✨ ENHANCEMENT: Added ARIA role for better accessibility -->
+            <div id="file-queue" class="flex flex-col gap-4" role="region" aria-label="File processing queue"></div>
 
             <div id="action-buttons" class="hidden flex-col gap-4 mt-2">
               <button
                 class="btn btn-primary text-lg w-full"
                 id="download-all-btn"
-                data-i18n-key="download-all-btn"
               >
-                Download All (.zip)
+                <!-- Content will be managed by JS -->
+                <span data-i18n-key="download-all-btn">Download All (.zip)</span>
               </button>
               <div class="grid grid-cols-2 gap-4">
                 <button
@@ -560,6 +535,7 @@
             "footer-text": "© 2024 Your Privacy-First Tool.",
             "status-queued": "Queued",
             "status-compressing": "Compressing...",
+            "status-zipping": "Zipping...", // ✨ ENHANCEMENT: New translation
             "status-complete": "Complete!",
             "status-error": "Error",
             "status-unsupported": "Unsupported Type",
@@ -570,14 +546,14 @@
             "main-title": "កម្មវិធីបង្ហាប់ឯកសារ",
             "sub-heading": "កាត់បន្ថយទំហំឯកសាររូបភាព PDF និងផ្សេងៗទៀត។",
             "drop-title": "ចុចដើម្បីផ្ទុកឡើង ឬអូស និងទម្លាក់",
-            disclaimer:
-              "ទំហំឯកសារអតិបរមា 100MB។ ការដំណើរការទាំងអស់ធ្វើឡើងក្នុង browser។",
+            disclaimer: "ទំហំឯកសារអតិបរមា 100MB។ ការដំណើរការទាំងអស់ធ្វើឡើងក្នុង browser។",
             "download-all-btn": "ទាញយកទាំងអស់ (.zip)",
             "add-more-btn": "បន្ថែមឯកសារ",
             "clear-all-btn": "លុបទាំងអស់",
             "footer-text": "© 2024 ឧបករណ៍រក្សាឯកជនភាពរបស់អ្នក។",
             "status-queued": "កំពុងរង់ចាំ",
             "status-compressing": "កំពុងបង្ហាប់...",
+            "status-zipping": "កំពុង Zip...", // ✨ ENHANCEMENT: New translation
             "status-complete": "រួចរាល់!",
             "status-error": "មានបញ្ហា",
             "status-unsupported": "ប្រភេទមិនស្គាល់",
@@ -586,19 +562,8 @@
           },
         };
         const langMap = [
-          {
-            code: "en",
-            label: "English",
-            short: "EN",
-            flag: "https://flagcdn.com/us.svg",
-          },
-          {
-            code: "km",
-            label: "ភាសាខ្មែរ",
-            short: "KH",
-            flag: "https://flagcdn.com/kh.svg",
-            fontClass: "font-khmer",
-          },
+          { code: "en", label: "English", short: "EN", flag: "https://flagcdn.com/us.svg" },
+          { code: "km", label: "ភាសាខ្មែរ", short: "KH", flag: "https://flagcdn.com/kh.svg", fontClass: "font-khmer" },
         ];
 
         // --- Element Selectors ---
@@ -613,7 +578,6 @@
         const langBtn = document.getElementById("lang-btn");
         const langDropdown = document.getElementById("lang-dropdown");
         const themeToggle = document.getElementById("theme-toggle");
-        const backToHomeBtn = document.getElementById("back-to-home");
 
         // --- State Variables ---
         let currentLang = "en";
@@ -625,13 +589,7 @@
           document.documentElement.classList.toggle("dark", theme === "dark");
           localStorage.setItem("theme", theme);
         };
-        themeToggle.addEventListener("click", () =>
-          applyTheme(
-            document.documentElement.classList.contains("dark")
-              ? "light"
-              : "dark"
-          )
-        );
+        themeToggle.addEventListener("click", () => applyTheme(document.documentElement.classList.contains("dark") ? "light" : "dark"));
         applyTheme(localStorage.getItem("theme") || "light");
 
         // --- Language Manager ---
@@ -642,32 +600,16 @@
               el.textContent = translations[currentLang][key];
             }
           });
-          document
-            .querySelectorAll(".dynamic-download-btn")
-            .forEach((btn) =>
-              btn.setAttribute(
-                "title",
-                translations[currentLang]["download-btn"]
-              )
-            );
+          document.querySelectorAll(".dynamic-download-btn").forEach((btn) => btn.setAttribute("title", translations[currentLang]["download-btn"]));
         };
 
         const setLang = (langCode) => {
-          const langData =
-            langMap.find((l) => l.code === langCode) || langMap[0];
+          const langData = langMap.find((l) => l.code === langCode) || langMap[0];
           currentLang = langData.code;
           document.documentElement.lang = currentLang;
           document.getElementById("lang-flag").src = langData.flag;
-          document.getElementById("lang-label-short").textContent =
-            langData.short;
-
-          langDropdown.querySelectorAll(".language-option").forEach((btn) => {
-            btn.classList.toggle(
-              "active-language",
-              btn.dataset.lang === langCode
-            );
-          });
-
+          document.getElementById("lang-label-short").textContent = langData.short;
+          langDropdown.querySelectorAll(".language-option").forEach((btn) => btn.classList.toggle("active-language", btn.dataset.lang === langCode));
           document.body.classList.toggle("font-khmer", !!langData.fontClass);
           translatePage();
           localStorage.setItem("language", langCode);
@@ -679,12 +621,10 @@
           if (lang.fontClass) option.classList.add(lang.fontClass);
           option.dataset.lang = lang.code;
           option.innerHTML = `<img src="${lang.flag}" class="language-flag" alt="${lang.label}"/><span>${lang.label}</span>`;
-          // Prevent dropdown from closing before setLang runs
-          option.addEventListener("mousedown", (e) => e.stopPropagation());
           option.addEventListener("click", (e) => {
             e.stopPropagation();
             setLang(lang.code);
-            langSelector.classList.remove("open"); // Close dropdown after selection
+            langSelector.classList.remove("open");
           });
           langDropdown.appendChild(option);
         });
@@ -694,11 +634,12 @@
           langSelector.classList.toggle("open");
         });
 
-        // Only close dropdown if click is outside the language selector
-        document.addEventListener("mousedown", (e) => {
-          if (!langSelector.contains(e.target)) {
-            langSelector.classList.remove("open");
-          }
+        document.addEventListener("click", () => langSelector.classList.remove("open"));
+        // ✨ ENHANCEMENT: Close dropdown with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape" && langSelector.classList.contains('open')) {
+                langSelector.classList.remove('open');
+            }
         });
 
         setLang(localStorage.getItem("language") || "en");
@@ -709,24 +650,14 @@
           const k = 1024;
           const sizes = ["Bytes", "KB", "MB", "GB"];
           const i = Math.floor(Math.log(bytes) / Math.log(k));
-          return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${
-            sizes[i]
-          }`;
+          return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
         };
 
         const sanitizeFilename = (name) => name.replace(/[<>:"/\\|?*]/g, "_");
 
         const getExtensionForBlob = (blob, originalName) => {
-          const mimeMap = {
-            "image/jpeg": "jpg",
-            "image/png": "png",
-            "application/pdf": "pdf",
-          };
-          return (
-            mimeMap[blob.type] ||
-            originalName.split(".").pop().toLowerCase() ||
-            "bin"
-          );
+          const mimeMap = { "image/jpeg": "jpg", "image/png": "png", "application/pdf": "pdf" };
+          return mimeMap[blob.type] || originalName.split(".").pop().toLowerCase() || "bin";
         };
 
         // --- UI State Management ---
@@ -735,13 +666,11 @@
           const isProcessing = processingCount > 0;
 
           actionButtons.style.display = hasFiles ? "flex" : "none";
-          document.getElementById("upload-module").style.display = hasFiles
-            ? "none"
-            : "block";
-          backToHomeBtn.style.display = hasFiles ? "none" : "inline-flex";
+          document.getElementById("upload-module").style.display = hasFiles ? "none" : "block";
+          
+          // ✅ FIX: The logic that was hiding the 'Back to Home' button has been REMOVED from this function.
 
-          downloadAllBtn.disabled =
-            isProcessing || compressedFiles.length === 0;
+          downloadAllBtn.disabled = isProcessing || compressedFiles.length === 0;
           addMoreBtn.disabled = isProcessing;
           clearAllBtn.disabled = isProcessing;
         };
@@ -749,14 +678,10 @@
         const getStatusIcon = (status) => {
           const iconProps = `viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"`;
           switch (status) {
-            case "progress":
-              return `<svg class="spinner w-6 h-6" style="color:var(--accent);" ${iconProps}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
-            case "success":
-              return `<svg class="w-8 h-8" style="color:var(--success);" ${iconProps}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
-            case "error":
-              return `<svg class="w-8 h-8" style="color:var(--error);" ${iconProps}><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
-            default:
-              return `<svg class="w-6 h-6" style="color:var(--text-muted);" ${iconProps}><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
+            case "progress": return `<svg class="spinner w-6 h-6" style="color:var(--accent);" ${iconProps}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
+            case "success": return `<svg class="w-8 h-8" style="color:var(--success);" ${iconProps}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+            case "error": return `<svg class="w-8 h-8" style="color:var(--error);" ${iconProps}><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+            default: return `<svg class="w-6 h-6" style="color:var(--text-muted);" ${iconProps}><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
           }
         };
 
@@ -765,43 +690,37 @@
           item.className = "file-item";
           item.id = fileId;
           item.innerHTML = `
-                    <div class="file-status-icon">${getStatusIcon(
-                      "queued"
-                    )}</div>
-                    <div class="min-w-0">
-                        <p class="font-title text-sm truncate" title="${
-                          file.name
-                        }">${file.name}</p>
-                        <p class="font-muted text-xs mt-1" role="status" aria-live="polite">
-                            ${formatFileSize(
-                              file.size
-                            )} <span class="file-status-text">→ ${
-            translations[currentLang]["status-queued"]
-          }</span>
-                        </p>
-                        <div class="progress-bar-wrapper" style="display: none;"><div class="progress-bar-fill"></div></div>
-                    </div>
-                    <div class="file-actions"></div>`;
+            <div class="file-status-icon">${getStatusIcon("queued")}</div>
+            <div class="min-w-0">
+                <p class="font-title text-sm truncate" title="${file.name}">${file.name}</p>
+                <p class="font-muted text-xs mt-1" role="status" aria-live="polite">
+                    ${formatFileSize(file.size)} <span class="file-status-text">→ ${translations[currentLang]["status-queued"]}</span>
+                </p>
+                <div class="progress-bar-wrapper" style="display: none;"><div class="progress-bar-fill"></div></div>
+            </div>
+            <div class="file-actions"></div>`;
           return item;
         };
 
-        const updateStatusUI = (item, status, text) => {
-          item.querySelector(".file-status-icon").innerHTML =
-            getStatusIcon(status);
-          item.querySelector(".file-status-text").textContent = text;
+        const updateStatusUI = (item, status, text, errorDetails = '') => {
+          item.querySelector(".file-status-icon").innerHTML = getStatusIcon(status);
+          const statusTextElement = item.querySelector(".file-status-text");
+          statusTextElement.textContent = text;
+          // ✨ ENHANCEMENT: Add technical error details to a tooltip for better user feedback
+          if (status === 'error' && errorDetails) {
+            statusTextElement.parentElement.title = errorDetails;
+          } else {
+            statusTextElement.parentElement.title = '';
+          }
           const progressBar = item.querySelector(".progress-bar-wrapper");
           progressBar.style.display = status === "progress" ? "block" : "none";
-          if (status !== "progress") {
-            item.querySelector(".progress-bar-fill").style.width = "0%";
-          }
+          if (status !== "progress") item.querySelector(".progress-bar-fill").style.width = "0%";
         };
 
         const addDownloadButton = (item, blob, originalName) => {
           const actionDiv = item.querySelector(".file-actions");
           const sanitizedName = sanitizeFilename(originalName);
-          const base =
-            sanitizedName.substring(0, sanitizedName.lastIndexOf(".")) ||
-            sanitizedName;
+          const base = sanitizedName.substring(0, sanitizedName.lastIndexOf(".")) || sanitizedName;
           const ext = getExtensionForBlob(blob, originalName);
 
           const link = document.createElement("a");
@@ -815,44 +734,33 @@
         };
 
         // --- Core Compression Logic ---
-        const compressImage = (file, onProgress) =>
-          new Promise((resolve, reject) => {
-            onProgress(0.1);
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              const img = new Image();
-              img.onload = () => {
-                onProgress(0.5);
-                const canvas = document.createElement("canvas");
-                canvas.width = img.width;
-                canvas.height = img.height;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0);
-                onProgress(0.9);
-                canvas.toBlob(
-                  (blob) => {
-                    onProgress(1);
-                    resolve(blob || file);
-                  },
-                  file.type === "image/png" ? "image/png" : "image/jpeg",
-                  0.75
-                );
-              };
-              img.onerror = () => reject(new Error("Cannot decode image."));
-              img.src = e.target.result;
+        const compressImage = (file, onProgress) => new Promise((resolve, reject) => {
+          onProgress(0.1);
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+              onProgress(0.5);
+              const canvas = document.createElement("canvas");
+              canvas.width = img.width; canvas.height = img.height;
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(img, 0, 0);
+              onProgress(0.9);
+              canvas.toBlob((blob) => { onProgress(1); resolve(blob || file); }, file.type === "image/png" ? "image/png" : "image/jpeg", 0.75);
             };
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-          });
+            img.onerror = () => reject(new Error("Cannot decode image. The file may be corrupt."));
+            img.src = e.target.result;
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
 
         const compressPDF = async (file, onProgress) => {
           onProgress(0.1);
           const { PDFDocument } = PDFLib;
           const buffer = await file.arrayBuffer();
           onProgress(0.2);
-          const pdfDoc = await PDFDocument.load(buffer, {
-            ignoreEncryption: true,
-          });
+          const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
           const images = pdfDoc.getImages();
           if (images.length > 0) {
             let i = 0;
@@ -862,17 +770,10 @@
                   const jpgImage = await pdfDoc.embedJpg(await image.embed());
                   pdfDoc.context.assign(image.ref, jpgImage.ref.stream);
                 }
-              } catch (e) {
-                console.warn(
-                  "Could not re-compress a PDF image. Skipping it.",
-                  e
-                );
-              }
+              } catch (e) { console.warn("Could not re-compress a PDF image. Skipping it.", e); }
               onProgress(0.2 + 0.7 * (++i / images.length));
             }
-          } else {
-            onProgress(0.9);
-          }
+          } else { onProgress(0.9); }
           onProgress(1);
           return new Blob([await pdfDoc.save()], { type: "application/pdf" });
         };
@@ -883,11 +784,7 @@
           onProgress(0.4);
           const zip = await JSZip.loadAsync(buffer);
           onProgress(0.8);
-          return zip.generateAsync({
-            type: "blob",
-            compression: "DEFLATE",
-            compressionOptions: { level: 9 },
-          });
+          return zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 9 } });
         };
 
         // --- File Processing Pipeline ---
@@ -899,61 +796,33 @@
           const fileItem = createQueueItem(file, fileId);
           fileQueue.appendChild(fileItem);
 
-          const onProgress = (p) =>
-            (fileItem.querySelector(".progress-bar-fill").style.width = `${
-              p * 100
-            }%`);
+          const onProgress = (p) => (fileItem.querySelector(".progress-bar-fill").style.width = `${p * 100}%`);
 
           if (file.size > 100 * 1024 * 1024) {
-            updateStatusUI(
-              fileItem,
-              "error",
-              `→ Error: File size exceeds 100MB`
-            );
+            updateStatusUI(fileItem, "error", "→ Error: File size exceeds 100MB");
             processingCount--;
             updateActionButtonsState();
             return;
           }
 
           try {
-            updateStatusUI(
-              fileItem,
-              "progress",
-              `→ ${translations[currentLang]["status-compressing"]}`
-            );
+            updateStatusUI(fileItem, "progress", `→ ${translations[currentLang]["status-compressing"]}`);
             let compressedBlob;
             const name = file.name.toLowerCase();
 
-            if (file.type.startsWith("image/"))
-              compressedBlob = await compressImage(file, onProgress);
-            else if (file.type === "application/pdf")
-              compressedBlob = await compressPDF(file, onProgress);
-            else if (name.match(/\.(docx|xlsx|pptx)$/i))
-              compressedBlob = await compressOfficeFile(file, onProgress);
+            if (file.type.startsWith("image/")) compressedBlob = await compressImage(file, onProgress);
+            else if (file.type === "application/pdf") compressedBlob = await compressPDF(file, onProgress);
+            else if (name.match(/\.(docx|xlsx|pptx)$/i)) compressedBlob = await compressOfficeFile(file, onProgress);
             else throw new Error("unsupported");
 
-            const ratio =
-              file.size > 0 ? 1 - compressedBlob.size / file.size : 0;
-            updateStatusUI(
-              fileItem,
-              "success",
-              `→ ${formatFileSize(compressedBlob.size)} (${Math.round(
-                ratio * 100
-              )}% smaller)`
-            );
+            const ratio = file.size > 0 ? 1 - compressedBlob.size / file.size : 0;
+            updateStatusUI(fileItem, "success", `→ ${formatFileSize(compressedBlob.size)} (${Math.round(ratio * 100)}% smaller)`);
             addDownloadButton(fileItem, compressedBlob, file.name);
             compressedFiles.push({ blob: compressedBlob, name: file.name });
           } catch (err) {
             console.error("Compression failed for file:", file.name, err);
-            const key =
-              err.message === "unsupported"
-                ? "status-unsupported"
-                : "status-error";
-            updateStatusUI(
-              fileItem,
-              "error",
-              `→ ${translations[currentLang][key]}`
-            );
+            const key = err.message === "unsupported" ? "status-unsupported" : "status-error";
+            updateStatusUI(fileItem, "error", `→ ${translations[currentLang][key]}`, err.message);
           } finally {
             processingCount--;
             updateActionButtonsState();
@@ -969,9 +838,7 @@
 
         // --- Global Event Listeners ---
         const resetState = () => {
-          fileQueue
-            .querySelectorAll("a[download]")
-            .forEach((link) => URL.revokeObjectURL(link.href));
+          fileQueue.querySelectorAll("a[download]").forEach((link) => URL.revokeObjectURL(link.href));
           fileQueue.innerHTML = "";
           fileInput.value = "";
           compressedFiles = [];
@@ -979,51 +846,49 @@
           updateActionButtonsState();
         };
 
-        ["dragover", "dragleave", "drop"].forEach((ev) =>
-          dropzone.addEventListener(ev, (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          })
-        );
-
-        dropzone.addEventListener("dragover", () =>
-          dropzone.classList.add("dragover")
-        );
-        dropzone.addEventListener("dragleave", () =>
-          dropzone.classList.remove("dragover")
-        );
+        ["dragover", "dragleave", "drop"].forEach((ev) => dropzone.addEventListener(ev, (e) => { e.preventDefault(); e.stopPropagation(); }));
+        dropzone.addEventListener("dragover", () => dropzone.classList.add("dragover"));
+        dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
         dropzone.addEventListener("drop", (e) => {
           dropzone.classList.remove("dragover");
           if (!addMoreBtn.disabled) handleFiles(e.dataTransfer.files);
         });
 
-        fileInput.addEventListener("change", (e) =>
-          handleFiles(e.target.files)
-        );
+        fileInput.addEventListener("change", (e) => handleFiles(e.target.files));
+        addMoreBtn.addEventListener("click", () => { if (!addMoreBtn.disabled) fileInput.click(); });
+        clearAllBtn.addEventListener("click", () => { if (!clearAllBtn.disabled) resetState(); });
 
-        addMoreBtn.addEventListener("click", () => {
-          if (!addMoreBtn.disabled) fileInput.click();
-        });
-
-        clearAllBtn.addEventListener("click", () => {
-          if (!clearAllBtn.disabled) resetState();
-        });
-
+        // ✨ ENHANCEMENT: Added visual feedback for the zipping process
         downloadAllBtn.addEventListener("click", async () => {
           if (downloadAllBtn.disabled) return;
-          const zip = new JSZip();
-          compressedFiles.forEach((f) => {
-            const base = sanitizeFilename(f.name).replace(/\.[^/.]+$/, "");
-            const ext = getExtensionForBlob(f.blob, f.name);
-            zip.file(`${base}-compressed.${ext}`, f.blob);
-          });
+          downloadAllBtn.disabled = true;
+          const originalHTML = downloadAllBtn.innerHTML;
+          downloadAllBtn.innerHTML = `
+              <svg class="spinner w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+              <span>${translations[currentLang]['status-zipping']}</span>`;
 
-          const zipBlob = await zip.generateAsync({ type: "blob" });
-          const link = document.createElement("a");
-          link.href = URL.createObjectURL(zipBlob);
-          link.download = "Compressed-Files.zip";
-          link.click();
-          URL.revokeObjectURL(link.href);
+          try {
+            const zip = new JSZip();
+            compressedFiles.forEach((f) => {
+              const base = sanitizeFilename(f.name).replace(/\.[^/.]+$/, "");
+              const ext = getExtensionForBlob(f.blob, f.name);
+              zip.file(`${base}-compressed.${ext}`, f.blob);
+            });
+            const zipBlob = await zip.generateAsync({ type: "blob" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(zipBlob);
+            link.download = "Compressed-Files.zip";
+            link.click();
+            URL.revokeObjectURL(link.href);
+          } catch(err) {
+            console.error("Error creating zip file:", err);
+            // Optionally, show an error message to the user here
+          } finally {
+            downloadAllBtn.disabled = false;
+            downloadAllBtn.innerHTML = originalHTML;
+            // Re-run translation in case language changed while zipping
+            translatePage(); 
+          }
         });
       });
     </script>
