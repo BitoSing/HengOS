@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>File-Compressor Pro (Fixed)</title>
+    <title>File-Compressor Pro (with Remove Item)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Khmer:wght@400;700&display=swap"
@@ -16,7 +16,6 @@
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
     <style>
-      /* === Professional UI Redesign v4 (Final) === */
       :root {
         --primary-hue: 210;
         --bg-light: #f8f9fc;
@@ -45,10 +44,8 @@
         --text-muted: var(--text-muted-light);
         --accent: var(--accent-light);
         --accent-hover: var(--accent-hover-light);
-        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
-          0 2px 4px -2px rgba(0, 0, 0, 0.05);
-        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05),
-          0 4px 6px -4px rgba(0, 0, 0, 0.05);
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
       }
       html.dark {
         --bg: var(--bg-dark);
@@ -59,16 +56,11 @@
         --text-muted: var(--text-muted-dark);
         --accent: var(--accent-dark);
         --accent-hover: var(--accent-hover-dark);
-        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2),
-          0 2px 4px -2px rgba(0, 0, 0, 0.2);
-        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2),
-          0 4px 6px -4px rgba(0, 0, 0, 0.2);
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
       }
-      *,
-      ::before,
-      ::after {
-        transition: background-color 0.2s, border-color 0.2s, color 0.2s,
-          box-shadow 0.2s, opacity 0.2s, transform 0.2s;
+      *, ::before, ::after {
+        transition: background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s, opacity 0.2s, transform 0.2s;
       }
       body {
         font-family: "Inter", "Noto Sans Khmer", sans-serif;
@@ -104,9 +96,12 @@
       .language-flag { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
       #dropzone { border: 2px dashed var(--border); background-color: var(--bg); border-radius: 1.25rem; padding: 2.5rem; }
       #dropzone.dragover { border-style: solid; border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent); transform: scale(1.02); }
+      /* ✅ UPGRADE: Grid layout adjusted to accomodate action buttons */
       .file-item { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; padding: 1rem; background-color: var(--bg); border: 1px solid var(--border); border-radius: 1rem; }
       .file-item .font-title { word-break: break-all; }
       .file-status-icon { width: 2.25rem; height: 2.25rem; display: flex; align-items: center; justify-content: center; }
+      /* ✅ UPGRADE: Flex container for multiple action buttons */
+      .file-actions { display: flex; align-items: center; gap: 0.25rem; }
       .spinner { animation: spin 1s linear infinite; }
       @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
       .progress-bar-wrapper { width: 100%; height: 6px; background-color: var(--border); border-radius: 3px; margin-top: 0.25rem; overflow: hidden; }
@@ -130,18 +125,8 @@
     >
       <div class="page-wrapper">
         <a href="index.html" class="back-to-home-btn" id="back-to-home">
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
-            ></path>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
           </svg>
           <span data-i18n-key="back-to-home">Back to Home</span>
         </a>
@@ -149,12 +134,8 @@
         <div class="main-card">
           <header class="flex justify-between items-center gap-4 mb-8">
             <div>
-              <h1 class="font-title text-3xl" data-i18n-key="main-title">
-                File Compressor
-              </h1>
-              <p class="font-body text-base mt-1" data-i18n-key="sub-heading">
-                Compress Images, PDFs, and Office documents.
-              </p>
+              <h1 class="font-title text-3xl" data-i18n-key="main-title">File Compressor</h1>
+              <p class="font-body text-base mt-1" data-i18n-key="sub-heading">Compress Images, PDFs, and Office documents.</p>
             </div>
             <div class="flex items-center gap-2 header-controls-wrapper">
               <div class="language-selector" id="lang-selector">
@@ -184,8 +165,8 @@
                 <svg class="mx-auto h-12 w-12 font-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                 </svg>
-                <h2 class="font-title text-xl mt-4" data-i18n-key="drop-title"> Click to upload or drag & drop </h2>
-                <p class="font-muted text-sm mt-1" data-i18n-key="disclaimer"> Max file size 100MB. All processing is done locally. </p>
+                <h2 class="font-title text-xl mt-4" data-i18n-key="drop-title">Click to upload or drag & drop</h2>
+                <p class="font-muted text-sm mt-1" data-i18n-key="disclaimer">Max file size 100MB. All processing is done locally.</p>
               </label>
               <input type="file" id="file-input" multiple class="hidden" accept=".jpg,.jpeg,.png,.pdf,.docx,.docm,.dotx,.dotm,.xlsx,.xlsm,.xltx,.xltm,.pptx,.pptm,.potx,.potm" />
             </div>
@@ -197,15 +178,15 @@
                 <span data-i18n-key="download-all-btn">Download All (.zip)</span>
               </button>
               <div class="grid grid-cols-2 gap-4">
-                <button class="btn btn-secondary" id="add-more-btn" data-i18n-key="add-more-btn"> Add More </button>
-                <button class="btn btn-ghost" id="clear-all-btn" data-i18n-key="clear-all-btn"> Clear All </button>
+                <button class="btn btn-secondary" id="add-more-btn" data-i18n-key="add-more-btn">Add More</button>
+                <button class="btn btn-ghost" id="clear-all-btn" data-i18n-key="clear-all-btn">Clear All</button>
               </div>
             </div>
           </div>
         </div>
 
         <footer class="text-center mt-6 text-sm">
-          <p class="font-muted" data-i18n-key="footer-text"> © 2024 Your Privacy-First Tool. </p>
+          <p class="font-muted" data-i18n-key="footer-text">© 2024 Your Privacy-First Tool.</p>
         </footer>
       </div>
     </main>
@@ -217,10 +198,10 @@
 
         const translations = {
           en: {
-            "main-title": "File Compressor", "sub-heading": "Compress Images, PDFs, and Office documents.", "drop-title": "Click to upload or drag & drop", "disclaimer": "Max file size 100MB. All processing is done locally.", "download-all-btn": "Download All (.zip)", "add-more-btn": "Add More", "clear-all-btn": "Clear All", "footer-text": "© 2024 Your Privacy-First Tool.", "status-queued": "Queued", "status-compressing": "Compressing...", "status-zipping": "Zipping...", "status-complete": "Complete!", "status-error": "Error", "status-unsupported": "Unsupported Type", "download-btn": "Download", "back-to-home": "Back to Home",
+            "main-title": "File Compressor", "sub-heading": "Compress Images, PDFs, and Office documents.", "drop-title": "Click to upload or drag & drop", "disclaimer": "Max file size 100MB. All processing is done locally.", "download-all-btn": "Download All (.zip)", "add-more-btn": "Add More", "clear-all-btn": "Clear All", "footer-text": "© 2024 Your Privacy-First Tool.", "status-queued": "Queued", "status-compressing": "Compressing...", "status-zipping": "Zipping...", "status-complete": "Complete!", "status-error": "Error", "status-unsupported": "Unsupported Type", "download-btn": "Download", "back-to-home": "Back to Home", "remove-item-btn": "Remove item", // ✅ NEW
           },
           km: {
-            "main-title": "កម្មវិធីបង្ហាប់ឯកសារ", "sub-heading": "បង្ហាប់រូបភាព, PDF, និងឯកសារ Office។", "drop-title": "ចុចដើម្បីផ្ទុកឡើង ឬអូស និងទម្លាក់", "disclaimer": "ទំហំឯកសារអតិបរមា 100MB។ ការដំណើរការទាំងអស់ធ្វើឡើងក្នុង browser។", "download-all-btn": "ទាញយកទាំងអស់ (.zip)", "add-more-btn": "បន្ថែមឯកសារ", "clear-all-btn": "លុបទាំងអស់", "footer-text": "© 2024 ឧបករណ៍រក្សាឯកជនភាពរបស់អ្នក។", "status-queued": "កំពុងរង់ចាំ", "status-compressing": "កំពុងបង្ហាប់...", "status-zipping": "កំពុង Zip...", "status-complete": "រួចរាល់!", "status-error": "មានបញ្ហា", "status-unsupported": "ប្រភេទមិនស្គាល់", "download-btn": "ទាញយក", "back-to-home": "ត្រឡប់ទៅទំព័រដើម",
+            "main-title": "កម្មវិធីបង្ហាប់ឯកសារ", "sub-heading": "បង្ហាប់រូបភាព, PDF, និងឯកសារ Office។", "drop-title": "ចុចដើម្បីផ្ទុកឡើង ឬអូស និងទម្លាក់", "disclaimer": "ទំហំឯកសារអតិបរមា 100MB។ ការដំណើរការទាំងអស់ធ្វើឡើងក្នុង browser។", "download-all-btn": "ទាញយកទាំងអស់ (.zip)", "add-more-btn": "បន្ថែមឯកសារ", "clear-all-btn": "លុបទាំងអស់", "footer-text": "© 2024 ឧបករណ៍រក្សាឯកជនភាពរបស់អ្នក។", "status-queued": "កំពុងរង់ចាំ", "status-compressing": "កំពុងបង្ហាប់...", "status-zipping": "កំពុង Zip...", "status-complete": "រួចរាល់!", "status-error": "មានបញ្ហា", "status-unsupported": "ប្រភេទមិនស្គាល់", "download-btn": "ទាញយក", "back-to-home": "ត្រឡប់ទៅទំព័រដើម", "remove-item-btn": "លុបចេញ", // ✅ NEW
           },
         };
         const langMap = [
@@ -259,6 +240,8 @@
             }
           });
           document.querySelectorAll(".dynamic-download-btn").forEach((btn) => btn.setAttribute("title", translations[currentLang]["download-btn"]));
+          // ✅ NEW: Translate remove buttons as well
+          document.querySelectorAll(".remove-item-button").forEach((btn) => btn.setAttribute("title", translations[currentLang]["remove-item-btn"]));
         };
 
         const setLang = (langCode) => {
@@ -322,6 +305,7 @@
           }
         };
 
+        // ✅ UPGRADE: createQueueItem now adds the remove button immediately
         const createQueueItem = (file, fileId) => {
           const item = document.createElement("div");
           item.className = "file-item"; item.id = fileId;
@@ -334,7 +318,13 @@
                 </p>
                 <div class="progress-bar-wrapper" style="display: none;"><div class="progress-bar-fill"></div></div>
             </div>
-            <div class="file-actions"></div>`;
+            <div class="file-actions">
+                <button class="remove-item-button btn btn-ghost p-2 h-10 w-10 text-gray-400 hover:text-red-500 hover:bg-red-500/10" data-file-id="${fileId}" title="${translations[currentLang]['remove-item-btn']}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>`;
           return item;
         };
 
@@ -347,7 +337,8 @@
           progressBar.style.display = status === "progress" ? "block" : "none";
           if (status !== "progress") item.querySelector(".progress-bar-fill").style.width = "0%";
         };
-
+        
+        // ✅ UPGRADE: addDownloadButton now prepends to keep the remove button at the end
         const addDownloadButton = (item, blob, originalName) => {
           const actionDiv = item.querySelector(".file-actions");
           const sanitizedName = sanitizeFilename(originalName);
@@ -359,23 +350,16 @@
           link.className = "dynamic-download-btn btn btn-ghost p-2 h-10 w-10";
           link.title = translations[currentLang]["download-btn"];
           link.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>`;
-          actionDiv.innerHTML = "";
-          actionDiv.appendChild(link);
+          // Prepend the download link so the remove button stays last.
+          actionDiv.prepend(link);
         };
 
-        // --- Core Compression Logic ---
         const compressImage = (file, onProgress) => new Promise((resolve, reject) => {
-          onProgress(0.1);
-          const reader = new FileReader();
+          onProgress(0.1); const reader = new FileReader();
           reader.onload = (e) => {
             const img = new Image();
             img.onload = () => {
-              onProgress(0.5);
-              const canvas = document.createElement("canvas");
-              canvas.width = img.width; canvas.height = img.height;
-              const ctx = canvas.getContext("2d");
-              ctx.drawImage(img, 0, 0);
-              onProgress(0.9);
+              onProgress(0.5); const canvas = document.createElement("canvas"); canvas.width = img.width; canvas.height = img.height; const ctx = canvas.getContext("2d"); ctx.drawImage(img, 0, 0); onProgress(0.9);
               canvas.toBlob((blob) => { onProgress(1); resolve(blob || file); }, file.type === "image/png" ? "image/png" : "image/jpeg", 0.75);
             };
             img.onerror = () => reject(new Error("Cannot decode image. The file may be corrupt."));
@@ -384,60 +368,23 @@
           reader.onerror = reject; reader.readAsDataURL(file);
         });
 
-        // ✅✅✅ MAJOR FIX: New, robust PDF compression logic ✅✅✅
         const compressPDF = async (file, onProgress) => {
-            const { PDFDocument } = PDFLib;
-            const existingPdfBytes = await file.arrayBuffer();
-            onProgress(0.1);
-
-            // Load the original PDF
-            const pdfDoc = await PDFDocument.load(existingPdfBytes, { 
-                // This option is crucial for handling complex PDFs that pdf-lib might not fully parse.
-                // It prevents errors on malformed or encrypted documents that we can still process.
-                ignoreEncryption: true 
-            });
-            onProgress(0.2);
-            
-            // Create a new, blank PDF to build the compressed version.
-            const newPdfDoc = await PDFDocument.create();
-
-            const pageCount = pdfDoc.getPageCount();
-            
-            // This loop processes each page individually.
+            const { PDFDocument } = PDFLib; const existingPdfBytes = await file.arrayBuffer(); onProgress(0.1);
+            const pdfDoc = await PDFDocument.load(existingPdfBytes, { ignoreEncryption: true }); onProgress(0.2);
+            const newPdfDoc = await PDFDocument.create(); const pageCount = pdfDoc.getPageCount();
             for (let i = 0; i < pageCount; i++) {
-                // This is the key step: It "embeds" a page from the source PDF.
-                // This process re-encodes the page content, which is where the compression
-                // of embedded images happens. It's much safer than manual replacement.
                 const [embeddedPage] = await newPdfDoc.embedPdf(existingPdfBytes, [i]);
-
-                // Get the dimensions of the original page to create a matching new page.
-                const { width, height } = embeddedPage.size();
-                
-                // Add a new page to our blank document.
-                const newPage = newPdfDoc.addPage([width, height]);
-                
-                // Draw the (now compressed) embedded page onto our new page.
+                const { width, height } = embeddedPage.size(); const newPage = newPdfDoc.addPage([width, height]);
                 newPage.drawPage(embeddedPage, { x: 0, y: 0, width, height });
-
-                // Update the progress bar.
                 onProgress(0.2 + (0.7 * (i + 1)) / pageCount);
             }
-
-            onProgress(0.95);
-            // Save the newly created document, which now contains the compressed pages.
-            const newPdfBytes = await newPdfDoc.save();
-            onProgress(1);
-            
+            onProgress(0.95); const newPdfBytes = await newPdfDoc.save(); onProgress(1);
             return new Blob([newPdfBytes], { type: 'application/pdf' });
         };
 
-
         const compressOfficeFile = async (file, onProgress) => {
-          onProgress(0.2);
-          const buffer = await file.arrayBuffer();
-          onProgress(0.4);
-          const zip = await JSZip.loadAsync(buffer);
-          onProgress(0.8);
+          onProgress(0.2); const buffer = await file.arrayBuffer(); onProgress(0.4);
+          const zip = await JSZip.loadAsync(buffer); onProgress(0.8);
           return zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 9 } });
         };
 
@@ -448,41 +395,62 @@
           const fileItem = createQueueItem(file, fileId);
           fileQueue.appendChild(fileItem);
           const onProgress = (p) => (fileItem.querySelector(".progress-bar-fill").style.width = `${p * 100}%`);
+          const removeBtn = fileItem.querySelector('.remove-item-button'); // ✅ Get the remove button
 
           if (file.size > 100 * 1024 * 1024) {
             updateStatusUI(fileItem, "error", "→ Error: File size exceeds 100MB");
-            processingCount--;
-            updateActionButtonsState();
+            processingCount--; updateActionButtonsState();
             return;
           }
 
           try {
+            if (removeBtn) removeBtn.disabled = true; // ✅ Disable button during processing
             updateStatusUI(fileItem, "progress", `→ ${translations[currentLang]["status-compressing"]}`);
             let compressedBlob;
             const name = file.name.toLowerCase();
 
-            if (file.type.startsWith("image/")) {
-                compressedBlob = await compressImage(file, onProgress);
-            } else if (file.type === "application/pdf") {
-                compressedBlob = await compressPDF(file, onProgress);
-            } else if (name.match(/\.(docx|docm|dotx|dotm|xlsx|xlsm|xltx|xltm|pptx|pptm|potx|potm)$/i)) {
-                compressedBlob = await compressOfficeFile(file, onProgress);
-            } else {
-                throw new Error("unsupported");
-            }
+            if (file.type.startsWith("image/")) compressedBlob = await compressImage(file, onProgress);
+            else if (file.type === "application/pdf") compressedBlob = await compressPDF(file, onProgress);
+            else if (name.match(/\.(docx|docm|dotx|dotm|xlsx|xlsm|xltx|xltm|pptx|pptm|potx|potm)$/i)) compressedBlob = await compressOfficeFile(file, onProgress);
+            else throw new Error("unsupported");
 
             const ratio = file.size > 0 ? 1 - compressedBlob.size / file.size : 0;
             updateStatusUI(fileItem, "success", `→ ${formatFileSize(compressedBlob.size)} (${Math.round(ratio * 100)}% smaller)`);
             addDownloadButton(fileItem, compressedBlob, file.name);
-            compressedFiles.push({ blob: compressedBlob, name: file.name });
+            compressedFiles.push({ fileId, blob: compressedBlob, name: file.name }); // ✅ Store fileId with compressed data
           } catch (err) {
             console.error("Compression failed for file:", file.name, err);
             const key = err.message === "unsupported" ? "status-unsupported" : "status-error";
             updateStatusUI(fileItem, "error", `→ ${translations[currentLang][key]}`, err.message);
           } finally {
+            if (removeBtn) removeBtn.disabled = false; // ✅ Re-enable button after processing
             processingCount--;
             updateActionButtonsState();
           }
+        };
+
+        // ✅ NEW: Function to remove a single item from the queue
+        const removeQueueItem = (fileId) => {
+            const item = document.getElementById(fileId);
+            if (!item) return;
+
+            // Clean up any generated blob URLs to prevent memory leaks
+            const downloadLink = item.querySelector('a[download]');
+            if (downloadLink && downloadLink.href) {
+                URL.revokeObjectURL(downloadLink.href);
+            }
+
+            // Remove the item from the DOM
+            item.remove();
+
+            // Remove the file from the compressed files array
+            const index = compressedFiles.findIndex(f => f.fileId === fileId);
+            if (index > -1) {
+                compressedFiles.splice(index, 1);
+            }
+            
+            // Update the main action buttons state
+            updateActionButtonsState();
         };
 
         const handleFiles = (files) => {
@@ -494,10 +462,7 @@
 
         const resetState = () => {
           fileQueue.querySelectorAll("a[download]").forEach((link) => URL.revokeObjectURL(link.href));
-          fileQueue.innerHTML = "";
-          fileInput.value = "";
-          compressedFiles = [];
-          processingCount = 0;
+          fileQueue.innerHTML = ""; fileInput.value = ""; compressedFiles = []; processingCount = 0;
           updateActionButtonsState();
         };
 
@@ -509,13 +474,19 @@
         addMoreBtn.addEventListener("click", () => { if (!addMoreBtn.disabled) fileInput.click(); });
         clearAllBtn.addEventListener("click", () => { if (!clearAllBtn.disabled) resetState(); });
 
+        // ✅ NEW: Event listener on the queue for handling individual removes
+        fileQueue.addEventListener('click', (e) => {
+            const removeBtn = e.target.closest('.remove-item-button');
+            if (removeBtn && !removeBtn.disabled) {
+                const fileId = removeBtn.dataset.fileId;
+                removeQueueItem(fileId);
+            }
+        });
+
         downloadAllBtn.addEventListener("click", async () => {
           if (downloadAllBtn.disabled) return;
-          downloadAllBtn.disabled = true;
-          const originalHTML = downloadAllBtn.innerHTML;
-          downloadAllBtn.innerHTML = `
-              <svg class="spinner w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-              <span>${translations[currentLang]['status-zipping']}</span>`;
+          downloadAllBtn.disabled = true; const originalHTML = downloadAllBtn.innerHTML;
+          downloadAllBtn.innerHTML = `<svg class="spinner w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><span>${translations[currentLang]['status-zipping']}</span>`;
           try {
             const zip = new JSZip();
             compressedFiles.forEach((f) => {
@@ -524,16 +495,12 @@
               zip.file(`${base}-compressed.${ext}`, f.blob);
             });
             const zipBlob = await zip.generateAsync({ type: "blob" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(zipBlob);
-            link.download = "Compressed-Files.zip";
-            link.click();
-            URL.revokeObjectURL(link.href);
+            const link = document.createElement("a"); link.href = URL.createObjectURL(zipBlob);
+            link.download = "Compressed-Files.zip"; link.click(); URL.revokeObjectURL(link.href);
           } catch(err) {
             console.error("Error creating zip file:", err);
           } finally {
-            downloadAllBtn.disabled = false;
-            downloadAllBtn.innerHTML = originalHTML;
+            downloadAllBtn.disabled = false; downloadAllBtn.innerHTML = originalHTML;
             translatePage(); 
           }
         });
