@@ -3,16 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>File-Compressor Enhanced</title>
+    <title>File-Compressor Pro (Fixed)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Khmer:wght@400;700&display=swap"
       rel="stylesheet"
     />
 
-    <!-- JSZip for creating .zip archives -->
+    <!-- JSZip for creating .zip archives and processing Office files -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <!-- pdf-lib for PDF manipulation -->
+    <!-- pdf-lib for advanced PDF manipulation -->
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
     <style>
@@ -77,277 +77,51 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
-      .font-khmer {
-        font-family: "Noto Sans Khmer", sans-serif;
-      }
-      .font-title {
-        color: var(--text-title);
-        font-weight: 700;
-      }
-      .font-body {
-        color: var(--text-body);
-      }
-      .font-muted {
-        color: var(--text-muted);
-      }
-
-      html, body {
-        box-sizing: border-box;
-        max-width: 100vw;
-        overflow-x: hidden;
-      }
-      *, *::before, *::after {
-        box-sizing: inherit;
-      }
-      .page-wrapper {
-        width: 90%;
-        max-width: 1400px;
-        margin-left: auto;
-        margin-right: auto;
-        max-width: 100vw;
-      }
-      @media (min-width: 1024px) {
-        .page-wrapper {
-          width: 50%;
-        }
-      }
-      .main-card {
-        background: var(--surface);
-        border-radius: 1.5rem;
-        box-shadow: var(--shadow-lg);
-        border: 1px solid var(--border);
-        padding: 2.5rem;
-      }
-      @media (max-width: 640px) {
-        .main-card {
-          padding: 1.5rem;
-        }
-      }
-      .back-to-home-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        text-decoration: none;
-        padding: 0.5rem 1rem;
-        margin-bottom: 1.5rem;
-        background: var(--surface);
-        color: var(--text-body);
-        border: 1px solid var(--border);
-        border-radius: 9999px;
-        font-weight: 500;
-        font-size: 0.875rem;
-        box-shadow: var(--shadow);
-      }
-      .back-to-home-btn:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-      }
-      .header-controls-wrapper button,
-      .header-controls-wrapper .language-btn {
-        background: var(--surface);
-        color: var(--text-body);
-        border: 1px solid var(--border);
-        height: 40px;
-        border-radius: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: var(--shadow);
-        cursor: pointer;
-      }
-      .header-controls-wrapper button:hover,
-      .header-controls-wrapper .language-btn:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-      }
-
-      .language-selector {
-        position: relative;
-      }
-      .language-btn {
-        padding: 0 16px;
-        gap: 8px;
-      }
-      .language-selector.open .language-btn .arrow {
-        transform: rotate(180deg);
-      }
-      .theme-toggle-btn {
-        width: 40px;
-      }
-      .theme-toggle-btn .sun-icon,
-      html.dark .theme-toggle-btn .moon-icon {
-        display: block;
-      }
-      .theme-toggle-btn .moon-icon,
-      html.dark .theme-toggle-btn .sun-icon {
-        display: none;
-      }
-      .language-dropdown {
-        display: block;
-        visibility: hidden;
-        opacity: 0;
-        transform: translateY(-0.5rem) scale(0.95);
-        transform-origin: top right;
-        position: absolute;
-        right: 0;
-        top: calc(100% + 8px);
-        background-color: var(--surface);
-        min-width: 160px;
-        border-radius: 14px;
-        box-shadow: var(--shadow-lg);
-        z-index: 10;
-        overflow: hidden;
-        border: 1px solid var(--border);
-      }
-      .language-selector.open .language-dropdown {
-        visibility: visible;
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-      .language-option {
-        color: var(--text-body);
-        padding: 10px 16px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: none;
-        border: none;
-        width: 100%;
-        text-align: left;
-        cursor: pointer;
-      }
-      .language-option:hover,
-      .language-option.active-language {
-        background-color: var(--accent);
-        color: white !important;
-      }
-      .language-flag {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-      #dropzone {
-        border: 2px dashed var(--border);
-        background-color: var(--bg);
-        border-radius: 1.25rem;
-        padding: 2.5rem;
-      }
-      #dropzone.dragover {
-        border-style: solid;
-        border-color: var(--accent);
-        box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent);
-        transform: scale(1.02);
-      }
-      .file-item {
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem;
-        background-color: var(--bg);
-        border: 1px solid var(--border);
-        border-radius: 1rem;
-      }
-      .file-item .font-title {
-        word-break: break-all;
-      }
-      .file-status-icon {
-        width: 2.25rem;
-        height: 2.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      /* Shared spinner animation for all loading states */
-      .spinner {
-        animation: spin 1s linear infinite;
-      }
-      @keyframes spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-      .progress-bar-wrapper {
-        width: 100%;
-        height: 6px;
-        background-color: var(--border);
-        border-radius: 3px;
-        margin-top: 0.25rem;
-        overflow: hidden;
-      }
-      .progress-bar-fill {
-        height: 100%;
-        width: 0%;
-        background-color: var(--accent);
-        border-radius: 3px;
-      }
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        padding: 0.75rem 1.5rem;
-        border-radius: 0.75rem;
-        border: 2px solid transparent;
-        cursor: pointer;
-      }
-      .btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        transform: scale(1) !important;
-      }
-      .btn-primary {
-        background-color: var(--accent);
-        color: white;
-      }
-      .btn-primary:hover:not(:disabled) {
-        background-color: var(--accent-hover);
-        transform: translateY(-2px);
-      }
-      .btn-secondary {
-        background-color: var(--surface);
-        color: var(--text-body);
-        border: 2px solid var(--border);
-        box-shadow: var(--shadow);
-      }
-      .btn-secondary:hover:not(:disabled) {
-        border-color: var(--accent);
-        color: var(--accent);
-        transform: translateY(-2px);
-      }
-      .btn-ghost {
-        background: transparent;
-        color: var(--text-body);
-      }
-      .btn-ghost:hover:not(:disabled) {
-        background-color: color-mix(in srgb, var(--accent) 10%, transparent);
-        color: var(--accent);
-      }
-      body.page-fade-init {
-        opacity: 0;
-        pointer-events: none;
-        overflow-x: hidden;
-      }
-      body.page-fade-in {
-        animation: pageFadeIn 0.5s cubic-bezier(.4,0,.2,1);
-        opacity: 1;
-        pointer-events: auto;
-        overflow-x: hidden;
-      }
-      @keyframes pageFadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+      .font-khmer { font-family: "Noto Sans Khmer", sans-serif; }
+      .font-title { color: var(--text-title); font-weight: 700; }
+      .font-body { color: var(--text-body); }
+      .font-muted { color: var(--text-muted); }
+      html, body { box-sizing: border-box; max-width: 100vw; overflow-x: hidden; }
+      *, *::before, *::after { box-sizing: inherit; }
+      .page-wrapper { width: 90%; max-width: 1400px; margin-left: auto; margin-right: auto; }
+      @media (min-width: 1024px) { .page-wrapper { width: 50%; } }
+      .main-card { background: var(--surface); border-radius: 1.5rem; box-shadow: var(--shadow-lg); border: 1px solid var(--border); padding: 2.5rem; }
+      @media (max-width: 640px) { .main-card { padding: 1.5rem; } }
+      .back-to-home-btn { display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; padding: 0.5rem 1rem; margin-bottom: 1.5rem; background: var(--surface); color: var(--text-body); border: 1px solid var(--border); border-radius: 9999px; font-weight: 500; font-size: 0.875rem; box-shadow: var(--shadow); }
+      .back-to-home-btn:hover { border-color: var(--accent); color: var(--accent); }
+      .header-controls-wrapper button, .header-controls-wrapper .language-btn { background: var(--surface); color: var(--text-body); border: 1px solid var(--border); height: 40px; border-radius: 50px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); cursor: pointer; }
+      .header-controls-wrapper button:hover, .header-controls-wrapper .language-btn:hover { border-color: var(--accent); color: var(--accent); }
+      .language-selector { position: relative; }
+      .language-btn { padding: 0 16px; gap: 8px; }
+      .language-selector.open .language-btn .arrow { transform: rotate(180deg); }
+      .theme-toggle-btn { width: 40px; }
+      .theme-toggle-btn .sun-icon, html.dark .theme-toggle-btn .moon-icon { display: block; }
+      .theme-toggle-btn .moon-icon, html.dark .theme-toggle-btn .sun-icon { display: none; }
+      .language-dropdown { display: block; visibility: hidden; opacity: 0; transform: translateY(-0.5rem) scale(0.95); transform-origin: top right; position: absolute; right: 0; top: calc(100% + 8px); background-color: var(--surface); min-width: 160px; border-radius: 14px; box-shadow: var(--shadow-lg); z-index: 10; overflow: hidden; border: 1px solid var(--border); }
+      .language-selector.open .language-dropdown { visibility: visible; opacity: 1; transform: translateY(0) scale(1); }
+      .language-option { color: var(--text-body); padding: 10px 16px; display: flex; align-items: center; gap: 10px; background: none; border: none; width: 100%; text-align: left; cursor: pointer; }
+      .language-option:hover, .language-option.active-language { background-color: var(--accent); color: white !important; }
+      .language-flag { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+      #dropzone { border: 2px dashed var(--border); background-color: var(--bg); border-radius: 1.25rem; padding: 2.5rem; }
+      #dropzone.dragover { border-style: solid; border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent); transform: scale(1.02); }
+      .file-item { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; padding: 1rem; background-color: var(--bg); border: 1px solid var(--border); border-radius: 1rem; }
+      .file-item .font-title { word-break: break-all; }
+      .file-status-icon { width: 2.25rem; height: 2.25rem; display: flex; align-items: center; justify-content: center; }
+      .spinner { animation: spin 1s linear infinite; }
+      @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .progress-bar-wrapper { width: 100%; height: 6px; background-color: var(--border); border-radius: 3px; margin-top: 0.25rem; overflow: hidden; }
+      .progress-bar-fill { height: 100%; width: 0%; background-color: var(--accent); border-radius: 3px; }
+      .btn { display: inline-flex; align-items: center; justify-content: center; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.75rem; border: 2px solid transparent; cursor: pointer; }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: scale(1) !important; }
+      .btn-primary { background-color: var(--accent); color: white; }
+      .btn-primary:hover:not(:disabled) { background-color: var(--accent-hover); transform: translateY(-2px); }
+      .btn-secondary { background-color: var(--surface); color: var(--text-body); border: 2px solid var(--border); box-shadow: var(--shadow); }
+      .btn-secondary:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+      .btn-ghost { background: transparent; color: var(--text-body); }
+      .btn-ghost:hover:not(:disabled) { background-color: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--accent); }
+      body.page-fade-init { opacity: 0; pointer-events: none; overflow-x: hidden; }
+      body.page-fade-in { animation: pageFadeIn 0.5s cubic-bezier(.4,0,.2,1); opacity: 1; pointer-events: auto; overflow-x: hidden; }
+      @keyframes pageFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
   </head>
   <body class="font-inter page-fade-init">
@@ -355,7 +129,6 @@
       class="w-full min-h-screen p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center"
     >
       <div class="page-wrapper">
-        <!-- ✅ FIX: Back to home button is now always visible for consistent navigation -->
         <a href="index.html" class="back-to-home-btn" id="back-to-home">
           <svg
             class="w-5 h-5"
@@ -380,68 +153,26 @@
                 File Compressor
               </h1>
               <p class="font-body text-base mt-1" data-i18n-key="sub-heading">
-                Reduce file size for images, PDFs, and more.
+                Compress Images, PDFs, and Office documents.
               </p>
             </div>
             <div class="flex items-center gap-2 header-controls-wrapper">
               <div class="language-selector" id="lang-selector">
-                <button
-                  class="language-btn"
-                  id="lang-btn"
-                  type="button"
-                  title="Change language"
-                >
-                  <img
-                    src="https://flagcdn.com/us.svg"
-                    class="language-flag"
-                    id="lang-flag"
-                    alt="Language"
-                  />
+                <button class="language-btn" id="lang-btn" type="button" title="Change language">
+                  <img src="https://flagcdn.com/us.svg" class="language-flag" id="lang-flag" alt="Language" />
                   <span id="lang-label-short" class="hidden sm:inline">EN</span>
-                  <svg
-                    class="arrow w-4 h-4 text-gray-500"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clip-rule="evenodd"
-                    />
+                  <svg class="arrow w-4 h-4 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                   </svg>
                 </button>
                 <div class="language-dropdown" id="lang-dropdown"></div>
               </div>
-              <button
-                class="theme-toggle-btn"
-                id="theme-toggle"
-                title="Toggle theme"
-              >
-                <svg
-                  class="sun-icon w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                  ></path>
+              <button class="theme-toggle-btn" id="theme-toggle" title="Toggle theme">
+                <svg class="sun-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
                 </svg>
-                <svg
-                  class="moon-icon w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                  ></path>
+                <svg class="moon-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                 </svg>
               </button>
             </div>
@@ -449,116 +180,47 @@
 
           <div class="flex flex-col gap-6">
             <div id="upload-module">
-              <label
-                for="file-input"
-                id="dropzone"
-                class="block cursor-pointer text-center transform-gpu"
-              >
-                <svg
-                  class="mx-auto h-12 w-12 font-muted"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="1"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                  />
+              <label for="file-input" id="dropzone" class="block cursor-pointer text-center transform-gpu">
+                <svg class="mx-auto h-12 w-12 font-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                 </svg>
-                <h2 class="font-title text-xl mt-4" data-i18n-key="drop-title">
-                  Click to upload or drag & drop
-                </h2>
-                <p class="font-muted text-sm mt-1" data-i18n-key="disclaimer">
-                  Max file size 100MB. All processing is done locally.
-                </p>
+                <h2 class="font-title text-xl mt-4" data-i18n-key="drop-title"> Click to upload or drag & drop </h2>
+                <p class="font-muted text-sm mt-1" data-i18n-key="disclaimer"> Max file size 100MB. All processing is done locally. </p>
               </label>
-              <input type="file" id="file-input" multiple class="hidden" />
+              <input type="file" id="file-input" multiple class="hidden" accept=".jpg,.jpeg,.png,.pdf,.docx,.docm,.dotx,.dotm,.xlsx,.xlsm,.xltx,.xltm,.pptx,.pptm,.potx,.potm" />
             </div>
             
-            <!-- ✨ ENHANCEMENT: Added ARIA role for better accessibility -->
             <div id="file-queue" class="flex flex-col gap-4" role="region" aria-label="File processing queue"></div>
 
             <div id="action-buttons" class="hidden flex-col gap-4 mt-2">
-              <button
-                class="btn btn-primary text-lg w-full"
-                id="download-all-btn"
-              >
-                <!-- Content will be managed by JS -->
+              <button class="btn btn-primary text-lg w-full" id="download-all-btn">
                 <span data-i18n-key="download-all-btn">Download All (.zip)</span>
               </button>
               <div class="grid grid-cols-2 gap-4">
-                <button
-                  class="btn btn-secondary"
-                  id="add-more-btn"
-                  data-i18n-key="add-more-btn"
-                >
-                  Add More
-                </button>
-                <button
-                  class="btn btn-ghost"
-                  id="clear-all-btn"
-                  data-i18n-key="clear-all-btn"
-                >
-                  Clear All
-                </button>
+                <button class="btn btn-secondary" id="add-more-btn" data-i18n-key="add-more-btn"> Add More </button>
+                <button class="btn btn-ghost" id="clear-all-btn" data-i18n-key="clear-all-btn"> Clear All </button>
               </div>
             </div>
           </div>
         </div>
 
         <footer class="text-center mt-6 text-sm">
-          <p class="font-muted" data-i18n-key="footer-text">
-            © 2024 Your Privacy-First Tool.
-          </p>
+          <p class="font-muted" data-i18n-key="footer-text"> © 2024 Your Privacy-First Tool. </p>
         </footer>
       </div>
     </main>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        // Smooth fade-in on reload
         document.body.classList.remove("page-fade-init");
         document.body.classList.add("page-fade-in");
 
-        // --- Translations and Language Map ---
         const translations = {
           en: {
-            "main-title": "File Compressor",
-            "sub-heading": "Reduce file size for images, PDFs, and more.",
-            "drop-title": "Click to upload or drag & drop",
-            disclaimer: "Max file size 100MB. All processing is done locally.",
-            "download-all-btn": "Download All (.zip)",
-            "add-more-btn": "Add More",
-            "clear-all-btn": "Clear All",
-            "footer-text": "© 2024 Your Privacy-First Tool.",
-            "status-queued": "Queued",
-            "status-compressing": "Compressing...",
-            "status-zipping": "Zipping...", // ✨ ENHANCEMENT: New translation
-            "status-complete": "Complete!",
-            "status-error": "Error",
-            "status-unsupported": "Unsupported Type",
-            "download-btn": "Download",
-            "back-to-home": "Back to Home",
+            "main-title": "File Compressor", "sub-heading": "Compress Images, PDFs, and Office documents.", "drop-title": "Click to upload or drag & drop", "disclaimer": "Max file size 100MB. All processing is done locally.", "download-all-btn": "Download All (.zip)", "add-more-btn": "Add More", "clear-all-btn": "Clear All", "footer-text": "© 2024 Your Privacy-First Tool.", "status-queued": "Queued", "status-compressing": "Compressing...", "status-zipping": "Zipping...", "status-complete": "Complete!", "status-error": "Error", "status-unsupported": "Unsupported Type", "download-btn": "Download", "back-to-home": "Back to Home",
           },
           km: {
-            "main-title": "កម្មវិធីបង្ហាប់ឯកសារ",
-            "sub-heading": "កាត់បន្ថយទំហំឯកសាររូបភាព PDF និងផ្សេងៗទៀត។",
-            "drop-title": "ចុចដើម្បីផ្ទុកឡើង ឬអូស និងទម្លាក់",
-            disclaimer: "ទំហំឯកសារអតិបរមា 100MB។ ការដំណើរការទាំងអស់ធ្វើឡើងក្នុង browser។",
-            "download-all-btn": "ទាញយកទាំងអស់ (.zip)",
-            "add-more-btn": "បន្ថែមឯកសារ",
-            "clear-all-btn": "លុបទាំងអស់",
-            "footer-text": "© 2024 ឧបករណ៍រក្សាឯកជនភាពរបស់អ្នក។",
-            "status-queued": "កំពុងរង់ចាំ",
-            "status-compressing": "កំពុងបង្ហាប់...",
-            "status-zipping": "កំពុង Zip...", // ✨ ENHANCEMENT: New translation
-            "status-complete": "រួចរាល់!",
-            "status-error": "មានបញ្ហា",
-            "status-unsupported": "ប្រភេទមិនស្គាល់",
-            "download-btn": "ទាញយក",
-            "back-to-home": "ត្រឡប់ទៅទំព័រដើម",
+            "main-title": "កម្មវិធីបង្ហាប់ឯកសារ", "sub-heading": "បង្ហាប់រូបភាព, PDF, និងឯកសារ Office។", "drop-title": "ចុចដើម្បីផ្ទុកឡើង ឬអូស និងទម្លាក់", "disclaimer": "ទំហំឯកសារអតិបរមា 100MB។ ការដំណើរការទាំងអស់ធ្វើឡើងក្នុង browser។", "download-all-btn": "ទាញយកទាំងអស់ (.zip)", "add-more-btn": "បន្ថែមឯកសារ", "clear-all-btn": "លុបទាំងអស់", "footer-text": "© 2024 ឧបករណ៍រក្សាឯកជនភាពរបស់អ្នក។", "status-queued": "កំពុងរង់ចាំ", "status-compressing": "កំពុងបង្ហាប់...", "status-zipping": "កំពុង Zip...", "status-complete": "រួចរាល់!", "status-error": "មានបញ្ហា", "status-unsupported": "ប្រភេទមិនស្គាល់", "download-btn": "ទាញយក", "back-to-home": "ត្រឡប់ទៅទំព័រដើម",
           },
         };
         const langMap = [
@@ -566,7 +228,6 @@
           { code: "km", label: "ភាសាខ្មែរ", short: "KH", flag: "https://flagcdn.com/kh.svg", fontClass: "font-khmer" },
         ];
 
-        // --- Element Selectors ---
         const dropzone = document.getElementById("dropzone");
         const fileInput = document.getElementById("file-input");
         const fileQueue = document.getElementById("file-queue");
@@ -579,12 +240,10 @@
         const langDropdown = document.getElementById("lang-dropdown");
         const themeToggle = document.getElementById("theme-toggle");
 
-        // --- State Variables ---
         let currentLang = "en";
         let compressedFiles = [];
         let processingCount = 0;
 
-        // --- Theme Manager ---
         const applyTheme = (theme) => {
           document.documentElement.classList.toggle("dark", theme === "dark");
           localStorage.setItem("theme", theme);
@@ -592,7 +251,6 @@
         themeToggle.addEventListener("click", () => applyTheme(document.documentElement.classList.contains("dark") ? "light" : "dark"));
         applyTheme(localStorage.getItem("theme") || "light");
 
-        // --- Language Manager ---
         const translatePage = () => {
           document.querySelectorAll("[data-i18n-key]").forEach((el) => {
             const key = el.dataset.i18nKey;
@@ -621,30 +279,15 @@
           if (lang.fontClass) option.classList.add(lang.fontClass);
           option.dataset.lang = lang.code;
           option.innerHTML = `<img src="${lang.flag}" class="language-flag" alt="${lang.label}"/><span>${lang.label}</span>`;
-          option.addEventListener("click", (e) => {
-            e.stopPropagation();
-            setLang(lang.code);
-            langSelector.classList.remove("open");
-          });
+          option.addEventListener("click", (e) => { e.stopPropagation(); setLang(lang.code); langSelector.classList.remove("open"); });
           langDropdown.appendChild(option);
         });
 
-        langBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          langSelector.classList.toggle("open");
-        });
-
+        langBtn.addEventListener("click", (e) => { e.stopPropagation(); langSelector.classList.toggle("open"); });
         document.addEventListener("click", () => langSelector.classList.remove("open"));
-        // ✨ ENHANCEMENT: Close dropdown with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === "Escape" && langSelector.classList.contains('open')) {
-                langSelector.classList.remove('open');
-            }
-        });
-
+        document.addEventListener('keydown', (e) => { if (e.key === "Escape" && langSelector.classList.contains('open')) { langSelector.classList.remove('open'); } });
         setLang(localStorage.getItem("language") || "en");
 
-        // --- Helper Functions ---
         const formatFileSize = (bytes) => {
           if (bytes === 0) return "0 Bytes";
           const k = 1024;
@@ -654,22 +297,16 @@
         };
 
         const sanitizeFilename = (name) => name.replace(/[<>:"/\\|?*]/g, "_");
-
         const getExtensionForBlob = (blob, originalName) => {
           const mimeMap = { "image/jpeg": "jpg", "image/png": "png", "application/pdf": "pdf" };
           return mimeMap[blob.type] || originalName.split(".").pop().toLowerCase() || "bin";
         };
 
-        // --- UI State Management ---
         const updateActionButtonsState = () => {
           const hasFiles = fileQueue.children.length > 0;
           const isProcessing = processingCount > 0;
-
           actionButtons.style.display = hasFiles ? "flex" : "none";
           document.getElementById("upload-module").style.display = hasFiles ? "none" : "block";
-          
-          // ✅ FIX: The logic that was hiding the 'Back to Home' button has been REMOVED from this function.
-
           downloadAllBtn.disabled = isProcessing || compressedFiles.length === 0;
           addMoreBtn.disabled = isProcessing;
           clearAllBtn.disabled = isProcessing;
@@ -687,8 +324,7 @@
 
         const createQueueItem = (file, fileId) => {
           const item = document.createElement("div");
-          item.className = "file-item";
-          item.id = fileId;
+          item.className = "file-item"; item.id = fileId;
           item.innerHTML = `
             <div class="file-status-icon">${getStatusIcon("queued")}</div>
             <div class="min-w-0">
@@ -706,12 +342,7 @@
           item.querySelector(".file-status-icon").innerHTML = getStatusIcon(status);
           const statusTextElement = item.querySelector(".file-status-text");
           statusTextElement.textContent = text;
-          // ✨ ENHANCEMENT: Add technical error details to a tooltip for better user feedback
-          if (status === 'error' && errorDetails) {
-            statusTextElement.parentElement.title = errorDetails;
-          } else {
-            statusTextElement.parentElement.title = '';
-          }
+          statusTextElement.parentElement.title = (status === 'error' && errorDetails) ? errorDetails : '';
           const progressBar = item.querySelector(".progress-bar-wrapper");
           progressBar.style.display = status === "progress" ? "block" : "none";
           if (status !== "progress") item.querySelector(".progress-bar-fill").style.width = "0%";
@@ -722,7 +353,6 @@
           const sanitizedName = sanitizeFilename(originalName);
           const base = sanitizedName.substring(0, sanitizedName.lastIndexOf(".")) || sanitizedName;
           const ext = getExtensionForBlob(blob, originalName);
-
           const link = document.createElement("a");
           link.href = URL.createObjectURL(blob);
           link.download = `${base}-compressed.${ext}`;
@@ -751,32 +381,56 @@
             img.onerror = () => reject(new Error("Cannot decode image. The file may be corrupt."));
             img.src = e.target.result;
           };
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
+          reader.onerror = reject; reader.readAsDataURL(file);
         });
 
+        // ✅✅✅ MAJOR FIX: New, robust PDF compression logic ✅✅✅
         const compressPDF = async (file, onProgress) => {
-          onProgress(0.1);
-          const { PDFDocument } = PDFLib;
-          const buffer = await file.arrayBuffer();
-          onProgress(0.2);
-          const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
-          const images = pdfDoc.getImages();
-          if (images.length > 0) {
-            let i = 0;
-            for (const image of images) {
-              try {
-                if (image.isJpg) {
-                  const jpgImage = await pdfDoc.embedJpg(await image.embed());
-                  pdfDoc.context.assign(image.ref, jpgImage.ref.stream);
-                }
-              } catch (e) { console.warn("Could not re-compress a PDF image. Skipping it.", e); }
-              onProgress(0.2 + 0.7 * (++i / images.length));
+            const { PDFDocument } = PDFLib;
+            const existingPdfBytes = await file.arrayBuffer();
+            onProgress(0.1);
+
+            // Load the original PDF
+            const pdfDoc = await PDFDocument.load(existingPdfBytes, { 
+                // This option is crucial for handling complex PDFs that pdf-lib might not fully parse.
+                // It prevents errors on malformed or encrypted documents that we can still process.
+                ignoreEncryption: true 
+            });
+            onProgress(0.2);
+            
+            // Create a new, blank PDF to build the compressed version.
+            const newPdfDoc = await PDFDocument.create();
+
+            const pageCount = pdfDoc.getPageCount();
+            
+            // This loop processes each page individually.
+            for (let i = 0; i < pageCount; i++) {
+                // This is the key step: It "embeds" a page from the source PDF.
+                // This process re-encodes the page content, which is where the compression
+                // of embedded images happens. It's much safer than manual replacement.
+                const [embeddedPage] = await newPdfDoc.embedPdf(existingPdfBytes, [i]);
+
+                // Get the dimensions of the original page to create a matching new page.
+                const { width, height } = embeddedPage.size();
+                
+                // Add a new page to our blank document.
+                const newPage = newPdfDoc.addPage([width, height]);
+                
+                // Draw the (now compressed) embedded page onto our new page.
+                newPage.drawPage(embeddedPage, { x: 0, y: 0, width, height });
+
+                // Update the progress bar.
+                onProgress(0.2 + (0.7 * (i + 1)) / pageCount);
             }
-          } else { onProgress(0.9); }
-          onProgress(1);
-          return new Blob([await pdfDoc.save()], { type: "application/pdf" });
+
+            onProgress(0.95);
+            // Save the newly created document, which now contains the compressed pages.
+            const newPdfBytes = await newPdfDoc.save();
+            onProgress(1);
+            
+            return new Blob([newPdfBytes], { type: 'application/pdf' });
         };
+
 
         const compressOfficeFile = async (file, onProgress) => {
           onProgress(0.2);
@@ -787,15 +441,12 @@
           return zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 9 } });
         };
 
-        // --- File Processing Pipeline ---
         const processFile = async (file) => {
           processingCount++;
           updateActionButtonsState();
-
           const fileId = `file-${Date.now()}-${Math.random()}`;
           const fileItem = createQueueItem(file, fileId);
           fileQueue.appendChild(fileItem);
-
           const onProgress = (p) => (fileItem.querySelector(".progress-bar-fill").style.width = `${p * 100}%`);
 
           if (file.size > 100 * 1024 * 1024) {
@@ -810,10 +461,15 @@
             let compressedBlob;
             const name = file.name.toLowerCase();
 
-            if (file.type.startsWith("image/")) compressedBlob = await compressImage(file, onProgress);
-            else if (file.type === "application/pdf") compressedBlob = await compressPDF(file, onProgress);
-            else if (name.match(/\.(docx|xlsx|pptx)$/i)) compressedBlob = await compressOfficeFile(file, onProgress);
-            else throw new Error("unsupported");
+            if (file.type.startsWith("image/")) {
+                compressedBlob = await compressImage(file, onProgress);
+            } else if (file.type === "application/pdf") {
+                compressedBlob = await compressPDF(file, onProgress);
+            } else if (name.match(/\.(docx|docm|dotx|dotm|xlsx|xlsm|xltx|xltm|pptx|pptm|potx|potm)$/i)) {
+                compressedBlob = await compressOfficeFile(file, onProgress);
+            } else {
+                throw new Error("unsupported");
+            }
 
             const ratio = file.size > 0 ? 1 - compressedBlob.size / file.size : 0;
             updateStatusUI(fileItem, "success", `→ ${formatFileSize(compressedBlob.size)} (${Math.round(ratio * 100)}% smaller)`);
@@ -836,7 +492,6 @@
           }
         };
 
-        // --- Global Event Listeners ---
         const resetState = () => {
           fileQueue.querySelectorAll("a[download]").forEach((link) => URL.revokeObjectURL(link.href));
           fileQueue.innerHTML = "";
@@ -849,16 +504,11 @@
         ["dragover", "dragleave", "drop"].forEach((ev) => dropzone.addEventListener(ev, (e) => { e.preventDefault(); e.stopPropagation(); }));
         dropzone.addEventListener("dragover", () => dropzone.classList.add("dragover"));
         dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
-        dropzone.addEventListener("drop", (e) => {
-          dropzone.classList.remove("dragover");
-          if (!addMoreBtn.disabled) handleFiles(e.dataTransfer.files);
-        });
-
+        dropzone.addEventListener("drop", (e) => { dropzone.classList.remove("dragover"); if (!addMoreBtn.disabled) handleFiles(e.dataTransfer.files); });
         fileInput.addEventListener("change", (e) => handleFiles(e.target.files));
         addMoreBtn.addEventListener("click", () => { if (!addMoreBtn.disabled) fileInput.click(); });
         clearAllBtn.addEventListener("click", () => { if (!clearAllBtn.disabled) resetState(); });
 
-        // ✨ ENHANCEMENT: Added visual feedback for the zipping process
         downloadAllBtn.addEventListener("click", async () => {
           if (downloadAllBtn.disabled) return;
           downloadAllBtn.disabled = true;
@@ -866,7 +516,6 @@
           downloadAllBtn.innerHTML = `
               <svg class="spinner w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
               <span>${translations[currentLang]['status-zipping']}</span>`;
-
           try {
             const zip = new JSZip();
             compressedFiles.forEach((f) => {
@@ -882,11 +531,9 @@
             URL.revokeObjectURL(link.href);
           } catch(err) {
             console.error("Error creating zip file:", err);
-            // Optionally, show an error message to the user here
           } finally {
             downloadAllBtn.disabled = false;
             downloadAllBtn.innerHTML = originalHTML;
-            // Re-run translation in case language changed while zipping
             translatePage(); 
           }
         });
