@@ -1229,38 +1229,58 @@
         setTimeout(() => el.classList.remove("shake-error"), 400);
       }
 
+      /**
+       * Corrected and improved input formatter.
+       * - It now correctly handles different logic for integers vs. currency.
+       * - Integers ('integer', 'signed-integer') are sanitized without adding commas.
+       * - This fixes the bug where typing a minus sign was not working.
+       */
       function formatInputAsNumber(input) {
-        // This function is for display formatting and does not need changes.
         const formatType = input.dataset.format;
         let value = input.value;
+        if (value === undefined || value === null) return;
+
         let cursorPos = input.selectionStart;
         const originalLength = value.length;
+        let formattedValue = value;
 
-        let rawValue = value.replace(/[^0-9.-]/g, "");
-        if (formatType === "integer")
-          rawValue = rawValue.replace(/[^0-9]/g, "");
-        if (formatType === "signed-integer")
-          rawValue = rawValue.replace(/[^0-9-]/g, "");
+        // Logic for simple integers that don't need comma-formatting
+        if (formatType === 'integer' || formatType === 'signed-integer') {
+            let sanitized = value.replace(/[^0-9-]/g, '');
+            const sign = sanitized.startsWith('-') ? '-' : '';
+            const numbers = sanitized.replace(/-/g, '');
 
-        let [integerPart, decimalPart] = rawValue.split(".");
+            if (formatType === 'integer') {
+                formattedValue = numbers; // No negative sign allowed
+            } else { // signed-integer
+                formattedValue = sign + numbers; // Allow one leading negative sign
+            }
+        } 
+        // Logic for currency/numbers that do need comma-formatting
+        else if (formatType === 'currency' || formatType === 'number') {
+            let rawValue = value.replace(/[^0-9.]/g, ''); // Disallow negatives for these fields
+            let parts = rawValue.split('.');
+            let integerPart = parts[0];
+            let decimalPart = parts.length > 1 ? '.' + parts[1].substring(0, 4) : '';
 
-        let formattedInteger = parseInt(
-          integerPart.replace(/[^0-9-]/g, "") || "0"
-        ).toLocaleString("en-US");
-
-        let formattedValue = formattedInteger;
-        if (decimalPart !== undefined) {
-          formattedValue += "." + decimalPart;
+            integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            
+            if (!integerPart && decimalPart) {
+              integerPart = '0';
+            }
+            formattedValue = integerPart + decimalPart;
         }
 
         if (input.value !== formattedValue) {
-          input.value = formattedValue;
-          const newLength = formattedValue.length;
-          cursorPos += newLength - originalLength;
-          if (cursorPos < 0) cursorPos = 0;
-          input.setSelectionRange(cursorPos, cursorPos);
+            input.value = formattedValue;
+            const newLength = formattedValue.length;
+            const diff = newLength - originalLength;
+            if (cursorPos !== null) {
+                input.setSelectionRange(cursorPos + diff, cursorPos + diff);
+            }
         }
       }
+
 
       // --- CALCULATION LOGIC ---
 
@@ -1329,24 +1349,19 @@
       }
 
       function calculateEndDate() {
-        /* No changes needed, this function is solid */
         const startChargeDateInput = document.getElementById("startChargeDate"),
+          monthRenewInput = document.getElementById("monthRenew"),
+          freeMonthInput = document.getElementById("freeMonth"),
           additionalDaysInput = document.getElementById("additionalDays");
-        [startChargeDateInput, additionalDaysInput].forEach((el) =>
-          el.classList.remove("input-error")
-        );
+
+        [
+          startChargeDateInput,
+          monthRenewInput,
+          freeMonthInput,
+          additionalDaysInput,
+        ].forEach((el) => el.classList.remove("input-error"));
 
         const startChargeDate = parseCustomDate(startChargeDateInput.value);
-        const monthRenew =
-          parseInt(
-            stripSeparators(document.getElementById("monthRenew").value)
-          ) || 0;
-        const freeMonth =
-          parseInt(
-            stripSeparators(document.getElementById("freeMonth").value)
-          ) || 0;
-        const additionalDays =
-          parseInt(stripSeparators(additionalDaysInput.value)) || 0;
 
         if (startChargeDateInput.value.trim() && !startChargeDate) {
           triggerInputError(startChargeDateInput);
@@ -1359,10 +1374,28 @@
           updateUI("totalDaysResult", "0 Days");
           return;
         }
-        if (additionalDaysInput.value.trim() && isNaN(additionalDays)) {
+
+        const monthRenewStr = stripSeparators(monthRenewInput.value);
+        const freeMonthStr = stripSeparators(freeMonthInput.value);
+        const additionalDaysStr = stripSeparators(additionalDaysInput.value);
+
+        // Stricter validation for integer fields before parsing
+        if (monthRenewStr && !/^\d+$/.test(monthRenewStr)) {
+          triggerInputError(monthRenewInput);
+          return;
+        }
+        if (freeMonthStr && !/^\d+$/.test(freeMonthStr)) {
+          triggerInputError(freeMonthInput);
+          return;
+        }
+        if (additionalDaysStr && additionalDaysStr !== '-' && !/^-?\d+$/.test(additionalDaysStr)) {
           triggerInputError(additionalDaysInput);
           return;
         }
+
+        const monthRenew = parseInt(monthRenewStr) || 0;
+        const freeMonth = parseInt(freeMonthStr) || 0;
+        const additionalDays = parseInt(additionalDaysStr) || 0;
 
         const startDate = new Date(startChargeDate);
         startDate.setHours(0, 0, 0, 0);
