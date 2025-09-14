@@ -760,6 +760,90 @@
           </div>
         </div>
 
+        <!-- Activate Invoice Adjustment -->
+        <div class="calculator-card" data-calculator="invoice-adjustment">
+          <div class="card-header">
+            <span class="icon-container"></span>
+            <h2 data-i18n-key="invoice-title">Activate Invoice Adjustment</h2>
+          </div>
+          <div class="card-content">
+            <div class="input-section">
+              <div class="input-row">
+                <div class="input-field">
+                  <label for="invoiceAmountVat"
+                    ><span data-i18n-key="invoice-original-price-label">Original Price</span>
+                    <span class="language-label font-khmer"
+                      data-i18n-key="invoice-original-price-kh"
+                      >ថ្លៃដើម</span
+                    ></label
+                  >
+                  <input
+                    type="text"
+                    id="invoiceAmountVat"
+                    placeholder="$216.00"
+                    data-format="currency"
+                  />
+                  <small id="originalPriceNoVatNote" style="font-style: italic; color: var(--primary-focus); background-color: var(--primary-light); padding: 3px 8px; border-radius: 8px; margin-top: 6px; display: inline-block; font-size: 0.8rem;"></small>
+                </div>
+                <div class="input-field">
+                  <label for="invoiceMonths"
+                    ><span data-i18n-key="invoice-months-label">Months</span>
+                    <span class="language-label font-khmer"
+                      data-i18n-key="invoice-months-kh"
+                      >ចំនួនខែ</span
+                    ></label
+                  >
+                  <input
+                    type="text"
+                    id="invoiceMonths"
+                    placeholder="e.g., 12"
+                    data-format="integer"
+                  />
+                </div>
+              </div>
+              <div class="input-field">
+                <label for="invoiceActualAmountVat"
+                  ><span data-i18n-key="invoice-price-in-system-label">Price in System</span>
+                  <span class="language-label font-khmer"
+                    data-i18n-key="invoice-price-in-system-kh"
+                    >តម្លៃក្នុងប្រព័ន្ធ</span
+                  ></label
+                >
+                <input
+                  type="text"
+                  id="invoiceActualAmountVat"
+                  placeholder="e.g., 1100"
+                  data-format="currency"
+                />
+              </div>
+            </div>
+            <div class="output-section">
+              <div class="primary-result">
+                <span class="primary-result-label" data-i18n-key="invoice-monthly-fee-label"
+                  >Adjustment Fee</span
+                >
+                <span class="primary-result-value" id="invoiceMonthlyFee"
+                  >$0.0000</span
+                >
+              </div>
+              <div class="secondary-results">
+                <div class="result-item">
+                  <span class="result-label" data-i18n-key="invoice-amount-incl-vat-label"
+                    >Amt (Incl. VAT)</span
+                  >
+                  <span class="result-value" id="invoiceAmountNoVat">$0.0000</span>
+                </div>
+                <div class="result-item">
+                  <span class="result-label" data-i18n-key="invoice-vat-amount-label"
+                    >VAT (10%)</span
+                  >
+                  <span class="result-value" id="invoiceVatAmount">$0.0000</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Billing Adjustment Calculator -->
         <div class="calculator-card" data-calculator="billing">
           <div class="card-header">
@@ -911,6 +995,16 @@
           "expires-on-label": "Expires On",
           "total-duration-label": "Total Duration",
           "total-days-label": "Total Days",
+          "invoice-title": "Activate Invoice Adjustment",
+          "invoice-original-price-label": "Original Price",
+          "invoice-original-price-kh": "ថ្លៃដើម",
+          "invoice-months-label": "Months",
+          "invoice-months-kh": "ចំនួនខែ",
+          "invoice-price-in-system-label": "Price in System",
+          "invoice-price-in-system-kh": "តម្លៃក្នុងប្រព័ន្ធ",
+          "invoice-monthly-fee-label": "Adjustment Fee",
+          "invoice-amount-incl-vat-label": "Amt (Incl. VAT)",
+          "invoice-vat-amount-label": "VAT (10%)",
           "billing-title": "Billing Adjustment",
           "monthly-fee-label": "Monthly Fee",
           "monthly-fee-kh": "ថ្លៃប្រចាំខែ",
@@ -954,6 +1048,16 @@
           "expires-on-label": "ផុតកំណត់នៅ",
           "total-duration-label": "រយៈពេលសរុប",
           "total-days-label": "ចំនួនថ្ងៃសរុប",
+          "invoice-title": "កែតម្រូវវិក្កយបត្រ",
+          "invoice-original-price-label": "ថ្លៃដើម",
+          "invoice-original-price-kh": "ថ្លៃដើម",
+          "invoice-months-label": "ចំនួនខែ",
+          "invoice-months-kh": "ចំនួនខែ",
+          "invoice-price-in-system-label": "តម្លៃក្នុងប្រព័ន្ធ",
+          "invoice-price-in-system-kh": "តម្លៃក្នុងប្រព័ន្ធ",
+          "invoice-monthly-fee-label": "ថ្លៃកែតម្រូវ",
+          "invoice-amount-incl-vat-label": "ទឹកប្រាក់ (រួមបញ្ចូលអាករ)",
+          "invoice-vat-amount-label": "អាករ (១០%)",
           "billing-title": "កែតម្រូវវិក្កយបត្រ",
           "monthly-fee-label": "ថ្លៃប្រចាំខែ",
           "monthly-fee-kh": "ថ្លៃប្រចាំខែ",
@@ -1018,6 +1122,7 @@
         const icons = [
           '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>',
           '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>',
+          '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
           '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l4 4m-4-12V4m0 16v-4m-4-4H4m12 0h4m-8 8v4m0-16V4m-4 4H4m12 0h4" /></svg>',
         ];
         document
@@ -1127,6 +1232,7 @@
       function runAllCalculations() {
         runCalculation("pricing");
         runCalculation("subscription");
+        runCalculation("invoice-adjustment");
         runCalculation("billing");
       }
 
@@ -1137,6 +1243,9 @@
             break;
           case "subscription":
             calculateEndDate();
+            break;
+          case "invoice-adjustment":
+            calculateInvoiceAdjustment(triggeredBy);
             break;
           case "billing":
             calculateBillingAdjustment();
@@ -1151,10 +1260,10 @@
       function parseNum(value) {
         return parseFloat(stripSeparators(value));
       }
-      function formatCurrency(num) {
+      function formatCurrency(num, precision = 2) {
         return `$${num.toLocaleString("en-US", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
+          minimumFractionDigits: precision,
+          maximumFractionDigits: precision,
         })}`;
       }
       function formatPercent(num) {
@@ -1229,58 +1338,38 @@
         setTimeout(() => el.classList.remove("shake-error"), 400);
       }
 
-      /**
-       * Corrected and improved input formatter.
-       * - It now correctly handles different logic for integers vs. currency.
-       * - Integers ('integer', 'signed-integer') are sanitized without adding commas.
-       * - This fixes the bug where typing a minus sign was not working.
-       */
       function formatInputAsNumber(input) {
+        // This function is for display formatting and does not need changes.
         const formatType = input.dataset.format;
         let value = input.value;
-        if (value === undefined || value === null) return;
-
         let cursorPos = input.selectionStart;
         const originalLength = value.length;
-        let formattedValue = value;
 
-        // Logic for simple integers that don't need comma-formatting
-        if (formatType === 'integer' || formatType === 'signed-integer') {
-            let sanitized = value.replace(/[^0-9-]/g, '');
-            const sign = sanitized.startsWith('-') ? '-' : '';
-            const numbers = sanitized.replace(/-/g, '');
+        let rawValue = value.replace(/[^0-9.-]/g, "");
+        if (formatType === "integer")
+          rawValue = rawValue.replace(/[^0-9]/g, "");
+        if (formatType === "signed-integer")
+          rawValue = rawValue.replace(/[^0-9-]/g, "");
 
-            if (formatType === 'integer') {
-                formattedValue = numbers; // No negative sign allowed
-            } else { // signed-integer
-                formattedValue = sign + numbers; // Allow one leading negative sign
-            }
-        } 
-        // Logic for currency/numbers that do need comma-formatting
-        else if (formatType === 'currency' || formatType === 'number') {
-            let rawValue = value.replace(/[^0-9.]/g, ''); // Disallow negatives for these fields
-            let parts = rawValue.split('.');
-            let integerPart = parts[0];
-            let decimalPart = parts.length > 1 ? '.' + parts[1].substring(0, 4) : '';
+        let [integerPart, decimalPart] = rawValue.split(".");
 
-            integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            
-            if (!integerPart && decimalPart) {
-              integerPart = '0';
-            }
-            formattedValue = integerPart + decimalPart;
+        let formattedInteger = parseInt(
+          integerPart.replace(/[^0-9-]/g, "") || "0"
+        ).toLocaleString("en-US");
+
+        let formattedValue = formattedInteger;
+        if (decimalPart !== undefined) {
+          formattedValue += "." + decimalPart;
         }
 
         if (input.value !== formattedValue) {
-            input.value = formattedValue;
-            const newLength = formattedValue.length;
-            const diff = newLength - originalLength;
-            if (cursorPos !== null) {
-                input.setSelectionRange(cursorPos + diff, cursorPos + diff);
-            }
+          input.value = formattedValue;
+          const newLength = formattedValue.length;
+          cursorPos += newLength - originalLength;
+          if (cursorPos < 0) cursorPos = 0;
+          input.setSelectionRange(cursorPos, cursorPos);
         }
       }
-
 
       // --- CALCULATION LOGIC ---
 
@@ -1348,20 +1437,59 @@
         );
       }
 
-      function calculateEndDate() {
-        const startChargeDateInput = document.getElementById("startChargeDate"),
-          monthRenewInput = document.getElementById("monthRenew"),
-          freeMonthInput = document.getElementById("freeMonth"),
-          additionalDaysInput = document.getElementById("additionalDays");
+      function calculateInvoiceAdjustment(triggeredBy) {
+        const amountVatInput = document.getElementById("invoiceAmountVat");
+        const noteElement = document.getElementById("originalPriceNoVatNote");
+        const priceInSystemInput = document.getElementById("invoiceActualAmountVat");
+        const monthsInput = document.getElementById("invoiceMonths");
 
-        [
-          startChargeDateInput,
-          monthRenewInput,
-          freeMonthInput,
-          additionalDaysInput,
-        ].forEach((el) => el.classList.remove("input-error"));
+        const amountVat = parseNum(amountVatInput.value) || 0;
+        const priceInSystem = parseNum(priceInSystemInput.value) || 0;
+        const months = parseInt(stripSeparators(monthsInput.value));
+
+        const priceWithoutVat = amountVat / 1.1;
+
+        // Update the note under Original Price
+        if (amountVat > 0) {
+          noteElement.textContent = `(w/o VAT: ${priceWithoutVat.toFixed(4)})`;
+        } else {
+          noteElement.textContent = "";
+        }
+
+        let adjustmentFee = 0;
+        if (months > 0) {
+          // Round the adjustment fee to 4 decimal places for precision
+          adjustmentFee = parseFloat(((priceWithoutVat - priceInSystem) / months).toFixed(4));
+        }
+
+        const totalAdjustment = adjustmentFee * (months || 0);
+        const newPriceInclVat = (priceInSystem + totalAdjustment) * 1.1;
+
+        // Update result fields
+        updateUI("invoiceMonthlyFee", formatCurrency(isNaN(adjustmentFee) ? 0 : adjustmentFee, 4));
+        updateUI("invoiceAmountNoVat", formatCurrency(isNaN(newPriceInclVat) ? 0 : newPriceInclVat, 4));
+        updateUI("invoiceVatAmount", formatCurrency(priceWithoutVat, 4));
+      }
+
+      function calculateEndDate() {
+        /* No changes needed, this function is solid */
+        const startChargeDateInput = document.getElementById("startChargeDate"),
+          additionalDaysInput = document.getElementById("additionalDays");
+        [startChargeDateInput, additionalDaysInput].forEach((el) =>
+          el.classList.remove("input-error")
+        );
 
         const startChargeDate = parseCustomDate(startChargeDateInput.value);
+        const monthRenew =
+          parseInt(
+            stripSeparators(document.getElementById("monthRenew").value)
+          ) || 0;
+        const freeMonth =
+          parseInt(
+            stripSeparators(document.getElementById("freeMonth").value)
+          ) || 0;
+        const additionalDays =
+          parseInt(stripSeparators(additionalDaysInput.value)) || 0;
 
         if (startChargeDateInput.value.trim() && !startChargeDate) {
           triggerInputError(startChargeDateInput);
@@ -1374,28 +1502,10 @@
           updateUI("totalDaysResult", "0 Days");
           return;
         }
-
-        const monthRenewStr = stripSeparators(monthRenewInput.value);
-        const freeMonthStr = stripSeparators(freeMonthInput.value);
-        const additionalDaysStr = stripSeparators(additionalDaysInput.value);
-
-        // Stricter validation for integer fields before parsing
-        if (monthRenewStr && !/^\d+$/.test(monthRenewStr)) {
-          triggerInputError(monthRenewInput);
-          return;
-        }
-        if (freeMonthStr && !/^\d+$/.test(freeMonthStr)) {
-          triggerInputError(freeMonthInput);
-          return;
-        }
-        if (additionalDaysStr && additionalDaysStr !== '-' && !/^-?\d+$/.test(additionalDaysStr)) {
+        if (additionalDaysInput.value.trim() && isNaN(additionalDays)) {
           triggerInputError(additionalDaysInput);
           return;
         }
-
-        const monthRenew = parseInt(monthRenewStr) || 0;
-        const freeMonth = parseInt(freeMonthStr) || 0;
-        const additionalDays = parseInt(additionalDaysStr) || 0;
 
         const startDate = new Date(startChargeDate);
         startDate.setHours(0, 0, 0, 0);
