@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HengOS/AI Hub</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Khmer:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <!-- JSZip for creating .zip archives -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- pdf-lib for PDF manipulation -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js`;
+    </script>
+    <style>
+      :root {
+        --primary-color: #0a4da6;
+        --secondary-color: #081a3d;
+        --accent-color: #33c1ff;
+        --compressor-accent-color: #4F46E5;
+        --primary-focus: var(--primary-color);
+        --primary-light: rgba(10, 77, 166, 0.1);
+        --heading-color: #1e2022;
+        --text-color: #1e2022;
+        --light-text: #57606a;
+        --bg-color: #f6f8fa;
+        --card-bg: #ffffff;
+        --border-color: #d0d7de;
+        --border-radius: 16px;
+        --box-shadow: 0 4px 12px rgba(10, 77, 166, 0.08);
+        --transition: all 0.3s ease;
+      }
+      body.dark-mode {
+        --bg-color: #0d1117;
+        --card-bg: #161b22;
+        --text-color: #e6edf3;
+        --heading-color: #e6edf3;
+        --light-text: #8b949e;
+        --border-color: #30363d;
+        --primary-light: rgba(10, 77, 166, 0.15);
+        --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body {
+        font-family: "Inter", "Noto Sans Khmer", "Segoe UI", Arial, sans-serif;
+        /* Ensures fallback and Khmer font always available */
+      }
+      .font-inter { font-family: "Inter", "Segoe UI", Arial, sans-serif; }
+      .font-khmer { font-family: "Noto Sans Khmer", "Khmer UI", "Inter", Arial, sans-serif; }
+      body {
+        font-family: "Inter", "Noto Sans Khmer", "Segoe UI", Arial, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: background-color 0.3s, color 0.3s;
+        min-height: 100vh;
+      }
+      .view-container { display: none; }
+      .view-container.active-view { display: block; animation: viewFadeIn 0.5s ease; }
+      @keyframes viewFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+      .page-controls { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2.5rem 0; gap: 1rem; }
+      .back-btn {
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+        color: #fff; font-weight: 600; border: none; border-radius: 50px;
+        padding: 0.65rem 1.3rem; font-size: 0.95rem; cursor: pointer;
+        text-decoration: none; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: var(--transition); visibility: visible;
+      }
+      .back-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); }
+      .right-controls { display: flex; align-items: center; gap: 1rem; }
+      .theme-toggle {
+        background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50%;
+        width: 40px; height: 40px; cursor: pointer; color: var(--light-text);
+        font-size: 1.2rem; display: grid; place-items: center; transition: var(--transition); flex-shrink: 0;
+      }
+      .theme-toggle:hover { color: var(--primary-focus); transform: translateY(-2px); }
+      .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+      #home-view .container {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        min-height: calc(100vh - 100px);
+      }
+      #home-view header { margin-bottom: 3rem; text-align: center; }
+      #home-view h1 { font-size: 2.5rem; font-weight: 800; }
+      .navigation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; width: 100%; max-width: 800px; }
+      @media (max-width: 600px) { .navigation-grid { grid-template-columns: 1fr; } }
+      .nav-card {
+        background: var(--card-bg); border-radius: var(--border-radius); padding: 2.5rem 2rem;
+        box-shadow: var(--box-shadow); border: 1px solid var(--border-color); text-decoration: none;
+        color: var(--text-color); display: flex; flex-direction: column; align-items: center;
+        gap: 1rem; transition: var(--transition); cursor: pointer; text-align: center;
+      }
+      .nav-card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(10, 77, 166, 0.12); border-color: var(--primary-focus); }
+      body.dark-mode .nav-card:hover { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25); }
+      .nav-card .icon { font-size: 3rem; color: var(--primary-focus); margin-bottom: 0.5rem; }
+      header { text-align: center; margin-bottom: 2.5rem; }
+      h1 {
+        font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--heading-color);
+        background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+        -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      }
+      .subtitle { color: var(--light-text); font-size: 1.1rem; }
+      .tool-placeholder {
+        background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--border-radius);
+        padding: 4rem 2rem; text-align: center; color: var(--light-text);
+        box-shadow: var(--box-shadow);
+      }
+      .tool-placeholder h2 { font-size: 1.5rem; color: var(--heading-color); margin-bottom: 1rem; }
+
+      /* --- Text Extractor Styles --- */
+      #text-extraction-view .extractor-root {
+          --extractor-accent-color: #4F46E5;
+          --extractor-accent-hover: #4338CA;
+      }
+      #text-extraction-view .extractor-body {
+          font-family: "Inter", "Noto Sans Khmer", "Segoe UI", Arial, sans-serif;
+          color: var(--text-color);
+      }
+      #text-extraction-view .font-khmer {
+        font-family: "Noto Sans Khmer", "Khmer UI", "Inter", Arial, sans-serif;
+      }
+
+      #text-extraction-view .content-wrapper {
+          width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
+      @media (min-width: 768px) {
+          #text-extraction-view .main-card {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 2rem;
+          }
+          #text-extraction-view .results-section {
+              grid-column: 2;
+              grid-row: 1 / span 2;
+              padding-top: 0;
+              padding-left: 2rem;
+              border-top: 0;
+              border-left: 1px solid var(--border-color);
+          }
+          #text-extraction-view .header-and-tabs,
+          #text-extraction-view .content-section {
+              grid-column: 1;
+          }
+      }
+      
+      #text-extraction-view .main-card {
+          background: var(--card-bg);
+          border-radius: 1.25rem;
+          box-shadow: var(--box-shadow);
+          border: 1px solid var(--border-color);
+          padding: 2rem;
+          margin-top: 1rem;
+          transition: all 0.3s;
+      }
+
+      #text-extraction-view .header-controls { display: flex; align-items: center; gap: 0.75rem; }
+      
+      #text-extraction-view .language-selector { position: relative; }
+      #text-extraction-view .language-btn { background-color: var(--card-bg); color: var(--light-text); border: 1px solid var(--border-color); border-radius: 24px; padding: 8px 16px 8px 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+      #text-extraction-view .language-btn:hover { background-color: var(--extractor-accent-color); color: white; border-color: var(--extractor-accent-color); }
+      #text-extraction-view .language-btn .arrow { transition: transform 0.2s; }
+      #text-extraction-view .language-selector.open .arrow { transform: rotate(180deg); }
+      #text-extraction-view .dropdown-content { display: none; position: absolute; right: 0; background-color: var(--card-bg); min-width: 160px; border-radius: 14px; box-shadow: var(--box-shadow); z-index: 10; margin-top: 8px; overflow: hidden; border: 1px solid var(--border-color); }
+      #text-extraction-view .language-selector.open .dropdown-content { display: block; }
+      #text-extraction-view .language-option { color: var(--light-text); padding: 10px 16px; display: flex; align-items: center; gap: 10px; background: none; border: none; width: 100%; text-align: left; cursor: pointer; transition: background 0.18s; }
+      #text-extraction-view .language-option:hover, #text-extraction-view .language-option.active-language { background-color: var(--extractor-accent-color); color: white; }
+      #text-extraction-view .language-flag { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+
+      /* --- Khmer Font Size Adjustments --- */
+      #text-extraction-view .font-khmer .text-2xl { font-size: 1.6rem; }
+      #text-extraction-view .font-khmer .text-base { font-size: 1.05rem; }
+      #text-extraction-view .font-khmer .text-sm { font-size: 0.95rem; }
+      #text-extraction-view .font-khmer .text-xl { font-size: 1.35rem; }
+      #text-extraction-view .font-khmer .leading-relaxed { line-height: 1.8; }
+
+      /* Tailwind-like utility classes used in React component */
+      #text-extraction-view .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem; }
+      #text-extraction-view .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
+      #text-extraction-view .space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem; }
+      #text-extraction-view .flex { display: flex; }
+      #text-extraction-view .justify-between { justify-content: space-between; }
+      #text-extraction-view .items-center { align-items: center; }
+      #text-extraction-view .items-start { align-items: flex-start; }
+      #text-extraction-view .gap-4 { gap: 1rem; }
+      #text-extraction-view .mb-6 { margin-bottom: 1.5rem; }
+      #text-extraction-view .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+      #text-extraction-view .p-1 { padding: 0.25rem; }
+      #text-extraction-view .rounded-full { border-radius: 9999px; }
+      #text-extraction-view .w-full { width: 100%; }
+      #text-extraction-view .w-1\/2 { width: 50%; }
+      #text-extraction-view .p-2\.5 { padding: 0.625rem; }
+      #text-extraction-view .text-sm { font-size: 0.875rem; }
+      #text-extraction-view .font-semibold { font-weight: 600; }
+      #text-extraction-view .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+      #text-extraction-view .duration-300 { transition-duration: 300ms; }
+      #text-extraction-view .shadow { box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06); }
+      body.dark-mode #text-extraction-view .shadow { box-shadow: 0 1px 3px 0 rgba(0,0,0,0.4), 0 1px 2px 0 rgba(0,0,0,0.3); }
+      #text-extraction-view .text-white { color: #fff; }
+      #text-extraction-view .hover\:opacity-80:hover { opacity: 0.8; }
+      #text-extraction-view .relative { position: relative; }
+      #text-extraction-view .border-2 { border-width: 2px; }
+      #text-extraction-view .border-dashed { border-style: dashed; }
+      #text-extraction-view .rounded-xl { border-radius: 0.75rem; }
+      #text-extraction-view .p-6 { padding: 1.5rem; }
+      #text-extraction-view .text-center { text-align: center; }
+      #text-extraction-view .transition-colors { transition-property: background-color, border-color, color, fill, stroke; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+      #text-extraction-view .hidden { display: none; }
+      #text-extraction-view .flex-col { flex-direction: column; }
+      #text-extraction-view .justify-center { justify-content: center; }
+      #text-extraction-view .h-48 { height: 12rem; }
+      #text-extraction-view .cursor-pointer { cursor: pointer; }
+      #text-extraction-view .h-12 { height: 3rem; }
+      #text-extraction-view .w-12 { width: 3rem; }
+      #text-extraction-view .mb-3 { margin-bottom: 0.75rem; }
+      #text-extraction-view .mt-1 { margin-top: 0.25rem; }
+      #text-extraction-view .absolute { position: absolute; }
+      #text-extraction-view .-top-3 { top: -0.75rem; }
+      #text-extraction-view .-right-3 { right: -0.75rem; }
+      #text-extraction-view .bg-slate-600 { background-color: #475569; }
+      #text-extraction-view .hover\:bg-slate-800:hover { background-color: #1e293b; }
+      #text-extraction-view .h-7 { height: 1.75rem; }
+      #text-extraction-view .w-7 { width: 1.75rem; }
+      #text-extraction-view .z-10 { z-index: 10; }
+      #text-extraction-view .h-4 { height: 1rem; }
+      #text-extraction-view .w-4 { width: 1rem; }
+      #text-extraction-view .max-h-64 { max-height: 16rem; }
+      #text-extraction-view .p-2 { padding: 0.5rem; }
+      #text-extraction-view .rounded-lg { border-radius: 0.5rem; }
+      #text-extraction-view .max-h-60 { max-height: 15rem; }
+      #text-extraction-view .object-contain { object-fit: contain; }
+      #text-extraction-view .rounded-md { border-radius: 0.375rem; }
+      #text-extraction-view .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+      #text-extraction-view .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+      #text-extraction-view .font-bold { font-weight: 700; }
+      #text-extraction-view .disabled\:opacity-50:disabled { opacity: 0.5; }
+      #text-extraction-view .disabled\:cursor-not-allowed:disabled { cursor: not-allowed; }
+      #text-extraction-view .animate-spin { animation: spin 1s linear infinite; }
+      @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      #text-extraction-view .mr-3 { margin-right: 0.75rem; }
+      #text-extraction-view .h-5 { height: 1.25rem; }
+      #text-extraction-view .w-5 { width: 1.25rem; }
+      #text-extraction-view .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+      #text-extraction-view .bg-red-600 { background-color: #dc2626; }
+      #text-extraction-view .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+      @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+      #text-extraction-view .ml-3 { margin-left: 0.75rem; }
+      #text-extraction-view .text-white\/80 { color: rgba(255, 255, 255, 0.8); }
+      #text-extraction-view .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+      #text-extraction-view .text-base { font-size: 1rem; }
+      #text-extraction-view .mr-2 { margin-right: 0.5rem; }
+      #text-extraction-view .h-6 { height: 1.5rem; }
+      #text-extraction-view .w-6 { width: 1.5rem; }
+      #text-extraction-view .my-2 { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+      #text-extraction-view .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+      #text-extraction-view .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+      #text-extraction-view .font-medium { font-weight: 500; }
+      #text-extraction-view .ml-2 { margin-left: 0.5rem; }
+      #text-extraction-view .font-normal { font-weight: 400; }
+      #text-extraction-view .border { border-width: 1px; }
+      #text-extraction-view .p-4 { padding: 1rem; }
+      #text-extraction-view .bg-slate-200 { background-color: #e2e8f0; }
+      #text-extraction-view .hover\:bg-slate-300:hover { background-color: #cbd5e1; }
+      body.dark-mode #text-extraction-view .dark\:bg-slate-600 { background-color: #475569; }
+      body.dark-mode #text-extraction-view .dark\:hover\:bg-slate-500:hover { background-color: #64748b; }
+      #text-extraction-view .w-full audio { width: 100%; }
+      #text-extraction-view .pt-6 { padding-top: 1.5rem; }
+      #text-extraction-view .border-t { border-top-width: 1px; }
+      #text-extraction-view .bg-red-100 { background-color: #fee2e2; }
+      #text-extraction-view .border-red-300 { border-color: #fca5a5; }
+      #text-extraction-view .text-red-700 { color: #b91c1c; }
+      #text-extraction-view .px-4 { padding-left: 1rem; padding-right: 1rem; }
+      #text-extraction-view .text-xl { font-size: 1.25rem; }
+      #text-extraction-view .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+      #text-extraction-view .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+      #text-extraction-view .disabled\:bg-green-100:disabled { background-color: #dcfce7; }
+      #text-extraction-view .disabled\:text-green-700:disabled { color: #15803d; }
+      body.dark-mode #text-extraction-view .dark\:disabled\:bg-green-800:disabled { background-color: #166534; }
+      body.dark-mode #text-extraction-view .dark\:disabled\:text-green-200:disabled { color: #bbf7d0; }
+      #text-extraction-view .min-h-\[10rem\] { min-height: 10rem; }
+      #text-extraction-view .max-h-96 { max-height: 24rem; }
+      #text-extraction-view .overflow-auto { overflow: auto; }
+      #text-extraction-view .whitespace-pre-wrap { white-space: pre-wrap; }
+      #text-extraction-view .leading-relaxed { line-height: 1.625; }
+      
+      /* --- Compressor Styles --- */
+      #compressor-view {
+        --primary-hue: 210;
+        --bg-light: #f8f9fc;
+        --surface-light: #ffffff;
+        --border-light: #eaebee;
+        --text-title-light: #1a202c;
+        --text-body-light: #4a5568;
+        --text-muted-light: #a0aec0;
+        --accent-light: hsl(var(--primary-hue), 89%, 60%);
+        --accent-hover-light: hsl(var(--primary-hue), 89%, 55%);
+        --bg-dark: #121828;
+        --surface-dark: #1a2234;
+        --border-dark: #2a364f;
+        --text-title-dark: #f7fafc;
+        --text-body-dark: #a3b3d9;
+        --text-muted-dark: #64748b;
+        --accent-dark: hsl(var(--primary-hue), 95%, 70%);
+        --accent-hover-dark: hsl(var(--primary-hue), 95%, 65%);
+        --success: #2ecc71;
+        --error: #e74c3c;
+        --bg: var(--bg-light);
+        --surface: var(--surface-light);
+        --border: var(--border-light);
+        --text-title: var(--text-title-light);
+        --text-body: var(--text-body-light);
+        --text-muted: var(--text-muted-light);
+        --accent: var(--accent-light);
+        --accent-hover: var(--accent-hover-light);
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
+          0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05),
+          0 4px 6px -4px rgba(0, 0, 0, 0.05);
+      }
+      body.dark-mode #compressor-view {
+        --bg: var(--bg-dark);
+        --surface: var(--surface-dark);
+        --border: var(--border-dark);
+        --text-title: var(--text-title-dark);
+        --text-body: var(--text-body-dark);
+        --text-muted: var(--text-muted-dark);
+        --accent: var(--accent-dark);
+        --accent-hover: var(--accent-hover-dark);
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2),
+          0 2px 4px -2px rgba(0, 0, 0, 0.2);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2),
+          0 4px 6px -4px rgba(0, 0, 0, 0.2);
+      }
+      #compressor-view *,
+      #compressor-view ::before,
+      #compressor-view ::after {
+        transition: background-color 0.2s, border-color 0.2s, color 0.2s,
+          box-shadow 0.2s, opacity 0.2s, transform 0.2s;
+      }
+      #compressor-view .font-khmer { font-family: "Noto Sans Khmer", "Khmer UI", "Inter", Arial, sans-serif; }
+      #compressor-view .font-title { color: var(--text-title); font-weight: 700; }
+      #compressor-view .font-body { color: var(--text-body); }
+      #compressor-view .font-muted { color: var(--text-muted); }
+      #compressor-view .main-card {
+        background: var(--surface);
+        border-radius: 1.5rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+        padding: 2.5rem;
+      }
+      @media (max-width: 640px) {
+        #compressor-view .main-card { padding: 1rem; }
+      }
+      #compressor-view .header-controls-wrapper button,
+      #compressor-view .header-controls-wrapper .language-btn {
+        background: var(--surface);
+        color: var(--text-body);
+        border: 1px solid var(--border);
+        height: 40px;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow);
+        cursor: pointer;
+      }
+      #compressor-view .header-controls-wrapper button:hover,
+      #compressor-view .header-controls-wrapper .language-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      #compressor-view .language-selector { position: relative; }
+      #compressor-view .language-btn { padding: 0 16px; gap: 8px; }
+      #compressor-view .language-selector.open .language-btn .arrow { transform: rotate(180deg); }
+      #compressor-view .language-dropdown {
+        display: block; visibility: hidden; opacity: 0;
+        transform: translateY(-0.5rem) scale(0.95);
+        transform-origin: top right; position: absolute;
+        right: 0; top: calc(100% + 8px);
+        background-color: var(--surface); min-width: 160px;
+        border-radius: 14px; box-shadow: var(--shadow-lg);
+        z-index: 10; overflow: hidden; border: 1px solid var(--border);
+      }
+      #compressor-view .language-selector.open .language-dropdown {
+        visibility: visible; opacity: 1; transform: translateY(0) scale(1);
+      }
+      #compressor-view .language-option {
+        color: var(--text-body); padding: 10px 16px;
+        display: flex; align-items: center; gap: 10px;
+        background: none; border: none; width: 100%;
+        text-align: left; cursor: pointer;
+      }
+      #compressor-view .language-option:hover,
+      #compressor-view .language-option.active-language {
+        background-color: var(--accent); color: white !important;
+      }
+      #compressor-view .language-flag {
+        width: 20px; height: 20px; border-radius: 50%; object-fit: cover;
+      }
+      #compressor-view #dropzone {
+        border: 2px dashed var(--border); background-color: var(--bg);
+        border-radius: 1.25rem; padding: 2.5rem;
+      }
+      #compressor-view #dropzone.dragover {
+        border-style: solid; border-color: var(--accent);
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent);
+        transform: scale(1.02);
+      }
+      #compressor-view .file-item {
+        display: grid; grid-template-columns: auto 1fr auto;
+        align-items: center; gap: 1rem; padding: 1rem;
+        background-color: var(--bg); border: 1px solid var(--border);
+        border-radius: 1rem;
+      }
+      #compressor-view .file-item .font-title { word-break: break-all; }
+      #compressor-view .file-status-icon {
+        width: 2.25rem; height: 2.25rem; display: flex;
+        align-items: center; justify-content: center;
+      }
+      #compressor-view .file-status-icon .spinner { animation: spin 1s linear infinite; }
+      #compressor-view .progress-bar-wrapper {
+        width: 100%; height: 6px; background-color: var(--border);
+        border-radius: 3px; margin-top: 0.25rem; overflow: hidden;
+      }
+      #compressor-view .progress-bar-fill {
+        height: 100%; width: 0%; background-color: var(--accent);
+        border-radius: 3px;
+      }
+      #compressor-view .btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.75rem;
+        border: 2px solid transparent; cursor: pointer;
+      }
+      #compressor-view .btn:disabled {
+        opacity: 0.5; cursor: not-allowed; transform: scale(1) !important;
+      }
+      #compressor-view .btn-primary { background-color: var(--accent); color: white; }
+      #compressor-view .btn-primary:hover:not(:disabled) {
+        background-color: var(--accent-hover); transform: translateY(-2px);
+      }
+      #compressor-view .btn-secondary {
+        background-color: var(--surface); color: var(--text-body);
+        border: 2px solid var(--border); box-shadow: var(--shadow);
+      }
+      #compressor-view .btn-secondary:hover:not(:disabled) {
+        border-color: var(--accent); color: var(--accent); transform: translateY(-2px);
+      }
+      #compressor-view .btn-ghost { background: transparent; color: var(--text-body); }
+      #compressor-view .btn-ghost:hover:not(:disabled) {
+        background-color: color-mix(in srgb, var(--accent) 10%, transparent);
+        color: var(--accent);
+      }
+      /* Tailwind classes used in new compressor */
+      #compressor-view .flex { display: flex; }
+      #compressor-view .flex-col { flex-direction: column; }
+      #compressor-view .gap-4 { gap: 1rem; }
+      #compressor-view .gap-6 { gap: 1.5rem; }
+      #compressor-view .gap-2 { gap: 0.5rem; }
+      #compressor-view .justify-between { justify-content: space-between; }
+      #compressor-view .items-center { align-items: center; }
+      #compressor-view .mb-8 { margin-bottom: 2rem; }
+      #compressor-view .mt-4 { margin-top: 1rem; }
+      #compressor-view .mt-1 { margin-top: 0.25rem; }
+      #compressor-view .mt-2 { margin-top: 0.5rem; }
+      #compressor-view .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+      #compressor-view .text-base { font-size: 1rem; line-height: 1.5rem; }
+      #compressor-view .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+      #compressor-view .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+      #compressor-view .text-xs { font-size: 0.75rem; line-height: 1rem; }
+      #compressor-view .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+      #compressor-view .hidden { display: none; }
+      #compressor-view .block { display: block; }
+      #compressor-view .cursor-pointer { cursor: pointer; }
+      #compressor-view .transform-gpu { transform: translateZ(0); }
+      #compressor-view .mx-auto { margin-left: auto; margin-right: auto; }
+      #compressor-view .h-12 { height: 3rem; }
+      #compressor-view .w-12 { width: 3rem; }
+      #compressor-view .w-4 { width: 1rem; }
+      #compressor-view .h-4 { height: 1rem; }
+      #compressor-view .w-5 { width: 1.25rem; }
+      #compressor-view .h-5 { height: 1.25rem; }
+      #compressor-view .w-6 { height: 1.5rem; }
+      #compressor-view .h-6 { height: 1.5rem; }
+      #compressor-view .w-8 { width: 2rem; }
+      #compressor-view .h-8 { height: 2rem; }
+      #compressor-view .w-10 { width: 2.5rem; }
+      #compressor-view .h-10 { height: 2.5rem; }
+      #compressor-view .p-2 { padding: 0.5rem; }
+      #compressor-view .text-gray-500 { color: #6b7280; }
+      #compressor-view .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      #compressor-view .min-w-0 { min-width: 0; }
+      #compressor-view [role=status] { }
+      #compressor-view .grid { display: grid; }
+      #compressor-view .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #compressor-view .w-full { width: 100%; }
+      #compressor-view .text-center { text-align: center; }
+      #compressor-view .sm\:inline { }
+      @media (min-width: 640px) {
+        #compressor-view .sm\:inline { display: inline; }
+      }
+    </style>
+  </head>
+  <body class="font-inter">
+    <div class="page-controls">
+      <a href="index.html" class="back-btn nav-link" data-target="">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" /></svg>
+        <span>Back to Home</span>
+      </a>
+      <div class="right-controls">
+        <button class="theme-toggle" id="themeToggle">🌓</button>
+      </div>
+    </div>
+
+    <!-- ====== HOME VIEW ====== -->
+    <div id="home-view" class="view-container active-view">
+      <div class="container">
+        <header><h1>HengOS/AI Hub</h1><p class="subtitle">AI-powered tools and assistants for enhanced productivity.</p></header>
+        <div class="navigation-grid">
+          <div class="nav-card nav-link" data-target="text-extraction-view">
+            <div class="icon">📄</div>
+            <h2>Text Extraction</h2>
+            <p>Extract and transcribe text from images, PDFs, and audio files.</p>
+          </div>
+          <div class="nav-card nav-link" data-target="compressor-view">
+            <div class="icon">🗜️</div>
+            <h2>Compressor Tool</h2>
+            <p>Compress PDF, images, videos, and other documents.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== TEXT EXTRACTION VIEW ====== -->
+    <div id="text-extraction-view" class="view-container">
+      <div class="container">
+        <header><h1>Text Extraction</h1><p class="subtitle">Extract text from various file types.</p></header>
+        <div id="root"></div>
+      </div>
+    </div>
+
+    <!-- ====== COMPRESSOR VIEW ====== -->
+    <div id="compressor-view" class="view-container">
+      <div class="container">
+        <div class="main-card">
+          <header class="flex justify-between items-center gap-4 mb-8">
+            <div>
+              <h1 class="font-title text-3xl" data-i18n-key="main-title">
+                File Compressor
+              </h1>
+              <p class="font-body text-base mt-1" data-i18n-key="sub-heading">
+                Reduce file size for images, PDFs, and more.
+              </p>
+            </div>
+            <div class="flex items-center gap-2 header-controls-wrapper">
+              <div class="language-selector" id="lang-selector">
+                <button
+                  class="language-btn"
+                  id="lang-btn"
+                  type="button"
+                  title="Change language"
+                >
+                  <img
+                    src="https://flagcdn.com/us.svg"
+                    class="language-flag"
+                    id="lang-flag"
+                    alt="Language"
+                  />
+                  <span id="lang-label-short" class="hidden sm:inline">EN</span>
+                  <svg
+                    class="arrow w-4 h-4 text-gray-500"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+                <div class="language-dropdown" id="lang-dropdown"></div>
+              </div>
+            </div>
+          </header>
+
+          <div class="flex flex-col gap-6">
+            <div id="upload-module">
+              <label
+                for="file-input"
+                id="dropzone"
+                class="block cursor-pointer text-center transform-gpu"
+              >
+                <svg
+                  class="mx-auto h-12 w-12 font-muted"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
+                </svg>
+                <h2 class="font-title text-xl mt-4" data-i18n-key="drop-title">
+                  Click to upload or drag & drop
+                </h2>
+                <p class="font-muted text-sm mt-1" data-i18n-key="disclaimer">
+                  Max file size 100MB. All processing is done locally.
+                </p>
+              </label>
+              <input type="file" id="file-input" multiple class="hidden" />
+            </div>
+
+            <div id="file-queue" class="flex flex-col gap-4"></div>
+
+            <div id="action-buttons" class="hidden flex-col gap-4 mt-2">
+              <button
+                class="btn btn-primary text-lg w-full"
+                id="download-all-btn"
+                data-i18n-key="download-all-btn"
+              >
+                Download All (.zip)
+              </button>
+              <div class="grid grid-cols-2 gap-4">
+                <button
+                  class="btn btn-secondary"
+                  id="add-more-btn"
+                  data-i18n-key="add-more-btn"
+                >
+                  Add More
+                </button>
+                <button
+                  class="btn btn-ghost"
+                  id="clear-all-btn"
+                  data-i18n-key="clear-all-btn"
+                >
+                  Clear All
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- Navigation ---
+        const navLinks = document.querySelectorAll(".nav-link");
+        const views = document.querySelectorAll(".view-container");
+        const backBtn = document.querySelector(".back-btn");
+        let compressorAppInitialized = false;
+
+        const updateBackBtn = (id) => {
+          backBtn.href = (id === "home-view") ? "index.html" : "#";
+          backBtn.dataset.target = (id === "home-view") ? "" : "home-view";
+        };
+
+        navLinks.forEach(link => {
+          link.addEventListener("click", e => {
+            const targetId = link.dataset.target;
+            if (targetId) {
+              e.preventDefault();
+              views.forEach(v => v.classList.remove("active-view"));
+              const targetView = document.getElementById(targetId);
+              if (targetView) {
+                targetView.classList.add("active-view");
+                window.scrollTo(0, 0);
+                updateBackBtn(targetId);
+
+                if (targetId === 'compressor-view' && !compressorAppInitialized) {
+                  initializeCompressorApp();
+                  compressorAppInitialized = true;
+                }
+              }
+            }
+          });
+        });
+        
+        const initialView = document.querySelector(".view-container.active-view");
+        updateBackBtn(initialView ? initialView.id : "home-view");
+
+        // --- Theme Toggle ---
+        const themeToggle = document.getElementById("themeToggle");
+        const applyTheme = (isDark) => {
+          document.body.classList.toggle("dark-mode", isDark);
+          if (themeToggle) themeToggle.textContent = isDark ? "🌞" : "🌓";
+        };
+        themeToggle?.addEventListener("click", () => {
+          const isDark = !document.body.classList.contains("dark-mode");
+          localStorage.setItem("darkMode", isDark);
+          applyTheme(isDark);
+        });
+        applyTheme(localStorage.getItem("darkMode") === "true");
+      });
+    </script>
+
+    <script type="text/babel">
+        const App = () => {
+            const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+            const MAX_FILE_SIZE_MB = 50;
+
+            const [mode, setMode] = React.useState('file');
+            const [selectedFile, setSelectedFile] = React.useState(null);
+            const [filePreview, setFilePreview] = React.useState(null);
+            const [fileType, setFileType] = React.useState('');
+            const [isRecording, setIsRecording] = React.useState(false);
+            const [audioFile, setAudioFile] = React.useState(null);
+            const [audioPreviewUrl, setAudioPreviewUrl] = React.useState('');
+            const [recordSeconds, setRecordSeconds] = React.useState(0);
+            const [extractedText, setExtractedText] = React.useState('');
+            const [isLoading, setIsLoading] = React.useState(false);
+            const [error, setError] = React.useState('');
+            const [isDragging, setIsDragging] = React.useState(false);
+            const [isCopied, setIsCopied] = React.useState(false);
+
+            const fileInputRef = React.useRef(null);
+            const pdfCanvasRef = React.useRef(null);
+            const audioInputRef = React.useRef(null);
+            const mediaRecorderRef = React.useRef(null);
+            const audioChunksRef = React.useRef([]);
+            const recordIntervalRef = React.useRef(null);
+
+            const languages = [
+                { code: 'en', label: 'English', flag: 'https://flagcdn.com/us.svg' },
+                { code: 'km', label: 'ភាសាខ្មែរ', flag: 'https://flagcdn.com/kh.svg' }
+            ];
+            const [lang, setLang] = React.useState('en');
+            const [langDropdown, setLangDropdown] = React.useState(false);
+            
+            const t = (key) => {
+                const dict = {
+                    'title': { en: 'AI Extractor & Transcriber', km: 'កម្មវិធីស្រង់ និងបម្លែងអត្ថបទ' },
+                    'subtitle': { en: 'Extract text from files or transcribe audio with AI.', km: 'ស្រង់អក្សរពីឯកសារ ឬបំប្លែងសំឡេងជាមួយ AI។' },
+                    'file_tab': { en: 'File Extractor', km: 'ស្រង់ពីឯកសារ' },
+                    'audio_tab': { en: 'Audio Transcriber', km: 'បម្លែងសំឡេង' },
+                    'upload_hint': { en: 'Drag & Drop, Paste, or Click to Upload', km: 'អូសនិងទម្លាក់ បិទភ្ជាប់ ឬចុចដើម្បីផ្ទុកឯកសារ' },
+                    'file_limit': { en: `PDF & Image (max ${MAX_FILE_SIZE_MB}MB)`, km: `PDF និង រូបភាព (អតិបរមា ${MAX_FILE_SIZE_MB}MB)` },
+                    'extract_btn': { en: 'Extract Text from File', km: 'ស្រង់អត្ថបទពីឯកសារ' },
+                    'extracting': { en: 'Extracting...', km: 'កំពុងស្រង់...' },
+                    'or': { en: 'Or', km: 'ឬ' },
+                    'record_audio': { en: 'Record Audio', km: 'ថតសំឡេង' },
+                    'stop_recording': { en: 'Stop Recording', km: 'បញ្ឈប់ការថត' },
+                    'upload_audio': { en: 'Upload an Audio File', km: 'ផ្ទុកឯកសារសំឡេង' },
+                    'audio_limit': { en: `Max ${MAX_FILE_SIZE_MB}MB`, km: `អតិបរមា ${MAX_FILE_SIZE_MB}MB` },
+                    'audio_preview_title': { en: 'Audio Ready', km: 'សំឡេងរួចរាល់' },
+                    'transcribe_btn': { en: 'Transcribe Audio', km: 'បម្លែងសំឡេងជាអត្ថបទ' },
+                    'transcribing': { en: 'Transcribing...', km: 'កំពុងបម្លែង...' },
+                    'results': { en: 'Results', km: 'លទ្ធផល' },
+                    'copy': { en: 'Copy', km: 'ចម្លង' },
+                    'copied': { en: 'Copied!', km: 'បានចម្លង!' },
+                    'results_placeholder': { en: 'Your results will appear here...', km: 'លទ្ធផលរបស់អ្នកនឹងបង្ហាញនៅទីនេះ...' },
+                    'error': { en: 'Error:', km: 'បញ្ហា៖' }
+                };
+                return dict[key]?.[lang] || key;
+            };
+            const getFontClass = () => lang === 'km' ? 'font-khmer' : 'font-inter';
+            const setLanguage = (langCode) => {
+                setLang(langCode);
+                localStorage.setItem('language', langCode);
+            };
+
+            React.useEffect(() => {
+                const savedLang = localStorage.getItem('language') || 'en';
+                setLanguage(savedLang);
+            }, []);
+
+            const toBase64 = (file) => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = (error) => reject(error);
+            });
+
+            const clearState = (clearMode = true) => {
+                setSelectedFile(null); setFilePreview(null); setFileType('');
+                if (fileInputRef.current) fileInputRef.current.value = '';
+                setIsRecording(false); setAudioFile(null); setAudioPreviewUrl('');
+                if (audioInputRef.current) audioInputRef.current.value = '';
+                setExtractedText(''); setError(''); setIsCopied(false);
+                if (clearMode) setIsLoading(false);
+            };
+
+            const switchMode = (newMode) => { clearState(); setMode(newMode); };
+
+            const handleFileSelect = (file) => {
+                if (!file) return;
+                clearState(false);
+                if (file.size > MAX_FILE_SIZE) {
+                    return setError(`File must be under ${MAX_FILE_SIZE_MB}MB.`);
+                }
+                if (file.type.startsWith('image/')) {
+                    setFileType('image');
+                    setSelectedFile(file);
+                    setFilePreview(URL.createObjectURL(file));
+                } else if (file.type === 'application/pdf') {
+                    setFileType('pdf');
+                    setSelectedFile(file);
+                    renderPdfPreview(file);
+                } else { setError('Please select a valid image or PDF file.'); }
+            };
+            
+            const handleDragEvents = (e, isEntering) => { e.preventDefault(); e.stopPropagation(); setIsDragging(isEntering); };
+            const handleDrop = (e) => { handleDragEvents(e, false); handleFileSelect(e.dataTransfer.files?.[0]); };
+            
+            React.useEffect(() => {
+                const handlePaste = (event) => {
+                    if (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA") {
+                        return;
+                    }
+                    const items = event.clipboardData.items;
+                    for (let i = 0; i < items.length; i++) {
+                        if (items[i].type.startsWith('image/')) {
+                            const file = items[i].getAsFile();
+                            if (file) {
+                                event.preventDefault();
+                                switchMode('file');
+                                handleFileSelect(file);
+                            }
+                            break;
+                        }
+                    }
+                };
+                window.addEventListener('paste', handlePaste);
+                return () => {
+                    window.removeEventListener('paste', handlePaste);
+                };
+            }, []);
+
+            const renderPdfPreview = async (file) => {
+                try {
+                    const uri = URL.createObjectURL(file);
+                    const pdf = await pdfjsLib.getDocument(uri).promise;
+                    const page = await pdf.getPage(1);
+                    const canvas = pdfCanvasRef.current;
+                    const containerWidth = canvas.parentElement.offsetWidth;
+                    const viewport = page.getViewport({ scale: 1 });
+                    const scale = (containerWidth / viewport.width) * 0.95;
+                    const scaledViewport = page.getViewport({ scale });
+                    canvas.height = scaledViewport.height;
+                    canvas.width = scaledViewport.width;
+                    await page.render({ canvasContext: canvas.getContext('2d'), viewport: scaledViewport }).promise;
+                    URL.revokeObjectURL(uri);
+                } catch (e) { setError("Could not render a preview for this PDF."); }
+            };
+
+            const handleStartRecording = async () => {
+                clearState(false);
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorderRef.current = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+                    audioChunksRef.current = [];
+                    mediaRecorderRef.current.ondataavailable = e => audioChunksRef.current.push(e.data);
+                    mediaRecorderRef.current.onstop = () => {
+                        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+                        if (audioBlob.size > MAX_FILE_SIZE) { 
+                            setError(`Recording is too large (max ${MAX_FILE_SIZE_MB}MB).`); setAudioFile(null); 
+                        } else { 
+                            setAudioFile(audioBlob); setAudioPreviewUrl(URL.createObjectURL(audioBlob)); 
+                        }
+                        stream.getTracks().forEach(track => track.stop());
+                        clearInterval(recordIntervalRef.current); setRecordSeconds(0);
+                    };
+                    mediaRecorderRef.current.start();
+                    setIsRecording(true); setRecordSeconds(0);
+                    recordIntervalRef.current = setInterval(() => setRecordSeconds(prev => prev + 1), 1000);
+                } catch (err) { setError("Microphone access denied."); }
+            };
+            const handleStopRecording = () => { mediaRecorderRef.current?.stop(); setIsRecording(false); };
+            
+            const handleAudioUpload = (event) => {
+                const file = event.target.files[0];
+                clearState(false);
+                if (!file) return;
+                if (file.size > MAX_FILE_SIZE) return setError(`Audio file must be under ${MAX_FILE_SIZE_MB}MB.`);
+                if (file.type.startsWith('audio/')) { setAudioFile(file); setAudioPreviewUrl(URL.createObjectURL(file)); } 
+                else { setError('Please select a valid audio file.'); }
+            };
+
+            const processApiRequest = async (prompt, file) => {
+                if (!file) { setError('No file or recording available.'); return; }
+                setIsLoading(true); setExtractedText(''); setError(''); setIsCopied(false);
+                
+                const apiKey = "AIzaSyAycJnyeujIVev_7M8ydS5ZhQ467fDXTcE";
+
+                if (apiKey.includes("PASTE_YOUR")) {
+                    setError("API key is missing. Please add your Google Gemini API key to the code.");
+                    setIsLoading(false); return;
+                }
+                
+                try {
+                    const base64Data = await toBase64(file);
+                    const model = "gemini-1.5-flash-latest";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+                    const payload = { contents: [{ parts: [{ text: prompt }, { inline_data: { mime_type: file.type, data: base64Data } }] }] };
+
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) { const errBody = await response.json(); throw new Error(errBody.error.message); }
+
+                    const result = await response.json();
+                    if (result.candidates?.[0]?.content) {
+                        setExtractedText(result.candidates[0].content.parts[0].text.trim());
+                    } else if (result.promptFeedback?.blockReason) {
+                        setError(`Request blocked. Reason: ${result.promptFeedback.blockReason}.`);
+                    } else { setError('No text could be extracted. The file might be empty or unsupported by the AI.'); }
+                } catch (err) { setError(`An error occurred: ${err.message}.`); } 
+                finally { setIsLoading(false); }
+            };
+
+            const handleCopy = () => { navigator.clipboard.writeText(extractedText); setIsCopied(true); setTimeout(() => setIsCopied(false), 2000); };
+            
+            const filePrompt = "Extract all text from this image or document. Output only the extracted text, nothing else.";
+            const audioPrompt = "Transcribe all spoken words in this audio file. If Khmer is spoken, use Khmer Unicode. If English is spoken, use English. If another language is spoken, use its native script. Output only the transcription.";
+
+            return (
+                <div className={`extractor-root extractor-body ${getFontClass()}`}>
+                    <div className="content-wrapper">
+                        <div className="main-card">
+                            <div className="header-and-tabs">
+                                <header className="flex justify-between items-start gap-4 mb-6">
+                                    <div>
+                                        <h2 className="text-2xl font-bold" style={{color: 'var(--heading-color)'}}>{t('title')}</h2>
+                                        <p className="text-base mt-1" style={{color: 'var(--light-text)'}}>{t('subtitle')}</p>
+                                    </div>
+                                    <div className="header-controls">
+                                        <div className={`language-selector${langDropdown ? ' open' : ''}`} tabIndex={0} onBlur={() => setTimeout(() => setLangDropdown(false), 150)}>
+                                            <button className="language-btn" onClick={() => setLangDropdown(v => !v)} type="button">
+                                                <img src={languages.find(l => l.code === lang).flag} className="language-flag" alt="" />
+                                                <span>{languages.find(l => l.code === lang).label}</span>
+                                                <svg className="arrow w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                                            </button>
+                                            {langDropdown && <div className="dropdown-content">
+                                                {languages.map(l => (
+                                                    <button key={l.code} className={`language-option ${lang === l.code ? 'active-language' : ''} ${l.code === 'km' ? 'font-khmer' : ''}`} onClick={() => { setLanguage(l.code); setLangDropdown(false); }}>
+                                                        <img src={l.flag} className="language-flag"/> {l.label}
+                                                    </button>
+                                                ))}
+                                            </div>}
+                                        </div>
+                                    </div>
+                                </header>
+
+                                <div className="p-1 rounded-full flex w-full mb-6" style={{backgroundColor: 'var(--bg-color)'}}>
+                                    <button onClick={() => switchMode('file')} className={`w-1/2 p-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${mode === 'file' ? 'shadow text-white' : 'hover:opacity-80'}`} style={{backgroundColor: mode === 'file' ? 'var(--extractor-accent-color)' : 'transparent', color: mode === 'file' ? 'white' : 'var(--light-text)'}}>{t('file_tab')}</button>
+                                    <button onClick={() => switchMode('audio')} className={`w-1/2 p-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${mode === 'audio' ? 'shadow text-white' : 'hover:opacity-80'}`} style={{backgroundColor: mode === 'audio' ? 'var(--extractor-accent-color)' : 'transparent', color: mode === 'audio' ? 'white' : 'var(--light-text)'}}>{t('audio_tab')}</button>
+                                </div>
+                            </div>
+                            
+                            <div className="content-section">
+                                {mode === 'file' && (
+                                    <div className="space-y-6">
+                                        <div className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-colors ${isDragging ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20' : ''}`} style={{borderColor: 'var(--border-color)'}} onDragEnter={(e) => handleDragEvents(e, true)} onDragLeave={(e) => handleDragEvents(e, false)} onDragOver={(e) => handleDragEvents(e, true)} onDrop={handleDrop}>
+                                            <input type="file" accept="image/*,application/pdf" onChange={(e) => handleFileSelect(e.target.files[0])} className="hidden" ref={fileInputRef} />
+                                            {!selectedFile ? (
+                                                <div className="flex flex-col items-center justify-center h-48 cursor-pointer" onClick={() => fileInputRef.current.click()}>
+                                                    <svg className="h-12 w-12 mb-3" style={{color: 'var(--light-text)'}} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                                                    <p className="font-semibold" style={{color: 'var(--text-color)'}}>{t('upload_hint')}</p>
+                                                    <p className="text-sm mt-1" style={{color: 'var(--light-text)'}}>{t('file_limit')}</p>
+                                                </div>
+                                            ) : (
+                                                <div className="relative">
+                                                    <button onClick={() => clearState(false)} className="absolute -top-3 -right-3 bg-slate-600 hover:bg-slate-800 text-white rounded-full h-7 w-7 flex items-center justify-center z-10" aria-label="Remove file"><svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M6 18L18 6M6 6l12 12" /></svg></button>
+                                                    <div className="max-h-64 flex justify-center p-2 rounded-lg" style={{backgroundColor: 'var(--bg-color)'}}>{fileType === 'image' ? <img src={filePreview} className="max-h-60 object-contain rounded-md" /> : <canvas ref={pdfCanvasRef} className="max-h-60 object-contain rounded-md"></canvas>}</div>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <button onClick={() => processApiRequest(filePrompt, selectedFile)} disabled={!selectedFile || isLoading} className="w-full px-6 py-3 rounded-lg font-bold text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center" style={{backgroundColor: 'var(--extractor-accent-color)'}}>{isLoading ? <svg className="animate-spin mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> : ''} {isLoading ? t('extracting') : t('extract_btn')}</button>
+                                    </div>
+                                )}
+
+                                {mode === 'audio' && (
+                                    <div className="space-y-6">
+                                        {!audioPreviewUrl ? (
+                                            <>
+                                                <button onClick={isRecording ? handleStopRecording : handleStartRecording} className={`w-full px-6 py-4 rounded-xl font-bold text-white transition-all flex items-center justify-center ${isRecording ? 'bg-red-600' : ''}`} style={{backgroundColor: isRecording ? '#DC2626' : 'var(--extractor-accent-color)'}}>{isRecording ? (<><span className="animate-pulse mr-3 h-3 w-3 bg-white rounded-full"></span>{t('stop_recording')} <span className="ml-3 text-white/80 font-mono text-base">{String(Math.floor(recordSeconds/60)).padStart(2,'0')}:{String(recordSeconds%60).padStart(2,'0')}</span></>) : (<><svg className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>{t('record_audio')}</>)}</button>
+                                                <div className="relative my-2"><div className="absolute inset-0 flex items-center"><span className="w-full" style={{borderTop: '1px solid var(--border-color)'}}></span></div><div className="relative flex justify-center text-sm"><span className="px-2 font-medium" style={{backgroundColor: 'var(--card-bg)', color: 'var(--light-text)'}}>{t('or')}</span></div></div>
+                                                <button type="button" onClick={() => audioInputRef.current?.click()} disabled={isRecording} className="w-full px-6 py-3 rounded-xl font-semibold transition-colors flex items-center justify-center disabled:opacity-50" style={{backgroundColor: 'var(--bg-color)', color: 'var(--light-text)'}}><input type="file" accept="audio/*" onChange={handleAudioUpload} className="hidden" ref={audioInputRef} />{t('upload_audio')} <span className="ml-2 text-sm font-normal">({t('audio_limit')})</span></button>
+                                            </>
+                                        ) : (
+                                            <div className="border rounded-xl p-4 space-y-4" style={{borderColor: 'var(--border-color)', backgroundColor: 'var(--bg-color)'}}>
+                                                <div className="flex justify-between items-center"><p className="font-semibold" style={{color: 'var(--text-color)'}}>{t('audio_preview_title')}</p><button onClick={() => clearState(false)} className="bg-slate-200 hover:bg-slate-300 dark:bg-slate-600 dark:hover:bg-slate-500 rounded-full h-7 w-7 flex items-center justify-center" aria-label="Remove audio"><svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M6 18L18 6M6 6l12 12" /></svg></button></div>
+                                                <audio src={audioPreviewUrl} controls className="w-full"></audio>
+                                            </div>
+                                        )}
+                                        <button onClick={() => processApiRequest(audioPrompt, audioFile)} disabled={!audioFile || isLoading} className="w-full px-6 py-3 rounded-lg font-bold text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center" style={{backgroundColor: 'var(--extractor-accent-color)'}}>{isLoading ? <svg className="animate-spin mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> : ''} {isLoading ? t('transcribing') : t('transcribe_btn')}</button>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Results Area */}
+                            <div className="results-section pt-6 border-t" style={{borderColor: 'var(--border-color)'}}>
+                                {error && <div className="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-lg mb-6" role="alert"><strong className="font-bold">{t('error')} </strong><span>{error}</span></div>}
+                                <div className="space-y-3">
+                                    <div className="flex justify-between items-center"><h2 className="text-xl font-bold flex items-center" style={{color: 'var(--heading-color)'}}>{t('results')}</h2>{extractedText && (<button onClick={handleCopy} disabled={isCopied} className="px-3 py-1.5 text-sm font-semibold rounded-md transition-all disabled:bg-green-100 disabled:text-green-700 dark:disabled:bg-green-800 dark:disabled:text-green-200" style={{backgroundColor: 'var(--extractor-accent-color)', color: 'white'}}>{isCopied ? t('copied') : t('copy')}</button>)}</div>
+                                    <div className="w-full p-4 rounded-lg border min-h-[10rem] max-h-96 overflow-auto whitespace-pre-wrap leading-relaxed" style={{backgroundColor: 'var(--bg-color)', borderColor: 'var(--border-color)', color: 'var(--text-color)'}}>
+                                        {isLoading ? (<div className="flex items-center justify-center h-full" style={{color: 'var(--light-text)'}}><svg className="animate-spin mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>Processing...</div>) : extractedText || <div className="flex items-center justify-center h-full" style={{color: 'var(--light-text)'}}>{t('results_placeholder')}</div>}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+        
+        // Only render the React app if the root element exists
+        const rootElement = document.getElementById('root');
+        if (rootElement) {
+            ReactDOM.createRoot(rootElement).render(<App />);
+        }
+    </script>
+    <script>
+      function initializeCompressorApp() {
+        const compressorView = document.getElementById('compressor-view');
+        if (!compressorView) return;
+
+        // --- Translations and Language Map ---
+        const translations = {
+          en: {
+            "main-title": "File Compressor",
+            "sub-heading": "Reduce file size for images, PDFs, and more.",
+            "drop-title": "Click to upload or drag & drop",
+            disclaimer: "Max file size 100MB. All processing is done locally.",
+            "download-all-btn": "Download All (.zip)",
+            "add-more-btn": "Add More",
+            "clear-all-btn": "Clear All",
+            "status-queued": "Queued",
+            "status-compressing": "Compressing...",
+            "status-complete": "Complete!",
+            "status-error": "Error",
+            "status-unsupported": "Unsupported Type",
+            "download-btn": "Download",
+          },
+          km: {
+            "main-title": "កម្មវិធីបង្ហាប់ឯកសារ",
+            "sub-heading": "កាត់បន្ថយទំហំឯកសាររូបភាព PDF និងផ្សេងៗទៀត។",
+            "drop-title": "ចុចដើម្បីផ្ទុកឡើង ឬអូស និងទម្លាក់",
+            disclaimer:
+              "ទំហំឯកសារអតិបរមា 100MB។ ការដំណើរការទាំងអស់ធ្វើឡើងក្នុង browser។",
+            "download-all-btn": "ទាញយកទាំងអស់ (.zip)",
+            "add-more-btn": "បន្ថែមឯកសារ",
+            "clear-all-btn": "លុបទាំងអស់",
+            "status-queued": "កំពុងរង់ចាំ",
+            "status-compressing": "កំពុងបង្ហាប់...",
+            "status-complete": "រួចរាល់!",
+            "status-error": "មានបញ្ហា",
+            "status-unsupported": "ប្រភេទមិនស្គាល់",
+            "download-btn": "ទាញយក",
+          },
+        };
+        const langMap = [
+          { code: "en", label: "English", short: "EN", flag: "https://flagcdn.com/us.svg" },
+          { code: "km", label: "ភាសាខ្មែរ", short: "KH", flag: "https://flagcdn.com/kh.svg", fontClass: "font-khmer" },
+        ];
+
+        // --- Element Selectors ---
+        const dropzone = compressorView.querySelector("#dropzone");
+        const fileInput = compressorView.querySelector("#file-input");
+        const fileQueue = compressorView.querySelector("#file-queue");
+        const actionButtons = compressorView.querySelector("#action-buttons");
+        const downloadAllBtn = compressorView.querySelector("#download-all-btn");
+        const addMoreBtn = compressorView.querySelector("#add-more-btn");
+        const clearAllBtn = compressorView.querySelector("#clear-all-btn");
+        const langSelector = compressorView.querySelector("#lang-selector");
+        const langBtn = compressorView.querySelector("#lang-btn");
+        const langDropdown = compressorView.querySelector("#lang-dropdown");
+        
+        // --- State Variables ---
+        let currentLang = "en";
+        let compressedFiles = [];
+        let processingCount = 0;
+
+        // --- Language Manager ---
+        const translatePage = () => {
+          compressorView.querySelectorAll("[data-i18n-key]").forEach((el) => {
+            const key = el.dataset.i18nKey;
+            if (translations[currentLang]?.[key]) {
+              el.textContent = translations[currentLang][key];
+            }
+          });
+          compressorView.querySelectorAll(".dynamic-download-btn").forEach((btn) =>
+              btn.setAttribute("title", translations[currentLang]["download-btn"])
+            );
+        };
+
+        const setLang = (langCode) => {
+          const langData = langMap.find((l) => l.code === langCode) || langMap[0];
+          currentLang = langData.code;
+          compressorView.querySelector("#lang-flag").src = langData.flag;
+          compressorView.querySelector("#lang-label-short").textContent = langData.short;
+
+          langDropdown.querySelectorAll(".language-option").forEach((btn) => {
+            btn.classList.toggle("active-language", btn.dataset.lang === langCode);
+            // Apply Khmer font for Khmer language option
+            if (btn.dataset.lang === "km") {
+              btn.classList.add("font-khmer");
+            } else {
+              btn.classList.remove("font-khmer");
+            }
+          });
+
+          compressorView.classList.toggle("font-khmer", !!langData.fontClass);
+          compressorView.classList.toggle("font-inter", !langData.fontClass);
+          translatePage();
+          localStorage.setItem("compressor_language", langCode);
+        };
+
+        langMap.forEach((lang) => {
+          const option = document.createElement("button");
+          option.className = "language-option";
+          if (lang.fontClass) option.classList.add(lang.fontClass);
+          option.dataset.lang = lang.code;
+          option.innerHTML = `<img src="${lang.flag}" class="language-flag" alt="${lang.label}"/><span>${lang.label}</span>`;
+          option.addEventListener("mousedown", (e) => e.stopPropagation());
+          option.addEventListener("click", (e) => {
+            e.stopPropagation();
+            setLang(lang.code);
+            langSelector.classList.remove("open");
+          });
+          langDropdown.appendChild(option);
+        });
+
+        langBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          langSelector.classList.toggle("open");
+        });
+
+        document.addEventListener("mousedown", (e) => {
+          if (!langSelector.contains(e.target)) {
+            langSelector.classList.remove("open");
+          }
+        });
+
+        setLang(localStorage.getItem("compressor_language") || "en");
+
+        // --- Helper Functions ---
+        const formatFileSize = (bytes) => {
+          if (bytes === 0) return "0 Bytes";
+          const k = 1024;
+          const sizes = ["Bytes", "KB", "MB", "GB"];
+          const i = Math.floor(Math.log(bytes) / Math.log(k));
+          return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+        };
+
+        const sanitizeFilename = (name) => name.replace(/[<>:"/\\|?*]/g, "_");
+
+        const getExtensionForBlob = (blob, originalName) => {
+          const mimeMap = { "image/jpeg": "jpg", "image/png": "png", "application/pdf": "pdf" };
+          return mimeMap[blob.type] || originalName.split(".").pop().toLowerCase() || "bin";
+        };
+
+        // --- UI State Management ---
+        const updateActionButtonsState = () => {
+          const hasFiles = fileQueue.children.length > 0;
+          const isProcessing = processingCount > 0;
+          const backBtn = document.querySelector('.back-btn');
+
+          actionButtons.style.display = hasFiles ? "flex" : "none";
+          compressorView.querySelector("#upload-module").style.display = hasFiles ? "none" : "block";
+
+          downloadAllBtn.disabled = isProcessing || compressedFiles.length === 0;
+          addMoreBtn.disabled = isProcessing;
+          clearAllBtn.disabled = isProcessing;
+        };
+
+        const getStatusIcon = (status) => {
+          const iconProps = `viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"`;
+          switch (status) {
+            case "progress": return `<svg class="spinner w-6 h-6" style="color:var(--accent);" ${iconProps}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
+            case "success": return `<svg class="w-8 h-8" style="color:var(--success);" ${iconProps}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+            case "error": return `<svg class="w-8 h-8" style="color:var(--error);" ${iconProps}><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+            default: return `<svg class="w-6 h-6" style="color:var(--text-muted);" ${iconProps}><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
+          }
+        };
+
+        const createQueueItem = (file, fileId) => {
+          const item = document.createElement("div");
+          item.className = "file-item";
+          item.id = fileId;
+          item.innerHTML = `
+            <div class="file-status-icon">${getStatusIcon("queued")}</div>
+            <div class="min-w-0">
+                <p class="font-title text-sm truncate" title="${file.name}">${file.name}</p>
+                <p class="font-muted text-xs mt-1" role="status" aria-live="polite">
+                    ${formatFileSize(file.size)} <span class="file-status-text">→ ${translations[currentLang]["status-queued"]}</span>
+                </p>
+                <div class="progress-bar-wrapper" style="display: none;"><div class="progress-bar-fill"></div></div>
+            </div>
+            <div class="file-actions"></div>`;
+          return item;
+        };
+
+        const updateStatusUI = (item, status, text) => {
+          item.querySelector(".file-status-icon").innerHTML = getStatusIcon(status);
+          item.querySelector(".file-status-text").textContent = text;
+          const progressBar = item.querySelector(".progress-bar-wrapper");
+          progressBar.style.display = status === "progress" ? "block" : "none";
+          if (status !== "progress") {
+            item.querySelector(".progress-bar-fill").style.width = "0%";
+          }
+        };
+
+        const addDownloadButton = (item, blob, originalName) => {
+          const actionDiv = item.querySelector(".file-actions");
+          const sanitizedName = sanitizeFilename(originalName);
+          const base = sanitizedName.substring(0, sanitizedName.lastIndexOf(".")) || sanitizedName;
+          const ext = getExtensionForBlob(blob, originalName);
+
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = `${base}-compressed.${ext}`;
+          link.className = "dynamic-download-btn btn btn-ghost p-2 h-10 w-10";
+          link.title = translations[currentLang]["download-btn"];
+          link.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>`;
+          actionDiv.innerHTML = "";
+          actionDiv.appendChild(link);
+        };
+
+        // --- Core Compression Logic ---
+        const compressImage = (file, onProgress) => new Promise((resolve, reject) => {
+            onProgress(0.1);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const img = new Image();
+              img.onload = () => {
+                onProgress(0.5);
+                const canvas = document.createElement("canvas");
+                canvas.width = img.width; canvas.height = img.height;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0);
+                onProgress(0.9);
+                canvas.toBlob( (blob) => { onProgress(1); resolve(blob || file); }, file.type === "image/png" ? "image/png" : "image/jpeg", 0.75 );
+              };
+              img.onerror = () => reject(new Error("Cannot decode image."));
+              img.src = e.target.result;
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+
+        const compressPDF = async (file, onProgress) => {
+          onProgress(0.1);
+          const { PDFDocument } = PDFLib;
+          const buffer = await file.arrayBuffer();
+          onProgress(0.2);
+          const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+          const images = pdfDoc.getImages();
+          if (images.length > 0) {
+            let i = 0;
+            for (const image of images) {
+              try {
+                if (image.isJpg) {
+                  const jpgImage = await pdfDoc.embedJpg(await image.embed());
+                  pdfDoc.context.assign(image.ref, jpgImage.ref.stream);
+                }
+              } catch (e) { console.warn("Could not re-compress a PDF image. Skipping it.", e); }
+              onProgress(0.2 + 0.7 * (++i / images.length));
+            }
+          } else { onProgress(0.9); }
+          onProgress(1);
+          return new Blob([await pdfDoc.save()], { type: "application/pdf" });
+        };
+
+        const compressOfficeFile = async (file, onProgress) => {
+          onProgress(0.2);
+          const buffer = await file.arrayBuffer();
+          onProgress(0.4);
+          const zip = await JSZip.loadAsync(buffer);
+          onProgress(0.8);
+          return zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 9 } });
+        };
+
+        // --- File Processing Pipeline ---
+        const processFile = async (file) => {
+          processingCount++;
+          updateActionButtonsState();
+
+          const fileId = `file-${Date.now()}-${Math.random()}`;
+          const fileItem = createQueueItem(file, fileId);
+          fileQueue.appendChild(fileItem);
+
+          const onProgress = (p) => (fileItem.querySelector(".progress-bar-fill").style.width = `${p * 100}%`);
+
+          if (file.size > 100 * 1024 * 1024) {
+            updateStatusUI(fileItem, "error", `→ Error: File size exceeds 100MB`);
+            processingCount--;
+            updateActionButtonsState();
+            return;
+          }
+
+          try {
+            updateStatusUI(fileItem, "progress", `→ ${translations[currentLang]["status-compressing"]}`);
+            let compressedBlob;
+            const name = file.name.toLowerCase();
+
+            if (file.type.startsWith("image/")) compressedBlob = await compressImage(file, onProgress);
+            else if (file.type === "application/pdf") compressedBlob = await compressPDF(file, onProgress);
+            else if (name.match(/\.(docx|xlsx|pptx)$/i)) compressedBlob = await compressOfficeFile(file, onProgress);
+            else throw new Error("unsupported");
+
+            const ratio = file.size > 0 ? 1 - compressedBlob.size / file.size : 0;
+            updateStatusUI(fileItem, "success", `→ ${formatFileSize(compressedBlob.size)} (${Math.round(ratio * 100)}% smaller)`);
+            addDownloadButton(fileItem, compressedBlob, file.name);
+            compressedFiles.push({ blob: compressedBlob, name: file.name });
+          } catch (err) {
+            console.error("Compression failed for file:", file.name, err);
+            const key = err.message === "unsupported" ? "status-unsupported" : "status-error";
+            updateStatusUI(fileItem, "error", `→ ${translations[currentLang][key]}`);
+          } finally {
+            processingCount--;
+            updateActionButtonsState();
+          }
+        };
+
+        const handleFiles = (files) => {
+          if (files.length > 0) {
+            [...files].forEach(processFile);
+            updateActionButtonsState();
+          }
+        };
+
+        // --- Global Event Listeners ---
+        const resetState = () => {
+          fileQueue.querySelectorAll("a[download]").forEach((link) => URL.revokeObjectURL(link.href));
+          fileQueue.innerHTML = "";
+          fileInput.value = "";
+          compressedFiles = [];
+          processingCount = 0;
+          updateActionButtonsState();
+        };
+
+        ["dragover", "dragleave", "drop"].forEach((ev) => dropzone.addEventListener(ev, (e) => { e.preventDefault(); e.stopPropagation(); }));
+        dropzone.addEventListener("dragover", () => dropzone.classList.add("dragover"));
+        dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+        dropzone.addEventListener("drop", (e) => {
+          dropzone.classList.remove("dragover");
+          if (!addMoreBtn.disabled) handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener("change", (e) => handleFiles(e.target.files));
+        addMoreBtn.addEventListener("click", () => { if (!addMoreBtn.disabled) fileInput.click(); });
+        clearAllBtn.addEventListener("click", () => { if (!clearAllBtn.disabled) resetState(); });
+
+        downloadAllBtn.addEventListener("click", async () => {
+          if (downloadAllBtn.disabled) return;
+          const zip = new JSZip();
+          compressedFiles.forEach((f) => {
+            const base = sanitizeFilename(f.name).replace(/\.[^/.]+$/, "");
+            const ext = getExtensionForBlob(f.blob, f.name);
+            zip.file(`${base}-compressed.${ext}`, f.blob);
+          });
+
+          const zipBlob = await zip.generateAsync({ type: "blob" });
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(zipBlob);
+          link.download = "Compressed-Files.zip";
+          link.click();
+          URL.revokeObjectURL(link.href);
+        });
+      }
+    </script>
+  </body>
+</html>
