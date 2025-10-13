@@ -1348,14 +1348,26 @@
         let rawValue = value.replace(/[^0-9.-]/g, "");
         if (formatType === "integer")
           rawValue = rawValue.replace(/[^0-9]/g, "");
-        if (formatType === "signed-integer")
+        if (formatType === "signed-integer") {
+          // Allow only a single leading minus sign
+          rawValue = rawValue.replace(/(?!^)-/g, ""); // Remove all minus except leading
           rawValue = rawValue.replace(/[^0-9-]/g, "");
+          if (rawValue.indexOf('-') > 0) {
+            // If minus is not at the start, remove it
+            rawValue = rawValue.replace(/-/g, "");
+          }
+        }
 
         let [integerPart, decimalPart] = rawValue.split(".");
 
         let formattedInteger = parseInt(
           integerPart.replace(/[^0-9-]/g, "") || "0"
         ).toLocaleString("en-US");
+
+        // For signed-integer, preserve leading minus
+        if (formatType === "signed-integer" && integerPart.startsWith("-")) {
+          formattedInteger = "-" + formattedInteger.replace(/^-/, "");
+        }
 
         let formattedValue = formattedInteger;
         if (decimalPart !== undefined) {
